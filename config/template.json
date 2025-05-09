@@ -1,0 +1,7 @@
+{
+    "template": {
+      "engine": "App\\Service\\Core\\Template\\AdvancedTemplateEngine",
+      "template_path": "template",
+      "cache_path": "template"
+    }
+}

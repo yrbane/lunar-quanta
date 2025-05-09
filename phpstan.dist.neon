@@ -1,0 +1,8 @@
+parameters:
+    level: 4
+    paths:
+        - public/
+        - src/
+
+includes:
+#	- phpstan-baseline.neon

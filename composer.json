@@ -1,0 +1,20 @@
+{
+    "name": "example/minisystem",
+    "description": "Mini système PHP8",
+    "type": "project",
+    "require": {
+        "php": ">=8.3",
+        "ext-mbstring": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "require-dev": {
+    }
+}

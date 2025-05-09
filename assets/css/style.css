@@ -1,0 +1,60 @@
+/* Définition des variables */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --text-color: #333;
+    --background-color: #fff;
+}
+
+/* Mode sombre */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-color: #2980b9;
+        --secondary-color: #27ae60;
+        --text-color: #eee;
+        --background-color: #222;
+    }
+}
+
+/* Styles de base */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    min-height: 100vh;
+}
+
+/* Mise en page responsive */
+header, footer {
+    padding: 1em;
+    text-align: center;
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+main {
+    padding: 1em;
+}
+
+/* Exemple de grille responsive */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+.container > div {
+    flex: 1 1 200px;
+    background: var(--secondary-color);
+    padding: 1em;
+    color: #fff;
+}
+
+.macro-call{
+    background: var(--primary-color);
+    padding: 1em;
+    color: #fff;
+    border-radius: 5px;
+}

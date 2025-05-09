@@ -1,0 +1,402 @@
+/* latin */
+@font-face {
+    font-family: 'Special Gothic Expanded One';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/specialgothicexpandedone/v1/IurO6Zxk74-YaYk1r3HOet4g75ENmBxUmOK61tA0Iu5QmJF_.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    font-weight: 100 700;
+    src: url(https://fonts.gstatic.com/s/materialsymbolsoutlined/v237/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2) format('woff2');
+}
+
+.icon {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -moz-font-feature-settings: 'liga';
+    -moz-osx-font-smoothing: grayscale;
+}
+
+    /* ============================================================================
+       Variables et paramètres de base
+       ---------------------------------------------------------------------------
+       Définition des variables CSS personnalisables pour les couleurs et les
+       paramètres globaux.
+    =========================================================================== */
+:root {
+    /* Couleurs de base */
+    --color-primary: #506266;
+    --color-secondary: #10454F;
+    --color-tertiary: #ADD028;
+    --color-quaternary: #A3AB78 ;
+
+    /* Couleurs de fond et de texte pour le thème clair */
+    --bg-light: #ffffff;
+    --bg-dark: #2E2E2E;
+    --text-light: #f0f0f0;
+    --text-dark: #333333;
+
+    /* Paramètres de transition */
+    --transition-speed: 0.3s;
+    --transition-ease: ease-in-out;
+
+    /* Font et taille de texte */
+    --font: 'Arial', sans-serif;
+    --font-mono: 'Courier New', monospace;
+    --font-title:  'Special Gothic Expanded One','Georgia', serif;
+    --line-height: 1.5;
+
+    /* Espacement */
+    --spacing: 0.5em;
+    --negative-spacing: -0.5em;
+    --spacing-large: 1.5em;
+    --spacing-small: 0.25em;
+
+    /* radius */
+    --radius: 8px;
+
+    /* Ombre */
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    --gradient1: transparent;
+    --gradient2: rgba(255,255,255,.2);
+
+    --gradient-orientation: 0deg;
+
+}
+
+/* ============================================================================
+   Thème sombre via prefers-color-scheme
+   ---------------------------------------------------------------------------
+   Application du thème sombre automatiquement si le navigateur le supporte.
+=========================================================================== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-light: #2E2E2E;
+        --bg-dark: #ffffff;
+        --text-light: #333333;
+        --text-dark: #f0f0f0;
+    }
+}
+
+/* ============================================================================
+   Reset et styles de base
+   ---------------------------------------------------------------------------
+   Réinitialisation des marges, paddings et application du box-sizing.
+=========================================================================== */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    font-family: var(--font),serif;
+    line-height: var(--line-height);
+    transition: background-color var(--transition-speed) var(--transition-ease),
+    color var(--transition-speed) var(--transition-ease);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-title), serif;
+    margin-bottom: var(--spacing);
+}
+
+/* ============================================================================
+   Système de grille basé sur Flexbox
+   ---------------------------------------------------------------------------
+   Les classes .container, .row et .col-* permettent de composer une grille
+   responsive.
+=========================================================================== */
+
+/* Wrapper pour ajouter un padding sur les côtés */
+.wrapper {
+    margin: 0 var(--spacing);
+    padding: 0 var(--spacing);
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: var(--negative-spacing);
+    margin-left: var(--negative-spacing);
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    [class*="col-"] {
+        padding-right: var(--spacing);
+        padding-left: var(--spacing);
+        flex: 1;
+    }
+
+    .col-1 { flex: 0 0 8.33%;   max-width: 8.33%; }
+    .col-2 { flex: 0 0 16.66%;  max-width: 16.66%; }
+    .col-3 { flex: 0 0 25%;     max-width: 25%; }
+    .col-4 { flex: 0 0 33.33%;  max-width: 33.33%; }
+    .col-5 { flex: 0 0 41.66%;  max-width: 41.66%; }
+    .col-6 { flex: 0 0 50%;     max-width: 50%; }
+    .col-7 { flex: 0 0 58.33%;  max-width: 58.33%; }
+    .col-8 { flex: 0 0 66.66%;  max-width: 66.66%; }
+    .col-9 { flex: 0 0 75%;     max-width: 75%; }
+    .col-10 { flex: 0 0 83.33%; max-width: 83.33%; }
+    .col-11 { flex: 0 0 91.66%; max-width: 91.66%; }
+    .col-12 { flex: 0 0 100%;   max-width: 100%; }
+}
+
+
+
+/* ============================================================================
+   Boutons
+   ---------------------------------------------------------------------------
+   Définition des styles pour les boutons remplis et en contour.
+=========================================================================== */
+.btn {
+    display: inline-block;
+    font-size: 1rem;
+    padding: 0.75em 1.5em;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background-color var(--transition-speed) var(--transition-ease),
+    color var(--transition-speed) var(--transition-ease),
+    box-shadow var(--transition-speed) var(--transition-ease);
+    margin: var(--spacing-small) 0;
+    color: #fff;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 1);
+    background-color: var(--color-primary);
+
+    :hover { background: var(--color-primary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+
+    &.primary { background: var(--color-primary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+    &.secondary { background: var(--color-secondary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+    &.tertiary { background: var(--color-tertiary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+    &.quaternary { background: var(--color-quaternary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+
+    &.primary:hover { background-color: var(--color-secondary); }
+    &.secondary:hover { background-color: var(--color-tertiary); }
+    &.tertiary:hover { background-color: var(--color-quaternary); }
+    &.quaternary:hover { background-color: var(--color-primary); }
+
+    &.outline {
+        background-color: transparent;
+        border: 2px solid var(--text-dark);
+        color: var(--text-dark);
+        text-shadow:none;
+
+        /* Variantes des boutons en contour */
+        &.primary { border-color: var(--color-primary); color: var(--color-primary); }
+        &.secondary { border-color: var(--color-secondary); color: var(--color-secondary); }
+        &.tertiary { border-color: var(--color-tertiary); color: var(--color-tertiary); }
+        &.quaternary { border-color: var(--color-quaternary); color: var(--color-quaternary); }
+
+        &.primary:hover { background-color: var(--color-primary); color: #fff; }
+        &.secondary:hover { background-color: var(--color-secondary); color: #fff; }
+        &.tertiary:hover { background-color: var(--color-tertiary); color: #fff; }
+        &.quaternary:hover { background-color: var(--color-quaternary); color: #fff; }
+    }
+}
+
+
+
+
+
+
+/* ============================================================================
+   Modules et composants
+   ---------------------------------------------------------------------------
+   Styles pour les cartes, la barre de navigation et les alertes.
+=========================================================================== */
+.card {
+    background-color: var(--bg-light);
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 1.5em;
+    margin: 1em 0;
+    transition: transform var(--transition-speed) var(--transition-ease),
+    box-shadow var(--transition-speed) var(--transition-ease);
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-primary { border-color: var(--color-primary); }
+.card-secondary { border-color: var(--color-secondary); }
+.card-tertiary { border-color: var(--color-tertiary); }
+.card-quaternary { border-color: var(--color-quaternary); }
+
+/* ============================================================================
+   Navbar
+   ---------------------------------------------------------------------------
+   Style de base et variantes de la barre de navigation selon la couleur.
+=========================================================================== */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em;
+    color: #fff;
+    animation: move 5s infinite;
+}
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 0.5em;
+}
+.navbar a:hover { text-decoration: underline; }
+
+.navbar-primary { background: var(--color-primary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+.navbar-secondary { background: var(--color-secondary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+.navbar-tertiary { background: var(--color-tertiary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+.navbar-quaternary { background: var(--color-quaternary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+
+
+/* ============================================================================
+   Alertes
+   ---------------------------------------------------------------------------
+   Styles pour les alertes avec animation et déclinaisons de couleur.
+=========================================================================== */
+.alert {
+    padding: 1em;
+    border-radius: 4px;
+    margin: 1em 0;
+    color: #fff;
+    animation: pulse 5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(.99); }
+    100% { transform: scale(1); }
+}
+
+.alert-primary { background: var(--color-primary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+.alert-secondary { background: var(--color-secondary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+.alert-tertiary { background: var(--color-tertiary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+.alert-quaternary { background: var(--color-quaternary) linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2)); }
+
+.alert-info {
+    background: #267365 linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2));
+    color: #fff;
+}
+
+.alert-warning {
+    background: #F2CB05 linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2));
+    color: #333;
+}
+
+.alert-error {
+    background: #F23030 linear-gradient(var(--gradient-orientation), var(--gradient1), var(--gradient2));
+    color: #fff;
+}
+.alert-error div:before{
+    content:'';
+}
+
+/* ============================================================================
+   Formulaires
+   ---------------------------------------------------------------------------
+   Styles pour des formulaires modernes et interactifs.
+=========================================================================== */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.75em;
+    border: 1px solid var(--color-quaternary);
+    border-radius: 4px;
+    margin-bottom: 1em;
+    transition: border-color var(--transition-speed) var(--transition-ease),
+    box-shadow var(--transition-speed) var(--transition-ease);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 5px rgba(255, 111, 97, 0.5);
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 1.5em;
+}
+
+/* ============================================================================
+   Effets et animations supplémentaires
+   ---------------------------------------------------------------------------
+   Animation pour l'apparition progressive (fade-in) et transitions sur liens.
+=========================================================================== */
+.fade-in {
+    opacity: 0;
+    animation: fadeInAnimation var(--transition-speed) forwards;
+}
+
+@keyframes fadeInAnimation {
+    to { opacity: 1; }
+}
+
+a {
+    transition: color var(--transition-speed) var(--transition-ease);
+}
+
+a:hover {
+    color: var(--color-secondary);
+}
+
+/* ============================================================================
+       Utilitaires
+       ---------------------------------------------------------------------------
+       Classes utilitaires pour changer la couleur du texte ou le fond.
+    =========================================================================== */
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.text-tertiary { color: var(--color-tertiary); }
+.text-quaternary { color: var(--color-quaternary); }
+
+.bg-primary { background-color: var(--color-primary); }
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-tertiary { background-color: var(--color-tertiary); }
+.bg-quaternary { background-color: var(--color-quaternary); }
+
+
+
+/* ============================================================================
+   Override pour le mode sombre manuel
+   ---------------------------------------------------------------------------
+   Ajout d'une classe "dark" sur le body permet de forcer le mode sombre.
+=========================================================================== */
+body.dark {
+    --bg-light: #2E2E2E;
+    --bg-dark: #ffffff;
+    --text-dark: #f0f0f0;
+    --text-light: #333333;
+}

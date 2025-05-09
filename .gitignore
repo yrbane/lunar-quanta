@@ -1,1 +1,9 @@
-vendor/
+# Ignorer les dépendances du projet
+/vendor/
+
+# Ignorer les dépendances des outils de développement
+/tools/vendor/.idea
+.php-cs-fixer.cache
+cache/
+log/
+.idea/
