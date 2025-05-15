@@ -21,15 +21,35 @@ class CacheClearCommand implements CommandInterface
     {
         $cacheDir = Config::getProjectRoot().'/cache';
 
-        foreach (glob($cacheDir.'/*') as $file) {
-            if (is_file($file)) {
-                unlink($file);
-            }
+        if (!is_dir($cacheDir)) {
+            echo "Le répertoire de cache n'existe pas.\n";
+            return 1;
         }
+        // Supprime le contenu du répertoire de cache
+        $this->deleteDirContent($cacheDir);
 
         echo "🧹 Cache vidé avec succès.\n";
 
         return 0;
+    }
+
+    function deleteDirContent(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+
+        $files = glob($dir.'/*');
+
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                $this->deleteDirContent($file);
+                rmdir($file);
+            } else {
+                echo $file." supprimé.\n";
+                unlink($file);
+            }
+        }
     }
 
     public function getHelp(): string
