@@ -47,6 +47,23 @@
     --text-light: #f0f0f0;
     --text-dark: #333333;
 
+    /* Palette Dumper */
+    --dump-bg: var(--bg-dark);
+    --dump-fg: var(--text-light);
+    --dump-line:       #f92a2a;
+    --dump-type:       #23ec31;
+    --dump-key:        #569cd6;
+    --dump-string:     #ce9178;
+    --dump-number:     #e79d47;
+    --dump-bool:       #4ec9b0;
+    --dump-null:       #c586c0;
+    --dump-array:      var(--dump-fg);
+    --dump-object:     #9cdcfe;
+    --dump-resource:   #808080;
+    --dump-visibility: #6a9955;
+    --dump-header-bg: color-mix(in srgb, var(--dump-bg) 60%, black);
+    --dump-header-fg: var(--dump-fg);
+
     /* Paramètres de transition */
     --transition-speed: 0.3s;
     --transition-ease: ease-in-out;
@@ -399,4 +416,103 @@ body.dark {
     --bg-dark: #ffffff;
     --text-dark: #f0f0f0;
     --text-light: #333333;
+}
+
+/* ============================================================================
+    Photo et image
+    ---------------------------------------------------------------------------
+    Styles pour les images et les photos.
+=========================================================================== */
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: transform var(--transition-speed) var(--transition-ease),
+    box-shadow var(--transition-speed) var(--transition-ease);
+}
+    /**
+     * Custom CSS filter pour faire ressortir
+     * les couleurs de la palette du design.
+     */
+    .photo-filter {
+      /* accentue la saturation et le contraste,
+         ajoute une touche de sépia et fait une
+         rotation de teinte subtile */
+      filter:
+        saturate(1.3)
+        contrast(1.2)
+        brightness(1.05)
+        sepia(0.15)
+        hue-rotate(10deg);
+      transition: filter var(--transition-speed) var(--transition-ease);
+    }
+    .photo-filter:hover {
+      filter:
+        saturate(1.5)
+        contrast(1.3)
+        brightness(1.1)
+        sepia(0.25)
+        hue-rotate(5deg);
+    }
+
+/* ============================================================================
+   Dumper
+=========================================================================== */
+.dump {
+    background-color: var(--dump-bg);
+    color: var(--dump-fg);
+    border: 2px solid var(--color-tertiary);
+    margin: var(--spacing);
+    padding: var(--spacing);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    font-family: var(--font-mono);
+    font-size: .9rem;
+    line-height: 1.4;
+    overflow: auto;
+    white-space: pre;
+    tab-size: 4;
+
+    /* --- Tokens imbriqués -------------------------------------------------- */
+    & .key        { color: var(--dump-key); }
+    & .string     { color: var(--dump-string); }
+    & .number     { color: var(--dump-number); }
+    & .bool       { color: var(--dump-bool); font-weight: 600; }
+    & .null       { color: var(--dump-null); font-style: italic; }
+    & .array      { color: var(--dump-array); }
+    & .object     { color: var(--dump-object); }
+    & .resource   { color: var(--dump-resource); }
+    & .visibility { color: var(--dump-visibility); font-style: italic; }
+
+    /* --- Effet d’interaction (hover sur ligne) ----------------------------- */
+    & > span:hover,
+    & > span:hover * {
+        /* Éclaircit la teinte du token survolé sans toucher aux autres */
+        color: color-mix(in srgb, currentColor 80%, white);
+    }
+
+    /* entête de dump */
+    & .header {
+        background: var(--dump-header-bg);
+        color: var(--dump-header-fg);
+        padding: calc(var(--spacing) / 2) var(--spacing);
+        border-radius: var(--radius) var(--radius) 0 0;
+        font-family: var(--font-mono);
+        font-size: 1.2rem;
+        white-space: pre;
+        overflow-x: auto;
+
+        
+        & .line {
+            color: var(--dump-line);
+            font-weight: 600;
+        }
+    }
+
+    & .type {
+        color: var(--dump-type);
+        font-weight: 600;
+    }
 }

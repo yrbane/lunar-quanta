@@ -27,7 +27,7 @@ use App\Service\Core\Router;
     name: 'router:debug',
     description: 'Liste toutes les classes de contrôleurs et les routes associées (ordre alpha).'
 )]
-class RouterDebugCommand extends AbstractCommand
+class RouterDebugCommand extends AbstractCommand  implements CommandInterface
 {
     /**
      * Exécute la commande.

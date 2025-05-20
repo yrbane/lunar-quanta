@@ -7,10 +7,26 @@
     <link rel="stylesheet" href="/css/potatoes.css">
 </head>
 <body>
-    <header>
-        <h1>Header de base</h1>
+    <!-- Barre de navigation -->
+    <nav class="navbar navbar-primary">
+        <div class="container wrapper">
+            <a href="#" class="text-quaternary">LOGO</a>
+            <div>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header du blog -->
+    <header class="photo-filter" style="text-align: center; background-image: url('/img/header.png'); background-size: cover; background-position: center; padding: 2em;min-height:50vh;">
+        <h1 class="fade-in">Welcome to Our Blog</h1>
+        <p class="fade-in" style="animation-delay: 0.2s;">
+        Discover stories, tips, and inspiration.
+        </p>
     </header>
-    <main>
+    <main class="wrapper">
         [% block content %]
         Contenu par défaut.
         [% endblock %]

@@ -33,7 +33,7 @@ class DefaultController extends BaseController
     #[Route('/', name: 'home', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $html = $this->render('home.html', [
+        $html = $this->render('examples/blog.html', [
             'title' => 'Accueil',
             'message' => 'Bienvenue sur notre site !',
             'loginUrl' => '/login',

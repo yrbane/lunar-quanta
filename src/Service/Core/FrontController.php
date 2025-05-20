@@ -76,7 +76,7 @@ class FrontController
      */
     private function loadEnvironment(): void
     {
-        $envFile = __DIR__ . '/../../.env';
+        $envFile = __DIR__ . '/../../../.env';
         if (file_exists($envFile)) {
             $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             foreach ($lines as $line) {
@@ -86,8 +86,12 @@ class FrontController
                     continue;
                 }
                 [$name, $value] = array_map('trim', explode('=', $line, 2));
+                dump($name, $value);
                 putenv("{$name}={$value}");
             }
         }
+        $env = getenv(null,false);
+        ksort($env);
+        dump($env);
     }
 }
