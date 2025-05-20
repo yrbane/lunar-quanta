@@ -6,6 +6,7 @@ L'architecture est pensée pour isoler les outils de développement (tests, anal
 ## Table des matières
 
 - [Introduction](#introduction)
+- [Architecture générale](#architecture-g%C3%A9n%C3%A9rale)
 - [Prérequis](#prérequis)
 - [Installation](#installation)
     - [Dépendances du projet principal](#dépendances-du-projet-principal)
@@ -27,6 +28,39 @@ Ce projet utilise une séparation claire entre :
 Cette organisation permet de :
 - **Isoler les versions** des outils de développement, évitant ainsi les conflits avec les dépendances du projet.
 - **Fournir des raccourcis** (dans le dossier `bin/`) pour une exécution simple des outils, sans interférer avec la configuration de l'application principale.
+
+## Architecture générale
+
+### Structure des répertoires
+
+```
+/src
+  /Command      -> Commandes CLI
+  /Controller   -> Contrôleurs web
+  /Entity       -> Entités (ex. User)
+  /Service      -> Services (Router, Template, etc.)
+/bin            -> Entrée CLI (script console)
+/public         -> Front web (index.php, assets)
+config/         -> Fichiers de configuration JSON
+template/       -> Templates .tpl utilisés par le moteur
+```
+
+### Principaux composants
+
+1. **FrontController** – point d'entrée de `public/index.php` qui charge la configuration, transmet la requête au routeur et gère les erreurs.
+2. **Router** – lit les attributs `#[Route]` dans `src/Controller`, met en cache les routes et associe une requête à la bonne action.
+3. **Container** – petit conteneur permettant d'injecter les dépendances via la réflexion.
+4. **Templating** – `BaseController` s'appuie sur `AdvancedTemplateEngine` pour rendre les vues avec héritage de blocs et macros.
+5. **Sécurité et stockage** – `EncryptionService` fournit le chiffrement AES‑256 et `JsonStorage` gère le stockage chiffré des entités `User`.
+6. **CLI** – les classes annotées `#[Command]` dans `src/Command/` sont exécutables via le script `bin/console` (voir `doc/command.md`).
+
+### Points de repère pour apprendre
+
+- **Configuration** : options dans `config/*.json` et variables dans `.env` (APP_ENV, APP_DEBUG…).
+- **Routage** : ajouter un contrôleur dans `src/Controller` avec `#[Route('/chemin', methods: ['GET'], name: 'nom')]`.
+- **Templates** : placer les fichiers `.tpl` dans `template/` et étendre `base.html.tpl`.
+- **Commandes CLI** : suivre `doc/command.md` pour créer une nouvelle commande.
+- **Conventions** : respecter PSR‑12, écrire le code en anglais et commenter en français.
 
 ## Prérequis
 
