@@ -55,8 +55,16 @@ class TestController extends BaseController
     #[Route('/testcss', methods: ['GET'],name: 'test.css')]
     public function testcss(Request $request): Response
     {
-        // Lancer une exception pour simuler une erreur interne (500)
-        $html = $this->render('test-css.html', []);
+        $html = $this->render('test/css.html', []);
+
+        return new Response($html);
+    }
+
+    /** */
+    #[Route('/testflex', methods: ['GET'],name: 'test.flex')]
+    public function testflex(Request $request): Response
+    {
+        $html = $this->render('test/flex.html', []);
 
         return new Response($html);
     }

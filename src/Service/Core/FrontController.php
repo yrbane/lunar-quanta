@@ -90,7 +90,7 @@ class FrontController
                 putenv("{$name}={$value}");
             }
         }
-        $env = getenv(null,false);
+        $env = getenv();
         ksort($env);
         dump($env);
     }

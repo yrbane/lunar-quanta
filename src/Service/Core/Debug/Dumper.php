@@ -44,7 +44,7 @@ final class Dumper
         /* ----------- HTML : on capture tout de suite le rendu ---------- */
         ob_start();
         echo '<div class="dump">';
-        self::htmlHeader($file, $line, $var); // écrit dans le buffer de sortie
+        self::htmlHeader($file, $line); // écrit dans le buffer de sortie
         foreach ($vars as $var) {
             echo '<div class="type">'.get_debug_type($var).'</div>';
             self::dumpHtml($var);   
@@ -81,7 +81,7 @@ final class Dumper
         ConsoleHelper::subtitle($msg);
     }
 
-    private static function htmlHeader(string $file, int $line, mixed $var): void
+    private static function htmlHeader(string $file, int $line): void
     {
         printf(
             '<pre class="header">%s:&nbsp;<span class="line">%d</span>&nbsp;</pre>',

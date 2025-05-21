@@ -166,7 +166,7 @@ class Router
     private function getControllerClasses(): array
     {
         $classes = [];
-        if (false === $this->controllerDir) {
+        if (false == $this->controllerDir) {
             return $classes;
         }
         $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->controllerDir));
@@ -221,7 +221,7 @@ class Router
                         'controller' => $controllerClass,
                         'action' => $method->getName(),
                     ];
-                    $this->routes[] = $route;
+                    $this->routes[$routeAttr->name] = $route;
                     // Si la route est nommée, on l'enregistre dans le tableau statique.
                     if (!empty($routeAttr->name)) {
                         self::$namedRoutes[$routeAttr->name] = $route;

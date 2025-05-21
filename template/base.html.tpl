@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>[[ title ]]</title>
     <link rel="stylesheet" href="/css/potatoes.css">
+    [% block header %][% endblock %]
 </head>
 <body>
     <!-- Barre de navigation -->

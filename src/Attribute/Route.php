@@ -23,15 +23,18 @@ namespace App\Attribute;
 class Route
 {
     public string $path;
+    /**
+     * @var array<string> liste des méthodes HTTP autorisées
+     */
     public array $methods;
     public ?string $name;
 
     /**
      * Route constructor.
      *
-     * @param string      $path    the route path
-     * @param array       $methods allowed HTTP methods (default ['GET'])
-     * @param null|string $name    optional name of the route
+     * @param string        $path    the route path
+     * @param array<string> $methods allowed HTTP methods (default ['GET'])
+     * @param null|string   $name    optional name of the route
      */
     public function __construct(string $path, array $methods = ['GET'], ?string $name = null)
     {

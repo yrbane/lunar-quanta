@@ -42,7 +42,6 @@ class AdvancedTemplateEngine
      * AdvancedTemplateEngine constructor.
      *
      * @param string  $templatePath répertoire où se trouvent les templates source
-     * @param ?string $cachePath    Répertoire pour stocker les templates compilés (optionnel).
      *
      * Pour éviter les problèmes de chemins relatifs, on convertit les chemins en chemin absolu.
      */
@@ -95,6 +94,20 @@ class AdvancedTemplateEngine
         }
 
         extract($variables, EXTR_OVERWRITE);
+
+        //Variables par défaut
+        $title = $title ?? 'Titre par défaut';
+        $description = $description ?? 'Description par défaut';
+        $keywords = $keywords ?? 'Mots-clés par défaut';
+        $author = $author ?? 'Auteur par défaut';
+        $charset = $charset ?? 'UTF-8';
+        $viewport = $viewport ?? 'width=device-width, initial-scale=1.0';
+        $lang = $lang ?? 'fr';
+        $favicon = $favicon ?? '/favicon.ico';
+        $baseUrl = $baseUrl ?? '/';
+        $basePath = $basePath ?? '/';
+     
+
         ob_start();
         try{
             include $compiledFile;
@@ -156,12 +169,6 @@ class AdvancedTemplateEngine
      */
     public function registerMacroInstance(MacroInterface $macro): void
     {
-        // Important : la méthode 'execute' doit être publique,
-        // et la classe doit être bien chargée/valide.
-        if (!method_exists($macro, 'execute')) {
-            throw new \RuntimeException('La macro '.get_class($macro).' n’a pas de méthode execute().');
-        }
-
         // Le tableau [$macro, 'execute'] est un callable valide SI la méthode est publique
         $this->registerMacro($macro->getName(), [$macro, 'execute']);
     }
