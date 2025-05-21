@@ -61,7 +61,8 @@ class Router
     {
         $this->cacheFile = self::getCacheFile();
         // Définir le répertoire des contrôleurs (relative à ce fichier)
-        $this->controllerDir = realpath(Config::getProjectRoot().'/src/Controller');
+        $controllerDir = realpath(Config::getProjectRoot().'/src/Controller');
+        $this->controllerDir = false === $controllerDir ? '' : $controllerDir;
         if(is_file($this->cacheFile)){
             $this->routes = include $this->cacheFile;
         }
@@ -77,7 +78,7 @@ class Router
      */
     public static function getCacheFile():string
     {
-        return Config::getProjectRoot().'/'.Config::get('cache.dir').'/router.php';
+        return Config::getProjectRoot().'/'.(string) Config::get('cache.dir').'/router.php';
     }
 
     /**
@@ -174,9 +175,16 @@ class Router
         }
         $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->controllerDir));
         foreach ($iterator as $file) {
+            if (!$file instanceof \SplFileInfo) {
+                continue;
+            }
             if ($file->isFile() && 'php' === $file->getExtension()) {
+                $realPath = $file->getRealPath();
+                if (false === $realPath) {
+                    continue;
+                }
                 // Obtenir le chemin relatif par rapport au dossier des contrôleurs
-                $relativePath = str_replace($this->controllerDir.DIRECTORY_SEPARATOR, '', $file->getRealPath());
+                $relativePath = str_replace($this->controllerDir.DIRECTORY_SEPARATOR, '', $realPath);
                 // Convertir les séparateurs de dossier en séparateurs de namespace
                 $relativeClass = str_replace(DIRECTORY_SEPARATOR, '\\', $relativePath);
                 // Enlever l'extension .php pour obtenir le nom de la classe
@@ -197,6 +205,7 @@ class Router
      */
     private function registerControllerRoutes(string $controllerClass): void
     {
+        /** @var class-string $controllerClass */
         $refClass = new \ReflectionClass($controllerClass);
         $basePath = '';
 

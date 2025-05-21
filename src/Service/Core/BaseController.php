@@ -35,15 +35,16 @@ abstract class BaseController
     protected function render(string $template, array $variables = []): string
     {
         // Récupère la configuration du templating
-        $engineClass = Config::get('template.engine', AdvancedTemplateEngine::class);
+        $engineClass = (string) Config::get('template.engine', AdvancedTemplateEngine::class);
+        /** @var class-string<AdvancedTemplateEngine> $engineClass */
         $templatePath = Config::get('template.template_path', Config::getProjectRoot().'/template');
-        $cachePath = Config::get('template.cache_path', Config::getProjectRoot().'/cache/template');
 
         // Instancie dynamiquement le moteur de template choisi
         if (!class_exists($engineClass)) {
             throw new \Exception("Template engine class {$engineClass} does not exist.");
         }
-        $engine = new $engineClass($templatePath, $cachePath);
+        /** @var AdvancedTemplateEngine $engine */
+        $engine = new $engineClass($templatePath);
         $engine->loadMacrosFromNamespace('App\Service\Core\Template\Macro', Config::getProjectRoot().'/src/Service/Core/Template/Macro');
 
         return $engine->render($template, $variables);

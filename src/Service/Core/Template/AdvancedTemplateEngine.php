@@ -58,7 +58,7 @@ class AdvancedTemplateEngine
         $this->templatePath = $absTemplatePath;
 
         // Définition du cachePath
-        $cachePath = Config::getProjectRoot().'/'.Config::get('cache.dir','cache').'/'.Config::get('template_cache_dir', 'template');
+        $cachePath = Config::getProjectRoot().'/'.(string) Config::get('cache.dir','cache').'/'.(string) Config::get('template_cache_dir', 'template');
 
         $absCachePath = realpath($cachePath) ?: $cachePath;
         $this->cachePath = rtrim($absCachePath, '/');
@@ -89,7 +89,11 @@ class AdvancedTemplateEngine
 
         // Si le template compilé n'existe pas ou est périmé, le recompiler.
         if (!file_exists($compiledFile) || filemtime($compiledFile) < filemtime($templateFile)) {
-            $compiled = $this->compileTemplate(file_get_contents($templateFile));
+            $source = file_get_contents($templateFile);
+            if ($source === false) {
+                throw new \Exception("Unable to read template: {$templateFile}");
+            }
+            $compiled = $this->compileTemplate($source);
             file_put_contents($compiledFile, $compiled);
         }
 
@@ -118,7 +122,7 @@ class AdvancedTemplateEngine
             throw $e;
         }
 
-        return ob_get_clean();
+        return (string) ob_get_clean();
     }
 
     /**
@@ -131,7 +135,11 @@ class AdvancedTemplateEngine
     public function loadMacrosFromNamespace(string $namespace, string $directory): void
     {
         // Parcourt tous les fichiers PHP dans le répertoire
-        foreach (glob($directory.'/*.php') as $file) {
+        $files = glob($directory.'/*.php');
+        if ($files === false) {
+            return;
+        }
+        foreach ($files as $file) {
             require_once $file;
 
             // Extrait le nom de la classe à partir du nom de fichier
@@ -189,10 +197,7 @@ class AdvancedTemplateEngine
             throw new \Exception("Macro {$name} is not defined.");
         }
 
-        if (!is_callable($this->macros[$name])) {
-            throw new \Exception("Macro {$name} is not callable.");
-        }
-        return $this->macros[$name][0]->{$this->macros[$name][1]}($args);
+        return $this->macros[$name](...$args);
     }
 
     /**
@@ -241,7 +246,7 @@ class AdvancedTemplateEngine
         // Nettoyage des éventuelles balises de blocs non remplacées
         $source = preg_replace('/\[%\s*block\s+\S+\s*%\]/', '', $source);
 
-        return preg_replace('/\[%\s*endblock\s*%\]/', '', $source);
+        return (string) preg_replace('/\[%\s*endblock\s*%\]/', '', $source);
     }
 
     /**
@@ -264,6 +269,9 @@ class AdvancedTemplateEngine
                 throw new \Exception("Parent template not found: {$parentFile}");
             }
             $parentSource = file_get_contents($parentFile);
+            if ($parentSource === false) {
+                throw new \Exception("Unable to read parent template: {$parentFile}");
+            }
 
             return preg_replace_callback('/\[%\s*block\s+(\w+)\s*%\](.*?)\[%\s*endblock\s*%\]/s', function ($matches) use ($blocks) {
                 $blockName = $matches[1];
