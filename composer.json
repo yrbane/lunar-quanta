@@ -1,5 +1,5 @@
 {
-    "name": "nethttp.net/lunar-quanta",
+    "name": "yrbane/lunar-quanta",
     "description": "Mini système PHP8",
     "type": "project",
     "require": {
