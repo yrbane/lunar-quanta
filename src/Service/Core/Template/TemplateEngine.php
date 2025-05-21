@@ -33,8 +33,8 @@ class TemplateEngine
     /**
      * Rendu d’un template avec des variables.
      *
-     * @param string $template  nom du template à utiliser
-     * @param array  $variables variables à injecter
+     * @param string               $template  nom du template à utiliser
+     * @param array<string, mixed> $variables variables à injecter
      *
      * @return string résultat du rendu
      */
