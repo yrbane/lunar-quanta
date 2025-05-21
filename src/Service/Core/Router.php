@@ -143,7 +143,7 @@ class Router
     /**
      * Retourne la liste des routes actuellement enregistrées.
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<string, array<string, mixed>>
      */
     public function getRegisteredRoutes(): array
     {
@@ -254,7 +254,7 @@ class Router
     /**
      * Retourne la liste des routes enregistrées.
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<string, array<string, mixed>>
      */
     public function getRoutes(): array
     {
