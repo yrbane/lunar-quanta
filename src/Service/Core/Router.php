@@ -119,7 +119,10 @@ class Router
     }
 
     /**
-**/
+     * Try to find a matching route for the given request.
+     *
+     * @return Response|false Response when a route matches, false otherwise
+     */
     public function searchRoute(Request $request):Response|bool
     {
         foreach ($this->routes as $route) {
