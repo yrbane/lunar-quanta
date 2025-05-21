@@ -20,14 +20,15 @@ class Response
 {
     private string $content;
     private int $statusCode;
+    /** @var array<int, string> */
     private array $headers;
 
     /**
      * Constructeur.
      *
-     * @param string $content    contenu de la réponse
-     * @param int    $statusCode code de statut HTTP
-     * @param array  $headers    en-têtes HTTP à envoyer
+     * @param string           $content    contenu de la réponse
+     * @param int              $statusCode code de statut HTTP
+     * @param array<int,string> $headers    en-têtes HTTP à envoyer
      */
     public function __construct(string $content = '', int $statusCode = 200, array $headers = [])
     {

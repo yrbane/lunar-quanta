@@ -102,6 +102,8 @@ class User
 
     /**
      * Retourne un tableau associatif des données de l'utilisateur.
+     *
+     * @return array<string, string>
      */
     public function toArray(): array
     {

@@ -99,6 +99,9 @@ final class Dumper
     /**
      * Affichage en terminal : scalaires colorés, tableaux/objets via TableRenderer.
      */
+    /**
+     * @param \SplObjectStorage<object, mixed>|null $seen
+     */
     private static function dumpCli(mixed $var, int $level = 0, ?\SplObjectStorage $seen = null): void
     {
         $seen ??= new \SplObjectStorage();
@@ -137,6 +140,10 @@ final class Dumper
     /**
      * Rendu d’un tableau pour le terminal.
      */
+    /**
+     * @param array<int|string, mixed>                    $array
+     * @param \SplObjectStorage<object, mixed>|null $seen
+     */
     private static function renderCliArray(array $array, int $level, ?\SplObjectStorage $seen=null): void
     {
         if ($level >= self::MAX_DEPTH) {
@@ -174,6 +181,9 @@ final class Dumper
 
     /**
      * Rendu d’un objet pour le terminal.
+     */
+    /**
+     * @param \SplObjectStorage<object, mixed> $seen
      */
     private static function renderCliObject(object $object, int $level, \SplObjectStorage $seen): void
     {
@@ -224,6 +234,9 @@ final class Dumper
     /**
      * Affichage dans un navigateur : <pre> avec classes CSS.
      */
+    /**
+     * @param \SplObjectStorage<object, mixed>|null $seen
+     */
     private static function dumpHtml(mixed $var, int $level = 0, ?\SplObjectStorage $seen = null): void
     {
         $seen ??= new \SplObjectStorage();
@@ -235,6 +248,9 @@ final class Dumper
 
     /**
      * Transformation récursive en HTML.
+     */
+    /**
+     * @param \SplObjectStorage<object, mixed> $seen
      */
     private static function exportHtml(mixed $var, int $level, ?\SplObjectStorage $seen): void
     {

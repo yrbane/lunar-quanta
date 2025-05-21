@@ -24,9 +24,8 @@ class Container
     /**
      * Instancie une classe en résolvant récursivement ses dépendances.
      *
-     * @template T of object
-     * @param class-string<T> $className
-     * @return T
+     * @param class-string $className
+     * @return object
      */
     public function get(string $className): object
     {
