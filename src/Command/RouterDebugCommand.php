@@ -123,9 +123,9 @@ HELP;
         $routes = $router->getRegisteredRoutes();
 
         // On va trier par ordre alphabétique de "name" (ou "path" si pas de nom).
-        usort($routes, function (array $a, array $b) {
-            $nameA = $a['name'] ?? $a['path'];
-            $nameB = $b['name'] ?? $b['path'];
+        usort($routes, function (array $a, array $b): int {
+            $nameA = (string) ($a['name'] ?? $a['path']);
+            $nameB = (string) ($b['name'] ?? $b['path']);
 
             return strcmp($nameA, $nameB);
         });

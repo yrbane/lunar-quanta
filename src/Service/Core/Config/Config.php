@@ -47,6 +47,7 @@ class Config
             // On charge la configuration depuis le cache
             $cached = include $cacheFile;
             if (is_array($cached)) {
+                /** @var array<string, mixed> $cached */
                 self::$config = $cached;
                 return;
             }
@@ -57,10 +58,14 @@ class Config
             self::$config = self::loadFromDirectory($path);
         } elseif (file_exists($path)) {
             $json = file_get_contents($path);
+            if ($json === false) {
+                throw new \Exception("Unable to read configuration file: {$path}");
+            }
             $data = json_decode($json, true);
             if ($data === null) {
                 throw new \Exception("Invalid JSON in configuration file: {$path}");
             }
+            /** @var array<string, mixed> $data */
             self::$config = $data;
         } else {
             throw new \Exception("Configuration path not found: {$path}");
@@ -95,12 +100,19 @@ class Config
     {
         $configData = [];
         $files = glob(rtrim($directory, '/') . '/*.json');
+        if ($files === false) {
+            return $configData;
+        }
         foreach ($files as $file) {
             $json = file_get_contents($file);
+            if ($json === false) {
+                throw new \Exception("Unable to read configuration file: {$file}");
+            }
             $data = json_decode($json, true);
             if ($data === null) {
                 throw new \Exception("Invalid JSON in configuration file: {$file}");
             }
+            /** @var array<string, mixed> $data */
             $configData = self::mergeArrays($configData, $data);
         }
         return $configData;
@@ -173,7 +185,8 @@ class Config
     public static function getProjectRoot(): string
     {
         if (null === self::$projectRoot) {
-            self::$projectRoot = realpath(__DIR__ . '/../../../../');
+            $root = realpath(__DIR__ . '/../../../../');
+            self::$projectRoot = false === $root ? '' : $root;
         }
 
         return self::$projectRoot;

@@ -49,10 +49,13 @@ class Container
         $args = array_map(function (ReflectionParameter $param) use ($className) {
             $type = $param->getType();
             if (!$type instanceof ReflectionNamedType || $type->isBuiltin()) {
-                throw new RuntimeException("Impossible de résoudre la dépendance `{$param->getName()}` dans {$className}.");
+                throw new RuntimeException(
+                    "Impossible de résoudre la dépendance `{$param->getName()}` dans {$className}."
+                );
             }
 
             $dependencyClass = $type->getName();
+            /** @var class-string $dependencyClass */
             return $this->get($dependencyClass); // récursivité ici
         }, $constructor->getParameters());
 
