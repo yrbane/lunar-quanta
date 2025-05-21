@@ -43,8 +43,8 @@ class ConsoleHelper
      * Affiche un tableau formaté avec entêtes et lignes, coloré.
      * Gère correctement les largeurs de colonnes en UTF-8 (ou encodage forcé).
      *
-     * @param array $headers entêtes de colonnes
-     * @param array $rows    données à afficher (tableau de tableaux)
+     * @param array<int, string>                     $headers entêtes de colonnes
+     * @param array<int, array<int|string, mixed>>   $rows    données à afficher (tableau de tableaux)
      */
     public static function table(array $headers, array $rows): void
     {

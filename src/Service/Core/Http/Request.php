@@ -20,9 +20,13 @@ class Request
 {
     private string $method;
     private string $uri;
+    /** @var array<string, mixed> */
     private array $query;
+    /** @var array<string, mixed> */
     private array $post;
+    /** @var array<string, mixed> */
     private readonly array $server;
+    /** @var array<string, mixed> */
     private array $headers;
 
     /**
@@ -63,7 +67,7 @@ class Request
     /**
      * Retourne les paramètres GET.
      *
-     * @return array les paramètres GET
+     * @return array<string, mixed> les paramètres GET
      */
     public function getQueryParams(): array
     {
@@ -73,7 +77,7 @@ class Request
     /**
      * Retourne les paramètres POST.
      *
-     * @return array les paramètres POST
+     * @return array<string, mixed> les paramètres POST
      */
     public function getPostParams(): array
     {
@@ -83,7 +87,7 @@ class Request
     /**
      * Retourne les en-têtes HTTP.
      *
-     * @return array les en-têtes de la requête
+     * @return array<string, mixed> les en-têtes de la requête
      */
     public function getHeaders(): array
     {
@@ -92,6 +96,8 @@ class Request
 
     /**
      * Retourne les var SERVER.
+     *
+     * @return array<string, mixed>
      */
     public function getServerParams(): array
     {

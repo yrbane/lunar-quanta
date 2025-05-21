@@ -19,5 +19,8 @@ interface MacroInterface
      *
      * @return mixed
      */
+    /**
+     * @param array<int, mixed> $args
+     */
     public function execute(array $args);
 }
