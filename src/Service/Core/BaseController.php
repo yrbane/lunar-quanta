@@ -27,8 +27,8 @@ abstract class BaseController
     /**
      * Render a template using the configured templating engine.
      *
-     * @param string $template  name of the template (without extension)
-     * @param array  $variables variables to inject in the template
+     * @param string               $template  name of the template (without extension)
+     * @param array<string, mixed> $variables variables to inject in the template
      *
      * @return string rendered HTML content
      */

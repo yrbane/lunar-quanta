@@ -19,6 +19,9 @@ class UrlMacro implements MacroInterface
         return 'url';
     }
 
+    /**
+     * @param array<int, mixed> $args
+     */
     public function execute(array $args)
     {
         $routeName = $args[0] ?? '';

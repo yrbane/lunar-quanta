@@ -31,12 +31,12 @@ class Router
     private string $cacheFile;
 
     /**
-     * @var array liste des routes enregistrées
+     * @var array<string, array<string, mixed>> liste des routes enregistrées
      */
     private array $routes = [];
 
     /**
-     * @var array<string, array> table de hachage des routes nommées
+     * @var array<string, array<string, mixed>> table de hachage des routes nommées
      */
     private static array $namedRoutes = [];
 
@@ -85,7 +85,7 @@ class Router
      *
      * @param string $name nom de la route
      *
-     * @return null|array le tableau décrivant la route ou null si non trouvée
+     * @return array<string, mixed>|null le tableau décrivant la route ou null si non trouvée
      */
     public static function getRouteByName(string $name): ?array
     {
@@ -164,7 +164,7 @@ class Router
     /**
      * Récupère la liste des classes du namespace \App\Controller à partir du dossier des contrôleurs.
      *
-     * @return array tableau des noms complets des classes
+     * @return array<int, string> tableau des noms complets des classes
      */
     private function getControllerClasses(): array
     {
@@ -240,7 +240,7 @@ class Router
     /**
      * Vérifie si une route correspond à la requête.
      *
-     * @param array   $route   la route sous forme de tableau
+     * @param array<string, mixed> $route la route sous forme de tableau
      * @param Request $request L'objet Request
      *
      * @return bool vrai si la route correspond, sinon faux

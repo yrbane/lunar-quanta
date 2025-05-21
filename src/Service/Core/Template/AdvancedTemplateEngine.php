@@ -35,7 +35,7 @@ class AdvancedTemplateEngine
     /** @var string Chemin absolu vers le dossier de cache des templates compilés */
     protected string $cachePath;
 
-    /** @var array Liste des macros enregistrées */
+    /** @var array<string, callable> Liste des macros enregistrées */
     protected array $macros = [];
 
     /**
@@ -70,8 +70,8 @@ class AdvancedTemplateEngine
     /**
      * Rendu d'un template avec injection de variables.
      *
-     * @param string $template  Nom du template (sans extension, fichier attendu en .tpl)
-     * @param array  $variables variables à injecter dans le template
+     * @param string               $template  Nom du template (sans extension, fichier attendu en .tpl)
+     * @param array<string, mixed> $variables variables à injecter dans le template
      *
      * @return string le contenu HTML généré
      *
@@ -176,8 +176,8 @@ class AdvancedTemplateEngine
     /**
      * Appelle une macro enregistrée.
      *
-     * @param string $name nom de la macro
-     * @param array  $args arguments passés à la macro
+     * @param string                  $name nom de la macro
+     * @param array<int, mixed>       $args arguments passés à la macro
      *
      * @return mixed résultat renvoyé par la macro
      *

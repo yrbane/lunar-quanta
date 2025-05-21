@@ -79,6 +79,10 @@ Options :
 HELP;
     }
 
+    /**
+     * @param array<int, array{name: string, description: string}> $arguments
+     * @param array<int, array{fqcn: string, var: string}>         $dependencies
+     */
     private function generateCommandClass(string $className, string $commandName, string $description, array $arguments, array $dependencies): string
     {
         $argList = implode(' ', array_map(fn($a) => '<' . $a['name'] . '>', $arguments));

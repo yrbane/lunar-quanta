@@ -21,7 +21,7 @@ class Config
     /**
      * Tableau interne stockant la configuration fusionnée.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     protected static ?array $config = null;
 
@@ -77,7 +77,7 @@ class Config
     /**
      * Récupère la configuration actuelle.
      *
-     * @return array|null La configuration actuelle ou null si non chargée.
+     * @return array<string, mixed>|null La configuration actuelle ou null si non chargée.
      */
     public static function getAll(): ?array
     {
@@ -87,8 +87,8 @@ class Config
     /**
      * Charge et fusionne tous les fichiers JSON présents dans un dossier.
      *
-     * @param string $directory Chemin du dossier contenant les fichiers JSON.
-     * @return array La configuration fusionnée.
+     * @param string $directory           Chemin du dossier contenant les fichiers JSON.
+     * @return array<string, mixed>       La configuration fusionnée.
      * @throws \Exception Si un fichier JSON est invalide.
      */
     protected static function loadFromDirectory(string $directory): array
@@ -111,9 +111,9 @@ class Config
      *
      * En cas de conflit, les valeurs du second tableau remplacent celles du premier.
      *
-     * @param array $a Premier tableau.
-     * @param array $b Second tableau.
-     * @return array Tableau fusionné.
+     * @param array<string, mixed> $a Premier tableau.
+     * @param array<string, mixed> $b Second tableau.
+     * @return array<string, mixed> Tableau fusionné.
      */
     protected static function mergeArrays(array $a, array $b): array
     {
