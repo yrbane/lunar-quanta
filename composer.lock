@@ -4,16 +4,78 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bf4f7dfc9f30d3f60849a16d64493eb4",
-    "packages": [],
+    "content-hash": "71c6a3a065afb18cefa7821d13269c64",
+    "packages": [
+        {
+            "name": "lunar/template",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "./lunar-template",
+                "reference": "d5f886b7b0aa5fadda725433dc392b3e7cb8f7c3"
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=8.3"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.0"
+            },
+            "suggest": {
+                "ext-opcache": "For better performance with compiled templates"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lunar\\Template\\": "src/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "phpunit"
+                ],
+                "analyse": [
+                    "phpstan analyse src --level=7"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Seb",
+                    "email": "seb@nethttp.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Standalone advanced template engine with inheritance, blocks, macros and caching",
+            "homepage": "https://github.com/lunar/template",
+            "keywords": [
+                "blocks",
+                "engine",
+                "inheritance",
+                "macros",
+                "php",
+                "template",
+                "templating"
+            ],
+            "transport-options": {
+                "relative": true
+            }
+        }
+    ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "lunar/template": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.3"
+        "php": ">=8.3",
+        "ext-mbstring": "*"
     },
     "platform-dev": {},
     "plugin-api-version": "2.6.0"
