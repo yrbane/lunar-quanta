@@ -6,7 +6,7 @@
         "php": ">=8.3",
         "ext-mbstring": "*",
         "yrbane/lunar-cli": "@dev",
-        "lunar/template": "@dev"
+        "yrbane/lunar-template": "@dev"
     },
     "repositories": [
         {
