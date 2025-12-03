@@ -10,12 +10,18 @@
     },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/yrbane/lunar-cli.git"
+            "type": "path",
+            "url": "../lunar-cli",
+            "options": {
+                "symlink": true
+            }
         },
         {
-            "type": "vcs",
-            "url": "https://github.com/yrbane/lunar-template.git"
+            "type": "path",
+            "url": "../lunar-template",
+            "options": {
+                "symlink": true
+            }
         }
     ],
     "autoload": {
