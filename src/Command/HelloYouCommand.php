@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Attribute\Command;
-use App\Service\Command\AbstractCommand;
-use App\Service\Command\ConsoleHelper as C;
+use Lunar\Cli\Attribute\Command;
+use Lunar\Cli\AbstractCommand;
+use Lunar\Cli\Helper\ConsoleHelper as C;
 
 #[Command(name: 'hello:you', description: 'Demande ton nom')]
 class HelloYouCommand extends AbstractCommand

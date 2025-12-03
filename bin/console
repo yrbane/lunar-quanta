@@ -2,7 +2,7 @@
 <?php
 /**
  * Console CLI du framework Lunar Quanta.
- * Utilise le package lunar/cli pour la gestion des commandes.
+ * Utilise le package yrbane/lunar-cli pour la gestion des commandes.
  *
  * @since 1.0.0
  * @author seb@nethttp.net
@@ -10,10 +10,9 @@
 declare(strict_types=1);
 
 use Lunar\Cli\Application;
-use Lunar\Cli\Attribute\Command as LunarCommand;
-use App\Attribute\Command;
+use Lunar\Cli\Attribute\Command;
+use Lunar\Cli\CommandInterface;
 use App\Service\Command\CommandFactory;
-use App\Service\Command\CommandInterface;
 use App\Service\Core\Config\Config;
 
 define('PROJECT_ROOT', realpath(__DIR__ . '/..'));
@@ -33,7 +32,7 @@ $app = new Application('Lunar Quanta Console', '1.0.0');
 // Configuration de la factory pour l'injection de dependances
 $factory = new CommandFactory();
 
-// Scan manuel des commandes avec l'attribut App\Attribute\Command
+// Scan manuel des commandes avec l'attribut Lunar\Cli\Attribute\Command
 foreach (glob(PROJECT_ROOT . '/src/Command/*Command.php') ?: [] as $file) {
     $className = 'App\\Command\\' . pathinfo($file, PATHINFO_FILENAME);
 
@@ -51,17 +50,14 @@ foreach (glob(PROJECT_ROOT . '/src/Command/*Command.php') ?: [] as $file) {
         continue;
     }
 
-    // Cherche l'attribut Command (App ou Lunar)
+    // Cherche l'attribut Command
     $attrs = $ref->getAttributes(Command::class);
-    if (empty($attrs)) {
-        $attrs = $ref->getAttributes(LunarCommand::class);
-    }
 
     if (empty($attrs)) {
         continue;
     }
 
-    /** @var Command|LunarCommand $meta */
+    /** @var Command $meta */
     $meta = $attrs[0]->newInstance();
 
     $instance = $factory->make($className);

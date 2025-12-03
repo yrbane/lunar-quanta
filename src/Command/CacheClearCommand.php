@@ -10,8 +10,8 @@
 
 namespace App\Command;
 
-use App\Attribute\Command;
-use App\Service\Command\CommandInterface;
+use Lunar\Cli\Attribute\Command;
+use Lunar\Cli\CommandInterface;
 use App\Service\Core\Config\Config;
 
 #[Command(name: 'cache:clear', description: 'Supprime les fichiers du cache.')]
