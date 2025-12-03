@@ -1,19 +1,16 @@
 <?php
 /**
- *
  * @since 0.0.1
  * @link https://nethttp.net
- * @Author seb@nethttp.net
- *
- *
+ * @author seb@nethttp.net
  */
 declare(strict_types=1);
 
 namespace Lunar\Service\Core;
 
 use Lunar\Attribute\Route;
+use Lunar\Config\Config;
 use Lunar\Controller\ErrorController;
-use Lunar\Service\Core\Config\Config;
 use Lunar\Service\Core\Http\Request;
 use Lunar\Service\Core\Http\Response;
 
@@ -42,26 +39,21 @@ class Router
 
     /**
      * Le namespace des contrôleurs.
-     * Celui-ci peut être mis en configuration si besoin.
      */
     private string $controllerNamespace = 'App\Controller\\';
 
     /**
      * Le chemin physique du dossier des contrôleurs.
-     * Celui-ci peut être mis en configuration si besoin.
      */
     private string $controllerDir;
 
     /**
      * Constructeur.
-     *
-     * Scanne automatiquement le répertoire des contrôleurs pour enregistrer leurs routes.
      */
     public function __construct()
     {
         $this->cacheFile = self::getCacheFile();
-        // Définir le répertoire des contrôleurs (relative à ce fichier)
-        $controllerDir = realpath(Config::getProjectRoot().'/src/Controller');
+        $controllerDir = realpath(Config::getProjectRoot() . '/src/Controller');
         $this->controllerDir = false === $controllerDir ? '' : $controllerDir;
         if (is_file($this->cacheFile)) {
             $this->routes = include $this->cacheFile;
@@ -75,7 +67,9 @@ class Router
      */
     public static function getCacheFile(): string
     {
-        return Config::getProjectRoot().'/'.(string) Config::get('cache.dir').'/router.php';
+        $cacheDir = (string) Config::get('cache', 'cache.dir', 'cache');
+
+        return Config::resolvePath($cacheDir . '/router.php');
     }
 
     /**
@@ -103,16 +97,13 @@ class Router
         if ($response instanceof Response) {
             return $response;
         }
-        // La route n'est peut-être pas en cache...
         $this->registerAllControllerRoutes();
         $response = $this->searchRoute($request);
         if ($response instanceof Response) {
             return $response;
         }
-        // Si aucune route ne correspond, appel direct du ErrorController pour générer une page 404.
         $errorController = new ErrorController();
 
-        // Appel de la méthode index avec le code 404 et message par défaut
         return $errorController->index($request, 404);
     }
 
@@ -192,12 +183,9 @@ class Router
                 if (false === $realPath) {
                     continue;
                 }
-                // Obtenir le chemin relatif par rapport au dossier des contrôleurs
-                $relativePath = str_replace($this->controllerDir.DIRECTORY_SEPARATOR, '', $realPath);
-                // Convertir les séparateurs de dossier en séparateurs de namespace
+                $relativePath = str_replace($this->controllerDir . DIRECTORY_SEPARATOR, '', $realPath);
                 $relativeClass = str_replace(DIRECTORY_SEPARATOR, '\\', $relativePath);
-                // Enlever l'extension .php pour obtenir le nom de la classe
-                $className = $this->controllerNamespace.str_replace('.php', '', $relativeClass);
+                $className = $this->controllerNamespace . str_replace('.php', '', $relativeClass);
                 if (class_exists($className)) {
                     $classes[] = $className;
                 }
@@ -218,22 +206,19 @@ class Router
         $refClass = new \ReflectionClass($controllerClass);
         $basePath = '';
 
-        // Optionnel : récupération d'une annotation de classe pour définir un préfixe de route
         $classAttributes = $refClass->getAttributes(Route::class);
         if (!empty($classAttributes)) {
-            // On prend la première annotation pour définir le préfixe
             /** @var Route $routeAttribute */
             $routeAttribute = $classAttributes[0]->newInstance();
             $basePath = $routeAttribute->path;
         }
 
-        // Parcours des méthodes publiques pour trouver les attributs de route
         foreach ($refClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
             $attributes = $method->getAttributes(Route::class);
             foreach ($attributes as $attribute) {
                 /** @var Route $routeAttr */
                 $routeAttr = $attribute->newInstance();
-                $fullPath = $basePath.$routeAttr->path;
+                $fullPath = $basePath . $routeAttr->path;
                 foreach ($routeAttr->methods as $httpMethod) {
                     $route = [
                         'name' => $routeAttr->name,
@@ -243,7 +228,6 @@ class Router
                         'action' => $method->getName(),
                     ];
                     $this->routes[$routeAttr->name] = $route;
-                    // Si la route est nommée, on l'enregistre dans le tableau statique.
                     if (!empty($routeAttr->name)) {
                         self::$namedRoutes[$routeAttr->name] = $route;
                     }
@@ -251,8 +235,7 @@ class Router
             }
         }
 
-        // Mise en cache
-        file_put_contents($this->cacheFile, '<?php return '.var_export($this->routes, true).';');
+        file_put_contents($this->cacheFile, '<?php return ' . var_export($this->routes, true) . ';');
     }
 
     /**

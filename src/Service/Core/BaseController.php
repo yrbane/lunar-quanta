@@ -1,17 +1,14 @@
 <?php
 /**
- *
  * @since 0.0.1
  * @link https://nethttp.net
- * @Author seb@nethttp.net
- *
- *
+ * @author seb@nethttp.net
  */
 declare(strict_types=1);
 
 namespace Lunar\Service\Core;
 
-use Lunar\Service\Core\Config\Config;
+use Lunar\Config\Config;
 use Lunar\Service\Core\Template\LunarTemplateAdapter;
 
 /**
@@ -34,11 +31,11 @@ abstract class BaseController
      */
     protected function render(string $template, array $variables = []): string
     {
-        // Récupère la configuration du templating
-        $engineClass = (string) Config::get('template.engine', LunarTemplateAdapter::class);
-        $templatePath = Config::get('template.template_path', Config::getProjectRoot().'/template');
+        $engineClass = (string) Config::get('template', 'template.engine', LunarTemplateAdapter::class);
+        $templatePath = Config::resolvePath(
+            (string) Config::get('template', 'template.template_path', 'template')
+        );
 
-        // Instancie dynamiquement le moteur de template choisi
         if (!class_exists($engineClass)) {
             throw new \Exception("Template engine class {$engineClass} does not exist.");
         }
