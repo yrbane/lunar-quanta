@@ -1,24 +1,21 @@
 <?php
 /**
- *
  * @since 0.0.1
  * @link https://nethttp.net
- * @Author seb@nethttp.net
- *
- *
+ * @author seb@nethttp.net
  */
 declare(strict_types=1);
 
 namespace Lunar\Service\Generator;
 
-use Lunar\Service\Core\Config\Config;
+use Lunar\Config\Config;
 
 class GeneratorService
 {
     public function generateController(string $name): string
     {
-        $controllerName = ucfirst($name).'Controller';
-        $controllerPath = Config::getProjectRoot()."/src/Controller/{$controllerName}.php";
+        $controllerName = ucfirst($name) . 'Controller';
+        $controllerPath = Config::getProjectRoot() . "/src/Controller/{$controllerName}.php";
         $controllerNamespace = 'App\\Controller';
 
         $dir = dirname($controllerPath);
@@ -33,7 +30,7 @@ class GeneratorService
         }
 
         $baseName = strtolower((string) preg_replace('/[cC]ontroller$/', '', $controllerName));
-        $routePath = '/'.$baseName;
+        $routePath = '/' . $baseName;
         $routeName = "{$baseName}.index";
 
         $content = <<<PHP
@@ -78,8 +75,8 @@ PHP;
 
     public function generateCommand(string $name): string
     {
-        $commandName = ucfirst($name).'Command';
-        $commandPath = Config::getProjectRoot()."/src/Command/{$commandName}.php";
+        $commandName = ucfirst($name) . 'Command';
+        $commandPath = Config::getProjectRoot() . "/src/Command/{$commandName}.php";
         $commandNamespace = 'App\\Command';
 
         $dir = dirname($commandPath);

@@ -1,17 +1,14 @@
 <?php
 /**
- *
  * @since 0.0.1
  * @link https://nethttp.net
- * @Author seb@nethttp.net
- *
- *
+ * @author seb@nethttp.net
  */
 declare(strict_types=1);
 
 namespace Lunar\Service\Server;
 
-use Lunar\Service\Core\Config\Config;
+use Lunar\Config\Config;
 
 class ServerService
 {
@@ -19,7 +16,7 @@ class ServerService
 
     public function __construct()
     {
-        $this->pidFile = Config::getProjectRoot().'/cache/server.pid';
+        $this->pidFile = Config::resolvePath('cache/server.pid');
     }
 
     /**
@@ -35,14 +32,13 @@ class ServerService
             'php -S %s:%d -t %s > %s 2>&1 & echo $!',
             $host,
             $port,
-            Config::getProjectRoot().'/public',
-            Config::getProjectRoot().'/log/server.log'
+            Config::getProjectRoot() . '/public',
+            Config::getProjectRoot() . '/log/server.log'
         );
 
         $pid = exec($command);
         file_put_contents($this->pidFile, $pid);
 
-        // Attendre un court instant pour que le serveur démarre
         sleep(1);
 
         return ['status' => 'success', 'message' => "Serveur démarré sur http://{$host}:{$port} (PID: {$pid})"];
@@ -83,7 +79,7 @@ class ServerService
      */
     public function getLogs(): array
     {
-        $logFile = Config::getProjectRoot().'/log/server.log';
+        $logFile = Config::getProjectRoot() . '/log/server.log';
         if (!file_exists($logFile)) {
             return ['status' => 'error', 'message' => 'Aucun fichier de log trouvé.'];
         }

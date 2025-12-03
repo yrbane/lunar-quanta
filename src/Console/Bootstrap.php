@@ -10,28 +10,21 @@ declare(strict_types=1);
 namespace Lunar\Console;
 
 use Lunar\Cli\BootstrapInterface;
-use Lunar\Service\Core\Config\Config;
 
 /**
  * Class Bootstrap.
  *
  * Initialise l'environnement avant le lancement des commandes.
+ * Note: lunar-config charge les fichiers à la demande, pas besoin de load() explicite.
  */
 class Bootstrap implements BootstrapInterface
 {
     /**
-     * Initialise la configuration du framework.
+     * Initialise l'environnement du framework.
      */
     public function boot(): void
     {
-        try {
-            Config::load(
-                Config::getProjectRoot() . '/config',
-                Config::getProjectRoot() . '/cache/config.php'
-            );
-        } catch (\Exception $e) {
-            fwrite(STDERR, 'Configuration Error: ' . $e->getMessage() . "\n");
-            exit(1);
-        }
+        // lunar-config charge automatiquement les fichiers config/*.json à la demande
+        // Plus besoin de chargement explicite
     }
 }

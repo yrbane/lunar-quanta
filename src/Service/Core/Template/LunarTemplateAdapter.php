@@ -1,17 +1,14 @@
 <?php
 /**
- *
  * @since 0.0.1
  * @link https://nethttp.net
- * @Author seb@nethttp.net
- *
- *
+ * @author seb@nethttp.net
  */
 declare(strict_types=1);
 
 namespace Lunar\Service\Core\Template;
 
-use Lunar\Service\Core\Config\Config;
+use Lunar\Config\Config;
 use Lunar\Service\Core\Router;
 use Lunar\Template\AdvancedTemplateEngine as LunarEngine;
 use Lunar\Template\Macro\AssetMacro;
@@ -28,24 +25,22 @@ class LunarTemplateAdapter
 
     public function __construct(string $templatePath)
     {
-        // Configuration des chemins
         if (!preg_match('#^(?:/|[A-Za-z]:[\/])#', $templatePath)) {
-            $templatePath = Config::getProjectRoot().'/'.$templatePath;
+            $templatePath = Config::getProjectRoot() . '/' . $templatePath;
         }
 
-        $cachePath = Config::getProjectRoot().'/'.(string) Config::get('cache.dir', 'cache').'/'.(string) Config::get('template_cache_dir', 'template');
+        $cacheDir = (string) Config::get('cache', 'cache.dir', 'cache');
+        $templateCacheDir = (string) Config::get('template', 'template.cache_path', 'template');
+        $cachePath = Config::resolvePath($cacheDir . '/' . $templateCacheDir);
 
-        // Initialisation du moteur Lunar
         $this->engine = new LunarEngine($templatePath, $cachePath);
-
-        // Enregistrement des macros par défaut
         $this->registerDefaultMacros();
     }
 
     /**
      * Rendu d'un template avec injection de variables.
      *
-     * @param string               $template  Nom du template (sans extension, fichier attendu en .tpl)
+     * @param string               $template  Nom du template (sans extension)
      * @param array<string, mixed> $variables Variables à injecter dans le template
      *
      * @return string Le contenu HTML généré
@@ -112,11 +107,9 @@ class LunarTemplateAdapter
      */
     private function registerDefaultMacros(): void
     {
-        // Macro pour les assets
-        $baseUrl = $_SERVER['REQUEST_SCHEME'] ?? 'http://'.($_SERVER['HTTP_HOST'] ?? 'localhost');
+        $baseUrl = $_SERVER['REQUEST_SCHEME'] ?? 'http://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
         $this->engine->registerMacroInstance(new AssetMacro($baseUrl));
 
-        // Macro pour les URLs (nécessite un adaptateur)
         $routerAdapter = new class implements RouterInterface {
             public function getRouteByName(string $name): ?array
             {

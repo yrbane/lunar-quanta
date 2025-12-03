@@ -1,17 +1,14 @@
 <?php
 /**
- *
  * @since 0.0.1
  * @link https://nethttp.net
- * @Author seb@nethttp.net
- *
- *
+ * @author seb@nethttp.net
  */
 declare(strict_types=1);
 
 namespace Lunar\Service\Cache;
 
-use Lunar\Service\Core\Config\Config;
+use Lunar\Config\Config;
 
 class CacheService
 {
@@ -20,7 +17,9 @@ class CacheService
      */
     public function clear(): array
     {
-        $cacheDir = Config::getProjectRoot().'/'.Config::get('cache.dir');
+        $cacheDir = Config::resolvePath(
+            (string) Config::get('cache', 'cache.dir', 'cache')
+        );
 
         /** @var array<array{status: string, message: string}> $results */
         $results = [];
