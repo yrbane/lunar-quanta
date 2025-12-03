@@ -1,13 +1,1 @@
-#!/usr/bin/env php
-<?php
-/**
- * Console CLI du framework Lunar Quanta.
- *
- * @since 1.0.0
- * @author seb@nethttp.net
- */
-declare(strict_types=1);
-
-require __DIR__ . '/../vendor/autoload.php';
-
-exit(\Lunar\Cli\Console::run(__DIR__ . '/..'));
+../vendor/yrbane/lunar-cli/bin/lunar
