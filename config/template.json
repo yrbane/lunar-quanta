@@ -1,6 +1,6 @@
 {
     "template": {
-      "engine": "App\\Service\\Core\\Template\\AdvancedTemplateEngine",
+      "engine": "App\\Service\\Core\\Template\\LunarTemplateAdapter",
       "template_path": "template",
       "cache_path": "template"
     }

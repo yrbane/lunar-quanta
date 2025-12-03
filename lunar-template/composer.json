@@ -1,0 +1,40 @@
+{
+    "name": "lunar/template",
+    "description": "Standalone advanced template engine with inheritance, blocks, macros and caching",
+    "version": "1.0.0",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["template", "engine", "php", "templating", "inheritance", "blocks", "macros"],
+    "homepage": "https://github.com/lunar/template",
+    "authors": [
+        {
+            "name": "Seb",
+            "email": "seb@nethttp.net",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Lunar\\Template\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.3",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan": "^1.10"
+    },
+    "suggest": {
+        "ext-opcache": "For better performance with compiled templates"
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "scripts": {
+        "test": "phpunit",
+        "analyse": "phpstan analyse src --level=7"
+    }
+}
