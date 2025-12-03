@@ -1,22 +1,20 @@
 <?php
 /**
- *
  * @since 0.0.1
  * @link https://nethttp.net
- * @Author seb@nethttp.net
- *
- *
+ * @author seb@nethttp.net
  */
 declare(strict_types=1);
 
 namespace Lunar\Service\Command;
 
+use Lunar\Cli\CommandFactoryInterface;
 use Lunar\Service\Core\Router;
 
 /**
  * Fabrique qui instancie dynamiquement les commandes CLI avec injection des dépendances.
  */
-class CommandFactory
+class CommandFactory implements CommandFactoryInterface
 {
     /**
      * Liste des instances de services partagés.
