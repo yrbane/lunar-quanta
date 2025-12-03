@@ -11,6 +11,13 @@
     "repositories": [
         {
             "type": "path",
+            "url": "../lunar-config",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "../lunar-cli",
             "options": {
                 "symlink": true
