@@ -1,11 +1,8 @@
 <?php
 /**
- *
  * @since 0.0.1
  * @link https://nethttp.net
- * @Author seb@nethttp.net
- *
- *
+ * @author seb@nethttp.net
  */
 declare(strict_types=1);
 
@@ -15,6 +12,7 @@ use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\AbstractCommand;
 use Lunar\Cli\CommandInterface;
 use Lunar\Cli\Helper\ConsoleHelper as C;
+use Lunar\Config\Config;
 
 /**
  * Commande pour générer une nouvelle commande CLI avec attributs PHP8.
@@ -37,10 +35,10 @@ class MakeCommandCommand extends AbstractCommand implements CommandInterface
 
         $commandName = C::ask('Nom de la commande (ex: user:create)');
 
-        // On implode et on met des majuscules pour avoir un nom de classe correct
+        // On génère un nom de classe à partir du nom de commande
         $className = ucfirst(implode('', array_map('ucfirst', explode(':', $commandName))));
-        $classNameShort = ucfirst(C::ask('Nom de la classe (Command est automatiquement ajouté à la fin...)', $className));
-        $className = $classNameShort.'Command';
+        $classNameShort = ucfirst(C::ask('Nom de la classe (Command ajouté automatiquement)', $className));
+        $className = $classNameShort . 'Command';
         $description = C::ask('Description courte de la commande');
 
         // Collecte des arguments
@@ -53,22 +51,27 @@ class MakeCommandCommand extends AbstractCommand implements CommandInterface
 
         // Dépendances injectées ?
         $dependencies = [];
-        while (C::confirm('Ajouter une dépendance injectée dans le constructeur ?', false)) {
-            $depClass = C::ask('FQCN du service (ex: App\\Service\\UserManager)');
+        while (C::confirm('Ajouter une dépendance injectée ?', false)) {
+            $depClass = C::ask('FQCN du service (ex: Lunar\\Service\\Core\\Router)');
             $depVar = lcfirst(basename(str_replace('\\', '/', $depClass)));
             $dependencies[] = ['fqcn' => $depClass, 'var' => $depVar];
         }
 
         // Génération de la commande
+        $commandPath = Config::resolvePath("src/Command/{$className}.php");
         $commandCode = $this->generateCommandClass($className, $commandName, $description, $arguments, $dependencies);
-        file_put_contents(__DIR__."/{$className}.php", $commandCode);
+        file_put_contents($commandPath, $commandCode);
         C::success("Commande générée : src/Command/{$className}.php");
 
         // Génération du test unitaire
-        $testCode = $this->generateTestClass($classNameShort);
-        $testPath = dirname(__DIR__, 2)."/tests/Command/{$classNameShort}CommandTest.php";
+        $testDir = Config::resolvePath('tests/Command');
+        if (!is_dir($testDir)) {
+            mkdir($testDir, 0755, true);
+        }
+        $testPath = "{$testDir}/{$className}Test.php";
+        $testCode = $this->generateTestClass($className, $dependencies);
         file_put_contents($testPath, $testCode);
-        C::success("Test généré : tests/Command/{$classNameShort}CommandTest.php");
+        C::success("Test généré : tests/Command/{$className}Test.php");
 
         return 0;
     }
@@ -76,10 +79,17 @@ class MakeCommandCommand extends AbstractCommand implements CommandInterface
     public function getHelp(): string
     {
         return <<<'HELP'
-Cette commande interactive permet de générer une nouvelle commande CLI dans le framework.
+Génère une nouvelle commande CLI avec son test unitaire.
 
 Usage :
   bin/console make:command
+
+La commande vous demandera :
+  - Le nom de la commande (ex: user:create)
+  - Le nom de la classe
+  - Une description
+  - Les arguments éventuels
+  - Les dépendances à injecter
 
 Options :
   --help       Affiche cette aide
@@ -90,81 +100,133 @@ HELP;
      * @param array<int, array{name: string, description: string}> $arguments
      * @param array<int, array{fqcn: string, var: string}>         $dependencies
      */
-    private function generateCommandClass(string $className, string $commandName, string $description, array $arguments, array $dependencies): string
+    private function generateCommandClass(
+        string $className,
+        string $commandName,
+        string $description,
+        array $arguments,
+        array $dependencies
+    ): string {
+        // Use statements pour les dépendances
+        $depUses = '';
+        if (!empty($dependencies)) {
+            $depUses = "\n" . implode("\n", array_map(
+                fn($d) => "use {$d['fqcn']};",
+                $dependencies
+            ));
+        }
+
+        // Propriétés
+        $depProps = '';
+        if (!empty($dependencies)) {
+            $depProps = "\n" . implode("\n", array_map(
+                fn($d) => "    private {$this->shortClassName($d['fqcn'])} \${$d['var']};",
+                $dependencies
+            )) . "\n";
+        }
+
+        // Constructeur (seulement si dépendances)
+        $constructor = '';
+        if (!empty($dependencies)) {
+            $ctorParams = implode(', ', array_map(
+                fn($d) => "{$this->shortClassName($d['fqcn'])} \${$d['var']}",
+                $dependencies
+            ));
+            $ctorBody = implode("\n", array_map(
+                fn($d) => "        \$this->{$d['var']} = \${$d['var']};",
+                $dependencies
+            ));
+            $constructor = <<<CTOR
+
+    public function __construct({$ctorParams})
     {
-        $argList = implode(' ', array_map(fn ($a) => '<'.$a['name'].'>', $arguments));
-        $argsDoc = implode(PHP_EOL, array_map(fn ($a) => " *   <{$a['name']}> : {$a['description']}", $arguments));
+{$ctorBody}
+    }
 
-        $depProps = implode("\n", array_map(fn ($d) => "    private {$d['fqcn']} \${$d['var']};", $dependencies));
-        $depCtorParams = implode(', ', array_map(fn ($d) => "{$d['fqcn']} \${$d['var']}", $dependencies));
-        $depCtorBody = implode("\n", array_map(fn ($d) => "        \$this->{$d['var']} = \${$d['var']};", $dependencies));
+CTOR;
+        }
 
-        $helpBlock = <<<HELP
-Cette commande {$description}.
-
-Usage :
-  bin/console {$commandName} {$argList}
-
-Arguments :
-{$argsDoc}
-
-Options :
-  --help       Affiche cette aide
-HELP;
+        // Help block
+        $helpBlock = $this->generateHelpBlock($commandName, $description, $arguments);
 
         return <<<PHP
 <?php
-
+/**
+ * @since 0.0.1
+ * @link https://nethttp.net
+ * @author seb@nethttp.net
+ */
 declare(strict_types=1);
 
 namespace Lunar\\Command;
 
-use Lunar\\Attribute\\Command;
-use Lunar\\Service\\Command\\AbstractCommand;
-use Lunar\\Service\\Command\\CommandInterface;
-use Lunar\\Service\\Command\\ConsoleHelper as C;
+use Lunar\\Cli\\Attribute\\Command;
+use Lunar\\Cli\\AbstractCommand;
+use Lunar\\Cli\\CommandInterface;
+use Lunar\\Cli\\Helper\\ConsoleHelper as C;{$depUses}
 
 /**
- * Commande générée automatiquement.
+ * {$description}
  */
 #[Command(
-    name: "{$commandName}",
-    description: "{$description}"
+    name: '{$commandName}',
+    description: '{$description}'
 )]
 class {$className} extends AbstractCommand implements CommandInterface
-{
-{$depProps}
-
-    public function __construct({$depCtorParams})
-    {
-{$depCtorBody}
-    }
-
+{{$depProps}{$constructor}
     public function execute(array \$args): int
     {
         if (\$this->wantsHelp(\$args)) {
             C::info(\$this->getHelp());
+
             return 0;
         }
 
         // TODO: implémenter la logique ici
 
-        C::success("Commande exécutée avec succès !");
+        C::success('Commande exécutée avec succès !');
+
         return 0;
     }
 
     public function getHelp(): string
     {
-        return <<<HELP
+        return <<<'HELP'
 {$helpBlock}
 HELP;
     }
 }
+
 PHP;
     }
 
-    private function generateTestClass(string $classNameShort): string
+    /**
+     * @param array<int, array{name: string, description: string}> $arguments
+     */
+    private function generateHelpBlock(string $commandName, string $description, array $arguments): string
     {
+        $help = "{$description}\n\nUsage :\n  bin/console {$commandName}";
+
+        if (!empty($arguments)) {
+            $argList = implode(' ', array_map(fn($a) => "<{$a['name']}>", $arguments));
+            $help .= " {$argList}\n\nArguments :";
+            foreach ($arguments as $arg) {
+                $help .= "\n  <{$arg['name']}>  {$arg['description']}";
+            }
+        }
+
+        $help .= "\n\nOptions :\n  --help  Affiche cette aide";
+
+        return $help;
+    }
+
+    /**
+     * @param array<int, array{fqcn: string, var: string}> $dependencies
+     */
+    private function generateTestClass(string $className, array $dependencies): string
+    {
+        $ctorArgs = empty($dependencies) ? '' : '/* TODO: mock dependencies */';
+
         return <<<PHP
 <?php
 
@@ -173,17 +235,38 @@ declare(strict_types=1);
 namespace Tests\\Command;
 
 use PHPUnit\\Framework\\TestCase;
-use Lunar\\Command\\{{$classNameShort}}Command;
+use Lunar\\Command\\{$className};
 
-class {$classNameShort}CommandTest extends TestCase
+class {$className}Test extends TestCase
 {
-    public function testExecute(): void
+    public function testExecuteReturnsZero(): void
     {
-        \$command = new {$classNameShort}Command(/* mock dependencies ici */);
+        \$command = new {$className}({$ctorArgs});
         \$result = \$command->execute([]);
+
         \$this->assertSame(0, \$result);
     }
+
+    public function testHelpReturnsString(): void
+    {
+        \$command = new {$className}({$ctorArgs});
+        \$help = \$command->getHelp();
+
+        \$this->assertIsString(\$help);
+        \$this->assertNotEmpty(\$help);
+    }
 }
+
 PHP;
+    }
+
+    /**
+     * Extrait le nom court d'une classe depuis son FQCN.
+     */
+    private function shortClassName(string $fqcn): string
+    {
+        $parts = explode('\\', $fqcn);
+
+        return end($parts);
     }
 }
