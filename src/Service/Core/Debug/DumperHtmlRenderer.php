@@ -8,24 +8,13 @@ declare(strict_types=1);
 
 namespace Lunar\Service\Core\Debug;
 
-use Lunar\Config\Config;
-use Lunar\Service\Core\Template\LunarTemplateAdapter;
-
 /**
  * Renderer HTML pour le Dumper.
- * Utilise lunar-template pour le rendu.
+ * Génère le HTML directement (le contenu contient du HTML brut).
  */
 final class DumperHtmlRenderer
 {
     private const MAX_DEPTH = 4;
-
-    private LunarTemplateAdapter $template;
-
-    public function __construct()
-    {
-        $templatePath = (string) Config::get('template', 'template.path', 'template');
-        $this->template = new LunarTemplateAdapter($templatePath);
-    }
 
     /**
      * Rend une variable en HTML.
@@ -33,13 +22,16 @@ final class DumperHtmlRenderer
     public function render(mixed $var, string $file, int $line): string
     {
         $content = $this->export($var, 0, new \SplObjectStorage());
+        $escapedFile = htmlspecialchars($file);
+        $type = get_debug_type($var);
 
-        return $this->template->render('debug/dump.html', [
-            'file' => htmlspecialchars($file),
-            'line' => $line,
-            'type' => get_debug_type($var),
-            'content' => $content,
-        ]);
+        return <<<HTML
+<div class="dump">
+    <pre class="header">{$escapedFile}:&nbsp;<span class="line">{$line}</span></pre>
+    <div class="type">{$type}</div>
+    <pre class="content">{$content}</pre>
+</div>
+HTML;
     }
 
     /**
