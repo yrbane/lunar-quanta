@@ -43,7 +43,7 @@ class UserController extends BaseController
      *
      * @return Response la réponse HTTP générée
      */
-    #[Route('/user', methods: ['GET', 'POST'],name:'user.index')]
+    #[Route('/user', methods: ['GET', 'POST'], name: 'user.index')]
     public function index(Request $request): Response
     {
         if ('POST' === $request->getMethod()) {

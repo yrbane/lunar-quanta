@@ -1,5 +1,12 @@
 <?php
-
+/**
+ *
+ * @since 0.0.1
+ * @link https://nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
+ */
 declare(strict_types=1);
 
 namespace App\Command;
@@ -7,15 +14,14 @@ namespace App\Command;
 use App\Attribute\Command;
 use App\Attribute\Route;
 use App\Service\Command\AbstractCommand;
-use App\Service\Command\CommandInterface;
 use App\Service\Command\ConsoleHelper as C;
 
 /**
  * Commande générée automatiquement.
  */
 #[Command(
-    name: "make:controller",
-    description: "Permet de créer un nouveau contrôleur."
+    name: 'make:controller',
+    description: 'Permet de créer un nouveau contrôleur.'
 )]
 class MakeControllerCommand extends AbstractCommand
 {
@@ -36,22 +42,24 @@ class MakeControllerCommand extends AbstractCommand
         // --help
         if ($this->wantsHelp($args)) {
             C::info($this->getHelp());
+
             return 0;
         }
 
         // Demande à l'utilisateur le nom du contrôleur (sans le suffixe "Controller")
-        $controllerName = C::ask("Nom du contrôleur (ex : User)");
-        $controllerClass = ucfirst($controllerName) . 'Controller';
+        $controllerName = C::ask('Nom du contrôleur (ex : User)');
+        $controllerClass = ucfirst($controllerName).'Controller';
 
         // Chemin vers le fichier à générer
-        $controllerPath = dirname(__DIR__, 2) . "/src/Controller/{$controllerClass}.php";
-        $controllerNamespace = "App\\Controller";
+        $controllerPath = dirname(__DIR__, 2)."/src/Controller/{$controllerClass}.php";
+        $controllerNamespace = 'App\\Controller';
 
         // Création du répertoire si nécessaire
         $dir = dirname($controllerPath);
         if (!is_dir($dir)) {
             if (!mkdir($dir, 0755, true) && !is_dir($dir)) {
                 C::error("Impossible de créer le répertoire {$dir}.");
+
                 return 1;
             }
         }
@@ -59,12 +67,13 @@ class MakeControllerCommand extends AbstractCommand
         // Protection contre l'écrasement
         if (file_exists($controllerPath)) {
             C::error("Le fichier {$controllerPath} existe déjà !");
+
             return 1;
         }
 
         // Préparation des routes et du nom de route
         $baseName = strtolower((string) preg_replace('/Controller$/', '', $controllerClass));
-        $routePath = '/' . $baseName;
+        $routePath = '/'.$baseName;
         $routeName = "{$baseName}.index";
 
         // Génération du contenu du contrôleur
@@ -75,10 +84,10 @@ declare(strict_types=1);
 
 namespace {$controllerNamespace};
 
-use App\Service\Core\BaseController;
-use App\Service\Core\Http\Request;
-use App\Service\Core\Http\Response;
-use App\Attribute\Route;
+use App\\Service\\Core\\BaseController;
+use App\\Service\\Core\\Http\\Request;
+use App\\Service\\Core\\Http\\Response;
+use App\\Attribute\\Route;
 
 /**
  * Contrôleur {$controllerClass} généré automatiquement.
@@ -107,6 +116,7 @@ PHP;
         file_put_contents($controllerPath, $content);
 
         C::success("Le contrôleur {$controllerClass} a été créé dans {$controllerPath}.");
+
         return 0;
     }
 
@@ -115,7 +125,7 @@ PHP;
      */
     public function getHelp(): string
     {
-        return <<<HELP
+        return <<<'HELP'
 Cette commande permet de créer un nouveau contrôleur.
 
 Usage :

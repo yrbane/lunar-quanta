@@ -1,5 +1,12 @@
 <?php
-
+/**
+ *
+ * @since 0.0.1
+ * @link https://nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
+ */
 declare(strict_types=1);
 
 namespace App\Service\Core\Debug;
@@ -12,7 +19,8 @@ use App\Service\Command\TableRenderer;
  * le contenu de n’importe quelle variable en CLI ou en HTML.
  *
  * @since   0.0.1
- * @link    https://nethttp.net
+ * @see    https://nethttp.net
+ *
  * @author  seb@
  */
 final class Dumper
@@ -22,37 +30,35 @@ final class Dumper
 
     /** @var list<string> Sortie HTML déjà rendue, prête à être envoyée */
     private static array $htmlBuffer = [];
-    private static bool  $shutdownRegistered = false;
+    private static bool $shutdownRegistered = false;
 
     /**
      * Dump une ou plusieurs variables.
-     *
-     * @param mixed ...$vars
      */
     public static function dump(mixed ...$vars): void
     {
-        $trace      = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1] ?? [];
-        $file       = $trace['file'] ?? 'n/a';
-        $line       = $trace['line'] ?? 0;
+        $trace = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1] ?? [];
+        $file = $trace['file'] ?? 'n/a';
+        $line = $trace['line'] ?? 0;
 
         if (\PHP_SAPI === 'cli') {
             foreach ($vars as $var) {
                 self::cliHeader($file, $line, $var);
                 self::dumpCli($var);
             }
-        } 
-        /* ----------- HTML : on capture tout de suite le rendu ---------- */
+        }
+        // ----------- HTML : on capture tout de suite le rendu ----------
         ob_start();
         echo '<div class="dump">';
         self::htmlHeader($file, $line); // écrit dans le buffer de sortie
         foreach ($vars as $var) {
             echo '<div class="type">'.get_debug_type($var).'</div>';
-            self::dumpHtml($var);   
+            self::dumpHtml($var);
         }
         echo '</div>';              // idem
         self::$htmlBuffer[] = ob_get_clean(); // on stocke la chaîne finale
 
-        if (! self::$shutdownRegistered) {
+        if (!self::$shutdownRegistered) {
             self::$shutdownRegistered = true;
             register_shutdown_function([self::class, 'flush']);
         }
@@ -64,7 +70,7 @@ final class Dumper
      */
     public static function flush(): void
     {
-        if (\PHP_SAPI === 'cli' || self::$htmlBuffer === []) {
+        if (\PHP_SAPI === 'cli' || [] === self::$htmlBuffer) {
             return;
         }
 
@@ -90,8 +96,6 @@ final class Dumper
         );
     }
 
-
-
     /* ---------------------------------------------------------------------
      *  CLI
      * ------------------------------------------------------------------ */
@@ -100,7 +104,7 @@ final class Dumper
      * Affichage en terminal : scalaires colorés, tableaux/objets via TableRenderer.
      */
     /**
-     * @param \SplObjectStorage<object, mixed>|null $seen
+     * @param null|\SplObjectStorage<object, mixed> $seen
      */
     private static function dumpCli(mixed $var, int $level = 0, ?\SplObjectStorage $seen = null): void
     {
@@ -109,27 +113,33 @@ final class Dumper
         switch (gettype($var)) {
             case 'boolean':
                 echo ConsoleHelper::color($var ? 'true' : 'false', $var ? '32' : '31').\PHP_EOL;
+
                 break;
 
             case 'integer':
             case 'double':
                 echo ConsoleHelper::color((string) $var, '33').\PHP_EOL;
+
                 break;
 
             case 'string':
                 echo ConsoleHelper::color('"'.$var.'"', '36').\PHP_EOL;
+
                 break;
 
             case 'NULL':
                 echo ConsoleHelper::color('null', '35').\PHP_EOL;
+
                 break;
 
             case 'array':
                 self::renderCliArray($var, $level, $seen);
+
                 break;
 
             case 'object':
                 self::renderCliObject($var, $level, $seen);
+
                 break;
 
             default:
@@ -141,10 +151,10 @@ final class Dumper
      * Rendu d’un tableau pour le terminal.
      */
     /**
-     * @param array<int|string, mixed>                    $array
-     * @param \SplObjectStorage<object, mixed>|null $seen
+     * @param array<int|string, mixed>              $array
+     * @param null|\SplObjectStorage<object, mixed> $seen
      */
-    private static function renderCliArray(array $array, int $level, ?\SplObjectStorage $seen=null): void
+    private static function renderCliArray(array $array, int $level, ?\SplObjectStorage $seen = null): void
     {
         if ($level >= self::MAX_DEPTH) {
             echo ConsoleHelper::color('[…]', '90').\PHP_EOL;
@@ -152,7 +162,7 @@ final class Dumper
             return;
         }
 
-        if ($array === []) {
+        if ([] === $array) {
             echo ConsoleHelper::color('[]', '90').\PHP_EOL;
 
             return;
@@ -163,7 +173,7 @@ final class Dumper
             ob_start();
             self::dumpCli($v, $level + 1, $seen);
             $rows[] = [
-                'Clé'    => (string) $k,
+                'Clé' => (string) $k,
                 'Valeur' => trim(ob_get_clean()),
             ];
         }
@@ -171,10 +181,10 @@ final class Dumper
         TableRenderer::renderSingleTable(
             $rows,
             [
-                'columns'      => ['Clé' => 'Clé', 'Valeur' => 'Valeur'],
-                'headerColor'  => '1;35',
-                'rowColor'     => '0;37',
-                'borderColor'  => '35',
+                'columns' => ['Clé' => 'Clé', 'Valeur' => 'Valeur'],
+                'headerColor' => '1;35',
+                'rowColor' => '0;37',
+                'borderColor' => '35',
             ],
         );
     }
@@ -200,18 +210,18 @@ final class Dumper
             return;
         }
 
-        $ref   = new \ReflectionObject($object);
+        $ref = new \ReflectionObject($object);
         $props = [];
 
         foreach ($ref->getProperties() as $prop) {
             $prop->setAccessible(true);
-            $vis   = implode('|', \Reflection::getModifierNames($prop->getModifiers()));
+            $vis = implode('|', \Reflection::getModifierNames($prop->getModifiers()));
             ob_start();
             self::dumpCli($prop->getValue($object), $level + 1, $seen);
             $props[] = [
-                'Propriété'  => $prop->getName(),
+                'Propriété' => $prop->getName(),
                 'Visibilité' => $vis,
-                'Valeur'     => trim(ob_get_clean()),
+                'Valeur' => trim(ob_get_clean()),
             ];
         }
 
@@ -219,10 +229,10 @@ final class Dumper
         TableRenderer::renderSingleTable(
             $props,
             [
-                'columns'      => ['Propriété' => 'Propriété', 'Visibilité' => 'Visibilité', 'Valeur' => 'Valeur'],
-                'headerColor'  => '1;35',
-                'rowColor'     => '0;37',
-                'borderColor'  => '35',
+                'columns' => ['Propriété' => 'Propriété', 'Visibilité' => 'Visibilité', 'Valeur' => 'Valeur'],
+                'headerColor' => '1;35',
+                'rowColor' => '0;37',
+                'borderColor' => '35',
             ],
         );
     }
@@ -235,7 +245,7 @@ final class Dumper
      * Affichage dans un navigateur : <pre> avec classes CSS.
      */
     /**
-     * @param \SplObjectStorage<object, mixed>|null $seen
+     * @param null|\SplObjectStorage<object, mixed> $seen
      */
     private static function dumpHtml(mixed $var, int $level = 0, ?\SplObjectStorage $seen = null): void
     {
@@ -257,19 +267,23 @@ final class Dumper
         switch (gettype($var)) {
             case 'boolean':
                 echo '<span class="bool">'.($var ? 'true' : 'false').'</span>';
+
                 break;
 
             case 'integer':
             case 'double':
                 echo '<span class="number">'.$var.'</span>';
+
                 break;
 
             case 'string':
                 echo '<span class="string">&quot;'.htmlspecialchars($var, \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8').'&quot;</span>';
+
                 break;
 
             case 'NULL':
                 echo '<span class="null">null</span>';
+
                 break;
 
             case 'array':
@@ -281,11 +295,13 @@ final class Dumper
                     echo ',<br>';
                 }
                 echo $thisLevelIndent.'<span class="array">]</span>';
+
                 break;
 
             case 'object':
                 if ($seen->contains($var)) {
                     echo '<span class="object">'.$var::class.' {&nbsp;référence circulaire&nbsp;}</span>';
+
                     break;
                 }
                 $seen->attach($var);
@@ -301,6 +317,7 @@ final class Dumper
                     echo ',<br>';
                 }
                 echo str_repeat('&nbsp;&nbsp;', $level).'}';
+
                 break;
 
             default:

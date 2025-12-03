@@ -20,12 +20,16 @@ class Request
 {
     private string $method;
     private string $uri;
+
     /** @var array<string, mixed> */
     private array $query;
+
     /** @var array<string, mixed> */
     private array $post;
+
     /** @var array<string, mixed> */
     private readonly array $server;
+
     /** @var array<string, mixed> */
     private array $headers;
 

@@ -18,7 +18,7 @@ interface MacroInterface
      * La méthode appelée quand le moteur appelle la macro.
      *
      * @param array<int, mixed> $args
-     * 
+     *
      * @return mixed
      */
     public function execute(array $args);

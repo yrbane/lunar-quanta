@@ -1,13 +1,15 @@
 <?php
-
+/**
+ *
+ * @since 0.0.1
+ * @link https://nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
+ */
 declare(strict_types=1);
 
 namespace App\Service\Core;
-
-use ReflectionClass;
-use ReflectionNamedType;
-use ReflectionParameter;
-use RuntimeException;
 
 /**
  * Conteneur de services ultra-léger avec résolution récursive.
@@ -15,7 +17,7 @@ use RuntimeException;
 class Container
 {
     /**
-     * Services instanciés (singletons)
+     * Services instanciés (singletons).
      *
      * @var array<class-string, object>
      */
@@ -25,7 +27,6 @@ class Container
      * Instancie une classe en résolvant récursivement ses dépendances.
      *
      * @param class-string $className
-     * @return object
      */
     public function get(string $className): object
     {
@@ -33,29 +34,31 @@ class Container
             return $this->instances[$className];
         }
 
-        $refClass = new ReflectionClass($className);
+        $refClass = new \ReflectionClass($className);
 
         if (!$refClass->isInstantiable()) {
-            throw new RuntimeException("La classe {$className} n’est pas instanciable.");
+            throw new \RuntimeException("La classe {$className} n’est pas instanciable.");
         }
 
         $constructor = $refClass->getConstructor();
         if (is_null($constructor)) {
             $instance = new $className();
             $this->instances[$className] = $instance;
+
             return $instance;
         }
 
-        $args = array_map(function (ReflectionParameter $param) use ($className) {
+        $args = array_map(function (\ReflectionParameter $param) use ($className) {
             $type = $param->getType();
-            if (!$type instanceof ReflectionNamedType || $type->isBuiltin()) {
-                throw new RuntimeException(
+            if (!$type instanceof \ReflectionNamedType || $type->isBuiltin()) {
+                throw new \RuntimeException(
                     "Impossible de résoudre la dépendance `{$param->getName()}` dans {$className}."
                 );
             }
 
             $dependencyClass = $type->getName();
-            /** @var class-string $dependencyClass */
+
+            // @var class-string $dependencyClass
             return $this->get($dependencyClass); // récursivité ici
         }, $constructor->getParameters());
 

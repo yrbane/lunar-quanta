@@ -1,20 +1,22 @@
 <?php
 /**
- * Adaptateur pour intégrer le moteur Lunar Template dans le framework.
  *
- * @since 1.0.0
- * @author seb@nethttp.net
+ * @since 0.0.1
+ * @link https://nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
  */
 declare(strict_types=1);
 
 namespace App\Service\Core\Template;
 
+use App\Service\Core\Config\Config;
+use App\Service\Core\Router;
 use Lunar\Template\AdvancedTemplateEngine as LunarEngine;
 use Lunar\Template\Macro\AssetMacro;
-use Lunar\Template\Macro\UrlMacro;
 use Lunar\Template\Macro\RouterInterface;
-use App\Service\Core\Router;
-use App\Service\Core\Config\Config;
+use Lunar\Template\Macro\UrlMacro;
 
 /**
  * Adaptateur pour le moteur de templates Lunar.
@@ -28,10 +30,10 @@ class LunarTemplateAdapter
     {
         // Configuration des chemins
         if (!preg_match('#^(?:/|[A-Za-z]:[\/])#', $templatePath)) {
-            $templatePath = Config::getProjectRoot() . '/' . $templatePath;
+            $templatePath = Config::getProjectRoot().'/'.$templatePath;
         }
 
-        $cachePath = Config::getProjectRoot() . '/' . (string) Config::get('cache.dir', 'cache') . '/' . (string) Config::get('template_cache_dir', 'template');
+        $cachePath = Config::getProjectRoot().'/'.(string) Config::get('cache.dir', 'cache').'/'.(string) Config::get('template_cache_dir', 'template');
 
         // Initialisation du moteur Lunar
         $this->engine = new LunarEngine($templatePath, $cachePath);
@@ -43,8 +45,9 @@ class LunarTemplateAdapter
     /**
      * Rendu d'un template avec injection de variables.
      *
-     * @param string $template Nom du template (sans extension, fichier attendu en .tpl)
+     * @param string               $template  Nom du template (sans extension, fichier attendu en .tpl)
      * @param array<string, mixed> $variables Variables à injecter dans le template
+     *
      * @return string Le contenu HTML généré
      */
     public function render(string $template, array $variables = []): string
@@ -55,7 +58,7 @@ class LunarTemplateAdapter
     /**
      * Enregistre une macro réutilisable dans les templates.
      *
-     * @param string $name Nom de la macro
+     * @param string   $name     Nom de la macro
      * @param callable $callback Fonction à appeler pour générer le contenu
      */
     public function registerMacro(string $name, callable $callback): void
@@ -66,8 +69,9 @@ class LunarTemplateAdapter
     /**
      * Appelle une macro enregistrée.
      *
-     * @param string $name Nom de la macro
+     * @param string            $name Nom de la macro
      * @param array<int, mixed> $args Arguments passés à la macro
+     *
      * @return mixed Résultat renvoyé par la macro
      */
     public function callMacro(string $name, array $args)
@@ -78,7 +82,7 @@ class LunarTemplateAdapter
     /**
      * Vide le cache des templates compilés.
      *
-     * @param string|null $template Template spécifique à vider (optionnel)
+     * @param null|string $template Template spécifique à vider (optionnel)
      */
     public function clearCache(?string $template = null): void
     {
@@ -89,7 +93,6 @@ class LunarTemplateAdapter
      * Vérifie si un template existe.
      *
      * @param string $template Nom du template
-     * @return bool
      */
     public function templateExists(string $template): bool
     {
@@ -98,8 +101,6 @@ class LunarTemplateAdapter
 
     /**
      * Retourne l'instance du moteur Lunar pour les utilisations avancées.
-     *
-     * @return LunarEngine
      */
     public function getEngine(): LunarEngine
     {
@@ -112,7 +113,7 @@ class LunarTemplateAdapter
     private function registerDefaultMacros(): void
     {
         // Macro pour les assets
-        $baseUrl = $_SERVER['REQUEST_SCHEME'] ?? 'http' . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
+        $baseUrl = $_SERVER['REQUEST_SCHEME'] ?? 'http://'.($_SERVER['HTTP_HOST'] ?? 'localhost');
         $this->engine->registerMacroInstance(new AssetMacro($baseUrl));
 
         // Macro pour les URLs (nécessite un adaptateur)
@@ -122,7 +123,7 @@ class LunarTemplateAdapter
                 return Router::getRouteByName($name);
             }
         };
-        
+
         $this->engine->registerMacroInstance(new UrlMacro($routerAdapter));
     }
 }

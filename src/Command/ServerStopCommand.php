@@ -1,5 +1,12 @@
 <?php
-
+/**
+ *
+ * @since 0.0.1
+ * @link https://nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
+ */
 declare(strict_types=1);
 
 namespace App\Command;
@@ -13,26 +20,28 @@ use App\Service\Command\ConsoleHelper as C;
  * Arrête le serveur PHP intégré en arrière-plan.
  */
 #[Command(
-    name: "server:stop",
-    description: "Arrête le serveur web en arrière-plan"
+    name: 'server:stop',
+    description: 'Arrête le serveur web en arrière-plan'
 )]
 class ServerStopCommand extends AbstractCommand implements CommandInterface
 {
     public function execute(array $args): int
     {
-        $cwd     = \getcwd() ?: __DIR__ . '/../../..';
-        $pidFile = $cwd . '/log/server.pid';
+        $cwd = \getcwd() ?: __DIR__.'/../../..';
+        $pidFile = $cwd.'/log/server.pid';
 
         if (!\is_file($pidFile)) {
-            C::error("Aucun serveur démarré.");
+            C::error('Aucun serveur démarré.');
+
             return 1;
         }
 
         $data = json_decode(file_get_contents($pidFile), true);
-        $pid  = $data['pid'] ?? null;
+        $pid = $data['pid'] ?? null;
 
         if (!\is_int($pid)) {
-            C::error("Fichier PID invalide.");
+            C::error('Fichier PID invalide.');
+
             return 2;
         }
 
@@ -41,22 +50,24 @@ class ServerStopCommand extends AbstractCommand implements CommandInterface
             $ok = @posix_kill($pid, SIGTERM);
         } else {
             exec("kill {$pid}", $out, $code);
-            $ok = ($code === 0);
+            $ok = (0 === $code);
         }
 
         if (!$ok) {
             C::error(sprintf("Échec de l'arrêt du processus %d.", $pid));
+
             return 3;
         }
 
         @unlink($pidFile);
-        C::success(sprintf("Serveur (PID %d) arrêté.", $pid));
+        C::success(sprintf('Serveur (PID %d) arrêté.', $pid));
+
         return 0;
     }
 
     public function getHelp(): string
     {
-        return <<<HELP
+        return <<<'HELP'
 Cette commande arrête le serveur PHP intégré en arrière-plan.
 
 Usage :

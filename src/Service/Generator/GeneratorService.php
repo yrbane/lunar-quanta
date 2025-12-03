@@ -1,5 +1,12 @@
 <?php
-
+/**
+ *
+ * @since 0.0.1
+ * @link https://nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
+ */
 declare(strict_types=1);
 
 namespace App\Service\Generator;
@@ -10,9 +17,9 @@ class GeneratorService
 {
     public function generateController(string $name): string
     {
-        $controllerName = ucfirst($name) . 'Controller';
-        $controllerPath = Config::getProjectRoot() . "/src/Controller/{$controllerName}.php";
-        $controllerNamespace = "App\\Controller";
+        $controllerName = ucfirst($name).'Controller';
+        $controllerPath = Config::getProjectRoot()."/src/Controller/{$controllerName}.php";
+        $controllerNamespace = 'App\\Controller';
 
         $dir = dirname($controllerPath);
         if (!is_dir($dir)) {
@@ -26,7 +33,7 @@ class GeneratorService
         }
 
         $baseName = strtolower((string) preg_replace('/[cC]ontroller$/', '', $controllerName));
-        $routePath = '/' . $baseName;
+        $routePath = '/'.$baseName;
         $routeName = "{$baseName}.index";
 
         $content = <<<PHP
@@ -36,10 +43,10 @@ declare(strict_types=1);
 
 namespace {$controllerNamespace};
 
-use App\Service\Core\BaseController;
-use App\Service\Core\Http\Request;
-use App\Service\Core\Http\Response;
-use App\Attribute\Route;
+use App\\Service\\Core\\BaseController;
+use App\\Service\\Core\\Http\\Request;
+use App\\Service\\Core\\Http\\Response;
+use App\\Attribute\\Route;
 
 /**
  * Contrôleur {$controllerName} généré automatiquement.
@@ -71,9 +78,9 @@ PHP;
 
     public function generateCommand(string $name): string
     {
-        $commandName = ucfirst($name) . 'Command';
-        $commandPath = Config::getProjectRoot() . "/src/Command/{$commandName}.php";
-        $commandNamespace = "App\\Command";
+        $commandName = ucfirst($name).'Command';
+        $commandPath = Config::getProjectRoot()."/src/Command/{$commandName}.php";
+        $commandNamespace = 'App\\Command';
 
         $dir = dirname($commandPath);
         if (!is_dir($dir)) {
@@ -95,9 +102,9 @@ declare(strict_types=1);
 
 namespace {$commandNamespace};
 
-use App\Attribute\Command;
-use App\Service\Command\AbstractCommand;
-use App\Service\Command\ConsoleHelper as C;
+use App\\Attribute\\Command;
+use App\\Service\\Command\\AbstractCommand;
+use App\\Service\\Command\\ConsoleHelper as C;
 
 #[Command(
     name: "{$commandId}:run",

@@ -23,6 +23,7 @@ class CacheClearCommand implements CommandInterface
 
         if (!is_dir($cacheDir)) {
             echo "Le répertoire de cache n'existe pas.\n";
+
             return 1;
         }
         // Supprime le contenu du répertoire de cache
@@ -33,7 +34,7 @@ class CacheClearCommand implements CommandInterface
         return 0;
     }
 
-    function deleteDirContent(string $dir): void
+    public function deleteDirContent(string $dir): void
     {
         if (!is_dir($dir)) {
             return;

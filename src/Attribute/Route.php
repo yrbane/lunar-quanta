@@ -23,6 +23,7 @@ namespace App\Attribute;
 class Route
 {
     public string $path;
+
     /**
      * @var array<string> liste des méthodes HTTP autorisées
      */

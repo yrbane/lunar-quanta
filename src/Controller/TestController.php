@@ -1,13 +1,20 @@
 <?php
-
+/**
+ *
+ * @since 0.0.1
+ * @link https://nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
+ */
 declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Route;
 use App\Service\Core\BaseController;
 use App\Service\Core\Http\Request;
 use App\Service\Core\Http\Response;
-use App\Attribute\Route;
 
 /**
  * Contrôleur TestController généré automatiquement.
@@ -16,16 +23,13 @@ class TestController extends BaseController
 {
     /**
      * Affiche la page index.
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     #[Route(path: '/test', methods: ['GET'], name: 'test.index')]
     public function index(Request $request): Response
     {
         // TODO : implémenter la logique de l'action index
         $html = $this->render('test/index', []);
+
         return new Response($html);
     }
 
@@ -40,7 +44,7 @@ class TestController extends BaseController
      *
      * @throws \RuntimeException intentionally thrown to simulate a server error
      */
-    #[Route('/test500', methods: ['GET'],name: 'test.500')]
+    #[Route('/test500', methods: ['GET'], name: 'test.500')]
     public function test500(Request $request): Response
     {
         // Lancer une exception pour simuler une erreur interne (500)
@@ -48,11 +52,9 @@ class TestController extends BaseController
     }
 
     /**
-     * @param Request $request
-     * @return Response
      * @throws \Exception
      */
-    #[Route('/testcss', methods: ['GET'],name: 'test.css')]
+    #[Route('/testcss', methods: ['GET'], name: 'test.css')]
     public function testcss(Request $request): Response
     {
         $html = $this->render('test/css.html', []);
@@ -60,8 +62,7 @@ class TestController extends BaseController
         return new Response($html);
     }
 
-    /** */
-    #[Route('/testflex', methods: ['GET'],name: 'test.flex')]
+    #[Route('/testflex', methods: ['GET'], name: 'test.flex')]
     public function testflex(Request $request): Response
     {
         $html = $this->render('test/flex.html', []);

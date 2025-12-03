@@ -20,11 +20,11 @@ class HelloYouCommand extends AbstractCommand
 {
     public function execute(array $args): int
     {
-        c::title('Bienvenue dans la Console');
-        c::subtitle('Nous allons faire connaissance...');
+        C::title('Bienvenue dans la Console');
+        C::subtitle('Nous allons faire connaissance...');
 
-        $name = c::ask('Quel est ton prénom ?', 'Sébastien');
-        c::success("Enchanté, {$name} !");
+        $name = C::ask('Quel est ton prénom ?', 'Sébastien');
+        C::success("Enchanté, {$name} !");
 
         return 0;
     }

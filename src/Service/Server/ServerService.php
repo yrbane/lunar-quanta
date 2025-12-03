@@ -1,5 +1,12 @@
 <?php
-
+/**
+ *
+ * @since 0.0.1
+ * @link https://nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
+ */
 declare(strict_types=1);
 
 namespace App\Service\Server;
@@ -12,7 +19,7 @@ class ServerService
 
     public function __construct()
     {
-        $this->pidFile = Config::getProjectRoot() . '/cache/server.pid';
+        $this->pidFile = Config::getProjectRoot().'/cache/server.pid';
     }
 
     /**
@@ -28,8 +35,8 @@ class ServerService
             'php -S %s:%d -t %s > %s 2>&1 & echo $!',
             $host,
             $port,
-            Config::getProjectRoot() . '/public',
-            Config::getProjectRoot() . '/log/server.log'
+            Config::getProjectRoot().'/public',
+            Config::getProjectRoot().'/log/server.log'
         );
 
         $pid = exec($command);
@@ -54,7 +61,7 @@ class ServerService
         exec("kill {$pid}");
         unlink($this->pidFile);
 
-        return ['status' => 'success', 'message' => "Serveur arrêté."];
+        return ['status' => 'success', 'message' => 'Serveur arrêté.'];
     }
 
     /**
@@ -64,10 +71,11 @@ class ServerService
     {
         if ($this->isRunning()) {
             $pid = (int) file_get_contents($this->pidFile);
+
             return ['status' => 'success', 'message' => "Le serveur est en cours d'exécution (PID: {$pid})."];
         }
 
-        return ['status' => 'error', 'message' => "Le serveur est arrêté."];
+        return ['status' => 'error', 'message' => 'Le serveur est arrêté.'];
     }
 
     /**
@@ -75,9 +83,9 @@ class ServerService
      */
     public function getLogs(): array
     {
-        $logFile = Config::getProjectRoot() . '/log/server.log';
+        $logFile = Config::getProjectRoot().'/log/server.log';
         if (!file_exists($logFile)) {
-            return ['status' => 'error', 'message' => "Aucun fichier de log trouvé."];
+            return ['status' => 'error', 'message' => 'Aucun fichier de log trouvé.'];
         }
 
         return ['status' => 'success', 'message' => file_get_contents($logFile)];
@@ -90,6 +98,7 @@ class ServerService
         }
 
         $pid = (int) file_get_contents($this->pidFile);
+
         return file_exists("/proc/{$pid}");
     }
 }
