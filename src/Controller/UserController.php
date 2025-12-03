@@ -9,14 +9,14 @@
  */
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Lunar\Controller;
 
-use App\Attribute\Route;
-use App\Entity\User;
-use App\Service\Core\BaseController;
-use App\Service\Core\Http\Request;
-use App\Service\Core\Http\Response;
-use App\Service\Storage\JsonStorage;
+use Lunar\Attribute\Route;
+use Lunar\Entity\User;
+use Lunar\Service\Core\BaseController;
+use Lunar\Service\Core\Http\Request;
+use Lunar\Service\Core\Http\Response;
+use Lunar\Service\Storage\JsonStorage;
 
 /**
  * Optionnel : Vous pouvez également annoter la classe pour définir un préfixe commun à toutes ses routes.

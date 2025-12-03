@@ -9,10 +9,10 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Core;
+namespace Lunar\Service\Core;
 
-use App\Service\Core\Config\Config;
-use App\Service\Core\Template\LunarTemplateAdapter;
+use Lunar\Service\Core\Config\Config;
+use Lunar\Service\Core\Template\LunarTemplateAdapter;
 
 /**
  * Class BaseController.

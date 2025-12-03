@@ -9,9 +9,9 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Server;
+namespace Lunar\Service\Server;
 
-use App\Service\Core\Config\Config;
+use Lunar\Service\Core\Config\Config;
 
 class ServerService
 {

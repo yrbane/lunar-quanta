@@ -9,7 +9,7 @@
  */
 declare(strict_types=1);
 
-use App\Service\Core\Debug\Dumper;
+use Lunar\Service\Core\Debug\Dumper;
 
 if (!function_exists('dump')) {
     /**

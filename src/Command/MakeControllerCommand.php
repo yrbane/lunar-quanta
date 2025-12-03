@@ -9,10 +9,10 @@
  */
 declare(strict_types=1);
 
-namespace App\Command;
+namespace Lunar\Command;
 
 use Lunar\Cli\Attribute\Command;
-use App\Attribute\Route;
+use Lunar\Attribute\Route;
 use Lunar\Cli\AbstractCommand;
 use Lunar\Cli\Helper\ConsoleHelper as C;
 
@@ -84,10 +84,10 @@ declare(strict_types=1);
 
 namespace {$controllerNamespace};
 
-use App\\Service\\Core\\BaseController;
-use App\\Service\\Core\\Http\\Request;
-use App\\Service\\Core\\Http\\Response;
-use App\\Attribute\\Route;
+use Lunar\\Service\\Core\\BaseController;
+use Lunar\\Service\\Core\\Http\\Request;
+use Lunar\\Service\\Core\\Http\\Response;
+use Lunar\\Attribute\\Route;
 
 /**
  * Contrôleur {$controllerClass} généré automatiquement.

@@ -9,10 +9,10 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Core\Template;
+namespace Lunar\Service\Core\Template;
 
-use App\Service\Core\Config\Config;
-use App\Service\Core\Router;
+use Lunar\Service\Core\Config\Config;
+use Lunar\Service\Core\Router;
 use Lunar\Template\AdvancedTemplateEngine as LunarEngine;
 use Lunar\Template\Macro\AssetMacro;
 use Lunar\Template\Macro\RouterInterface;

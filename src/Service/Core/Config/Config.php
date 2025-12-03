@@ -9,7 +9,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Core\Config;
+namespace Lunar\Service\Core\Config;
 
 /**
  * Class Config.

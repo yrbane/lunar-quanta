@@ -9,10 +9,10 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Core\Template;
+namespace Lunar\Service\Core\Template;
 
-use App\Service\Core\Config\Config;
-use App\Service\Core\Template\Macro\MacroInterface;
+use Lunar\Service\Core\Config\Config;
+use Lunar\Service\Core\Template\Macro\MacroInterface;
 
 /**
  * Class AdvancedTemplateEngine.

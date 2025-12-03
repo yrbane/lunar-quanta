@@ -9,12 +9,12 @@
  */
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Lunar\Controller;
 
-use App\Attribute\Route;
-use App\Service\Core\BaseController;
-use App\Service\Core\Http\Request;
-use App\Service\Core\Http\Response;
+use Lunar\Attribute\Route;
+use Lunar\Service\Core\BaseController;
+use Lunar\Service\Core\Http\Request;
+use Lunar\Service\Core\Http\Response;
 
 /**
  * Contrôleur TestController généré automatiquement.

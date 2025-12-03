@@ -8,7 +8,7 @@
  *
  */
 
-namespace App\Service\Core\Template\Macro;
+namespace Lunar\Service\Core\Template\Macro;
 
 interface MacroInterface
 {

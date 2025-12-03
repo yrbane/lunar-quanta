@@ -9,9 +9,9 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Generator;
+namespace Lunar\Service\Generator;
 
-use App\Service\Core\Config\Config;
+use Lunar\Service\Core\Config\Config;
 
 class GeneratorService
 {
@@ -43,10 +43,10 @@ declare(strict_types=1);
 
 namespace {$controllerNamespace};
 
-use App\\Service\\Core\\BaseController;
-use App\\Service\\Core\\Http\\Request;
-use App\\Service\\Core\\Http\\Response;
-use App\\Attribute\\Route;
+use Lunar\\Service\\Core\\BaseController;
+use Lunar\\Service\\Core\\Http\\Request;
+use Lunar\\Service\\Core\\Http\\Response;
+use Lunar\\Attribute\\Route;
 
 /**
  * Contrôleur {$controllerName} généré automatiquement.
@@ -102,9 +102,9 @@ declare(strict_types=1);
 
 namespace {$commandNamespace};
 
-use App\\Attribute\\Command;
-use App\\Service\\Command\\AbstractCommand;
-use App\\Service\\Command\\ConsoleHelper as C;
+use Lunar\\Attribute\\Command;
+use Lunar\\Service\\Command\\AbstractCommand;
+use Lunar\\Service\\Command\\ConsoleHelper as C;
 
 #[Command(
     name: "{$commandId}:run",

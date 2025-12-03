@@ -9,7 +9,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Command;
+namespace Lunar\Command;
 
 use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\AbstractCommand;

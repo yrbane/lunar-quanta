@@ -9,7 +9,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Attribute;
+namespace Lunar\Attribute;
 
 /**
  * Classe Route.

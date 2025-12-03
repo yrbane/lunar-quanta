@@ -8,9 +8,9 @@
  *
  */
 
-namespace App\Service\Core\Template\Macro;
+namespace Lunar\Service\Core\Template\Macro;
 
-use App\Service\Core\Router;
+use Lunar\Service\Core\Router;
 
 class UrlMacro implements MacroInterface
 {

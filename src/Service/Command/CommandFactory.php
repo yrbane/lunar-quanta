@@ -9,9 +9,9 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Command;
+namespace Lunar\Service\Command;
 
-use App\Service\Core\Router;
+use Lunar\Service\Core\Router;
 
 /**
  * Fabrique qui instancie dynamiquement les commandes CLI avec injection des dépendances.

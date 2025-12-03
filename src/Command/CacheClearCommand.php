@@ -8,11 +8,11 @@
  *
  */
 
-namespace App\Command;
+namespace Lunar\Command;
 
 use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\CommandInterface;
-use App\Service\Core\Config\Config;
+use Lunar\Service\Core\Config\Config;
 
 #[Command(name: 'cache:clear', description: 'Supprime les fichiers du cache.')]
 class CacheClearCommand implements CommandInterface

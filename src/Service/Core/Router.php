@@ -9,13 +9,13 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Core;
+namespace Lunar\Service\Core;
 
-use App\Attribute\Route;
-use App\Controller\ErrorController;
-use App\Service\Core\Config\Config;
-use App\Service\Core\Http\Request;
-use App\Service\Core\Http\Response;
+use Lunar\Attribute\Route;
+use Lunar\Controller\ErrorController;
+use Lunar\Service\Core\Config\Config;
+use Lunar\Service\Core\Http\Request;
+use Lunar\Service\Core\Http\Response;
 
 /**
  * Class Router.

@@ -9,7 +9,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Core\Http;
+namespace Lunar\Service\Core\Http;
 
 /**
  * Classe Response.

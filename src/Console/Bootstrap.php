@@ -7,10 +7,10 @@
  */
 declare(strict_types=1);
 
-namespace App\Console;
+namespace Lunar\Console;
 
 use Lunar\Cli\BootstrapInterface;
-use App\Service\Core\Config\Config;
+use Lunar\Service\Core\Config\Config;
 
 /**
  * Class Bootstrap.
