@@ -174,12 +174,14 @@ $response->send();
 
 ## Templates
 
-### AdvancedTemplateEngine
+Le système de templates utilise le package externe **[lunar/template](https://github.com/yrbane/lunar-template)** via un adaptateur.
 
-**Namespace :** `App\Service\Core\Template\AdvancedTemplateEngine`  
-**Fichier :** `src/Service/Core/Template/AdvancedTemplateEngine.php`
+### LunarTemplateAdapter
 
-Moteur de templates avancé avec héritage, blocs et macros.
+**Namespace :** `App\Service\Core\Template\LunarTemplateAdapter`
+**Fichier :** `src/Service/Core/Template/LunarTemplateAdapter.php`
+
+Adaptateur pour intégrer le moteur de templates Lunar dans le framework.
 
 #### Constructeur
 
@@ -204,8 +206,8 @@ Rend un template avec les variables fournies.
 
 **Exemple :**
 ```php
-$engine = new AdvancedTemplateEngine('template');
-$html = $engine->render('blog/show', [
+$adapter = new LunarTemplateAdapter('template');
+$html = $adapter->render('blog/show', [
     'post' => $post,
     'title' => 'Mon Article'
 ]);
@@ -220,7 +222,7 @@ Enregistre une macro réutilisable.
 
 **Exemple :**
 ```php
-$engine->registerMacro('url', function($routeName) {
+$adapter->registerMacro('url', function($routeName) {
     return Router::generateUrl($routeName);
 });
 ```
@@ -231,6 +233,11 @@ Appelle une macro enregistrée.
 **Paramètres :**
 - `$name` : Nom de la macro
 - `$args` : Arguments à passer à la macro
+
+##### `getEngine(): Lunar\Template\AdvancedTemplateEngine`
+Retourne l'instance du moteur Lunar pour les utilisations avancées.
+
+**Retour :** Instance du moteur de templates sous-jacent
 
 ---
 

@@ -93,7 +93,7 @@ lunar-quanta/
 - **BaseController** : Contrôleur de base avec intégration du moteur de templates
 
 #### 🎨 Moteur de Templates
-- **AdvancedTemplateEngine** (`src/Service/Core/Template/AdvancedTemplateEngine.php:80`) : 
+- **[lunar/template](https://github.com/yrbane/lunar-template)** : Package externe autonome intégré via `LunarTemplateAdapter`
   - Syntaxe intuitive `[[ variable ]]`, `[% if condition %]`, `[% for item in items %]`
   - Héritage de templates avec `[% extends 'parent.tpl' %]`
   - Système de blocs `[% block content %]`
