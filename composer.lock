@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2eeed6f1825d8d5b6f1da24ac396f664",
+    "content-hash": "4bd3627a89241f6d8b6f2582556aa2fc",
     "packages": [
         {
             "name": "yrbane/lunar-cli",
@@ -12,11 +12,12 @@
             "dist": {
                 "type": "path",
                 "url": "../lunar-cli",
-                "reference": "d2fbeb1e2be8678e531ef2d11858a4fbb2d638ca"
+                "reference": "1ca53df46125e9a7109485d9f41a4154d09476cc"
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": ">=8.3"
+                "php": ">=8.3",
+                "yrbane/lunar-config": "@dev"
             },
             "require-dev": {
                 "phpstan/phpstan": "^2.0",
@@ -52,17 +53,57 @@
             }
         },
         {
+            "name": "yrbane/lunar-config",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../lunar-config",
+                "reference": "4f651bb62d1bb181868a46e3f2d82b24b9bd022e"
+            },
+            "require": {
+                "php": ">=8.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lunar\\Config\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Seb",
+                    "email": "seb@nethttp.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Configuration management for Lunar packages",
+            "homepage": "https://github.com/yrbane/lunar-config",
+            "keywords": [
+                "config",
+                "configuration",
+                "lunar"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "yrbane/lunar-template",
             "version": "1.4.0",
             "dist": {
                 "type": "path",
                 "url": "../lunar-template",
-                "reference": "35912cba8fef0b466b5b63551f9e22956a61f036"
+                "reference": "7068a89041376d8638d176f0c1ea4543b9ee354a"
             },
             "require": {
                 "ext-mbstring": "*",
                 "php": ">=8.3",
-                "yrbane/lunar-cli": "@dev"
+                "yrbane/lunar-cli": "@dev",
+                "yrbane/lunar-config": "@dev"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.91",
