@@ -43,8 +43,8 @@ class ConsoleHelper
      * Affiche un tableau formaté avec entêtes et lignes, coloré.
      * Gère correctement les largeurs de colonnes en UTF-8 (ou encodage forcé).
      *
-     * @param array<int, string>                     $headers entêtes de colonnes
-     * @param array<int, array<int|string, mixed>>   $rows    données à afficher (tableau de tableaux)
+     * @param array<int, string>                   $headers entêtes de colonnes
+     * @param array<int, array<int|string, mixed>> $rows    données à afficher (tableau de tableaux)
      */
     public static function table(array $headers, array $rows): void
     {
@@ -231,7 +231,7 @@ class ConsoleHelper
     public static function progressBar(int $current, int $total, int $width = 50): void
     {
         $percent = ($current / $total);
-        $filled = (int)round($percent * $width);
+        $filled = (int) round($percent * $width);
         $bar = str_repeat('█', $filled).str_repeat('░', $width - $filled);
         $percentDisplay = str_pad(round($percent * 100).'%', 4, ' ', STR_PAD_LEFT);
         echo "\r".self::color("Progress: [{$bar}] {$percentDisplay}", '36');
@@ -242,8 +242,6 @@ class ConsoleHelper
 
     /**
      * Retourne une icône en fonction du type de fichier.
-     *
-     * @param string $path
      */
     public static function fileIcon(string $path): string
     {
@@ -267,8 +265,6 @@ class ConsoleHelper
 
     /**
      * Retourne une couleur ANSI suggérée pour un type de fichier.
-     *
-     * @param string $path
      */
     public static function fileColor(string $path): string
     {

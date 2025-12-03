@@ -1,13 +1,17 @@
 <?php
-
+/**
+ *
+ * @since 0.0.1
+ * @link https://nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
+ */
 declare(strict_types=1);
 
 namespace App\Service\Command;
 
 use App\Service\Core\Router;
-use ReflectionClass;
-use ReflectionNamedType;
-use ReflectionParameter;
 
 /**
  * Fabrique qui instancie dynamiquement les commandes CLI avec injection des dépendances.
@@ -15,7 +19,7 @@ use ReflectionParameter;
 class CommandFactory
 {
     /**
-     * Liste des instances de services partagés
+     * Liste des instances de services partagés.
      *
      * @var array<class-string, object>
      */
@@ -31,20 +35,19 @@ class CommandFactory
      * Instancie une commande avec ses dépendances injectées automatiquement.
      *
      * @param class-string $className Nom de la classe de commande
-     * @return object
      */
     public function make(string $className): object
     {
-        $refClass = new ReflectionClass($className);
+        $refClass = new \ReflectionClass($className);
 
         $constructor = $refClass->getConstructor();
-        if ($constructor === null || $constructor->getNumberOfParameters() === 0) {
+        if (null === $constructor || 0 === $constructor->getNumberOfParameters()) {
             return new $className();
         }
 
-        $params = array_map(function (ReflectionParameter $param) {
+        $params = array_map(function (\ReflectionParameter $param) {
             $type = $param->getType();
-            if (!$type instanceof ReflectionNamedType || $type->isBuiltin()) {
+            if (!$type instanceof \ReflectionNamedType || $type->isBuiltin()) {
                 throw new \RuntimeException("Impossible d'injecter le paramètre \${$param->getName()} : type non supporté.");
             }
 

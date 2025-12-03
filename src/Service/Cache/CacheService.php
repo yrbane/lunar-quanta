@@ -1,5 +1,12 @@
 <?php
-
+/**
+ *
+ * @since 0.0.1
+ * @link https://nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
+ */
 declare(strict_types=1);
 
 namespace App\Service\Cache;
@@ -13,12 +20,14 @@ class CacheService
      */
     public function clear(): array
     {
-        $cacheDir = Config::getProjectRoot() . '/' . Config::get('cache.dir');
+        $cacheDir = Config::getProjectRoot().'/'.Config::get('cache.dir');
+
         /** @var array<array{status: string, message: string}> $results */
         $results = [];
 
         if (!is_dir($cacheDir)) {
             $results[] = ['status' => 'error', 'message' => "Le dossier cache '{$cacheDir}' n'existe pas."];
+
             return $results;
         }
 
@@ -42,7 +51,7 @@ class CacheService
                 }
             }
         }
-        
+
         if (rmdir($cacheDir)) {
             $results[] = ['status' => 'success', 'message' => "Dossier cache principal supprimé : {$cacheDir}"];
         }
@@ -50,7 +59,6 @@ class CacheService
         if (!mkdir($cacheDir, 0777, true) && !is_dir($cacheDir)) {
             $results[] = ['status' => 'error', 'message' => "Impossible de recréer le dossier cache : {$cacheDir}"];
         }
-
 
         return $results;
     }

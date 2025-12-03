@@ -27,7 +27,7 @@ use App\Service\Core\Router;
     name: 'router:debug',
     description: 'Liste toutes les classes de contrôleurs et les routes associées (ordre alpha).'
 )]
-class RouterDebugCommand extends AbstractCommand  implements CommandInterface
+class RouterDebugCommand extends AbstractCommand implements CommandInterface
 {
     /**
      * Exécute la commande.
@@ -45,7 +45,7 @@ class RouterDebugCommand extends AbstractCommand  implements CommandInterface
             return 0;
         }
 
-        //On vide le cache du router
+        // On vide le cache du router
         unlink(Router::getCacheFile());
 
         // Instancie le router
@@ -175,6 +175,7 @@ HELP;
 
         if (empty($routes)) {
             C::info("Aucune route enregistrée.\n");
+
             return;
         }
 

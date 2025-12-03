@@ -41,15 +41,15 @@ class AdvancedTemplateEngine
     /**
      * AdvancedTemplateEngine constructor.
      *
-     * @param string  $templatePath répertoire où se trouvent les templates source
+     * @param string $templatePath répertoire où se trouvent les templates source
      *
-     * Pour éviter les problèmes de chemins relatifs, on convertit les chemins en chemin absolu.
+     * Pour éviter les problèmes de chemins relatifs, on convertit les chemins en chemin absolu
      */
     public function __construct(string $templatePath)
     {
         // Si $templatePath n'est pas absolu, on le préfixe par le répertoire courant
         if (!preg_match('#^(?:/|[A-Za-z]:[\/])#', $templatePath)) {
-            $templatePath = Config::getProjectRoot() . '/' .$templatePath;
+            $templatePath = Config::getProjectRoot().'/'.$templatePath;
         }
         $absTemplatePath = realpath($templatePath);
         if (false === $absTemplatePath) {
@@ -58,7 +58,7 @@ class AdvancedTemplateEngine
         $this->templatePath = $absTemplatePath;
 
         // Définition du cachePath
-        $cachePath = Config::getProjectRoot().'/'.(string) Config::get('cache.dir','cache').'/'.(string) Config::get('template_cache_dir', 'template');
+        $cachePath = Config::getProjectRoot().'/'.(string) Config::get('cache.dir', 'cache').'/'.(string) Config::get('template_cache_dir', 'template');
 
         $absCachePath = realpath($cachePath) ?: $cachePath;
         $this->cachePath = rtrim($absCachePath, '/');
@@ -90,7 +90,7 @@ class AdvancedTemplateEngine
         // Si le template compilé n'existe pas ou est périmé, le recompiler.
         if (!file_exists($compiledFile) || filemtime($compiledFile) < filemtime($templateFile)) {
             $source = file_get_contents($templateFile);
-            if ($source === false) {
+            if (false === $source) {
                 throw new \Exception("Unable to read template: {$templateFile}");
             }
             $compiled = $this->compileTemplate($source);
@@ -99,7 +99,7 @@ class AdvancedTemplateEngine
 
         extract($variables, EXTR_OVERWRITE);
 
-        //Variables par défaut
+        // Variables par défaut
         $title = $title ?? 'Titre par défaut';
         $description = $description ?? 'Description par défaut';
         $keywords = $keywords ?? 'Mots-clés par défaut';
@@ -110,15 +110,14 @@ class AdvancedTemplateEngine
         $favicon = $favicon ?? '/favicon.ico';
         $baseUrl = $baseUrl ?? '/';
         $basePath = $basePath ?? '/';
-     
 
         ob_start();
-        try{
-            include $compiledFile;
 
-        }
-        catch (\Throwable $e) {
+        try {
+            include $compiledFile;
+        } catch (\Throwable $e) {
             ob_end_clean();
+
             throw $e;
         }
 
@@ -136,7 +135,7 @@ class AdvancedTemplateEngine
     {
         // Parcourt tous les fichiers PHP dans le répertoire
         $files = glob($directory.'/*.php');
-        if ($files === false) {
+        if (false === $files) {
             return;
         }
         foreach ($files as $file) {
@@ -184,8 +183,8 @@ class AdvancedTemplateEngine
     /**
      * Appelle une macro enregistrée.
      *
-     * @param string                  $name nom de la macro
-     * @param array<int, mixed>       $args arguments passés à la macro
+     * @param string            $name nom de la macro
+     * @param array<int, mixed> $args arguments passés à la macro
      *
      * @return mixed résultat renvoyé par la macro
      *
@@ -269,7 +268,7 @@ class AdvancedTemplateEngine
                 throw new \Exception("Parent template not found: {$parentFile}");
             }
             $parentSource = file_get_contents($parentFile);
-            if ($parentSource === false) {
+            if (false === $parentSource) {
                 throw new \Exception("Unable to read parent template: {$parentFile}");
             }
 

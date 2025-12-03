@@ -42,7 +42,7 @@ abstract class BaseController
         if (!class_exists($engineClass)) {
             throw new \Exception("Template engine class {$engineClass} does not exist.");
         }
-        
+
         /** @var LunarTemplateAdapter $engine */
         $engine = new $engineClass($templatePath);
 

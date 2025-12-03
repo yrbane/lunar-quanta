@@ -11,11 +11,11 @@ declare(strict_types=1);
 
 namespace App\Service\Core;
 
+use App\Attribute\Route;
 use App\Controller\ErrorController;
 use App\Service\Core\Config\Config;
 use App\Service\Core\Http\Request;
 use App\Service\Core\Http\Response;
-use App\Attribute\Route;
 
 /**
  * Class Router.
@@ -63,20 +63,17 @@ class Router
         // Définir le répertoire des contrôleurs (relative à ce fichier)
         $controllerDir = realpath(Config::getProjectRoot().'/src/Controller');
         $this->controllerDir = false === $controllerDir ? '' : $controllerDir;
-        if(is_file($this->cacheFile)){
+        if (is_file($this->cacheFile)) {
             $this->routes = include $this->cacheFile;
-        }
-        else{
+        } else {
             $this->registerAllControllerRoutes();
         }
-
     }
 
     /**
-     * Récuppère le chemin du fichier de cache
-     * @return string
+     * Récuppère le chemin du fichier de cache.
      */
-    public static function getCacheFile():string
+    public static function getCacheFile(): string
     {
         return Config::getProjectRoot().'/'.(string) Config::get('cache.dir').'/router.php';
     }
@@ -86,7 +83,7 @@ class Router
      *
      * @param string $name nom de la route
      *
-     * @return array<string, mixed>|null le tableau décrivant la route ou null si non trouvée
+     * @return null|array<string, mixed> le tableau décrivant la route ou null si non trouvée
      */
     public static function getRouteByName(string $name): ?array
     {
@@ -103,13 +100,13 @@ class Router
     public function dispatch(Request $request): Response
     {
         $response = $this->searchRoute($request);
-        if($response instanceof Response){
+        if ($response instanceof Response) {
             return $response;
         }
-        //La route n'est peut-être pas en cache...
+        // La route n'est peut-être pas en cache...
         $this->registerAllControllerRoutes();
         $response = $this->searchRoute($request);
-        if($response instanceof Response){
+        if ($response instanceof Response) {
             return $response;
         }
         // Si aucune route ne correspond, appel direct du ErrorController pour générer une page 404.
@@ -122,9 +119,9 @@ class Router
     /**
      * Try to find a matching route for the given request.
      *
-     * @return Response|false Response when a route matches, false otherwise
+     * @return false|Response Response when a route matches, false otherwise
      */
-    public function searchRoute(Request $request):Response|bool
+    public function searchRoute(Request $request): bool|Response
     {
         foreach ($this->routes as $route) {
             if ($this->match($route, $request)) {
@@ -139,14 +136,26 @@ class Router
                 return new Response((string) $result);
             }
         }
+
         return false;
     }
+
     /**
      * Retourne la liste des routes actuellement enregistrées.
      *
      * @return array<string, array<string, mixed>>
      */
     public function getRegisteredRoutes(): array
+    {
+        return $this->routes;
+    }
+
+    /**
+     * Retourne la liste des routes enregistrées.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public function getRoutes(): array
     {
         return $this->routes;
     }
@@ -242,15 +251,15 @@ class Router
             }
         }
 
-        //Mise en cache
+        // Mise en cache
         file_put_contents($this->cacheFile, '<?php return '.var_export($this->routes, true).';');
     }
 
     /**
      * Vérifie si une route correspond à la requête.
      *
-     * @param array<string, mixed> $route la route sous forme de tableau
-     * @param Request $request L'objet Request
+     * @param array<string, mixed> $route   la route sous forme de tableau
+     * @param Request              $request L'objet Request
      *
      * @return bool vrai si la route correspond, sinon faux
      */
@@ -258,15 +267,5 @@ class Router
     {
         return $route['method'] === strtoupper($request->getMethod())
             && $route['path'] === $request->getUri();
-    }
-
-    /**
-     * Retourne la liste des routes enregistrées.
-     *
-     * @return array<string, array<string, mixed>>
-     */
-    public function getRoutes(): array
-    {
-        return $this->routes;
     }
 }

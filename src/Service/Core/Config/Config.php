@@ -1,10 +1,18 @@
 <?php
+/**
+ *
+ * @since 0.0.1
+ * @link https://nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
+ */
 declare(strict_types=1);
 
 namespace App\Service\Core\Config;
 
 /**
- * Class Config
+ * Class Config.
  *
  * Système de configuration basé sur des fichiers JSON.
  *
@@ -19,36 +27,35 @@ namespace App\Service\Core\Config;
 class Config
 {
     /**
+     * Chemin absolu vers la racine du projet.
+     */
+    public static ?string $projectRoot = null;
+
+    /**
      * Tableau interne stockant la configuration fusionnée.
      *
-     * @var array<string, mixed>|null
+     * @var null|array<string, mixed>
      */
     protected static ?array $config = null;
 
     /**
-     * Chemin absolu vers la racine du projet
-     *
-     * @var ?string
-     */
-    public static ?string $projectRoot=null;
-
-    /**
      * Charge la configuration depuis un chemin (fichier unique ou dossier) et, éventuellement, utilise un cache.
      *
-     * @param string $path Chemin vers le fichier ou le dossier de configuration.
-     * @param string|null $cacheFile Chemin optionnel vers un fichier de cache.
-     * @return void
-     * @throws \Exception Si le chemin est invalide ou si un JSON est invalide.
+     * @param string      $path      chemin vers le fichier ou le dossier de configuration
+     * @param null|string $cacheFile chemin optionnel vers un fichier de cache
+     *
+     * @throws \Exception si le chemin est invalide ou si un JSON est invalide
      */
     public static function load(string $path, ?string $cacheFile = null): void
     {
         // Utilisation du cache fichier si fourni et s'il existe
-        if ($cacheFile !== null && file_exists($cacheFile)) {
+        if (null !== $cacheFile && file_exists($cacheFile)) {
             // On charge la configuration depuis le cache
             $cached = include $cacheFile;
             if (is_array($cached)) {
-                /** @var array<string, mixed> $cached */
+                // @var array<string, mixed> $cached
                 self::$config = $cached;
+
                 return;
             }
         }
@@ -58,21 +65,21 @@ class Config
             self::$config = self::loadFromDirectory($path);
         } elseif (file_exists($path)) {
             $json = file_get_contents($path);
-            if ($json === false) {
+            if (false === $json) {
                 throw new \Exception("Unable to read configuration file: {$path}");
             }
             $data = json_decode($json, true);
-            if ($data === null) {
+            if (null === $data) {
                 throw new \Exception("Invalid JSON in configuration file: {$path}");
             }
-            /** @var array<string, mixed> $data */
+            // @var array<string, mixed> $data
             self::$config = $data;
         } else {
             throw new \Exception("Configuration path not found: {$path}");
         }
 
         // Écriture du cache si un fichier de cache est fourni
-        if ($cacheFile !== null) {
+        if (null !== $cacheFile) {
             // On écrit le contenu en PHP (avec un return de l'array) pour une inclusion rapide
             $exported = var_export(self::$config, true);
             file_put_contents($cacheFile, "<?php\nreturn {$exported};\n");
@@ -82,7 +89,7 @@ class Config
     /**
      * Récupère la configuration actuelle.
      *
-     * @return array<string, mixed>|null La configuration actuelle ou null si non chargée.
+     * @return null|array<string, mixed> la configuration actuelle ou null si non chargée
      */
     public static function getAll(): ?array
     {
@@ -90,69 +97,21 @@ class Config
     }
 
     /**
-     * Charge et fusionne tous les fichiers JSON présents dans un dossier.
-     *
-     * @param string $directory           Chemin du dossier contenant les fichiers JSON.
-     * @return array<string, mixed>       La configuration fusionnée.
-     * @throws \Exception Si un fichier JSON est invalide.
-     */
-    protected static function loadFromDirectory(string $directory): array
-    {
-        $configData = [];
-        $files = glob(rtrim($directory, '/') . '/*.json');
-        if ($files === false) {
-            return $configData;
-        }
-        foreach ($files as $file) {
-            $json = file_get_contents($file);
-            if ($json === false) {
-                throw new \Exception("Unable to read configuration file: {$file}");
-            }
-            $data = json_decode($json, true);
-            if ($data === null) {
-                throw new \Exception("Invalid JSON in configuration file: {$file}");
-            }
-            /** @var array<string, mixed> $data */
-            $configData = self::mergeArrays($configData, $data);
-        }
-        return $configData;
-    }
-
-    /**
-     * Fusionne récursivement deux tableaux.
-     *
-     * En cas de conflit, les valeurs du second tableau remplacent celles du premier.
-     *
-     * @param array<string, mixed> $a Premier tableau.
-     * @param array<string, mixed> $b Second tableau.
-     * @return array<string, mixed> Tableau fusionné.
-     */
-    protected static function mergeArrays(array $a, array $b): array
-    {
-        foreach ($b as $key => $value) {
-            if (isset($a[$key]) && is_array($a[$key]) && is_array($value)) {
-                $a[$key] = self::mergeArrays($a[$key], $value);
-            } else {
-                $a[$key] = $value;
-            }
-        }
-        return $a;
-    }
-
-    /**
      * Récupère une valeur de configuration en utilisant une clé "dot-notée".
      *
      * Exemple : Config::get('template.engine') pour obtenir la valeur associée.
      *
-     * @param string $key Clé de configuration.
-     * @param mixed $default Valeur par défaut si la clé n'est pas trouvée.
-     * @return mixed La valeur de configuration ou $default.
-     * @throws \Exception Si la configuration n'est pas chargée.
+     * @param string $key     clé de configuration
+     * @param mixed  $default valeur par défaut si la clé n'est pas trouvée
+     *
+     * @return mixed la valeur de configuration ou $default
+     *
+     * @throws \Exception si la configuration n'est pas chargée
      */
     public static function get(string $key, $default = null)
     {
-        if (self::$config === null) {
-            throw new \Exception("Configuration not loaded.");
+        if (null === self::$config) {
+            throw new \Exception('Configuration not loaded.');
         }
         $keys = explode('.', $key);
         $value = self::$config;
@@ -162,6 +121,7 @@ class Config
             }
             $value = $value[$k];
         }
+
         return $value;
     }
 
@@ -185,10 +145,66 @@ class Config
     public static function getProjectRoot(): string
     {
         if (null === self::$projectRoot) {
-            $root = realpath(__DIR__ . '/../../../../');
+            $root = realpath(__DIR__.'/../../../../');
             self::$projectRoot = false === $root ? '' : $root;
         }
 
         return self::$projectRoot;
+    }
+
+    /**
+     * Charge et fusionne tous les fichiers JSON présents dans un dossier.
+     *
+     * @param string $directory chemin du dossier contenant les fichiers JSON
+     *
+     * @return array<string, mixed> la configuration fusionnée
+     *
+     * @throws \Exception si un fichier JSON est invalide
+     */
+    protected static function loadFromDirectory(string $directory): array
+    {
+        $configData = [];
+        $files = glob(rtrim($directory, '/').'/*.json');
+        if (false === $files) {
+            return $configData;
+        }
+        foreach ($files as $file) {
+            $json = file_get_contents($file);
+            if (false === $json) {
+                throw new \Exception("Unable to read configuration file: {$file}");
+            }
+            $data = json_decode($json, true);
+            if (null === $data) {
+                throw new \Exception("Invalid JSON in configuration file: {$file}");
+            }
+
+            /** @var array<string, mixed> $data */
+            $configData = self::mergeArrays($configData, $data);
+        }
+
+        return $configData;
+    }
+
+    /**
+     * Fusionne récursivement deux tableaux.
+     *
+     * En cas de conflit, les valeurs du second tableau remplacent celles du premier.
+     *
+     * @param array<string, mixed> $a premier tableau
+     * @param array<string, mixed> $b second tableau
+     *
+     * @return array<string, mixed> tableau fusionné
+     */
+    protected static function mergeArrays(array $a, array $b): array
+    {
+        foreach ($b as $key => $value) {
+            if (isset($a[$key]) && is_array($a[$key]) && is_array($value)) {
+                $a[$key] = self::mergeArrays($a[$key], $value);
+            } else {
+                $a[$key] = $value;
+            }
+        }
+
+        return $a;
     }
 }
