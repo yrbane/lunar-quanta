@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "91a462376afedf3cba042cc27dfbdd6e",
+    "content-hash": "8343a6713f841bbd8eba12af3c596e55",
     "packages": [
         {
-            "name": "lunar/template",
+            "name": "lunar/cli",
             "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/yrbane/lunar-template.git",
-                "reference": "910d773c4c8c4b34595d885a113ac6c19f4f1dfe"
+                "url": "https://github.com/yrbane/lunar-cli.git",
+                "reference": "661ed442523809e73847bc00773e0de6b353e6f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yrbane/lunar-template/zipball/910d773c4c8c4b34595d885a113ac6c19f4f1dfe",
-                "reference": "910d773c4c8c4b34595d885a113ac6c19f4f1dfe",
+                "url": "https://api.github.com/repos/yrbane/lunar-cli/zipball/661ed442523809e73847bc00773e0de6b353e6f3",
+                "reference": "661ed442523809e73847bc00773e0de6b353e6f3",
                 "shasum": ""
             },
             "require": {
@@ -25,11 +25,63 @@
                 "php": ">=8.3"
             },
             "require-dev": {
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^11.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lunar\\Cli\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Lunar\\Cli\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "seb",
+                    "email": "seb@nethttp.net"
+                }
+            ],
+            "description": "Framework CLI PHP autonome avec commandes, helpers console et rendu de tableaux",
+            "support": {
+                "source": "https://github.com/yrbane/lunar-cli/tree/main",
+                "issues": "https://github.com/yrbane/lunar-cli/issues"
+            },
+            "time": "2025-12-03T11:57:26+00:00"
+        },
+        {
+            "name": "lunar/template",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yrbane/lunar-template.git",
+                "reference": "46927a8fcdece32abe15b93445ca9de1adeaa9d4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yrbane/lunar-template/zipball/46927a8fcdece32abe15b93445ca9de1adeaa9d4",
+                "reference": "46927a8fcdece32abe15b93445ca9de1adeaa9d4",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=8.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.91",
                 "phpstan/phpstan": "^1.10",
                 "phpunit/phpunit": "^10.0"
             },
             "suggest": {
-                "ext-opcache": "For better performance with compiled templates"
+                "ext-opcache": "For better performance with compiled templates",
+                "ext-pcov": "For fast code coverage analysis"
             },
             "default-branch": true,
             "type": "library",
@@ -38,12 +90,37 @@
                     "Lunar\\Template\\": "src/"
                 }
             },
+            "autoload-dev": {
+                "psr-4": {
+                    "Lunar\\Template\\Tests\\": "tests/"
+                }
+            },
             "scripts": {
                 "test": [
-                    "phpunit"
+                    "phpunit --testsuite=All"
+                ],
+                "test:unit": [
+                    "phpunit --testsuite=Unit"
+                ],
+                "test:integration": [
+                    "phpunit --testsuite=Integration"
+                ],
+                "coverage": [
+                    "XDEBUG_MODE=coverage phpunit --coverage-html coverage/html --coverage-text"
+                ],
+                "cs:check": [
+                    "php-cs-fixer fix --dry-run --diff"
+                ],
+                "cs:fix": [
+                    "php-cs-fixer fix"
                 ],
                 "analyse": [
-                    "phpstan analyse src --level=7"
+                    "phpstan analyse src tests --level=7"
+                ],
+                "qa": [
+                    "@cs:check",
+                    "@analyse",
+                    "@test"
                 ]
             },
             "license": [
@@ -71,13 +148,14 @@
                 "source": "https://github.com/yrbane/lunar-template/tree/main",
                 "issues": "https://github.com/yrbane/lunar-template/issues"
             },
-            "time": "2025-12-03T08:39:30+00:00"
+            "time": "2025-12-03T11:41:05+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "lunar/cli": 20,
         "lunar/template": 20
     },
     "prefer-stable": false,

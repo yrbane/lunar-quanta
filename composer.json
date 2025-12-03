@@ -5,9 +5,14 @@
     "require": {
         "php": ">=8.3",
         "ext-mbstring": "*",
+        "lunar/cli": "@dev",
         "lunar/template": "@dev"
     },
     "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/yrbane/lunar-cli.git"
+        },
         {
             "type": "vcs",
             "url": "https://github.com/yrbane/lunar-template.git"

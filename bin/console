@@ -1,13 +1,19 @@
 #!/usr/bin/env php
 <?php
-
+/**
+ * Console CLI du framework Lunar Quanta.
+ * Utilise le package lunar/cli pour la gestion des commandes.
+ *
+ * @since 1.0.0
+ * @author seb@nethttp.net
+ */
 declare(strict_types=1);
 
+use Lunar\Cli\Application;
+use Lunar\Cli\Attribute\Command as LunarCommand;
 use App\Attribute\Command;
-use App\Service\Command\CommandInterface;
-use App\Service\Command\ConsoleHelper as C;
-use App\Service\Command\TableRenderer;
 use App\Service\Command\CommandFactory;
+use App\Service\Command\CommandInterface;
 use App\Service\Core\Config\Config;
 
 define('PROJECT_ROOT', realpath(__DIR__ . '/..'));
@@ -16,163 +22,54 @@ require PROJECT_ROOT . '/vendor/autoload.php';
 
 // Charge la configuration depuis le dossier "config" avec un fichier de cache optionnel.
 try {
-    Config::load(Config::getProjectRoot().'/config', Config::getProjectRoot().'/cache/config.php');
+    Config::load(Config::getProjectRoot() . '/config', Config::getProjectRoot() . '/cache/config.php');
 } catch (\Exception $e) {
-    exit('Configuration Error: '.$e->getMessage());
+    exit('Configuration Error: ' . $e->getMessage());
 }
 
-// Vérifie la compatibilité du terminal avec l'UTF-8
-if (!C::isUtf8Compatible()) {
-    C::setTerminalEncoding('ISO-8859-1');
-    C::error("⚠️ Le terminal ne semble pas compatible UTF-8. Passage temporaire en ISO-8859-1.");
-}
+// Creation de l'application CLI
+$app = new Application('Lunar Quanta Console', '1.0.0');
 
-// Recherche et instanciation des commandes
-$commands = [];
-foreach (glob(PROJECT_ROOT . '/src/Command/*Command.php') as $file) {
+// Configuration de la factory pour l'injection de dependances
+$factory = new CommandFactory();
+
+// Scan manuel des commandes avec l'attribut App\Attribute\Command
+foreach (glob(PROJECT_ROOT . '/src/Command/*Command.php') ?: [] as $file) {
     $className = 'App\\Command\\' . pathinfo($file, PATHINFO_FILENAME);
+
     if (!class_exists($className)) {
         require_once $file;
     }
-}
 
-foreach (get_declared_classes() as $class) {
-    if (str_starts_with($class, 'App\\Command\\')) {
-        $ref = new ReflectionClass($class);
-        if (!$ref->isInstantiable()) {
-            continue;
-        }
-        $attrs = $ref->getAttributes(Command::class);
-        if ($attrs) {
-            /** @var Command $meta */
-            $meta = $attrs[0]->newInstance();
-            $factory = new CommandFactory();
-            $instance = $factory->make($class);
-            if ($instance instanceof CommandInterface) {
-                $commands[$meta->name] = [
-                    'instance'    => $instance,
-                    'description' => $meta->description,
-                ];
-            }
-        }
+    if (!class_exists($className)) {
+        continue;
+    }
+
+    $ref = new ReflectionClass($className);
+
+    if (!$ref->isInstantiable()) {
+        continue;
+    }
+
+    // Cherche l'attribut Command (App ou Lunar)
+    $attrs = $ref->getAttributes(Command::class);
+    if (empty($attrs)) {
+        $attrs = $ref->getAttributes(LunarCommand::class);
+    }
+
+    if (empty($attrs)) {
+        continue;
+    }
+
+    /** @var Command|LunarCommand $meta */
+    $meta = $attrs[0]->newInstance();
+
+    $instance = $factory->make($className);
+
+    if ($instance instanceof CommandInterface) {
+        $app->addCommand($meta->name, $instance, $meta->description);
     }
 }
 
-// Détermine ce que l'utilisateur a passé comme commande (1er argument)
-$argv = $_SERVER['argv'];
-$commandName = $argv[1] ?? null;
-
-/**
- * Construit le tableau complet (une seule table) pour lister
- * toutes les commandes. Chaque ligne comporte trois colonnes :
- *   - "Groupe" (le préfixe en majuscules avant le ':')
- *   - "Commande" (le nom complet, ex.: "cache:clear")
- *   - "Description"
- *
- * @param array<string,array{instance:CommandInterface,description:string}> $commands
- * @return array<array<string,string>>
- */
-function buildCommandRows(array $commands): array
-{
-    $rows = [];
-    foreach ($commands as $name => $data) {
-        $prefix = explode(':', $name)[0] ?? 'misc';
-        $rows[] = [
-            'Groupe'      => strtoupper($prefix),
-            'Commande'    => $name,
-            'Description' => $data['description'],
-        ];
-    }
-    // On peut trier les lignes par ordre alphabétique du groupe, puis commande
-    usort($rows, function (array $a, array $b) {
-        $groupComp = strcmp($a['Groupe'], $b['Groupe']);
-        if ($groupComp !== 0) {
-            return $groupComp;
-        }
-        // sinon on compare par "Commande"
-        return strcmp($a['Commande'], $b['Commande']);
-    });
-
-    return $rows;
-}
-
-/**
- * Affiche le tableau complet (ou filtré) dans un seul tableau,
- * avec une seule en‑tête.
- */
-function displayCommandsInOneTable(array $commands, ?string $unknownCmd = null): void
-{
-    if ($unknownCmd) {
-        C::error("Commande inconnue : \"$unknownCmd\"\n");
-    }
-    C::subtitle("Commandes disponibles :\n");
-
-    // On construit nos lignes : [ ['Groupe'=>..., 'Commande'=>..., 'Description'=>...], ... ]
-    $rows = buildCommandRows($commands);
-
-    // On passe ces lignes à un renderer "simple" (une seule table)
-    TableRenderer::renderSingleTable($rows, [
-        'borderColor'     => '35',    // magenta
-        'headerColor'     => '1;35',  // magenta gras
-        'rowColor'        => '0;37',  // gris clair
-        'showHeaders'     => true,
-        // Les colonnes à afficher, dans l'ordre voulu
-        // => On s'assure que la clé => label correspond à ce qu'on veut.
-        'columns'         => [
-            'Groupe'      => 'Groupe',
-            'Commande'    => 'Commande',
-            'Description' => 'Description',
-        ],
-    ]);
-
-    echo "\n";
-}
-
-/**
- * A) Si pas de commande => lister tout.
- */
-if (!$commandName) {
-    C::title("Console du Framework");
-    displayCommandsInOneTable($commands);
-    exit(0);
-}
-
-/**
- * B) Commande exacte trouvée => exécution ou aide.
- */
-if (isset($commands[$commandName])) {
-    $cmd = $commands[$commandName]['instance'];
-
-    $args = array_slice($argv, 2);
-    if (in_array('--help', $args, true)) {
-        C::info($cmd->getHelp());
-        exit(0);
-    }
-
-    $exitCode = $cmd->execute($args);
-    exit($exitCode);
-}
-
-/**
- * C) Filtrage par préfixe : si "cache" existe
- *    => afficher toutes les commandes "cache:*".
- */
-$possibleMatches = [];
-foreach ($commands as $name => $info) {
-    if (str_starts_with($name, $commandName . ':')) {
-        $possibleMatches[$name] = $info;
-    }
-}
-
-if (!empty($possibleMatches)) {
-    C::title("Console du Framework");
-    displayCommandsInOneTable($possibleMatches);
-    exit(0);
-}
-
-/**
- * D) Aucune commande exacte ni préfixe => inconnu
- */
-C::title("Console du Framework");
-displayCommandsInOneTable($commands, $commandName);
-exit(1);
+// Execution de l'application
+exit($app->run());
