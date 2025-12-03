@@ -7,3 +7,4 @@ use Lunar\Service\Core\FrontController;
 
 $frontController = new FrontController();
 $frontController->run();
+dump($frontController);

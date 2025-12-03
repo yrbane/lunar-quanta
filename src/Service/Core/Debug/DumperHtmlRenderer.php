@@ -34,7 +34,7 @@ final class DumperHtmlRenderer
     {
         $content = $this->export($var, 0, new \SplObjectStorage());
 
-        return $this->template->render('debug/dump', [
+        return $this->template->render('debug/dump.html', [
             'file' => htmlspecialchars($file),
             'line' => $line,
             'type' => get_debug_type($var),
