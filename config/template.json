@@ -1,7 +1,8 @@
 {
     "template": {
-      "engine": "App\\Service\\Core\\Template\\LunarTemplateAdapter",
-      "template_path": "template",
-      "cache_path": "template"
+        "engine": "Lunar\\Service\\Core\\Template\\LunarTemplateAdapter",
+        "template_path": "template",
+        "cache_path": "template",
+        "extension": "tpl"
     }
 }
