@@ -20,7 +20,7 @@ graph TD
     C --> D[Config::load]
     D --> E[Router::dispatch]
     E --> F[Controller::action]
-    F --> G[AdvancedTemplateEngine::render]
+    F --> G[LunarTemplateAdapter::render]
     G --> H[Response::send]
 ```
 
@@ -65,7 +65,15 @@ $service = $container->get(BlogService::class);
 
 ## Système de templates
 
-### AdvancedTemplateEngine (`src/Service/Core/Template/AdvancedTemplateEngine.php`)
+Le moteur de templates est fourni par le package externe **[lunar/template](https://github.com/yrbane/lunar-template)**, intégré via l'adaptateur `LunarTemplateAdapter`.
+
+### LunarTemplateAdapter (`src/Service/Core/Template/LunarTemplateAdapter.php`)
+
+Adaptateur qui intègre le package `lunar/template` dans le framework. Il configure automatiquement :
+- Les chemins des templates et du cache
+- Les macros par défaut (`asset`, `url`)
+
+### Package lunar/template
 
 **Architecture en 3 phases :**
 
