@@ -1,0 +1,9 @@
+{
+    "name": "Lunar Quanta Console",
+    "version": "1.0.0",
+    "commands": {
+        "App\\Command": "src/Command"
+    },
+    "factory": "App\\Service\\Command\\CommandFactory",
+    "bootstrap": "App\\Console\\Bootstrap"
+}
