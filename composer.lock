@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "71c6a3a065afb18cefa7821d13269c64",
+    "content-hash": "91a462376afedf3cba042cc27dfbdd6e",
     "packages": [
         {
             "name": "lunar/template",
-            "version": "1.0.0",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yrbane/lunar-template.git",
+                "reference": "910d773c4c8c4b34595d885a113ac6c19f4f1dfe"
+            },
             "dist": {
-                "type": "path",
-                "url": "./lunar-template",
-                "reference": "d5f886b7b0aa5fadda725433dc392b3e7cb8f7c3"
+                "type": "zip",
+                "url": "https://api.github.com/repos/yrbane/lunar-template/zipball/910d773c4c8c4b34595d885a113ac6c19f4f1dfe",
+                "reference": "910d773c4c8c4b34595d885a113ac6c19f4f1dfe",
+                "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
@@ -25,6 +31,7 @@
             "suggest": {
                 "ext-opcache": "For better performance with compiled templates"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -60,9 +67,11 @@
                 "template",
                 "templating"
             ],
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/yrbane/lunar-template/tree/main",
+                "issues": "https://github.com/yrbane/lunar-template/issues"
+            },
+            "time": "2025-12-03T08:39:30+00:00"
         }
     ],
     "packages-dev": [],

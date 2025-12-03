@@ -9,8 +9,8 @@
     },
     "repositories": [
         {
-            "type": "path",
-            "url": "./lunar-template"
+            "type": "vcs",
+            "url": "https://github.com/yrbane/lunar-template.git"
         }
     ],
     "autoload": {
