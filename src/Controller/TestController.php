@@ -28,7 +28,7 @@ class TestController extends BaseController
     public function index(Request $request): Response
     {
         // TODO : implémenter la logique de l'action index
-        $html = $this->render('test/index', []);
+        $html = $this->render('test/index.html', []);
 
         return new Response($html);
     }

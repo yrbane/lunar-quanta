@@ -40,7 +40,7 @@ class Router
     /**
      * Le namespace des contrôleurs.
      */
-    private string $controllerNamespace = 'App\Controller\\';
+    private string $controllerNamespace = 'Lunar\Controller\\';
 
     /**
      * Le chemin physique du dossier des contrôleurs.
