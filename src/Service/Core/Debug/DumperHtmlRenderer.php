@@ -9,24 +9,22 @@ declare(strict_types=1);
 namespace Lunar\Service\Core\Debug;
 
 use Lunar\Config\Config;
+use Lunar\Service\Core\Template\LunarTemplateAdapter;
 
 /**
  * Renderer HTML pour le Dumper.
- * Génère le HTML à partir de templates.
+ * Utilise lunar-template pour le rendu.
  */
 final class DumperHtmlRenderer
 {
     private const MAX_DEPTH = 4;
 
-    private string $templatePath;
-
-    /** @var array<string, string> */
-    private array $templates = [];
+    private LunarTemplateAdapter $template;
 
     public function __construct()
     {
-        $this->templatePath = Config::resolvePath('template/debug');
-        $this->loadTemplates();
+        $templatePath = (string) Config::get('template', 'template.path', 'template');
+        $this->template = new LunarTemplateAdapter($templatePath);
     }
 
     /**
@@ -36,48 +34,12 @@ final class DumperHtmlRenderer
     {
         $content = $this->export($var, 0, new \SplObjectStorage());
 
-        return $this->renderTemplate('dump', [
+        return $this->template->render('debug/dump', [
             'file' => htmlspecialchars($file),
             'line' => $line,
             'type' => get_debug_type($var),
             'content' => $content,
         ]);
-    }
-
-    /**
-     * Charge les templates depuis le dossier.
-     */
-    private function loadTemplates(): void
-    {
-        $files = glob($this->templatePath . '/*.html.tpl');
-        if ($files === false) {
-            return;
-        }
-
-        foreach ($files as $file) {
-            $name = basename($file, '.html.tpl');
-            $this->templates[$name] = file_get_contents($file) ?: '';
-        }
-    }
-
-    /**
-     * Rend un template avec les variables.
-     *
-     * @param array<string, mixed> $vars
-     */
-    private function renderTemplate(string $name, array $vars): string
-    {
-        if (!isset($this->templates[$name])) {
-            return '';
-        }
-
-        $html = $this->templates[$name];
-
-        foreach ($vars as $key => $value) {
-            $html = str_replace("[% {$key} %]", (string) $value, $html);
-        }
-
-        return $html;
     }
 
     /**
