@@ -2,70 +2,12 @@
 <?php
 /**
  * Console CLI du framework Lunar Quanta.
- * Utilise le package yrbane/lunar-cli pour la gestion des commandes.
  *
  * @since 1.0.0
  * @author seb@nethttp.net
  */
 declare(strict_types=1);
 
-use Lunar\Cli\Application;
-use Lunar\Cli\Attribute\Command;
-use Lunar\Cli\CommandInterface;
-use App\Service\Command\CommandFactory;
-use App\Service\Core\Config\Config;
+require __DIR__ . '/../vendor/autoload.php';
 
-define('PROJECT_ROOT', realpath(__DIR__ . '/..'));
-
-require PROJECT_ROOT . '/vendor/autoload.php';
-
-// Charge la configuration depuis le dossier "config" avec un fichier de cache optionnel.
-try {
-    Config::load(Config::getProjectRoot() . '/config', Config::getProjectRoot() . '/cache/config.php');
-} catch (\Exception $e) {
-    exit('Configuration Error: ' . $e->getMessage());
-}
-
-// Creation de l'application CLI
-$app = new Application('Lunar Quanta Console', '1.0.0');
-
-// Configuration de la factory pour l'injection de dependances
-$factory = new CommandFactory();
-
-// Scan manuel des commandes avec l'attribut Lunar\Cli\Attribute\Command
-foreach (glob(PROJECT_ROOT . '/src/Command/*Command.php') ?: [] as $file) {
-    $className = 'App\\Command\\' . pathinfo($file, PATHINFO_FILENAME);
-
-    if (!class_exists($className)) {
-        require_once $file;
-    }
-
-    if (!class_exists($className)) {
-        continue;
-    }
-
-    $ref = new ReflectionClass($className);
-
-    if (!$ref->isInstantiable()) {
-        continue;
-    }
-
-    // Cherche l'attribut Command
-    $attrs = $ref->getAttributes(Command::class);
-
-    if (empty($attrs)) {
-        continue;
-    }
-
-    /** @var Command $meta */
-    $meta = $attrs[0]->newInstance();
-
-    $instance = $factory->make($className);
-
-    if ($instance instanceof CommandInterface) {
-        $app->addCommand($meta->name, $instance, $meta->description);
-    }
-}
-
-// Execution de l'application
-exit($app->run());
+exit(\Lunar\Cli\Console::run(__DIR__ . '/..'));

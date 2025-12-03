@@ -106,12 +106,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yrbane/lunar-cli.git",
-                "reference": "28d700e6f87abbf03a04e0e9a6d2d78560b08407"
+                "reference": "ad22b1ed4df5529dae50215f1fa081d196206ac9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yrbane/lunar-cli/zipball/28d700e6f87abbf03a04e0e9a6d2d78560b08407",
-                "reference": "28d700e6f87abbf03a04e0e9a6d2d78560b08407",
+                "url": "https://api.github.com/repos/yrbane/lunar-cli/zipball/ad22b1ed4df5529dae50215f1fa081d196206ac9",
+                "reference": "ad22b1ed4df5529dae50215f1fa081d196206ac9",
                 "shasum": ""
             },
             "require": {
@@ -151,7 +151,7 @@
                 "source": "https://github.com/yrbane/lunar-cli/tree/main",
                 "issues": "https://github.com/yrbane/lunar-cli/issues"
             },
-            "time": "2025-12-03T12:48:32+00:00"
+            "time": "2025-12-03T13:55:24+00:00"
         }
     ],
     "packages-dev": [],
