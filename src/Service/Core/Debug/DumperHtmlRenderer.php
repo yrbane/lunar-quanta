@@ -102,24 +102,24 @@ final class DumperHtmlRenderer
     {
         $value = $var ? 'true' : 'false';
 
-        return "<span class=\"dump-bool dump-bool-{$value}\">{$value}</span>";
+        return "<span class=\"bool\">{$value}</span>";
     }
 
     private function renderNumber(int|float $var): string
     {
-        return '<span class="dump-number">' . $var . '</span>';
+        return '<span class="number">' . $var . '</span>';
     }
 
     private function renderString(string $var): string
     {
         $escaped = htmlspecialchars($var, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
-        return '<span class="dump-string">&quot;' . $escaped . '&quot;</span>';
+        return '<span class="string">&quot;' . $escaped . '&quot;</span>';
     }
 
     private function renderNull(): string
     {
-        return '<span class="dump-null">null</span>';
+        return '<span class="null">null</span>';
     }
 
     /**
@@ -129,24 +129,24 @@ final class DumperHtmlRenderer
     private function renderArray(array $var, int $level, \SplObjectStorage $seen): string
     {
         if ($level >= self::MAX_DEPTH) {
-            return '<span class="dump-truncated">[…]</span>';
+            return '<span class="null">[…]</span>';
         }
 
         if ($var === []) {
-            return '<span class="dump-array-empty">[]</span>';
+            return '<span class="array">[]</span>';
         }
 
         $indent = $this->indent($level);
         $innerIndent = $this->indent($level + 1);
-        $html = '<span class="dump-array">[</span>' . "\n";
+        $html = '<span class="array">[</span>' . "\n";
 
         foreach ($var as $key => $value) {
-            $keyHtml = '<span class="dump-key">' . htmlspecialchars((string) $key) . '</span>';
+            $keyHtml = '<span class="key">' . htmlspecialchars((string) $key) . '</span>';
             $valueHtml = $this->export($value, $level + 1, $seen);
             $html .= $innerIndent . $keyHtml . ' =&gt; ' . $valueHtml . ",\n";
         }
 
-        $html .= $indent . '<span class="dump-array">]</span>';
+        $html .= $indent . '<span class="array">]</span>';
 
         return $html;
     }
@@ -157,20 +157,20 @@ final class DumperHtmlRenderer
     private function renderObject(object $var, int $level, \SplObjectStorage $seen): string
     {
         if ($seen->contains($var)) {
-            return '<span class="dump-circular">' . $var::class . ' { référence circulaire }</span>';
+            return '<span class="object">' . $var::class . ' { référence circulaire }</span>';
         }
 
         $seen->attach($var);
 
         if ($level >= self::MAX_DEPTH) {
-            return '<span class="dump-truncated">' . $var::class . ' { … }</span>';
+            return '<span class="null">' . $var::class . ' { … }</span>';
         }
 
         $ref = new \ReflectionObject($var);
         $indent = $this->indent($level);
         $innerIndent = $this->indent($level + 1);
 
-        $html = '<span class="dump-object">' . $ref->getName() . '</span> {' . "\n";
+        $html = '<span class="object">' . $ref->getName() . '</span> {' . "\n";
 
         foreach ($ref->getProperties() as $prop) {
             $prop->setAccessible(true);
@@ -178,8 +178,8 @@ final class DumperHtmlRenderer
             $valueHtml = $this->export($prop->getValue($var), $level + 1, $seen);
 
             $html .= $innerIndent
-                . '<span class="dump-property">' . $prop->getName() . '</span>'
-                . ' <span class="dump-visibility">(' . $visibility . ')</span>'
+                . '<span class="key">' . $prop->getName() . '</span>'
+                . ' <span class="visibility">(' . $visibility . ')</span>'
                 . ' =&gt; ' . $valueHtml . ",\n";
         }
 
@@ -192,7 +192,7 @@ final class DumperHtmlRenderer
     {
         $type = is_resource($var) ? get_resource_type($var) : 'unknown';
 
-        return '<span class="dump-resource">resource(' . htmlspecialchars($type) . ')</span>';
+        return '<span class="resource">resource(' . htmlspecialchars($type) . ')</span>';
     }
 
     /**

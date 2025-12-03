@@ -1,5 +1,5 @@
 <div class="dump">
-    <pre class="dump-header">[% file %]:&nbsp;<span class="dump-line">[% line %]</span></pre>
-    <div class="dump-type">[% type %]</div>
-    <pre class="dump-content">[% content %]</pre>
+    <pre class="header">[% file %]:&nbsp;<span class="line">[% line %]</span></pre>
+    <div class="type">[% type %]</div>
+    <pre class="content">[% content %]</pre>
 </div>
