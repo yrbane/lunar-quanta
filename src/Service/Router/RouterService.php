@@ -9,9 +9,9 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Router;
+namespace Lunar\Service\Router;
 
-use App\Service\Core\Router;
+use Lunar\Service\Core\Router;
 
 class RouterService
 {

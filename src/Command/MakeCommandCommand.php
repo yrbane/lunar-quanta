@@ -9,7 +9,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Command;
+namespace Lunar\Command;
 
 use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\AbstractCommand;
@@ -117,12 +117,12 @@ HELP;
 
 declare(strict_types=1);
 
-namespace App\\Command;
+namespace Lunar\\Command;
 
-use App\\Attribute\\Command;
-use App\\Service\\Command\\AbstractCommand;
-use App\\Service\\Command\\CommandInterface;
-use App\\Service\\Command\\ConsoleHelper as C;
+use Lunar\\Attribute\\Command;
+use Lunar\\Service\\Command\\AbstractCommand;
+use Lunar\\Service\\Command\\CommandInterface;
+use Lunar\\Service\\Command\\ConsoleHelper as C;
 
 /**
  * Commande générée automatiquement.
@@ -173,7 +173,7 @@ declare(strict_types=1);
 namespace Tests\\Command;
 
 use PHPUnit\\Framework\\TestCase;
-use App\\Command\\{{$classNameShort}}Command;
+use Lunar\\Command\\{{$classNameShort}}Command;
 
 class {$classNameShort}CommandTest extends TestCase
 {

@@ -8,7 +8,7 @@
  *
  */
 
-namespace App\Command;
+namespace Lunar\Command;
 
 use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\AbstractCommand;

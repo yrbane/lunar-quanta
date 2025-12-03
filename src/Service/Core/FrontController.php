@@ -9,12 +9,12 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Core;
+namespace Lunar\Service\Core;
 
-use App\Controller\ErrorController;
-use App\Service\Core\Config\Config;
-use App\Service\Core\Http\HttpStatus;
-use App\Service\Core\Http\Request;
+use Lunar\Controller\ErrorController;
+use Lunar\Service\Core\Config\Config;
+use Lunar\Service\Core\Http\HttpStatus;
+use Lunar\Service\Core\Http\Request;
 
 /**
  * Class FrontController.

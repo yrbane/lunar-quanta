@@ -9,9 +9,9 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Cache;
+namespace Lunar\Service\Cache;
 
-use App\Service\Core\Config\Config;
+use Lunar\Service\Core\Config\Config;
 
 class CacheService
 {

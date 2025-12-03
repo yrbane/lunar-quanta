@@ -9,10 +9,10 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Core\Debug;
+namespace Lunar\Service\Core\Debug;
 
-use App\Service\Command\ConsoleHelper;
-use App\Service\Command\TableRenderer;
+use Lunar\Service\Command\ConsoleHelper;
+use Lunar\Service\Command\TableRenderer;
 
 /**
  * Classe utilitaire de débogage permettant d’afficher joliment

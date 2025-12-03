@@ -9,9 +9,9 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Storage;
+namespace Lunar\Service\Storage;
 
-use App\Entity\User;
+use Lunar\Entity\User;
 
 /**
  * Interface StorageInterface.

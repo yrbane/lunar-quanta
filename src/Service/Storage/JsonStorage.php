@@ -9,10 +9,10 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Storage;
+namespace Lunar\Service\Storage;
 
-use App\Entity\User;
-use App\Service\Security\EncryptionService;
+use Lunar\Entity\User;
+use Lunar\Service\Security\EncryptionService;
 
 /**
  * Class JsonStorage.

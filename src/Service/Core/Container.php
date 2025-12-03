@@ -9,7 +9,7 @@
  */
 declare(strict_types=1);
 
-namespace App\Service\Core;
+namespace Lunar\Service\Core;
 
 /**
  * Conteneur de services ultra-léger avec résolution récursive.

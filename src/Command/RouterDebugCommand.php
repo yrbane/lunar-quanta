@@ -9,14 +9,14 @@
  */
 declare(strict_types=1);
 
-namespace App\Command;
+namespace Lunar\Command;
 
 use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\AbstractCommand;
 use Lunar\Cli\CommandInterface;
 use Lunar\Cli\Helper\ConsoleHelper as C;
 use Lunar\Cli\Helper\TableRenderer;
-use App\Service\Core\Router;
+use Lunar\Service\Core\Router;
 
 /**
  * Commande permettant de lister :
