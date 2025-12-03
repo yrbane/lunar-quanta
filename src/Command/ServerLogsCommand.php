@@ -55,14 +55,32 @@ class ServerLogsCommand extends AbstractCommand implements CommandInterface
             return 1;
         }
 
+        // Nombre de lignes à afficher au démarrage
+        $namedArgs = $this->parseNamedArgs($args);
+        $lines = (int) $this->getOptionValue($namedArgs, 'lines', '20');
+        $follow = !$this->hasFlag($args, 'no-follow');
+
         C::subtitle('Logs du serveur PHP');
         echo self::DIM . "Fichier : {$logFile}" . self::RESET . "\n";
-        echo self::DIM . "Ctrl+C pour quitter" . self::RESET . "\n\n";
+        if ($follow) {
+            echo self::DIM . "Ctrl+C pour quitter" . self::RESET . "\n";
+        }
+        echo "\n";
 
         // Afficher la légende
         $this->showLegend();
 
-        // Ouvrir le fichier en mode lecture
+        // Afficher les dernières lignes existantes
+        $this->showLastLines($logFile, $lines);
+
+        // Si --no-follow, on s'arrête là
+        if (!$follow) {
+            return 0;
+        }
+
+        echo self::DIM . "─── Suivi en temps réel ───" . self::RESET . "\n";
+
+        // Ouvrir le fichier en mode lecture pour suivre
         $handle = fopen($logFile, 'r');
         if (!$handle) {
             C::error("Impossible d'ouvrir le fichier de logs");
@@ -83,6 +101,23 @@ class ServerLogsCommand extends AbstractCommand implements CommandInterface
                 clearstatcache(true, $logFile);
             }
         }
+    }
+
+    /**
+     * Affiche les N dernières lignes du fichier.
+     */
+    private function showLastLines(string $file, int $count): void
+    {
+        $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if ($lines === false) {
+            return;
+        }
+
+        $lastLines = array_slice($lines, -$count);
+        foreach ($lastLines as $line) {
+            echo $this->colorizeLine($line) . "\n";
+        }
+
     }
 
     /**
@@ -211,7 +246,12 @@ Commande : server:logs
 Affiche les logs du serveur PHP en couleur avec suivi en temps réel.
 
 Usage :
-  bin/console server:logs
+  bin/console server:logs [options]
+
+Options :
+  --lines=N    Nombre de lignes à afficher au démarrage (défaut: 20)
+  --no-follow  Affiche les logs et quitte (sans suivi)
+  --help       Affiche cette aide
 
 Coloration :
   - Codes HTTP : 2xx (vert), 3xx (cyan), 4xx (jaune), 5xx (rouge)
@@ -219,8 +259,10 @@ Coloration :
   - Erreurs PHP : fond rouge
   - Timestamps : gris
 
-Options :
-  --help       Affiche cette aide
+Exemples :
+  bin/console server:logs              # 20 dernières lignes + suivi
+  bin/console server:logs --lines=50   # 50 dernières lignes + suivi
+  bin/console server:logs --no-follow  # Affiche et quitte
 
 HELP;
     }
