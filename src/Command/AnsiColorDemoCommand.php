@@ -10,9 +10,9 @@
 
 namespace App\Command;
 
-use App\Attribute\Command;
-use App\Service\Command\AbstractCommand;
-use App\Service\Command\ConsoleHelper;
+use Lunar\Cli\Attribute\Command;
+use Lunar\Cli\AbstractCommand;
+use Lunar\Cli\Helper\ConsoleHelper;
 
 #[Command(name: 'style:ansi', description: 'Affiche toutes les couleurs ANSI supportées')]
 class AnsiColorDemoCommand extends AbstractCommand

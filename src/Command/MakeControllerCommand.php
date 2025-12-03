@@ -11,10 +11,10 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Attribute\Command;
+use Lunar\Cli\Attribute\Command;
 use App\Attribute\Route;
-use App\Service\Command\AbstractCommand;
-use App\Service\Command\ConsoleHelper as C;
+use Lunar\Cli\AbstractCommand;
+use Lunar\Cli\Helper\ConsoleHelper as C;
 
 /**
  * Commande générée automatiquement.

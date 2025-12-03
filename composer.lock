@@ -4,73 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8343a6713f841bbd8eba12af3c596e55",
+    "content-hash": "ef8a04846471d5d73a29c3d4235e1ba8",
     "packages": [
-        {
-            "name": "lunar/cli",
-            "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yrbane/lunar-cli.git",
-                "reference": "434099366d6b27fc74e518dd1f3c07bb20cbc27b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yrbane/lunar-cli/zipball/434099366d6b27fc74e518dd1f3c07bb20cbc27b",
-                "reference": "434099366d6b27fc74e518dd1f3c07bb20cbc27b",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "php": ">=8.3"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "^2.0",
-                "phpunit/phpunit": "^11.0"
-            },
-            "default-branch": true,
-            "bin": [
-                "bin/lunar"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Lunar\\Cli\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Lunar\\Cli\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "seb",
-                    "email": "seb@nethttp.net"
-                }
-            ],
-            "description": "Framework CLI PHP autonome avec commandes, helpers console et rendu de tableaux",
-            "support": {
-                "source": "https://github.com/yrbane/lunar-cli/tree/main",
-                "issues": "https://github.com/yrbane/lunar-cli/issues"
-            },
-            "time": "2025-12-03T12:06:12+00:00"
-        },
         {
             "name": "lunar/template",
             "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yrbane/lunar-template.git",
-                "reference": "46927a8fcdece32abe15b93445ca9de1adeaa9d4"
+                "reference": "cd15325ae4ca017793f987ce08cccd34dd1c9944"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yrbane/lunar-template/zipball/46927a8fcdece32abe15b93445ca9de1adeaa9d4",
-                "reference": "46927a8fcdece32abe15b93445ca9de1adeaa9d4",
+                "url": "https://api.github.com/repos/yrbane/lunar-template/zipball/cd15325ae4ca017793f987ce08cccd34dd1c9944",
+                "reference": "cd15325ae4ca017793f987ce08cccd34dd1c9944",
                 "shasum": ""
             },
             "require": {
@@ -151,15 +98,68 @@
                 "source": "https://github.com/yrbane/lunar-template/tree/main",
                 "issues": "https://github.com/yrbane/lunar-template/issues"
             },
-            "time": "2025-12-03T11:41:05+00:00"
+            "time": "2025-12-03T11:47:01+00:00"
+        },
+        {
+            "name": "yrbane/lunar-cli",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yrbane/lunar-cli.git",
+                "reference": "28d700e6f87abbf03a04e0e9a6d2d78560b08407"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yrbane/lunar-cli/zipball/28d700e6f87abbf03a04e0e9a6d2d78560b08407",
+                "reference": "28d700e6f87abbf03a04e0e9a6d2d78560b08407",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=8.3"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^11.0"
+            },
+            "default-branch": true,
+            "bin": [
+                "bin/lunar"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lunar\\Cli\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Lunar\\Cli\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "seb",
+                    "email": "seb@nethttp.net"
+                }
+            ],
+            "description": "Framework CLI PHP autonome avec commandes, helpers console et rendu de tableaux",
+            "support": {
+                "source": "https://github.com/yrbane/lunar-cli/tree/main",
+                "issues": "https://github.com/yrbane/lunar-cli/issues"
+            },
+            "time": "2025-12-03T12:48:32+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "lunar/cli": 20,
-        "lunar/template": 20
+        "lunar/template": 20,
+        "yrbane/lunar-cli": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
