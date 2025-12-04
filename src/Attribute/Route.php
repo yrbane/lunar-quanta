@@ -31,16 +31,27 @@ class Route
     public ?string $name;
 
     /**
+     * @var array<class-string> liste des middlewares à appliquer
+     */
+    public array $middlewares;
+
+    /**
      * Route constructor.
      *
-     * @param string        $path    the route path
-     * @param array<string> $methods allowed HTTP methods (default ['GET'])
-     * @param null|string   $name    optional name of the route
+     * @param string         $path        the route path
+     * @param array<string>  $methods     allowed HTTP methods (default ['GET'])
+     * @param null|string    $name        optional name of the route
+     * @param array<class-string> $middlewares middleware classes to apply
      */
-    public function __construct(string $path, array $methods = ['GET'], ?string $name = null)
-    {
+    public function __construct(
+        string $path,
+        array $methods = ['GET'],
+        ?string $name = null,
+        array $middlewares = []
+    ) {
         $this->path = $path;
         $this->methods = $methods;
         $this->name = $name;
+        $this->middlewares = $middlewares;
     }
 }
