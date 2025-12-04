@@ -33,6 +33,9 @@ class Request
     /** @var array<string, mixed> */
     private array $headers;
 
+    /** @var array<string, mixed> */
+    private array $attributes = [];
+
     /**
      * Constructeur.
      *
@@ -122,5 +125,31 @@ class Request
     public function getServerParams(): array
     {
         return $this->server;
+    }
+
+    /**
+     * Set a request attribute.
+     */
+    public function setAttribute(string $name, mixed $value): void
+    {
+        $this->attributes[$name] = $value;
+    }
+
+    /**
+     * Get a request attribute.
+     */
+    public function getAttribute(string $name, mixed $default = null): mixed
+    {
+        return $this->attributes[$name] ?? $default;
+    }
+
+    /**
+     * Get all request attributes.
+     *
+     * @return array<string, mixed>
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
     }
 }

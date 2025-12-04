@@ -43,10 +43,18 @@ Lunar Quanta est né du besoin d'avoir un framework PHP moderne, léger et effic
 - **Serveur de développement** intégré
 - **Outils de debugging** (routes, arborescence, etc.)
 
-### 🔒 Sécurité & Storage  
+### 🔒 Sécurité & Authentification
+- **Système d'authentification complet** avec sessions sécurisées
+- **Protection CSRF** avec tokens automatiques
+- **Middleware d'autorisation** basé sur les rôles
 - **Chiffrement AES-256** pour les données sensibles
 - **Stockage JSON sécurisé** avec chiffrement automatique
 - **Configuration d'environnement** avec fichiers `.env`
+
+### 🔄 Middleware
+- **Pipeline de middlewares** PSR-15 inspiré
+- **Middlewares route-level** via attributs
+- **Middlewares intégrés** : Auth, Guest, Role, CSRF, Session
 
 ### ⚡ Performances
 - **Cache intelligent** des routes et templates
@@ -72,8 +80,11 @@ lunar-quanta/
 │       ├── 📁 Core/                # Cœur du framework
 │       ├── 📁 Generator/           # Générateurs de code
 │       ├── 📁 Router/              # Service de routage
-│       ├── 📁 Security/            # Chiffrement et sécurité
+│       ├── 📁 Security/            # Sécurité (chiffrement, auth, CSRF)
+│       │   ├── 📁 Auth/            # Authentification & autorisation
+│       │   └── 📁 Csrf/            # Protection CSRF
 │       ├── 📁 Server/              # Serveur de développement
+│       ├── 📁 Session/             # Gestion des sessions
 │       └── 📁 Storage/             # Stockage JSON
 ├── 📁 public/                      # Point d'entrée web + assets
 ├── 📁 template/                    # Templates avec système d'héritage
@@ -203,7 +214,7 @@ class BlogController extends BaseController
             'posts' => $this->getPosts()
         ]));
     }
-    
+
     #[Route('/blog/{id}', name: 'blog_show', methods: ['GET'])]
     public function show(Request $request): Response
     {
@@ -211,6 +222,15 @@ class BlogController extends BaseController
         return new Response($this->render('blog/show', [
             'post' => $this->getPost($id)
         ]));
+    }
+
+    // Route protégée avec middleware d'authentification
+    #[Route('/blog/create', name: 'blog_create', methods: ['GET', 'POST'],
+            middlewares: [AuthMiddleware::class])]
+    public function create(Request $request): Response
+    {
+        $user = $request->getAttribute('user'); // Utilisateur authentifié
+        return new Response($this->render('blog/create', ['user' => $user]));
     }
 }
 ```
@@ -360,21 +380,211 @@ class ApiController extends BaseController
 }
 ```
 
+#### Middlewares personnalisés
+
+```php
+use Lunar\Service\Core\Http\Request;
+use Lunar\Service\Core\Http\Response;
+use Lunar\Service\Core\Middleware\MiddlewareInterface;
+
+class LoggingMiddleware implements MiddlewareInterface
+{
+    public function process(Request $request, callable $next): Response
+    {
+        // Avant le contrôleur
+        $start = microtime(true);
+
+        $response = $next($request);
+
+        // Après le contrôleur
+        $duration = microtime(true) - $start;
+        error_log("Request {$request->getUri()} took {$duration}s");
+
+        return $response;
+    }
+}
+
+// Utilisation sur une route
+#[Route('/api/data', middlewares: [LoggingMiddleware::class])]
+public function getData(Request $request): Response { /* ... */ }
+```
+
+#### Sessions et messages flash
+
+```php
+use Lunar\Service\Session\SessionInterface;
+
+class CartController extends BaseController
+{
+    #[Route('/cart/add', methods: ['POST'])]
+    public function addToCart(Request $request): Response
+    {
+        /** @var SessionInterface $session */
+        $session = $request->getAttribute('session');
+
+        // Stocker dans la session
+        $cart = $session->get('cart', []);
+        $cart[] = $request->getPostParams()['product_id'];
+        $session->set('cart', $cart);
+
+        // Message flash (affiché une seule fois)
+        $session->flash('success', 'Produit ajouté au panier !');
+
+        return new Response('', 302, ['Location: /cart']);
+    }
+
+    #[Route('/cart')]
+    public function viewCart(Request $request): Response
+    {
+        $session = $request->getAttribute('session');
+
+        return new Response($this->render('cart', [
+            'items' => $session->get('cart', []),
+            'message' => $session->getFlash('success') // Consommé après lecture
+        ]));
+    }
+}
+```
+
+#### Protection CSRF
+
+```php
+use Lunar\Service\Security\Csrf\CsrfMiddleware;
+use Lunar\Service\Security\Csrf\CsrfTokenManagerInterface;
+
+class ContactController extends BaseController
+{
+    // Le middleware CSRF valide automatiquement les requêtes POST/PUT/DELETE
+    #[Route('/contact', methods: ['GET', 'POST'],
+            middlewares: [SessionMiddleware::class, CsrfMiddleware::class])]
+    public function contact(Request $request): Response
+    {
+        if ($request->getMethod() === 'POST') {
+            // Le token a été validé par le middleware
+            $this->sendEmail($request->getPostParams());
+            return new Response('Message envoyé !');
+        }
+
+        // Générer un token pour le formulaire
+        /** @var CsrfTokenManagerInterface $csrf */
+        $csrf = $request->getAttribute('csrf');
+        $token = $csrf->generate('csrf');
+
+        return new Response($this->render('contact', ['csrf_token' => $token]));
+    }
+}
+```
+
+Template avec token CSRF :
+```html
+<form method="POST" action="/contact">
+    <input type="hidden" name="_csrf_token" value="[[ csrf_token ]]">
+    <input type="email" name="email" required>
+    <textarea name="message" required></textarea>
+    <button type="submit">Envoyer</button>
+</form>
+```
+
+#### Authentification complète
+
+```php
+use Lunar\Service\Security\Auth\Authenticator;
+use Lunar\Service\Security\Auth\AuthMiddleware;
+use Lunar\Service\Security\Auth\GuestMiddleware;
+use Lunar\Service\Security\Auth\RoleMiddleware;
+
+class AuthController extends BaseController
+{
+    public function __construct(private Authenticator $auth) {}
+
+    // Accessible uniquement aux invités (redirige si connecté)
+    #[Route('/login', methods: ['GET', 'POST'],
+            middlewares: [GuestMiddleware::class])]
+    public function login(Request $request): Response
+    {
+        if ($request->getMethod() === 'POST') {
+            $params = $request->getPostParams();
+            $user = $this->auth->attempt($params['email'], $params['password']);
+
+            if ($user) {
+                $request->getAttribute('session')->flash('success', 'Bienvenue !');
+                return new Response('', 302, ['Location: /dashboard']);
+            }
+
+            return new Response($this->render('login', [
+                'error' => 'Identifiants invalides'
+            ]));
+        }
+
+        return new Response($this->render('login'));
+    }
+
+    // Accessible uniquement aux utilisateurs connectés
+    #[Route('/dashboard', middlewares: [AuthMiddleware::class])]
+    public function dashboard(Request $request): Response
+    {
+        $user = $request->getAttribute('user');
+        return new Response($this->render('dashboard', ['user' => $user]));
+    }
+
+    // Accessible uniquement aux administrateurs
+    #[Route('/admin', middlewares: [RoleMiddleware::class])]
+    public function admin(Request $request): Response
+    {
+        // RoleMiddleware configuré avec ['ROLE_ADMIN']
+        return new Response($this->render('admin'));
+    }
+
+    #[Route('/logout', methods: ['POST'])]
+    public function logout(Request $request): Response
+    {
+        $this->auth->logout();
+        return new Response('', 302, ['Location: /']);
+    }
+}
+```
+
+#### Configuration de l'authentification
+
+```php
+// Dans votre bootstrap ou container
+use Lunar\Service\Security\Auth\Authenticator;
+use Lunar\Service\Security\Auth\PasswordHasher;
+use Lunar\Service\Security\Auth\InMemoryUserProvider;
+use Lunar\Service\Session\SessionService;
+
+// Provider simple en mémoire (pour tests/prototypage)
+$hasher = PasswordHasher::bcrypt();
+$userProvider = new InMemoryUserProvider();
+$userProvider->createUser(1, 'admin@example.com', 'secret123', $hasher, ['ROLE_ADMIN']);
+$userProvider->createUser(2, 'user@example.com', 'password', $hasher, ['ROLE_USER']);
+
+// Ou implémentez UserProviderInterface pour charger depuis une base de données
+$session = new SessionService();
+$auth = new Authenticator($userProvider, $hasher, $session);
+
+// Vérifier si connecté
+if ($auth->check()) {
+    $user = $auth->user();
+    echo "Connecté en tant que " . $user->getIdentifier();
+}
+```
+
 #### Formulaires et validation
 ```php
 #[Route('/contact', methods: ['POST'])]
 public function submitContact(Request $request): Response
 {
-    $data = $request->getParsedBody();
-    
+    $data = $request->getPostParams();
+
     if (empty($data['email']) || empty($data['message'])) {
         return new Response($this->render('contact', [
             'error' => 'Tous les champs sont requis'
         ]), 400);
     }
-    
+
     // Traitement du formulaire...
-    
+
     return new Response($this->render('contact', [
         'success' => 'Message envoyé avec succès !'
     ]));

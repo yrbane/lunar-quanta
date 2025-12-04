@@ -16,6 +16,8 @@ use Lunar\Config\Config;
 use Lunar\Controller\ErrorController;
 use Lunar\Service\Core\Http\Request;
 use Lunar\Service\Core\Http\Response;
+use Lunar\Service\Core\Middleware\MiddlewareInterface;
+use Lunar\Service\Core\Middleware\MiddlewareStack;
 
 /**
  * Class Router.
@@ -123,19 +125,54 @@ class Router
     {
         foreach ($this->routes as $route) {
             if ($this->match($route, $request)) {
-                $controller = new $route['controller']();
-                $action = $route['action'];
-                $result = $controller->{$action}($request);
-
-                if ($result instanceof Response) {
-                    return $result;
-                }
-
-                return new Response(is_string($result) ? $result : '');
+                return $this->executeRoute($route, $request);
             }
         }
 
         return false;
+    }
+
+    /**
+     * Execute a matched route with its middlewares.
+     *
+     * @param array<string, mixed> $route The matched route
+     * @param Request $request The request
+     * @return Response The response
+     */
+    private function executeRoute(array $route, Request $request): Response
+    {
+        $controller = new $route['controller']();
+        $action = $route['action'];
+
+        // Build the final handler (controller action)
+        $finalHandler = function (Request $req) use ($controller, $action): Response {
+            $result = $controller->{$action}($req);
+            if ($result instanceof Response) {
+                return $result;
+            }
+            return new Response(is_string($result) ? $result : '');
+        };
+
+        // Get route middlewares
+        /** @var array<class-string> $middlewareClasses */
+        $middlewareClasses = $route['middlewares'] ?? [];
+
+        if (empty($middlewareClasses)) {
+            return $finalHandler($request);
+        }
+
+        // Build and execute middleware stack
+        $stack = new MiddlewareStack();
+        foreach ($middlewareClasses as $middlewareClass) {
+            if (class_exists($middlewareClass)) {
+                $middleware = new $middlewareClass();
+                if ($middleware instanceof MiddlewareInterface) {
+                    $stack->add($middleware);
+                }
+            }
+        }
+
+        return $stack->handle($request, $finalHandler);
     }
 
     /**
@@ -284,6 +321,7 @@ class Router
                         'method' => strtoupper($httpMethod),
                         'controller' => $controllerClass,
                         'action' => $method->getName(),
+                        'middlewares' => $routeAttr->middlewares,
                     ];
                     $this->routes[$routeAttr->name] = $route;
                     if (!empty($routeAttr->name)) {

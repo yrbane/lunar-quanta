@@ -126,11 +126,25 @@ Retourne les données POST parsées.
 ##### `getHeaders(): array`
 Retourne tous les en-têtes de la requête.
 
+##### `setAttribute(string $name, mixed $value): void`
+Définit un attribut de requête (utilisé par les middlewares).
+
+##### `getAttribute(string $name, mixed $default = null): mixed`
+Récupère un attribut de requête.
+
+##### `getAttributes(): array`
+Retourne tous les attributs de la requête.
+
 **Exemple :**
 ```php
 $request = new Request();
 $method = $request->getMethod(); // 'GET', 'POST', etc.
 $uri = $request->getUri();       // '/blog/123'
+
+// Attributs (définis par les middlewares)
+$session = $request->getAttribute('session'); // SessionInterface
+$user = $request->getAttribute('user');       // UserInterface|null
+$csrf = $request->getAttribute('csrf');       // CsrfTokenManagerInterface
 ```
 
 ---
@@ -497,19 +511,33 @@ Attribut pour définir une route sur une méthode de contrôleur.
 
 #### Constructeur
 
-##### `__construct(string $path, string $name = '', array $methods = ['GET'])`
+##### `__construct(string $path, array $methods = ['GET'], ?string $name = null, array $middlewares = [])`
 
 **Paramètres :**
 - `$path` : Chemin de la route (peut contenir des paramètres {id})
+- `$methods` : Méthodes HTTP acceptées (par défaut `['GET']`)
 - `$name` : Nom de la route (optionnel)
-- `$methods` : Méthodes HTTP acceptées
+- `$middlewares` : Classes de middlewares à exécuter (optionnel)
 
-**Exemple :**
+**Exemples :**
 ```php
+// Route simple
 #[Route('/blog/{id}', name: 'blog_show', methods: ['GET', 'POST'])]
 public function show(Request $request): Response
 {
     // Logique du contrôleur
+}
+
+// Route avec middlewares
+use Lunar\Service\Security\Auth\AuthMiddleware;
+use Lunar\Service\Security\Csrf\CsrfMiddleware;
+
+#[Route('/blog/create', methods: ['GET', 'POST'],
+        middlewares: [AuthMiddleware::class, CsrfMiddleware::class])]
+public function create(Request $request): Response
+{
+    $user = $request->getAttribute('user'); // Injecté par AuthMiddleware
+    // ...
 }
 ```
 
@@ -535,6 +563,508 @@ class CacheClearCommand extends AbstractCommand implements CommandInterface
 {
     // Implémentation de la commande
 }
+```
+
+---
+
+## Middleware
+
+### MiddlewareInterface
+
+**Namespace :** `Lunar\Service\Core\Middleware\MiddlewareInterface`
+**Fichier :** `src/Service/Core/Middleware/MiddlewareInterface.php`
+
+Interface pour tous les middlewares du framework.
+
+#### Méthodes requises
+
+##### `process(Request $request, callable $next): Response`
+Traite la requête et retourne une réponse.
+
+**Paramètres :**
+- `$request` : Requête HTTP entrante
+- `$next` : Prochain handler dans la chaîne
+
+**Retour :** Réponse HTTP
+
+**Exemple :**
+```php
+class TimingMiddleware implements MiddlewareInterface
+{
+    public function process(Request $request, callable $next): Response
+    {
+        $start = microtime(true);
+        $response = $next($request);
+        $duration = microtime(true) - $start;
+
+        return new Response(
+            $response->getBody(),
+            $response->getStatusCode(),
+            array_merge($response->getHeaders(), ["X-Duration: {$duration}s"])
+        );
+    }
+}
+```
+
+---
+
+### MiddlewareStack
+
+**Namespace :** `Lunar\Service\Core\Middleware\MiddlewareStack`
+**Fichier :** `src/Service/Core/Middleware/MiddlewareStack.php`
+
+Gère une pile de middlewares et leur exécution en chaîne.
+
+#### Méthodes publiques
+
+##### `add(MiddlewareInterface $middleware): self`
+Ajoute un middleware à la pile.
+
+##### `handle(Request $request, callable $finalHandler): Response`
+Exécute la pile de middlewares puis le handler final.
+
+**Exemple :**
+```php
+$stack = new MiddlewareStack();
+$stack->add(new SessionMiddleware())
+      ->add(new CsrfMiddleware($tokenManager));
+
+$response = $stack->handle($request, fn($req) => $controller->action($req));
+```
+
+---
+
+## Session
+
+### SessionInterface
+
+**Namespace :** `Lunar\Service\Session\SessionInterface`
+**Fichier :** `src/Service/Session/SessionInterface.php`
+
+Interface de gestion des sessions.
+
+#### Méthodes requises
+
+| Méthode | Description |
+|---------|-------------|
+| `start(): void` | Démarre la session |
+| `get(string $key, mixed $default = null): mixed` | Récupère une valeur |
+| `set(string $key, mixed $value): void` | Définit une valeur |
+| `has(string $key): bool` | Vérifie si une clé existe |
+| `remove(string $key): void` | Supprime une valeur |
+| `flash(string $key, mixed $value): void` | Définit un message flash |
+| `getFlash(string $key, mixed $default = null): mixed` | Récupère et supprime un flash |
+| `regenerate(): void` | Régénère l'ID de session |
+| `destroy(): void` | Détruit la session |
+| `all(): array` | Retourne toutes les données |
+
+---
+
+### SessionService
+
+**Namespace :** `Lunar\Service\Session\SessionService`
+**Fichier :** `src/Service/Session/SessionService.php`
+
+Implémentation complète de `SessionInterface`.
+
+#### Constructeur
+
+##### `__construct(bool $testMode = false)`
+
+**Paramètres :**
+- `$testMode` : Si `true`, utilise un stockage en mémoire (pour tests PHPUnit)
+
+**Exemple :**
+```php
+// Production
+$session = new SessionService();
+$session->start();
+
+// Tests PHPUnit
+$session = new SessionService(testMode: true);
+$session->set('user', 'test');
+$this->assertSame('test', $session->get('user'));
+```
+
+---
+
+### SessionMiddleware
+
+**Namespace :** `Lunar\Service\Session\SessionMiddleware`
+**Fichier :** `src/Service/Session/SessionMiddleware.php`
+
+Middleware qui démarre la session et l'attache à la requête.
+
+#### Constructeur
+
+##### `__construct(?SessionInterface $session = null)`
+
+**Exemple :**
+```php
+// Avec session par défaut
+$middleware = new SessionMiddleware();
+
+// Avec session personnalisée
+$middleware = new SessionMiddleware(new SessionService());
+
+// Dans le contrôleur
+$session = $request->getAttribute('session');
+$session->set('visited', true);
+```
+
+---
+
+## CSRF Protection
+
+### CsrfTokenManagerInterface
+
+**Namespace :** `Lunar\Service\Security\Csrf\CsrfTokenManagerInterface`
+**Fichier :** `src/Service/Security/Csrf/CsrfTokenManagerInterface.php`
+
+Interface de gestion des tokens CSRF.
+
+#### Méthodes requises
+
+| Méthode | Description |
+|---------|-------------|
+| `generate(string $tokenId): string` | Génère un token |
+| `isValid(string $tokenId, string $token): bool` | Valide un token |
+| `remove(string $tokenId): void` | Supprime un token |
+
+---
+
+### CsrfTokenManager
+
+**Namespace :** `Lunar\Service\Security\Csrf\CsrfTokenManager`
+**Fichier :** `src/Service/Security/Csrf/CsrfTokenManager.php`
+
+Gestionnaire de tokens CSRF avec stockage en session.
+
+#### Constructeur
+
+##### `__construct(SessionInterface $session)`
+
+**Exemple :**
+```php
+$csrf = new CsrfTokenManager($session);
+
+// Générer un token pour un formulaire
+$token = $csrf->generate('contact_form');
+
+// Valider le token soumis (timing-safe)
+if ($csrf->isValid('contact_form', $_POST['_csrf_token'])) {
+    // Token valide, traiter le formulaire
+}
+```
+
+---
+
+### CsrfMiddleware
+
+**Namespace :** `Lunar\Service\Security\Csrf\CsrfMiddleware`
+**Fichier :** `src/Service/Security/Csrf/CsrfMiddleware.php`
+
+Middleware de validation CSRF automatique.
+
+#### Constructeur
+
+##### `__construct(?CsrfTokenManagerInterface $tokenManager = null)`
+
+#### Factory
+
+##### `static withSession(SessionInterface $session): self`
+Crée un middleware avec un token manager basé sur la session.
+
+#### Constantes
+
+| Constante | Valeur | Description |
+|-----------|--------|-------------|
+| `TOKEN_FIELD` | `_csrf_token` | Nom du champ POST |
+| `TOKEN_HEADER` | `X-CSRF-Token` | Nom du header HTTP |
+| `TOKEN_ID` | `csrf` | ID du token par défaut |
+
+**Exemple :**
+```php
+// Via factory
+$middleware = CsrfMiddleware::withSession($session);
+
+// Le token manager est accessible dans le contrôleur
+$csrf = $request->getAttribute('csrf');
+$token = $csrf->generate(CsrfMiddleware::TOKEN_ID);
+```
+
+---
+
+## Authentication
+
+### UserInterface
+
+**Namespace :** `Lunar\Service\Security\Auth\UserInterface`
+**Fichier :** `src/Service/Security/Auth/UserInterface.php`
+
+Interface pour les entités utilisateur.
+
+#### Méthodes requises
+
+| Méthode | Description |
+|---------|-------------|
+| `getId(): string\|int` | Retourne l'ID unique |
+| `getIdentifier(): string` | Retourne l'identifiant (email, username) |
+| `getPassword(): string` | Retourne le mot de passe hashé |
+| `getRoles(): array` | Retourne les rôles (`['ROLE_USER']`) |
+
+**Exemple d'implémentation :**
+```php
+class User implements UserInterface
+{
+    public function __construct(
+        private int $id,
+        private string $email,
+        private string $passwordHash,
+        private array $roles = ['ROLE_USER']
+    ) {}
+
+    public function getId(): int { return $this->id; }
+    public function getIdentifier(): string { return $this->email; }
+    public function getPassword(): string { return $this->passwordHash; }
+    public function getRoles(): array { return $this->roles; }
+}
+```
+
+---
+
+### UserProviderInterface
+
+**Namespace :** `Lunar\Service\Security\Auth\UserProviderInterface`
+**Fichier :** `src/Service/Security/Auth/UserProviderInterface.php`
+
+Interface pour les fournisseurs d'utilisateurs.
+
+#### Méthodes requises
+
+##### `loadByIdentifier(string $identifier): ?UserInterface`
+Charge un utilisateur par son identifiant.
+
+##### `loadById(string|int $id): ?UserInterface`
+Charge un utilisateur par son ID.
+
+---
+
+### InMemoryUserProvider
+
+**Namespace :** `Lunar\Service\Security\Auth\InMemoryUserProvider`
+**Fichier :** `src/Service/Security/Auth/InMemoryUserProvider.php`
+
+Fournisseur d'utilisateurs en mémoire (tests et prototypage).
+
+#### Méthodes publiques
+
+##### `addUser(InMemoryUser $user): self`
+Ajoute un utilisateur.
+
+##### `createUser(string|int $id, string $identifier, string $plainPassword, PasswordHasherInterface $hasher, array $roles = ['ROLE_USER']): self`
+Crée et ajoute un utilisateur avec hashage du mot de passe.
+
+**Exemple :**
+```php
+$hasher = PasswordHasher::bcrypt();
+$provider = new InMemoryUserProvider();
+
+$provider->createUser(1, 'admin@example.com', 'admin123', $hasher, ['ROLE_ADMIN'])
+         ->createUser(2, 'user@example.com', 'user123', $hasher);
+
+$user = $provider->loadByIdentifier('admin@example.com');
+```
+
+---
+
+### PasswordHasherInterface
+
+**Namespace :** `Lunar\Service\Security\Auth\PasswordHasherInterface`
+**Fichier :** `src/Service/Security/Auth/PasswordHasherInterface.php`
+
+Interface de hashage de mots de passe.
+
+#### Méthodes requises
+
+| Méthode | Description |
+|---------|-------------|
+| `hash(string $plainPassword): string` | Hashe un mot de passe |
+| `verify(string $plainPassword, string $hashedPassword): bool` | Vérifie un mot de passe |
+| `needsRehash(string $hashedPassword): bool` | Vérifie si rehashage nécessaire |
+
+---
+
+### PasswordHasher
+
+**Namespace :** `Lunar\Service\Security\Auth\PasswordHasher`
+**Fichier :** `src/Service/Security/Auth/PasswordHasher.php`
+
+Hashage sécurisé avec bcrypt ou Argon2id.
+
+#### Constructeur
+
+##### `__construct(string $algorithm = PASSWORD_BCRYPT, array $options = [])`
+
+#### Factory Methods
+
+##### `static bcrypt(int $cost = PASSWORD_BCRYPT_DEFAULT_COST): self`
+Crée un hasher bcrypt.
+
+##### `static argon2id(int $memoryCost = ..., int $timeCost = ..., int $threads = ...): self`
+Crée un hasher Argon2id.
+
+**Exemple :**
+```php
+$hasher = PasswordHasher::bcrypt(12);
+// ou
+$hasher = PasswordHasher::argon2id();
+
+$hash = $hasher->hash('secret');
+$valid = $hasher->verify('secret', $hash); // true
+
+if ($hasher->needsRehash($oldHash)) {
+    $newHash = $hasher->hash('secret');
+    // Mettre à jour en base de données
+}
+```
+
+---
+
+### Authenticator
+
+**Namespace :** `Lunar\Service\Security\Auth\Authenticator`
+**Fichier :** `src/Service/Security/Auth/Authenticator.php`
+
+Service principal d'authentification.
+
+#### Constructeur
+
+##### `__construct(UserProviderInterface $userProvider, PasswordHasherInterface $passwordHasher, SessionInterface $session)`
+
+#### Méthodes publiques
+
+| Méthode | Description |
+|---------|-------------|
+| `attempt(string $identifier, string $password): ?UserInterface` | Authentifie et connecte |
+| `login(UserInterface $user): void` | Connecte un utilisateur |
+| `logout(): void` | Déconnecte l'utilisateur |
+| `user(): ?UserInterface` | Retourne l'utilisateur connecté |
+| `check(): bool` | Vérifie si connecté |
+| `guest(): bool` | Vérifie si non connecté |
+| `id(): string\|int\|null` | Retourne l'ID de l'utilisateur |
+| `validate(string $identifier, string $password): bool` | Valide sans connecter |
+
+**Exemple :**
+```php
+$auth = new Authenticator($userProvider, $hasher, $session);
+
+// Tentative de connexion
+if ($user = $auth->attempt('email@example.com', 'password')) {
+    echo "Bienvenue " . $user->getIdentifier();
+} else {
+    echo "Identifiants invalides";
+}
+
+// Vérifications
+if ($auth->check()) {
+    $currentUser = $auth->user();
+}
+
+// Déconnexion
+$auth->logout();
+```
+
+---
+
+### AuthMiddleware
+
+**Namespace :** `Lunar\Service\Security\Auth\AuthMiddleware`
+**Fichier :** `src/Service/Security/Auth/AuthMiddleware.php`
+
+Middleware qui requiert une authentification.
+
+#### Constructeur
+
+##### `__construct(Authenticator $authenticator, ?string $redirectUrl = null)`
+
+**Paramètres :**
+- `$authenticator` : Service d'authentification
+- `$redirectUrl` : URL de redirection si non authentifié (sinon 401)
+
+**Comportement :**
+- Retourne 401 si non authentifié et pas de `$redirectUrl`
+- Redirige (302) si `$redirectUrl` défini
+- Attache `user` et `auth` à la requête si authentifié
+
+**Exemple :**
+```php
+// Sans redirection (API)
+$middleware = new AuthMiddleware($auth);
+
+// Avec redirection (Web)
+$middleware = new AuthMiddleware($auth, '/login');
+
+// Dans le contrôleur
+$user = $request->getAttribute('user');
+$auth = $request->getAttribute('auth');
+```
+
+---
+
+### GuestMiddleware
+
+**Namespace :** `Lunar\Service\Security\Auth\GuestMiddleware`
+**Fichier :** `src/Service/Security/Auth/GuestMiddleware.php`
+
+Middleware qui requiert un utilisateur NON authentifié.
+
+#### Constructeur
+
+##### `__construct(Authenticator $authenticator, string $redirectUrl = '/')`
+
+**Comportement :**
+- Redirige vers `$redirectUrl` si utilisateur connecté
+- Laisse passer si non connecté
+
+**Exemple :**
+```php
+// Pour la page de login
+$middleware = new GuestMiddleware($auth, '/dashboard');
+
+#[Route('/login', middlewares: [GuestMiddleware::class])]
+public function login() { /* ... */ }
+```
+
+---
+
+### RoleMiddleware
+
+**Namespace :** `Lunar\Service\Security\Auth\RoleMiddleware`
+**Fichier :** `src/Service/Security/Auth/RoleMiddleware.php`
+
+Middleware de vérification des rôles.
+
+#### Constructeur
+
+##### `__construct(Authenticator $authenticator, array $requiredRoles, bool $requireAll = false)`
+
+**Paramètres :**
+- `$authenticator` : Service d'authentification
+- `$requiredRoles` : Rôles requis (`['ROLE_ADMIN']`)
+- `$requireAll` : `true` = TOUS les rôles, `false` = AU MOINS UN
+
+**Comportement :**
+- Retourne 401 si non authentifié
+- Retourne 403 si rôles insuffisants
+
+**Exemple :**
+```php
+// Au moins un des rôles
+$middleware = new RoleMiddleware($auth, ['ROLE_ADMIN', 'ROLE_MODERATOR']);
+
+// Tous les rôles requis
+$middleware = new RoleMiddleware($auth, ['ROLE_USER', 'ROLE_VERIFIED'], requireAll: true);
 ```
 
 ---

@@ -19,9 +19,19 @@ graph TD
     B --> C[FrontController::run]
     C --> D[Config::load]
     D --> E[Router::dispatch]
-    E --> F[Controller::action]
+    E --> M[MiddlewareStack]
+    M --> F[Controller::action]
     F --> G[LunarTemplateAdapter::render]
     G --> H[Response::send]
+```
+
+### Pipeline de middlewares
+
+Les middlewares s'exécutent en **FIFO** (premier ajouté, premier exécuté) avant le contrôleur,
+puis en **LIFO** (dernier ajouté, premier exécuté) pour le retour :
+
+```
+Request → Middleware1 → Middleware2 → Controller → Middleware2 → Middleware1 → Response
 ```
 
 ### 1. Point d'entrée (`public/index.php`)
@@ -139,11 +149,15 @@ src/Service/
 │   ├── Config/     # Configuration
 │   ├── Debug/      # Outils de debug
 │   ├── Http/       # Request/Response
+│   ├── Middleware/ # Infrastructure middleware
 │   └── Template/   # Moteur de templates
 ├── Generator/      # Générateurs de code
 ├── Router/         # Service de routage
-├── Security/       # Chiffrement
+├── Security/       # Sécurité
+│   ├── Auth/       # Authentification & autorisation
+│   └── Csrf/       # Protection CSRF
 ├── Server/         # Serveur de développement
+├── Session/        # Gestion des sessions
 └── Storage/        # Stockage JSON
 ```
 
@@ -248,6 +262,244 @@ DB_PASSWORD=secret
 
 // Utilisation
 $host = Config::get('database.host', 'localhost'); // production-server
+```
+
+## Système de Middlewares
+
+### Architecture du pipeline
+
+Le système de middlewares est inspiré de PSR-15, simplifié pour les besoins du framework.
+
+```php
+interface MiddlewareInterface
+{
+    public function process(Request $request, callable $next): Response;
+}
+```
+
+### MiddlewareStack
+
+Le `MiddlewareStack` gère l'exécution en chaîne des middlewares :
+
+```php
+$stack = new MiddlewareStack();
+$stack->add(new SessionMiddleware())
+      ->add(new CsrfMiddleware())
+      ->add(new AuthMiddleware($auth));
+
+$response = $stack->handle($request, fn($req) => $controller->action($req));
+```
+
+### Middlewares sur les routes
+
+Les middlewares peuvent être attachés directement aux routes via l'attribut `#[Route]` :
+
+```php
+#[Route('/admin', middlewares: [AuthMiddleware::class, RoleMiddleware::class])]
+public function admin(Request $request): Response
+{
+    // Le code ici ne s'exécute que si tous les middlewares passent
+}
+```
+
+### Middlewares intégrés
+
+| Middleware | Description |
+|------------|-------------|
+| `SessionMiddleware` | Démarre la session et l'attache à `$request->getAttribute('session')` |
+| `CsrfMiddleware` | Valide les tokens CSRF sur POST/PUT/PATCH/DELETE |
+| `AuthMiddleware` | Requiert un utilisateur authentifié |
+| `GuestMiddleware` | Requiert un utilisateur NON authentifié (pour login) |
+| `RoleMiddleware` | Vérifie les rôles de l'utilisateur |
+
+## Gestion des Sessions
+
+### SessionService
+
+Le `SessionService` gère les sessions PHP avec des options sécurisées par défaut :
+
+```php
+$session = new SessionService();
+$session->start();
+
+// Données persistantes
+$session->set('user_id', 123);
+$userId = $session->get('user_id');
+
+// Messages flash (une seule lecture)
+$session->flash('success', 'Opération réussie !');
+$message = $session->getFlash('success'); // "Opération réussie !"
+$message = $session->getFlash('success'); // null (consommé)
+
+// Régénération de l'ID de session (après login)
+$session->regenerate();
+
+// Destruction complète
+$session->destroy();
+```
+
+### Options de sécurité
+
+Le `SessionService` configure automatiquement :
+- `cookie_httponly: true` - Protection XSS
+- `cookie_samesite: Lax` - Protection CSRF basique
+- `use_strict_mode: true` - Refuse les IDs de session non initialisés
+- `cookie_secure: true` - HTTPS seulement (si HTTPS détecté)
+
+## Protection CSRF
+
+### Fonctionnement
+
+La protection CSRF utilise un token stocké en session :
+
+```mermaid
+graph LR
+    A[GET /form] --> B[Générer token]
+    B --> C[Stocker en session]
+    C --> D[Afficher dans formulaire]
+    D --> E[POST /form + token]
+    E --> F[CsrfMiddleware valide]
+    F --> G[Controller exécuté]
+```
+
+### CsrfTokenManager
+
+```php
+$csrf = new CsrfTokenManager($session);
+
+// Génération (stocke automatiquement en session)
+$token = $csrf->generate('form_contact');
+
+// Validation (timing-safe avec hash_equals)
+if ($csrf->isValid('form_contact', $submittedToken)) {
+    // Token valide
+}
+
+// Suppression après utilisation (one-time token)
+$csrf->remove('form_contact');
+```
+
+### CsrfMiddleware
+
+Le middleware valide automatiquement les tokens sur les requêtes non-sûres :
+
+- **Safe methods** (ignorés) : GET, HEAD, OPTIONS, TRACE
+- **Validated methods** : POST, PUT, PATCH, DELETE
+
+Le token peut être envoyé via :
+- Body: `_csrf_token`
+- Header: `X-CSRF-Token`
+
+## Système d'Authentification
+
+### Architecture
+
+```mermaid
+graph TD
+    A[Authenticator] --> B[UserProviderInterface]
+    A --> C[PasswordHasherInterface]
+    A --> D[SessionInterface]
+    B --> E[loadByIdentifier]
+    B --> F[loadById]
+    C --> G[hash]
+    C --> H[verify]
+```
+
+### Authenticator
+
+Le service principal d'authentification :
+
+```php
+$auth = new Authenticator($userProvider, $passwordHasher, $session);
+
+// Tentative de connexion
+$user = $auth->attempt('email@example.com', 'password');
+if ($user) {
+    // Connecté, session régénérée
+}
+
+// Vérifications
+$auth->check();   // true si connecté
+$auth->guest();   // true si non connecté
+$auth->user();    // UserInterface|null
+$auth->id();      // ID de l'utilisateur|null
+
+// Validation sans connexion
+$auth->validate('email', 'password'); // bool
+
+// Déconnexion
+$auth->logout();
+```
+
+### UserInterface
+
+Toute entité utilisateur doit implémenter :
+
+```php
+interface UserInterface
+{
+    public function getId(): string|int;
+    public function getIdentifier(): string;  // email ou username
+    public function getPassword(): string;    // hash
+    public function getRoles(): array;        // ['ROLE_USER', 'ROLE_ADMIN']
+}
+```
+
+### PasswordHasher
+
+Hachage sécurisé avec bcrypt ou Argon2id :
+
+```php
+// Factory methods
+$hasher = PasswordHasher::bcrypt(cost: 12);
+$hasher = PasswordHasher::argon2id();
+
+// Utilisation
+$hash = $hasher->hash('password');           // Hash sécurisé
+$valid = $hasher->verify('password', $hash); // Validation
+$needsRehash = $hasher->needsRehash($hash);  // Mise à jour nécessaire ?
+```
+
+### InMemoryUserProvider
+
+Pour le prototypage et les tests :
+
+```php
+$provider = new InMemoryUserProvider();
+$provider->createUser(1, 'admin@example.com', 'secret', $hasher, ['ROLE_ADMIN']);
+$provider->createUser(2, 'user@example.com', 'password', $hasher, ['ROLE_USER']);
+
+$user = $provider->loadByIdentifier('admin@example.com');
+$user = $provider->loadById(1);
+```
+
+### UserProviderInterface personnalisé
+
+Pour charger depuis une base de données :
+
+```php
+class DatabaseUserProvider implements UserProviderInterface
+{
+    public function __construct(private PDO $pdo) {}
+
+    public function loadByIdentifier(string $identifier): ?UserInterface
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = ?');
+        $stmt->execute([$identifier]);
+        $row = $stmt->fetch();
+
+        return $row ? new User($row) : null;
+    }
+
+    public function loadById(string|int $id): ?UserInterface
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM users WHERE id = ?');
+        $stmt->execute([$id]);
+        $row = $stmt->fetch();
+
+        return $row ? new User($row) : null;
+    }
+}
 ```
 
 ## Sécurité
