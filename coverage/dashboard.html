@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /home/seb/Dev/lunar-quanta/src</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="_css/bootstrap.min.css?v=12.5.0" rel="stylesheet" type="text/css">
+  <link href="_css/billboard.min.css?v=12.5.0" rel="stylesheet" type="text/css">
+  <link href="_css/style.css?v=12.5.0" rel="stylesheet" type="text/css">
+  <link href="_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="index.html">/home/seb/Dev/lunar-quanta/src</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classesCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Service/Cache/CacheService.php.html#16">Lunar\Service\Cache\CacheService</a></td><td class="text-right">76%</td></tr>
+       <tr><td><a href="Service/Storage/JsonStorage.php.html#22">Lunar\Service\Storage\JsonStorage</a></td><td class="text-right">86%</td></tr>
+       <tr><td><a href="Service/Security/EncryptionService.php.html#22">Lunar\Service\Security\EncryptionService</a></td><td class="text-right">87%</td></tr>
+       <tr><td><a href="Service/Core/Router.php.html#26">Lunar\Service\Core\Router</a></td><td class="text-right">87%</td></tr>
+       <tr><td><a href="Service/Core/Debug/Dumper.php.html#21">Lunar\Service\Core\Debug\Dumper</a></td><td class="text-right">87%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+         <th class="text-right">Complexity</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Service/Core/Router.php.html#26">Lunar\Service\Core\Router</a></td><td class="text-right">87.4%</td><td class="text-right">46</td><td class="text-right">50</td></tr>
+       <tr><td><a href="Service/Core/Debug/Dumper.php.html#21">Lunar\Service\Core\Debug\Dumper</a></td><td class="text-right">87.8%</td><td class="text-right">33</td><td class="text-right">34</td></tr>
+       <tr><td><a href="Service/Cache/CacheService.php.html#16">Lunar\Service\Cache\CacheService</a></td><td class="text-right">76.7%</td><td class="text-right">11</td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Storage/JsonStorage.php.html#22">Lunar\Service\Storage\JsonStorage</a></td><td class="text-right">86.7%</td><td class="text-right">12</td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Security/EncryptionService.php.html#22">Lunar\Service\Security\EncryptionService</a></td><td class="text-right">87.1%</td><td class="text-right">10</td><td class="text-right">10</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2 style="margin-top: 3rem;">Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodsCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Service/Core/Debug/DumperHtmlRenderer.php.html#144"><abbr title="Lunar\Service\Core\Debug\DumperHtmlRenderer::renderResource">renderResource</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Service/Core/Debug/Dumper.php.html#64"><abbr title="Lunar\Service\Core\Debug\Dumper::flush">flush</abbr></a></td><td class="text-right">50%</td></tr>
+       <tr><td><a href="Service/Core/Debug/Dumper.php.html#33"><abbr title="Lunar\Service\Core\Debug\Dumper::dump">dump</abbr></a></td><td class="text-right">57%</td></tr>
+       <tr><td><a href="Service/Core/Router.php.html#166"><abbr title="Lunar\Service\Core\Router::isCacheStale">isCacheStale</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Service/Core/Http/Response.php.html#70"><abbr title="Lunar\Service\Core\Http\Response::send">send</abbr></a></td><td class="text-right">75%</td></tr>
+       <tr><td><a href="Service/Cache/CacheService.php.html#21"><abbr title="Lunar\Service\Cache\CacheService::clear">clear</abbr></a></td><td class="text-right">76%</td></tr>
+       <tr><td><a href="Service/Core/Router.php.html#187"><abbr title="Lunar\Service\Core\Router::hasNewerControllerFiles">hasNewerControllerFiles</abbr></a></td><td class="text-right">76%</td></tr>
+       <tr><td><a href="Service/Security/EncryptionService.php.html#53"><abbr title="Lunar\Service\Security\EncryptionService::encrypt">encrypt</abbr></a></td><td class="text-right">77%</td></tr>
+       <tr><td><a href="Service/Core/Template/LunarTemplateAdapter.php.html#114"><abbr title="Lunar\Service\Core\Template\LunarTemplateAdapter::registerDefaultMacros">registerDefaultMacros</abbr></a></td><td class="text-right">81%</td></tr>
+       <tr><td><a href="Service/Core/Router.php.html#228"><abbr title="Lunar\Service\Core\Router::getControllerClasses">getControllerClasses</abbr></a></td><td class="text-right">82%</td></tr>
+       <tr><td><a href="Service/Storage/JsonStorage.php.html#72"><abbr title="Lunar\Service\Storage\JsonStorage::loadUser">loadUser</abbr></a></td><td class="text-right">82%</td></tr>
+       <tr><td><a href="Service/Core/Router.php.html#101"><abbr title="Lunar\Service\Core\Router::dispatch">dispatch</abbr></a></td><td class="text-right">88%</td></tr>
+       <tr><td><a href="Service/Core/Router.php.html#122"><abbr title="Lunar\Service\Core\Router::searchRoute">searchRoute</abbr></a></td><td class="text-right">88%</td></tr>
+       <tr><td><a href="Service/Security/EncryptionService.php.html#82"><abbr title="Lunar\Service\Security\EncryptionService::decrypt">decrypt</abbr></a></td><td class="text-right">89%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+         <th class="text-right">Complexity</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Service/Cache/CacheService.php.html#21"><abbr title="Lunar\Service\Cache\CacheService::clear">clear</abbr></a></td><td class="text-right">76.7%</td><td class="text-right">11</td><td class="text-right">12</td></tr>
+       <tr><td><a href="Service/Core/Router.php.html#187"><abbr title="Lunar\Service\Core\Router::hasNewerControllerFiles">hasNewerControllerFiles</abbr></a></td><td class="text-right">76.9%</td><td class="text-right">8</td><td class="text-right">8</td></tr>
+       <tr><td><a href="Service/Core/Router.php.html#228"><abbr title="Lunar\Service\Core\Router::getControllerClasses">getControllerClasses</abbr></a></td><td class="text-right">82.4%</td><td class="text-right">8</td><td class="text-right">8</td></tr>
+       <tr><td><a href="Service/Core/Debug/Dumper.php.html#33"><abbr title="Lunar\Service\Core\Debug\Dumper::dump">dump</abbr></a></td><td class="text-right">57.1%</td><td class="text-right">5</td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Core/Debug/DumperHtmlRenderer.php.html#144"><abbr title="Lunar\Service\Core\Debug\DumperHtmlRenderer::renderResource">renderResource</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Security/EncryptionService.php.html#82"><abbr title="Lunar\Service\Security\EncryptionService::decrypt">decrypt</abbr></a></td><td class="text-right">89.5%</td><td class="text-right">6</td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Storage/JsonStorage.php.html#72"><abbr title="Lunar\Service\Storage\JsonStorage::loadUser">loadUser</abbr></a></td><td class="text-right">82.4%</td><td class="text-right">6</td><td class="text-right">6</td></tr>
+       <tr><td><a href="Service/Core/Router.php.html#122"><abbr title="Lunar\Service\Core\Router::searchRoute">searchRoute</abbr></a></td><td class="text-right">88.9%</td><td class="text-right">5</td><td class="text-right">5</td></tr>
+       <tr><td><a href="Service/Core/Debug/Dumper.php.html#64"><abbr title="Lunar\Service\Core\Debug\Dumper::flush">flush</abbr></a></td><td class="text-right">50.0%</td><td class="text-right">3</td><td class="text-right">4</td></tr>
+       <tr><td><a href="Service/Core/Router.php.html#101"><abbr title="Lunar\Service\Core\Router::dispatch">dispatch</abbr></a></td><td class="text-right">88.9%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Service/Core/Router.php.html#166"><abbr title="Lunar\Service\Core\Router::isCacheStale">isCacheStale</abbr></a></td><td class="text-right">66.7%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Service/Core/Template/LunarTemplateAdapter.php.html#114"><abbr title="Lunar\Service\Core\Template\LunarTemplateAdapter::registerDefaultMacros">registerDefaultMacros</abbr></a></td><td class="text-right">81.8%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Service/Security/EncryptionService.php.html#53"><abbr title="Lunar\Service\Security\EncryptionService::encrypt">encrypt</abbr></a></td><td class="text-right">77.8%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Service/Core/Http/Response.php.html#70"><abbr title="Lunar\Service\Core\Http\Response::send">send</abbr></a></td><td class="text-right">75.0%</td><td class="text-right">2</td><td class="text-right">2</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 12.5.0</a> using <a href="https://www.php.net/" target="_top">PHP 8.4.15</a> and <a href="https://phpunit.de/">PHPUnit 12.4.5</a> at Thu Dec 4 6:56:54 UTC 2025.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="_js/billboard.pkgd.min.js?v=12.5.0" type="text/javascript"></script>
+  <script type="application/json" id="complexity_class">[[76.66666666666667,11,"Service\/Cache\/CacheService.php.html#16","Lunar\\Service\\Cache\\CacheService","12.54"],[86.66666666666667,12,"Service\/Storage\/JsonStorage.php.html#22","Lunar\\Service\\Storage\\JsonStorage","12.34"],[87.09677419354838,10,"Service\/Security\/EncryptionService.php.html#22","Lunar\\Service\\Security\\EncryptionService","10.21"],[87.36842105263159,46,"Service\/Core\/Router.php.html#26","Lunar\\Service\\Core\\Router","50.26"],[87.8048780487805,33,"Service\/Core\/Debug\/Dumper.php.html#21","Lunar\\Service\\Core\\Debug\\Dumper","34.98"],[90,6,"Service\/Core\/Http\/Response.php.html#19","Lunar\\Service\\Core\\Http\\Response","6.04"],[90.9090909090909,5,"Service\/Core\/BaseController.php.html#23","Lunar\\Service\\Core\\BaseController","5.02"],[91.66666666666666,9,"Service\/Core\/Container.php.html#21","Lunar\\Service\\Core\\Container","9.05"],[92.3076923076923,13,"Service\/Core\/Template\/LunarTemplateAdapter.php.html#25","Lunar\\Service\\Core\\Template\\LunarTemplateAdapter","13.08"],[94.64285714285714,25,"Service\/Core\/Debug\/DumperHtmlRenderer.php.html#18","Lunar\\Service\\Core\\Debug\\DumperHtmlRenderer","25.10"],[100,1,"Attribute\/Route.php.html#22","Lunar\\Attribute\\Route","1"],[100,9,"Entity\/User.php.html#21","Lunar\\Entity\\User","9"],[100,0,"Exception\/ContainerException.php.html#17","Lunar\\Exception\\ContainerException","0"],[100,0,"Exception\/LunarException.php.html#20","Lunar\\Exception\\LunarException","0"],[100,0,"Exception\/RouterException.php.html#17","Lunar\\Exception\\RouterException","0"],[100,0,"Exception\/SecurityException.php.html#17","Lunar\\Exception\\SecurityException","0"],[100,0,"Exception\/StorageException.php.html#17","Lunar\\Exception\\StorageException","0"],[100,0,"Exception\/TemplateException.php.html#17","Lunar\\Exception\\TemplateException","0"],[100,1,"Service\/Core\/Http\/HttpStatus.php.html#29","Lunar\\Service\\Core\\Http\\HttpStatus","1"],[100,12,"Service\/Core\/Http\/Request.php.html#19","Lunar\\Service\\Core\\Http\\Request","12"]]</script>
+  <script type="application/json" id="complexity_method">[[0,2,"Service\/Core\/Debug\/DumperHtmlRenderer.php.html#144","Lunar\\Service\\Core\\Debug\\DumperHtmlRenderer::renderResource","6"],[50,3,"Service\/Core\/Debug\/Dumper.php.html#64","Lunar\\Service\\Core\\Debug\\Dumper::flush","4.12"],[57.14285714285714,5,"Service\/Core\/Debug\/Dumper.php.html#33","Lunar\\Service\\Core\\Debug\\Dumper::dump","6.97"],[66.66666666666666,3,"Service\/Core\/Router.php.html#166","Lunar\\Service\\Core\\Router::isCacheStale","3.33"],[75,2,"Service\/Core\/Http\/Response.php.html#70","Lunar\\Service\\Core\\Http\\Response::send","2.06"],[76.66666666666667,11,"Service\/Cache\/CacheService.php.html#21","Lunar\\Service\\Cache\\CacheService::clear","12.54"],[76.92307692307693,8,"Service\/Core\/Router.php.html#187","Lunar\\Service\\Core\\Router::hasNewerControllerFiles","8.79"],[77.77777777777779,3,"Service\/Security\/EncryptionService.php.html#53","Lunar\\Service\\Security\\EncryptionService::encrypt","3.10"],[81.81818181818183,3,"Service\/Core\/Template\/LunarTemplateAdapter.php.html#114","Lunar\\Service\\Core\\Template\\LunarTemplateAdapter::registerDefaultMacros","3.05"],[82.35294117647058,8,"Service\/Core\/Router.php.html#228","Lunar\\Service\\Core\\Router::getControllerClasses","8.35"],[82.35294117647058,6,"Service\/Storage\/JsonStorage.php.html#72","Lunar\\Service\\Storage\\JsonStorage::loadUser","6.20"],[88.88888888888889,3,"Service\/Core\/Router.php.html#101","Lunar\\Service\\Core\\Router::dispatch","3.01"],[88.88888888888889,5,"Service\/Core\/Router.php.html#122","Lunar\\Service\\Core\\Router::searchRoute","5.03"],[89.47368421052632,6,"Service\/Security\/EncryptionService.php.html#82","Lunar\\Service\\Security\\EncryptionService::decrypt","6.04"],[90,4,"Service\/Core\/BaseController.php.html#35","Lunar\\Service\\Core\\BaseController::render","4.02"],[90.9090909090909,7,"Service\/Core\/Container.php.html#60","Lunar\\Service\\Core\\Container::get","7.04"],[90.9090909090909,3,"Service\/Storage\/JsonStorage.php.html#44","Lunar\\Service\\Storage\\JsonStorage::saveUser","3.01"],[91.30434782608695,6,"Service\/Core\/Router.php.html#261","Lunar\\Service\\Core\\Router::registerControllerRoutes","6.02"],[92.3076923076923,4,"Service\/Core\/Debug\/Dumper.php.html#171","Lunar\\Service\\Core\\Debug\\Dumper::renderCliObject","4.01"],[94.73684210526315,4,"Service\/Core\/Debug\/DumperHtmlRenderer.php.html#110","Lunar\\Service\\Core\\Debug\\DumperHtmlRenderer::renderObject","4.00"],[100,1,"Attribute\/Route.php.html#40","Lunar\\Attribute\\Route::__construct","1"],[100,1,"Entity\/User.php.html#36","Lunar\\Entity\\User::__construct","1"],[100,1,"Entity\/User.php.html#50","Lunar\\Entity\\User::getEmail","1"],[100,1,"Entity\/User.php.html#58","Lunar\\Entity\\User::getName","1"],[100,1,"Entity\/User.php.html#66","Lunar\\Entity\\User::getPassword","1"],[100,1,"Entity\/User.php.html#74","Lunar\\Entity\\User::getCreatedAt","1"],[100,1,"Entity\/User.php.html#82","Lunar\\Entity\\User::getUpdatedAt","1"],[100,1,"Entity\/User.php.html#90","Lunar\\Entity\\User::updateTimestamp","1"],[100,1,"Entity\/User.php.html#98","Lunar\\Entity\\User::getHash","1"],[100,1,"Entity\/User.php.html#108","Lunar\\Entity\\User::toArray","1"],[100,1,"Service\/Core\/BaseController.php.html#25","Lunar\\Service\\Core\\BaseController::__construct","1"],[100,2,"Service\/Core\/Container.php.html#40","Lunar\\Service\\Core\\Container::has","2"],[100,1,"Service\/Core\/Debug\/Dumper.php.html#78","Lunar\\Service\\Core\\Debug\\Dumper::cliHeader","1"],[100,8,"Service\/Core\/Debug\/Dumper.php.html#91","Lunar\\Service\\Core\\Debug\\Dumper::dumpCli","8"],[100,3,"Service\/Core\/Debug\/Dumper.php.html#106","Lunar\\Service\\Core\\Debug\\Dumper::printBool","3"],[100,1,"Service\/Core\/Debug\/Dumper.php.html#111","Lunar\\Service\\Core\\Debug\\Dumper::printNumber","1"],[100,1,"Service\/Core\/Debug\/Dumper.php.html#116","Lunar\\Service\\Core\\Debug\\Dumper::printString","1"],[100,1,"Service\/Core\/Debug\/Dumper.php.html#121","Lunar\\Service\\Core\\Debug\\Dumper::printNull","1"],[100,2,"Service\/Core\/Debug\/Dumper.php.html#126","Lunar\\Service\\Core\\Debug\\Dumper::printResource","2"],[100,4,"Service\/Core\/Debug\/Dumper.php.html#136","Lunar\\Service\\Core\\Debug\\Dumper::renderCliArray","4"],[100,1,"Service\/Core\/Debug\/DumperHtmlRenderer.php.html#25","Lunar\\Service\\Core\\Debug\\DumperHtmlRenderer::render","1"],[100,8,"Service\/Core\/Debug\/DumperHtmlRenderer.php.html#41","Lunar\\Service\\Core\\Debug\\DumperHtmlRenderer::export","8"],[100,2,"Service\/Core\/Debug\/DumperHtmlRenderer.php.html#54","Lunar\\Service\\Core\\Debug\\DumperHtmlRenderer::renderBool","2"],[100,1,"Service\/Core\/Debug\/DumperHtmlRenderer.php.html#61","Lunar\\Service\\Core\\Debug\\DumperHtmlRenderer::renderNumber","1"],[100,1,"Service\/Core\/Debug\/DumperHtmlRenderer.php.html#66","Lunar\\Service\\Core\\Debug\\DumperHtmlRenderer::renderString","1"],[100,1,"Service\/Core\/Debug\/DumperHtmlRenderer.php.html#73","Lunar\\Service\\Core\\Debug\\DumperHtmlRenderer::renderNull","1"],[100,4,"Service\/Core\/Debug\/DumperHtmlRenderer.php.html#82","Lunar\\Service\\Core\\Debug\\DumperHtmlRenderer::renderArray","4"],[100,1,"Service\/Core\/Debug\/DumperHtmlRenderer.php.html#154","Lunar\\Service\\Core\\Debug\\DumperHtmlRenderer::indent","1"],[100,1,"Service\/Core\/Http\/HttpStatus.php.html#191","Lunar\\Service\\Core\\Http\\HttpStatus::getDefaultMessage","1"],[100,6,"Service\/Core\/Http\/Request.php.html#41","Lunar\\Service\\Core\\Http\\Request::__construct","6"],[100,1,"Service\/Core\/Http\/Request.php.html#72","Lunar\\Service\\Core\\Http\\Request::getMethod","1"],[100,1,"Service\/Core\/Http\/Request.php.html#82","Lunar\\Service\\Core\\Http\\Request::getUri","1"],[100,1,"Service\/Core\/Http\/Request.php.html#92","Lunar\\Service\\Core\\Http\\Request::getQueryParams","1"],[100,1,"Service\/Core\/Http\/Request.php.html#102","Lunar\\Service\\Core\\Http\\Request::getPostParams","1"],[100,1,"Service\/Core\/Http\/Request.php.html#112","Lunar\\Service\\Core\\Http\\Request::getHeaders","1"],[100,1,"Service\/Core\/Http\/Request.php.html#122","Lunar\\Service\\Core\\Http\\Request::getServerParams","1"],[100,1,"Service\/Core\/Http\/Response.php.html#34","Lunar\\Service\\Core\\Http\\Response::__construct","1"],[100,1,"Service\/Core\/Http\/Response.php.html#44","Lunar\\Service\\Core\\Http\\Response::getStatusCode","1"],[100,1,"Service\/Core\/Http\/Response.php.html#52","Lunar\\Service\\Core\\Http\\Response::getBody","1"],[100,1,"Service\/Core\/Http\/Response.php.html#62","Lunar\\Service\\Core\\Http\\Response::getHeaders","1"],[100,4,"Service\/Core\/Router.php.html#56","Lunar\\Service\\Core\\Router::__construct","4"],[100,2,"Service\/Core\/Router.php.html#74","Lunar\\Service\\Core\\Router::getCacheFile","2"],[100,1,"Service\/Core\/Router.php.html#89","Lunar\\Service\\Core\\Router::getRouteByName","1"],[100,1,"Service\/Core\/Router.php.html#146","Lunar\\Service\\Core\\Router::getRegisteredRoutes","1"],[100,1,"Service\/Core\/Router.php.html#156","Lunar\\Service\\Core\\Router::getRoutes","1"],[100,2,"Service\/Core\/Router.php.html#215","Lunar\\Service\\Core\\Router::registerAllControllerRoutes","2"],[100,2,"Service\/Core\/Router.php.html#307","Lunar\\Service\\Core\\Router::match","2"],[100,4,"Service\/Core\/Template\/LunarTemplateAdapter.php.html#29","Lunar\\Service\\Core\\Template\\LunarTemplateAdapter::__construct","4"],[100,1,"Service\/Core\/Template\/LunarTemplateAdapter.php.html#54","Lunar\\Service\\Core\\Template\\LunarTemplateAdapter::render","1"],[100,1,"Service\/Core\/Template\/LunarTemplateAdapter.php.html#65","Lunar\\Service\\Core\\Template\\LunarTemplateAdapter::registerMacro","1"],[100,1,"Service\/Core\/Template\/LunarTemplateAdapter.php.html#78","Lunar\\Service\\Core\\Template\\LunarTemplateAdapter::callMacro","1"],[100,1,"Service\/Core\/Template\/LunarTemplateAdapter.php.html#88","Lunar\\Service\\Core\\Template\\LunarTemplateAdapter::clearCache","1"],[100,1,"Service\/Core\/Template\/LunarTemplateAdapter.php.html#98","Lunar\\Service\\Core\\Template\\LunarTemplateAdapter::templateExists","1"],[100,1,"Service\/Core\/Template\/LunarTemplateAdapter.php.html#106","Lunar\\Service\\Core\\Template\\LunarTemplateAdapter::getEngine","1"],[100,1,"Service\/Security\/EncryptionService.php.html#34","Lunar\\Service\\Security\\EncryptionService::__construct","1"],[100,3,"Service\/Storage\/JsonStorage.php.html#30","Lunar\\Service\\Storage\\JsonStorage::__construct","3"]]</script>
+  <script type="text/javascript" defer>
+  const barLabels = [
+    '0%',
+    '0-10%',
+    '10-20%',
+    '20-30%',
+    '30-40%',
+    '40-50%',
+    '50-60%',
+    '60-70%',
+    '70-80%',
+    '80-90%',
+    '90-100%',
+    '100%'
+  ];
+  const barConfig = (name, fullName, values) => ({
+    axis: {
+      x: {
+        type: "category",
+        categories: barLabels,
+      },
+      y: {
+        label: {
+          text: `#${name}`,
+          position: 'outer-top',
+        },
+      },
+    },
+    bindto: `#${name}CoverageDistribution`,
+    data: {
+      columns: [
+        [fullName].concat(values),
+      ],
+      colors: {
+        [fullName]: "rgba(69, 114, 167, 0.75)",
+      },
+      type: "bar",
+    },
+    bar: {
+      width: {
+        ratio: 0.9,
+      },
+    },
+    grid: {
+      focus: {
+        show: false,
+      },
+      x: {
+        show: true,
+      },
+      y: {
+        show: true,
+      },
+    },
+    legend: {
+      show: false,
+    },
+    tooltip: {
+      contents: function (data) {
+        return `<table class="bb-tooltip"><tbody>
+            <tr><th colspan="2">Coverage ${barLabels[data[0].x]}</th></tr>
+            <tr><td class="value">${data[0].value} ${name}</td></tr>
+          </tbody></table>`;
+      },
+      grouped: false,
+    },
+  });
+  bb.generate(
+    barConfig('classes', "Class Coverage", [0,0,0,0,0,0,0,0,1,4,5,10])
+  );
+  bb.generate(
+    barConfig('methods', "Method Coverage", [1,0,0,0,0,0,2,1,4,6,6,56])
+  );
+
+  const scatterConfig = (name, complexityData) => ({
+    axis: {
+      x: {
+        label: {
+          text: 'Code Coverage (in percent)',
+          position: 'outer-right',
+        },
+        tick: {
+          values: [0, 20, 40, 60, 80, 100],
+        },
+      },
+      y: {
+        label: {
+          text: 'Cyclomatic Complexity',
+          position: 'outer-top',
+        },
+        min: 0,
+        padding: {
+          bottom: 0,
+          top: 5,
+        },
+      },
+    },
+    bindto: `#${name}Complexity`,
+    data: {
+      columns: [
+        ["complexity_x"].concat(complexityData.map(d => d[0])),
+        ["complexity"].concat(complexityData.map(d => d[1])),
+      ],
+      onclick: function(data, element) {
+        window.location = complexityData[data.index][2];
+      },
+      type: "scatter",
+      xs: {
+        "complexity": "complexity_x",
+      },
+    },
+    grid: {
+      focus: {
+        show: true,
+        y: true,
+      },
+      x: {
+        show: true,
+      },
+      y: {
+        show: true,
+      },
+    },
+    legend: {
+      show: false,
+    },
+    tooltip: {
+      contents: function (data) {
+        const coverage = Math.round(data[0].x);
+        const complexity = data[0].value;
+        const targetName = complexityData[data[0].index][3];
+        const crap = complexityData[data[0].index][4];
+        return `<table class="bb-tooltip"><tbody>
+            <tr><th colspan="2">${targetName}</th></tr>
+            <tr class="bb-tooltip-name-complexity"><td>Coverage</td><td class="name">${coverage}%</td></tr>
+            <tr class="bb-tooltip-name-complexity"><td>Complexity</td><td class="value">${complexity}</td></tr>
+            <tr class="bb-tooltip-name-complexity"><td>Crap</td><td class="value">${crap}</td></tr>
+          </tbody></table>`;
+      },
+      grouped: false,
+    },
+  });
+  const classComplexityData = JSON.parse(document.getElementById('complexity_class').textContent);
+  bb.generate(
+    scatterConfig("class", classComplexityData)
+  );
+  const methodComplexityData = JSON.parse(document.getElementById('complexity_method').textContent);
+  bb.generate(
+    scatterConfig("method", methodComplexityData),
+  );
+  </script>
+ </body>
+</html>

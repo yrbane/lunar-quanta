@@ -465,12 +465,12 @@ img {
     color: var(--dump-fg);
     border: 2px solid var(--color-tertiary);
     margin: var(--spacing);
-    padding: var(--spacing);
+    padding: 0;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     font-family: var(--font-mono);
-    font-size: .9rem;
-    line-height: 1.4;
+    font-size: .8rem;
+    line-height: 1.2;
     overflow: auto;
     white-space: pre;
     tab-size: 4;
@@ -500,7 +500,7 @@ img {
         padding: calc(var(--spacing) / 2) var(--spacing);
         border-radius: var(--radius) var(--radius) 0 0;
         font-family: var(--font-mono);
-        font-size: 1.2rem;
+        font-size: 1rem;
         white-space: pre;
         overflow-x: auto;
 
@@ -514,5 +514,9 @@ img {
     & .type {
         color: var(--dump-type);
         font-weight: 600;
+    }
+
+    & .content, & .type {
+        padding: 2px;
     }
 }

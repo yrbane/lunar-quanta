@@ -1,8 +1,11 @@
 <?php
 /**
+ *
  * @since 0.0.1
  * @link https://nethttp.net
- * @author seb@nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
  */
 declare(strict_types=1);
 
@@ -26,11 +29,7 @@ final class DumperHtmlRenderer
         $type = get_debug_type($var);
 
         return <<<HTML
-<div class="dump">
-    <pre class="header">{$escapedFile}:&nbsp;<span class="line">{$line}</span></pre>
-    <div class="type">{$type}</div>
-    <pre class="content">{$content}</pre>
-</div>
+<div class="dump"><pre class="header">{$escapedFile}:&nbsp;<span class="line">{$line}</span></pre><div class="type">{$type}</div><pre class="content">{$content}</pre></div>
 HTML;
     }
 
@@ -59,16 +58,16 @@ HTML;
         return "<span class=\"bool\">{$value}</span>";
     }
 
-    private function renderNumber(int|float $var): string
+    private function renderNumber(float|int $var): string
     {
-        return '<span class="number">' . $var . '</span>';
+        return '<span class="number">'.$var.'</span>';
     }
 
     private function renderString(string $var): string
     {
         $escaped = htmlspecialchars($var, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
-        return '<span class="string">&quot;' . $escaped . '&quot;</span>';
+        return '<span class="string">&quot;'.$escaped.'&quot;</span>';
     }
 
     private function renderNull(): string
@@ -77,7 +76,7 @@ HTML;
     }
 
     /**
-     * @param array<int|string, mixed> $var
+     * @param array<int|string, mixed>         $var
      * @param \SplObjectStorage<object, mixed> $seen
      */
     private function renderArray(array $var, int $level, \SplObjectStorage $seen): string
@@ -86,21 +85,21 @@ HTML;
             return '<span class="null">[…]</span>';
         }
 
-        if ($var === []) {
+        if ([] === $var) {
             return '<span class="array">[]</span>';
         }
 
         $indent = $this->indent($level);
         $innerIndent = $this->indent($level + 1);
-        $html = '<span class="array">[</span>' . "\n";
+        $html = '<span class="array">[</span>'."\n";
 
         foreach ($var as $key => $value) {
-            $keyHtml = '<span class="key">' . htmlspecialchars((string) $key) . '</span>';
+            $keyHtml = '<span class="key">'.htmlspecialchars((string) $key).'</span>';
             $valueHtml = $this->export($value, $level + 1, $seen);
-            $html .= $innerIndent . $keyHtml . ' =&gt; ' . $valueHtml . ",\n";
+            $html .= $innerIndent.$keyHtml.' =&gt; '.$valueHtml.",\n";
         }
 
-        $html .= $indent . '<span class="array">]</span>';
+        $html .= $indent.'<span class="array">]</span>';
 
         return $html;
     }
@@ -111,20 +110,20 @@ HTML;
     private function renderObject(object $var, int $level, \SplObjectStorage $seen): string
     {
         if ($seen->contains($var)) {
-            return '<span class="object">' . $var::class . ' { référence circulaire }</span>';
+            return '<span class="object">'.$var::class.' { référence circulaire }</span>';
         }
 
         $seen->attach($var);
 
         if ($level >= self::MAX_DEPTH) {
-            return '<span class="null">' . $var::class . ' { … }</span>';
+            return '<span class="null">'.$var::class.' { … }</span>';
         }
 
         $ref = new \ReflectionObject($var);
         $indent = $this->indent($level);
         $innerIndent = $this->indent($level + 1);
 
-        $html = '<span class="object">' . $ref->getName() . '</span> {' . "\n";
+        $html = '<span class="object">'.$ref->getName().'</span> {'."\n";
 
         foreach ($ref->getProperties() as $prop) {
             $prop->setAccessible(true);
@@ -132,12 +131,12 @@ HTML;
             $valueHtml = $this->export($prop->getValue($var), $level + 1, $seen);
 
             $html .= $innerIndent
-                . '<span class="key">' . $prop->getName() . '</span>'
-                . ' <span class="visibility">(' . $visibility . ')</span>'
-                . ' =&gt; ' . $valueHtml . ",\n";
+                .'<span class="key">'.$prop->getName().'</span>'
+                .' <span class="visibility">('.$visibility.')</span>'
+                .' =&gt; '.$valueHtml.",\n";
         }
 
-        $html .= $indent . '}';
+        $html .= $indent.'}';
 
         return $html;
     }
@@ -146,7 +145,7 @@ HTML;
     {
         $type = is_resource($var) ? get_resource_type($var) : 'unknown';
 
-        return '<span class="resource">resource(' . htmlspecialchars($type) . ')</span>';
+        return '<span class="resource">resource('.htmlspecialchars($type).')</span>';
     }
 
     /**

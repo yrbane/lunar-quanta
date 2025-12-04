@@ -11,56 +11,109 @@ declare(strict_types=1);
 
 namespace Lunar\Service\Security;
 
+use Lunar\Exception\SecurityException;
+
 /**
- * Class EncryptionService.
+ * Encryption service with AES-256-CBC and HMAC verification.
  *
- * Fournit des méthodes pour chiffrer et déchiffrer les données.
+ * Provides methods to encrypt and decrypt data with integrity verification.
+ * Uses encrypt-then-MAC pattern for authenticated encryption.
  */
-class EncryptionService
+class EncryptionService implements EncryptionInterface
 {
-    private string $key;
+    private string $encryptionKey;
+    private string $hmacKey;
     private string $cipher = 'AES-256-CBC';
+    private string $hmacAlgo = 'sha256';
 
     /**
-     * Constructeur.
+     * Constructor.
      *
-     * @param string $key clé secrète pour le chiffrement
+     * @param string $key secret key for encryption
      */
     public function __construct(string $key)
     {
-        $this->key = substr(hash('sha256', $key), 0, 32);
+        // Derive separate keys for encryption and HMAC
+        $derivedKey = hash('sha512', $key, true);
+        $this->encryptionKey = substr($derivedKey, 0, 32);
+        $this->hmacKey = substr($derivedKey, 32, 32);
     }
 
     /**
-     * Chiffre une chaîne de caractères.
+     * Encrypt data with HMAC verification.
      *
-     * @param string $data données à chiffrer
+     * Format: base64(IV + ciphertext + HMAC)
      *
-     * @return string données chiffrées encodées en base64
+     * @param string $plaintext data to encrypt
+     *
+     * @return string encrypted data encoded in base64
+     *
+     * @throws SecurityException if encryption fails
      */
-    public function encrypt(string $data): string
+    public function encrypt(string $plaintext): string
     {
         $ivLength = openssl_cipher_iv_length($this->cipher);
+        if (false === $ivLength) {
+            throw new SecurityException("Cipher {$this->cipher} not supported");
+        }
+
         $iv = openssl_random_pseudo_bytes($ivLength);
-        $encrypted = openssl_encrypt($data, $this->cipher, $this->key, OPENSSL_RAW_DATA, $iv);
+        $ciphertext = openssl_encrypt($plaintext, $this->cipher, $this->encryptionKey, OPENSSL_RAW_DATA, $iv);
 
-        return base64_encode($iv.$encrypted);
+        if (false === $ciphertext) {
+            throw new SecurityException('Encryption failed');
+        }
+
+        // Compute HMAC over IV + ciphertext (encrypt-then-MAC)
+        $hmac = hash_hmac($this->hmacAlgo, $iv.$ciphertext, $this->hmacKey, true);
+
+        return base64_encode($iv.$ciphertext.$hmac);
     }
 
     /**
-     * Déchiffre une chaîne de caractères.
+     * Decrypt data with HMAC verification.
      *
-     * @param string $encrypted données chiffrées en base64
+     * @param string $ciphertext encrypted data in base64
      *
-     * @return string données déchiffrées
+     * @return string decrypted data
+     *
+     * @throws SecurityException if decryption or HMAC verification fails
      */
-    public function decrypt(string $encrypted): string
+    public function decrypt(string $ciphertext): string
     {
-        $data = base64_decode($encrypted);
-        $ivLength = openssl_cipher_iv_length($this->cipher);
-        $iv = substr($data, 0, $ivLength);
-        $cipherText = substr($data, $ivLength);
+        $data = base64_decode($ciphertext, true);
+        if (false === $data) {
+            throw new SecurityException('Invalid base64 encoding');
+        }
 
-        return openssl_decrypt($cipherText, $this->cipher, $this->key, OPENSSL_RAW_DATA, $iv);
+        $ivLength = openssl_cipher_iv_length($this->cipher);
+        if (false === $ivLength) {
+            throw new SecurityException("Cipher {$this->cipher} not supported");
+        }
+
+        $hmacLength = 32; // SHA-256 produces 32 bytes
+
+        // Minimum length: IV + at least 0 bytes ciphertext + HMAC
+        if (strlen($data) < $ivLength + $hmacLength) {
+            throw new SecurityException('Invalid encrypted data format');
+        }
+
+        // Extract components
+        $iv = substr($data, 0, $ivLength);
+        $hmac = substr($data, -$hmacLength);
+        $encryptedData = substr($data, $ivLength, -$hmacLength);
+
+        // Verify HMAC first (constant-time comparison)
+        $expectedHmac = hash_hmac($this->hmacAlgo, $iv.$encryptedData, $this->hmacKey, true);
+        if (!hash_equals($expectedHmac, $hmac)) {
+            throw new SecurityException('HMAC verification failed: data may have been tampered with');
+        }
+
+        $decrypted = openssl_decrypt($encryptedData, $this->cipher, $this->encryptionKey, OPENSSL_RAW_DATA, $iv);
+        if (false === $decrypted) {
+            throw new SecurityException('Decryption failed');
+        }
+
+        return $decrypted;
     }
 }

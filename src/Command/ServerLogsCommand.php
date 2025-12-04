@@ -1,15 +1,18 @@
 <?php
 /**
+ *
  * @since 0.0.1
  * @link https://nethttp.net
- * @author seb@nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
  */
 declare(strict_types=1);
 
 namespace Lunar\Command;
 
-use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\AbstractCommand;
+use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\CommandInterface;
 use Lunar\Cli\Helper\ConsoleHelper as C;
 use Lunar\Config\Config;
@@ -40,13 +43,10 @@ class ServerLogsCommand extends AbstractCommand implements CommandInterface
 
     // Couleurs de fond
     private const BG_RED = "\033[41m";
-    private const BG_GREEN = "\033[42m";
-    private const BG_YELLOW = "\033[43m";
-    private const BG_BLUE = "\033[44m";
 
     public function execute(array $args): int
     {
-        $logFile = Config::getProjectRoot() . '/log/server.log';
+        $logFile = Config::getProjectRoot().'/log/server.log';
 
         if (!\is_file($logFile)) {
             C::error("Fichier de logs introuvable : {$logFile}");
@@ -61,9 +61,9 @@ class ServerLogsCommand extends AbstractCommand implements CommandInterface
         $follow = !$this->hasFlag($args, 'no-follow');
 
         C::subtitle('Logs du serveur PHP');
-        echo self::DIM . "Fichier : {$logFile}" . self::RESET . "\n";
+        echo self::DIM."Fichier : {$logFile}".self::RESET."\n";
         if ($follow) {
-            echo self::DIM . "Ctrl+C pour quitter" . self::RESET . "\n";
+            echo self::DIM.'Ctrl+C pour quitter'.self::RESET."\n";
         }
         echo "\n";
 
@@ -78,165 +78,31 @@ class ServerLogsCommand extends AbstractCommand implements CommandInterface
             return 0;
         }
 
-        echo self::DIM . "─── Suivi en temps réel ───" . self::RESET . "\n";
+        echo self::DIM.'─── Suivi en temps réel ───'.self::RESET."\n";
 
         // Ouvrir le fichier en mode lecture pour suivre
         $handle = fopen($logFile, 'r');
         if (!$handle) {
             C::error("Impossible d'ouvrir le fichier de logs");
+
             return 1;
         }
 
         // Aller à la fin du fichier
         fseek($handle, 0, SEEK_END);
 
-        // Boucle infinie pour suivre le fichier
+        // Boucle infinie pour suivre le fichier (Ctrl+C pour quitter)
+        // @phpstan-ignore while.alwaysTrue
         while (true) {
             $line = fgets($handle);
-            if ($line !== false) {
-                echo $this->colorizeLine(trim($line)) . "\n";
+            if (false !== $line) {
+                echo $this->colorizeLine(trim($line))."\n";
             } else {
                 // Attendre un peu avant de réessayer
                 usleep(100000); // 100ms
                 clearstatcache(true, $logFile);
             }
         }
-    }
-
-    /**
-     * Affiche les N dernières lignes du fichier.
-     */
-    private function showLastLines(string $file, int $count): void
-    {
-        $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        if ($lines === false) {
-            return;
-        }
-
-        $lastLines = array_slice($lines, -$count);
-        foreach ($lastLines as $line) {
-            echo $this->colorizeLine($line) . "\n";
-        }
-
-    }
-
-    /**
-     * Affiche la légende des couleurs.
-     */
-    private function showLegend(): void
-    {
-        echo self::DIM . "─────────────────────────────────────────────────\n" . self::RESET;
-        echo self::BOLD . "Légende : " . self::RESET;
-        echo self::GREEN . "2xx " . self::RESET;
-        echo self::CYAN . "3xx " . self::RESET;
-        echo self::YELLOW . "4xx " . self::RESET;
-        echo self::RED . "5xx " . self::RESET;
-        echo self::DIM . "| " . self::RESET;
-        echo self::GREEN . "GET " . self::RESET;
-        echo self::BLUE . "POST " . self::RESET;
-        echo self::YELLOW . "PUT " . self::RESET;
-        echo self::RED . "DELETE" . self::RESET;
-        echo "\n";
-        echo self::DIM . "─────────────────────────────────────────────────\n" . self::RESET;
-    }
-
-    /**
-     * Colorise une ligne de log.
-     */
-    private function colorizeLine(string $line): string
-    {
-        // Format typique du serveur PHP: [Date] IP:Port [Code]: Method URI
-        // Exemple: [Wed Dec  3 16:00:00 2025] 127.0.0.1:54321 [200]: GET /index.php
-
-        // Coloriser la date/heure
-        $line = preg_replace(
-            '/^\[([^\]]+)\]/',
-            self::GRAY . '[$1]' . self::RESET,
-            $line
-        );
-
-        // Coloriser l'IP:Port
-        $line = preg_replace(
-            '/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)/',
-            self::DIM . '$1' . self::RESET,
-            $line
-        );
-
-        // Coloriser les codes de statut HTTP
-        $line = preg_replace_callback(
-            '/\[(\d{3})\]:/',
-            fn($m) => '[' . $this->colorizeStatusCode($m[1]) . ']:',
-            $line
-        );
-
-        // Coloriser les méthodes HTTP
-        $line = preg_replace_callback(
-            '/\b(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)\b/',
-            fn($m) => $this->colorizeMethod($m[1]),
-            $line
-        );
-
-        // Coloriser les URLs/chemins
-        $line = preg_replace(
-            '#(/[^\s]*)#',
-            self::CYAN . '$1' . self::RESET,
-            $line
-        );
-
-        // Coloriser les erreurs PHP
-        $line = preg_replace(
-            '/(PHP Fatal error|PHP Warning|PHP Notice|PHP Parse error)/i',
-            self::BG_RED . self::WHITE . self::BOLD . ' $1 ' . self::RESET,
-            $line
-        );
-
-        // Coloriser "Accepted" et "Closing"
-        $line = preg_replace(
-            '/\bAccepted\b/',
-            self::GREEN . 'Accepted' . self::RESET,
-            $line
-        );
-
-        $line = preg_replace(
-            '/\bClosing\b/',
-            self::YELLOW . 'Closing' . self::RESET,
-            $line
-        );
-
-        return $line;
-    }
-
-    /**
-     * Colorise un code de statut HTTP.
-     */
-    private function colorizeStatusCode(string $code): string
-    {
-        $color = match (true) {
-            str_starts_with($code, '2') => self::GREEN . self::BOLD,
-            str_starts_with($code, '3') => self::CYAN . self::BOLD,
-            str_starts_with($code, '4') => self::YELLOW . self::BOLD,
-            str_starts_with($code, '5') => self::RED . self::BOLD,
-            default => self::WHITE,
-        };
-
-        return $color . $code . self::RESET;
-    }
-
-    /**
-     * Colorise une méthode HTTP.
-     */
-    private function colorizeMethod(string $method): string
-    {
-        $color = match ($method) {
-            'GET' => self::GREEN,
-            'POST' => self::BLUE,
-            'PUT', 'PATCH' => self::YELLOW,
-            'DELETE' => self::RED,
-            'HEAD', 'OPTIONS' => self::MAGENTA,
-            default => self::WHITE,
-        };
-
-        return $color . self::BOLD . $method . self::RESET;
     }
 
     public function getHelp(): string
@@ -265,5 +131,138 @@ Exemples :
   bin/console server:logs --no-follow  # Affiche et quitte
 
 HELP;
+    }
+
+    /**
+     * Affiche les N dernières lignes du fichier.
+     */
+    private function showLastLines(string $file, int $count): void
+    {
+        $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if (false === $lines) {
+            return;
+        }
+
+        $lastLines = array_slice($lines, -$count);
+        foreach ($lastLines as $line) {
+            echo $this->colorizeLine($line)."\n";
+        }
+    }
+
+    /**
+     * Affiche la légende des couleurs.
+     */
+    private function showLegend(): void
+    {
+        echo self::DIM."─────────────────────────────────────────────────\n".self::RESET;
+        echo self::BOLD.'Légende : '.self::RESET;
+        echo self::GREEN.'2xx '.self::RESET;
+        echo self::CYAN.'3xx '.self::RESET;
+        echo self::YELLOW.'4xx '.self::RESET;
+        echo self::RED.'5xx '.self::RESET;
+        echo self::DIM.'| '.self::RESET;
+        echo self::GREEN.'GET '.self::RESET;
+        echo self::BLUE.'POST '.self::RESET;
+        echo self::YELLOW.'PUT '.self::RESET;
+        echo self::RED.'DELETE'.self::RESET;
+        echo "\n";
+        echo self::DIM."─────────────────────────────────────────────────\n".self::RESET;
+    }
+
+    /**
+     * Colorise une ligne de log.
+     */
+    private function colorizeLine(string $line): string
+    {
+        // Format typique du serveur PHP: [Date] IP:Port [Code]: Method URI
+        // Exemple: [Wed Dec  3 16:00:00 2025] 127.0.0.1:54321 [200]: GET /index.php
+
+        // Coloriser la date/heure
+        $line = (string) preg_replace(
+            '/^\[([^\]]+)\]/',
+            self::GRAY.'[$1]'.self::RESET,
+            $line
+        );
+
+        // Coloriser l'IP:Port
+        $line = (string) preg_replace(
+            '/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+)/',
+            self::DIM.'$1'.self::RESET,
+            $line
+        );
+
+        // Coloriser les codes de statut HTTP
+        $line = (string) preg_replace_callback(
+            '/\[(\d{3})\]:/',
+            fn ($m) => '['.$this->colorizeStatusCode($m[1]).']:',
+            $line
+        );
+
+        // Coloriser les méthodes HTTP
+        $line = (string) preg_replace_callback(
+            '/\b(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)\b/',
+            fn ($m) => $this->colorizeMethod($m[1]),
+            $line
+        );
+
+        // Coloriser les URLs/chemins
+        $line = (string) preg_replace(
+            '#(/[^\s]*)#',
+            self::CYAN.'$1'.self::RESET,
+            $line
+        );
+
+        // Coloriser les erreurs PHP
+        $line = (string) preg_replace(
+            '/(PHP Fatal error|PHP Warning|PHP Notice|PHP Parse error)/i',
+            self::BG_RED.self::WHITE.self::BOLD.' $1 '.self::RESET,
+            $line
+        );
+
+        // Coloriser "Accepted" et "Closing"
+        $line = (string) preg_replace(
+            '/\bAccepted\b/',
+            self::GREEN.'Accepted'.self::RESET,
+            $line
+        );
+
+        return (string) preg_replace(
+            '/\bClosing\b/',
+            self::YELLOW.'Closing'.self::RESET,
+            $line
+        );
+    }
+
+    /**
+     * Colorise un code de statut HTTP.
+     */
+    private function colorizeStatusCode(string $code): string
+    {
+        $color = match (true) {
+            str_starts_with($code, '2') => self::GREEN.self::BOLD,
+            str_starts_with($code, '3') => self::CYAN.self::BOLD,
+            str_starts_with($code, '4') => self::YELLOW.self::BOLD,
+            str_starts_with($code, '5') => self::RED.self::BOLD,
+            default => self::WHITE,
+        };
+
+        return $color.$code.self::RESET;
+    }
+
+    /**
+     * Colorise une méthode HTTP.
+     */
+    private function colorizeMethod(string $method): string
+    {
+        $color = match ($method) {
+            'GET' => self::GREEN,
+            'POST' => self::BLUE,
+            'PUT', 'PATCH' => self::YELLOW,
+            'DELETE' => self::RED,
+            'HEAD', 'OPTIONS' => self::MAGENTA,
+            default => self::WHITE,
+        };
+
+        return $color.self::BOLD.$method.self::RESET;
     }
 }

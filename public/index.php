@@ -7,8 +7,3 @@ use Lunar\Service\Core\FrontController;
 
 $frontController = new FrontController();
 $frontController->run();
-
-dump('TOTO');
-dump(33);
-dump($frontController);
-dump($_SERVER);

@@ -1,8 +1,11 @@
 <?php
 /**
+ *
  * @since 0.0.1
  * @link https://nethttp.net
- * @author seb@nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
  */
 declare(strict_types=1);
 
@@ -60,7 +63,7 @@ final class Dumper
      */
     public static function flush(): void
     {
-        if (PHP_SAPI === 'cli' || self::$htmlBuffer === []) {
+        if (PHP_SAPI === 'cli' || [] === self::$htmlBuffer) {
             return;
         }
 
@@ -83,7 +86,7 @@ final class Dumper
      * ----------------------------------------------------------------*/
 
     /**
-     * @param \SplObjectStorage<object, mixed>|null $seen
+     * @param null|\SplObjectStorage<object, mixed> $seen
      */
     private static function dumpCli(mixed $var, int $level = 0, ?\SplObjectStorage $seen = null): void
     {
@@ -102,44 +105,44 @@ final class Dumper
 
     private static function printBool(bool $var): void
     {
-        echo ConsoleHelper::color($var ? 'true' : 'false', $var ? '32' : '31') . PHP_EOL;
+        echo ConsoleHelper::color($var ? 'true' : 'false', $var ? '32' : '31').PHP_EOL;
     }
 
-    private static function printNumber(int|float $var): void
+    private static function printNumber(float|int $var): void
     {
-        echo ConsoleHelper::color((string) $var, '33') . PHP_EOL;
+        echo ConsoleHelper::color((string) $var, '33').PHP_EOL;
     }
 
     private static function printString(string $var): void
     {
-        echo ConsoleHelper::color('"' . $var . '"', '36') . PHP_EOL;
+        echo ConsoleHelper::color('"'.$var.'"', '36').PHP_EOL;
     }
 
     private static function printNull(): void
     {
-        echo ConsoleHelper::color('null', '35') . PHP_EOL;
+        echo ConsoleHelper::color('null', '35').PHP_EOL;
     }
 
     private static function printResource(mixed $var): void
     {
         $type = is_resource($var) ? get_resource_type($var) : 'unknown';
-        echo ConsoleHelper::color('resource(' . $type . ')', '90') . PHP_EOL;
+        echo ConsoleHelper::color('resource('.$type.')', '90').PHP_EOL;
     }
 
     /**
-     * @param array<int|string, mixed> $array
-     * @param \SplObjectStorage<object, mixed>|null $seen
+     * @param array<int|string, mixed>              $array
+     * @param null|\SplObjectStorage<object, mixed> $seen
      */
     private static function renderCliArray(array $array, int $level, ?\SplObjectStorage $seen = null): void
     {
         if ($level >= self::MAX_DEPTH) {
-            echo ConsoleHelper::color('[…]', '90') . PHP_EOL;
+            echo ConsoleHelper::color('[…]', '90').PHP_EOL;
 
             return;
         }
 
-        if ($array === []) {
-            echo ConsoleHelper::color('[]', '90') . PHP_EOL;
+        if ([] === $array) {
+            echo ConsoleHelper::color('[]', '90').PHP_EOL;
 
             return;
         }
@@ -168,14 +171,14 @@ final class Dumper
     private static function renderCliObject(object $object, int $level, \SplObjectStorage $seen): void
     {
         if ($seen->contains($object)) {
-            echo ConsoleHelper::color('[référence circulaire]', '90') . PHP_EOL;
+            echo ConsoleHelper::color('[référence circulaire]', '90').PHP_EOL;
 
             return;
         }
         $seen->attach($object);
 
         if ($level >= self::MAX_DEPTH) {
-            echo ConsoleHelper::color($object::class . ' { … }', '90') . PHP_EOL;
+            echo ConsoleHelper::color($object::class.' { … }', '90').PHP_EOL;
 
             return;
         }

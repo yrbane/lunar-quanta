@@ -1,15 +1,18 @@
 <?php
 /**
+ *
  * @since 0.0.1
  * @link https://nethttp.net
- * @author seb@nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
  */
 declare(strict_types=1);
 
 namespace Lunar\Command;
 
-use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\AbstractCommand;
+use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\CommandInterface;
 use Lunar\Cli\Helper\ConsoleHelper as C;
 use Lunar\Config\Config;
@@ -38,7 +41,7 @@ class MakeCommandCommand extends AbstractCommand implements CommandInterface
         // On génère un nom de classe à partir du nom de commande
         $className = ucfirst(implode('', array_map('ucfirst', explode(':', $commandName))));
         $classNameShort = ucfirst(C::ask('Nom de la classe (Command ajouté automatiquement)', $className));
-        $className = $classNameShort . 'Command';
+        $className = $classNameShort.'Command';
         $description = C::ask('Description courte de la commande');
 
         // Collecte des arguments
@@ -52,7 +55,7 @@ class MakeCommandCommand extends AbstractCommand implements CommandInterface
         // Dépendances injectées ?
         $dependencies = [];
         while (C::confirm('Ajouter une dépendance injectée ?', false)) {
-            $depClass = C::ask('FQCN du service (ex: Lunar\\Service\\Core\\Router)');
+            $depClass = C::ask('FQCN du service (ex: Lunar\Service\Core\Router)');
             $depVar = lcfirst(basename(str_replace('\\', '/', $depClass)));
             $dependencies[] = ['fqcn' => $depClass, 'var' => $depVar];
         }
@@ -110,8 +113,8 @@ HELP;
         // Use statements pour les dépendances
         $depUses = '';
         if (!empty($dependencies)) {
-            $depUses = "\n" . implode("\n", array_map(
-                fn($d) => "use {$d['fqcn']};",
+            $depUses = "\n".implode("\n", array_map(
+                fn ($d) => "use {$d['fqcn']};",
                 $dependencies
             ));
         }
@@ -119,21 +122,21 @@ HELP;
         // Propriétés
         $depProps = '';
         if (!empty($dependencies)) {
-            $depProps = "\n" . implode("\n", array_map(
-                fn($d) => "    private {$this->shortClassName($d['fqcn'])} \${$d['var']};",
+            $depProps = "\n".implode("\n", array_map(
+                fn ($d) => "    private {$this->shortClassName($d['fqcn'])} \${$d['var']};",
                 $dependencies
-            )) . "\n";
+            ))."\n";
         }
 
         // Constructeur (seulement si dépendances)
         $constructor = '';
         if (!empty($dependencies)) {
             $ctorParams = implode(', ', array_map(
-                fn($d) => "{$this->shortClassName($d['fqcn'])} \${$d['var']}",
+                fn ($d) => "{$this->shortClassName($d['fqcn'])} \${$d['var']}",
                 $dependencies
             ));
             $ctorBody = implode("\n", array_map(
-                fn($d) => "        \$this->{$d['var']} = \${$d['var']};",
+                fn ($d) => "        \$this->{$d['var']} = \${$d['var']};",
                 $dependencies
             ));
             $constructor = <<<CTOR
@@ -208,7 +211,7 @@ PHP;
         $help = "{$description}\n\nUsage :\n  bin/console {$commandName}";
 
         if (!empty($arguments)) {
-            $argList = implode(' ', array_map(fn($a) => "<{$a['name']}>", $arguments));
+            $argList = implode(' ', array_map(fn ($a) => "<{$a['name']}>", $arguments));
             $help .= " {$argList}\n\nArguments :";
             foreach ($arguments as $arg) {
                 $help .= "\n  <{$arg['name']}>  {$arg['description']}";

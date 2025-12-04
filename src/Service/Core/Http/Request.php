@@ -40,12 +40,28 @@ class Request
      */
     public function __construct()
     {
-        $this->method = (string) ($_SERVER['REQUEST_METHOD'] ?? 'GET');
-        $this->uri = (string) parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-        $this->query = $_GET;
-        $this->post = $_POST;
-        $this->server = $_SERVER;
-        $this->headers = function_exists('getallheaders') ? getallheaders() : [];
+        $requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        $this->method = is_string($requestMethod) ? $requestMethod : 'GET';
+
+        $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+        $parsedPath = parse_url(is_string($requestUri) ? $requestUri : '/', PHP_URL_PATH);
+        $this->uri = is_string($parsedPath) ? $parsedPath : '/';
+
+        /** @var array<string, mixed> $query */
+        $query = $_GET;
+        $this->query = $query;
+
+        /** @var array<string, mixed> $post */
+        $post = $_POST;
+        $this->post = $post;
+
+        /** @var array<string, mixed> $server */
+        $server = $_SERVER;
+        $this->server = $server;
+
+        /** @var array<string, mixed> $headers */
+        $headers = function_exists('getallheaders') ? (getallheaders() ?: []) : [];
+        $this->headers = $headers;
     }
 
     /**

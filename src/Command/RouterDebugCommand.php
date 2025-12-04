@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Lunar\Command;
 
-use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\AbstractCommand;
+use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\CommandInterface;
 use Lunar\Cli\Helper\ConsoleHelper as C;
 use Lunar\Cli\Helper\TableRenderer;
@@ -46,7 +46,10 @@ class RouterDebugCommand extends AbstractCommand implements CommandInterface
         }
 
         // On vide le cache du router
-        unlink(Router::getCacheFile());
+        $cacheFile = Router::getCacheFile();
+        if (is_file($cacheFile)) {
+            unlink($cacheFile);
+        }
 
         // Instancie le router
         $router = new Router();

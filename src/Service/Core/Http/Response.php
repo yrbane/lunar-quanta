@@ -39,6 +39,32 @@ class Response
     }
 
     /**
+     * Retourne le code de statut HTTP.
+     */
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * Retourne le contenu de la réponse.
+     */
+    public function getBody(): string
+    {
+        return $this->content;
+    }
+
+    /**
+     * Retourne les en-têtes HTTP.
+     *
+     * @return array<int, string>
+     */
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    /**
      * Envoie la réponse au client.
      */
     public function send(): void
