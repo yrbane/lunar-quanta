@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Lunar\Command;
 
-use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\AbstractCommand;
+use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\CommandInterface;
 use Lunar\Cli\Helper\ConsoleHelper as C;
 
@@ -36,7 +36,13 @@ class ServerStatusCommand extends AbstractCommand implements CommandInterface
             return 1;
         }
 
-        $data = json_decode(file_get_contents($pidFile), true);
+        $contents = file_get_contents($pidFile);
+        if (false === $contents) {
+            C::error('Impossible de lire le fichier PID.');
+
+            return 2;
+        }
+        $data = json_decode($contents, true);
         $pid = $data['pid'] ?? null;
         $port = $data['port'] ?? null;
 

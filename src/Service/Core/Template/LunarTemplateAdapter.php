@@ -1,8 +1,11 @@
 <?php
 /**
+ *
  * @since 0.0.1
  * @link https://nethttp.net
- * @author seb@nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
  */
 declare(strict_types=1);
 
@@ -26,12 +29,15 @@ class LunarTemplateAdapter
     public function __construct(string $templatePath)
     {
         if (!preg_match('#^(?:/|[A-Za-z]:[\/])#', $templatePath)) {
-            $templatePath = Config::getProjectRoot() . '/' . $templatePath;
+            $templatePath = Config::getProjectRoot().'/'.$templatePath;
         }
 
-        $cacheDir = (string) Config::get('cache', 'cache.dir', 'cache');
-        $templateCacheDir = (string) Config::get('template', 'template.cache_path', 'template');
-        $cachePath = Config::resolvePath($cacheDir . '/' . $templateCacheDir);
+        $cacheDirConfig = Config::get('cache', 'cache.dir', 'cache');
+        $cacheDir = is_string($cacheDirConfig) ? $cacheDirConfig : 'cache';
+
+        $templateCacheDirConfig = Config::get('template', 'template.cache_path', 'template');
+        $templateCacheDir = is_string($templateCacheDirConfig) ? $templateCacheDirConfig : 'template';
+        $cachePath = Config::resolvePath($cacheDir.'/'.$templateCacheDir);
 
         $this->engine = new LunarEngine($templatePath, $cachePath);
         $this->registerDefaultMacros();
@@ -107,13 +113,23 @@ class LunarTemplateAdapter
      */
     private function registerDefaultMacros(): void
     {
-        $baseUrl = $_SERVER['REQUEST_SCHEME'] ?? 'http://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
+        $scheme = $_SERVER['REQUEST_SCHEME'] ?? null;
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $schemeStr = is_string($scheme) ? $scheme : 'http';
+        $hostStr = is_string($host) ? $host : 'localhost';
+        $baseUrl = $schemeStr.'://'.$hostStr;
         $this->engine->registerMacroInstance(new AssetMacro($baseUrl));
 
         $routerAdapter = new class implements RouterInterface {
+            /**
+             * @return null|array{path: string, params?: array<string, string>}
+             */
             public function getRouteByName(string $name): ?array
             {
-                return Router::getRouteByName($name);
+                /** @var array{path: string, params?: array<string, string>}|null $route */
+                $route = Router::getRouteByName($name);
+
+                return $route;
             }
         };
 

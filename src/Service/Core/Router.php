@@ -1,8 +1,11 @@
 <?php
 /**
+ *
  * @since 0.0.1
  * @link https://nethttp.net
- * @author seb@nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
  */
 declare(strict_types=1);
 
@@ -40,7 +43,7 @@ class Router
     /**
      * Le namespace des contrôleurs.
      */
-    private string $controllerNamespace = 'App\Controller\\';
+    private string $controllerNamespace = 'Lunar\Controller\\';
 
     /**
      * Le chemin physique du dossier des contrôleurs.
@@ -53,10 +56,13 @@ class Router
     public function __construct()
     {
         $this->cacheFile = self::getCacheFile();
-        $controllerDir = realpath(Config::getProjectRoot() . '/src/Controller');
+        $controllerDir = realpath(Config::getProjectRoot().'/src/Controller');
         $this->controllerDir = false === $controllerDir ? '' : $controllerDir;
-        if (is_file($this->cacheFile)) {
-            $this->routes = include $this->cacheFile;
+
+        if (is_file($this->cacheFile) && !$this->isCacheStale()) {
+            /** @var array<string, array<string, mixed>> $cachedRoutes */
+            $cachedRoutes = include $this->cacheFile;
+            $this->routes = $cachedRoutes;
         } else {
             $this->registerAllControllerRoutes();
         }
@@ -67,9 +73,10 @@ class Router
      */
     public static function getCacheFile(): string
     {
-        $cacheDir = (string) Config::get('cache', 'cache.dir', 'cache');
+        $cacheDir = Config::get('cache', 'cache.dir', 'cache');
+        $cacheDirStr = is_string($cacheDir) ? $cacheDir : 'cache';
 
-        return Config::resolvePath($cacheDir . '/router.php');
+        return Config::resolvePath($cacheDirStr.'/router.php');
     }
 
     /**
@@ -124,7 +131,7 @@ class Router
                     return $result;
                 }
 
-                return new Response((string) $result);
+                return new Response(is_string($result) ? $result : '');
             }
         }
 
@@ -149,6 +156,57 @@ class Router
     public function getRoutes(): array
     {
         return $this->routes;
+    }
+
+    /**
+     * Check if the route cache is stale based on controller file modifications.
+     *
+     * @return bool true if cache is stale and needs regeneration
+     */
+    private function isCacheStale(): bool
+    {
+        if (!is_file($this->cacheFile)) {
+            return true;
+        }
+
+        $cacheTime = filemtime($this->cacheFile);
+        if (false === $cacheTime) {
+            return true;
+        }
+
+        return $this->hasNewerControllerFiles($cacheTime);
+    }
+
+    /**
+     * Check if any controller file is newer than the cache.
+     *
+     * @param int $cacheTime timestamp of the cache file
+     *
+     * @return bool true if any controller file is newer
+     */
+    private function hasNewerControllerFiles(int $cacheTime): bool
+    {
+        if ('' === $this->controllerDir || !is_dir($this->controllerDir)) {
+            return false;
+        }
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($this->controllerDir)
+        );
+
+        foreach ($iterator as $file) {
+            if (!$file instanceof \SplFileInfo) {
+                continue;
+            }
+            if ($file->isFile() && 'php' === $file->getExtension()) {
+                $fileTime = $file->getMTime();
+                if ($fileTime > $cacheTime) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -183,9 +241,9 @@ class Router
                 if (false === $realPath) {
                     continue;
                 }
-                $relativePath = str_replace($this->controllerDir . DIRECTORY_SEPARATOR, '', $realPath);
+                $relativePath = str_replace($this->controllerDir.DIRECTORY_SEPARATOR, '', $realPath);
                 $relativeClass = str_replace(DIRECTORY_SEPARATOR, '\\', $relativePath);
-                $className = $this->controllerNamespace . str_replace('.php', '', $relativeClass);
+                $className = $this->controllerNamespace.str_replace('.php', '', $relativeClass);
                 if (class_exists($className)) {
                     $classes[] = $className;
                 }
@@ -218,7 +276,7 @@ class Router
             foreach ($attributes as $attribute) {
                 /** @var Route $routeAttr */
                 $routeAttr = $attribute->newInstance();
-                $fullPath = $basePath . $routeAttr->path;
+                $fullPath = $basePath.$routeAttr->path;
                 foreach ($routeAttr->methods as $httpMethod) {
                     $route = [
                         'name' => $routeAttr->name,
@@ -235,7 +293,7 @@ class Router
             }
         }
 
-        file_put_contents($this->cacheFile, '<?php return ' . var_export($this->routes, true) . ';');
+        file_put_contents($this->cacheFile, '<?php return '.var_export($this->routes, true).';');
     }
 
     /**

@@ -11,60 +11,109 @@ declare(strict_types=1);
 
 namespace Lunar\Service\Core;
 
+use Lunar\Exception\ContainerException;
+
 /**
- * Conteneur de services ultra-léger avec résolution récursive.
+ * Lightweight DI container with recursive dependency resolution.
+ *
+ * Implements ContainerInterface for SOLID compliance.
  */
-class Container
+class Container implements ContainerInterface
 {
     /**
-     * Services instanciés (singletons).
+     * Instantiated services (singletons).
      *
      * @var array<class-string, object>
      */
     private array $instances = [];
 
     /**
-     * Instancie une classe en résolvant récursivement ses dépendances.
+     * Classes currently being resolved (for circular dependency detection).
      *
-     * @param class-string $className
+     * @var array<class-string, bool>
+     */
+    private array $resolving = [];
+
+    /**
+     * Check if a service is registered or can be instantiated.
+     */
+    public function has(string $id): bool
+    {
+        if (isset($this->instances[$id])) {
+            return true;
+        }
+
+        return class_exists($id);
+    }
+
+    /**
+     * Instantiate a class by recursively resolving its dependencies.
+     *
+     * @template T of object
+     *
+     * @param class-string<T> $className
+     *
+     * @return T
+     *
+     * @throws ContainerException if the class cannot be instantiated or has circular dependencies
      */
     public function get(string $className): object
     {
         if (isset($this->instances[$className])) {
+            /** @var T */
             return $this->instances[$className];
         }
 
-        $refClass = new \ReflectionClass($className);
+        // Circular dependency detection
+        if (isset($this->resolving[$className])) {
+            $chain = array_keys($this->resolving);
+            $chain[] = $className;
 
-        if (!$refClass->isInstantiable()) {
-            throw new \RuntimeException("La classe {$className} n’est pas instanciable.");
+            throw new ContainerException(
+                sprintf(
+                    'Circular dependency detected: %s',
+                    implode(' -> ', $chain)
+                )
+            );
         }
 
-        $constructor = $refClass->getConstructor();
-        if (is_null($constructor)) {
-            $instance = new $className();
+        $this->resolving[$className] = true;
+
+        try {
+            $refClass = new \ReflectionClass($className);
+
+            if (!$refClass->isInstantiable()) {
+                throw new ContainerException("Class {$className} is not instantiable.");
+            }
+
+            $constructor = $refClass->getConstructor();
+            if (null === $constructor) {
+                $instance = new $className();
+                $this->instances[$className] = $instance;
+
+                return $instance;
+            }
+
+            $args = array_map(function (\ReflectionParameter $param) use ($className): object {
+                $type = $param->getType();
+                if (!$type instanceof \ReflectionNamedType || $type->isBuiltin()) {
+                    throw new ContainerException(
+                        "Cannot resolve dependency `{$param->getName()}` in {$className}."
+                    );
+                }
+
+                /** @var class-string $dependencyClass */
+                $dependencyClass = $type->getName();
+
+                return $this->get($dependencyClass); // recursion here
+            }, $constructor->getParameters());
+
+            $instance = $refClass->newInstanceArgs($args);
             $this->instances[$className] = $instance;
 
             return $instance;
+        } finally {
+            unset($this->resolving[$className]);
         }
-
-        $args = array_map(function (\ReflectionParameter $param) use ($className) {
-            $type = $param->getType();
-            if (!$type instanceof \ReflectionNamedType || $type->isBuiltin()) {
-                throw new \RuntimeException(
-                    "Impossible de résoudre la dépendance `{$param->getName()}` dans {$className}."
-                );
-            }
-
-            $dependencyClass = $type->getName();
-
-            // @var class-string $dependencyClass
-            return $this->get($dependencyClass); // récursivité ici
-        }, $constructor->getParameters());
-
-        $instance = $refClass->newInstanceArgs($args);
-        $this->instances[$className] = $instance;
-
-        return $instance;
     }
 }

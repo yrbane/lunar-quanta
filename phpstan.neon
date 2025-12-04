@@ -1,0 +1,8 @@
+parameters:
+    level: max
+    paths:
+        - src
+    excludePaths:
+        - src/Command
+        - src/Controller
+    treatPhpDocTypesAsCertain: false

@@ -3,7 +3,5 @@
     "version": "1.0.0",
     "commands": {
         "Lunar\\Command": "src/Command"
-    },
-    "factory": "Lunar\\Service\\Command\\CommandFactory",
-    "bootstrap": "Lunar\\Console\\Bootstrap"
+    }
 }

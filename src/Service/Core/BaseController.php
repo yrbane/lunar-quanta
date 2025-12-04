@@ -1,8 +1,11 @@
 <?php
 /**
+ *
  * @since 0.0.1
  * @link https://nethttp.net
- * @author seb@nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
  */
 declare(strict_types=1);
 
@@ -31,9 +34,12 @@ abstract class BaseController
      */
     protected function render(string $template, array $variables = []): string
     {
-        $engineClass = (string) Config::get('template', 'template.engine', LunarTemplateAdapter::class);
+        $engineClassConfig = Config::get('template', 'template.engine', LunarTemplateAdapter::class);
+        $engineClass = is_string($engineClassConfig) ? $engineClassConfig : LunarTemplateAdapter::class;
+
+        $templatePathConfig = Config::get('template', 'template.template_path', 'template');
         $templatePath = Config::resolvePath(
-            (string) Config::get('template', 'template.template_path', 'template')
+            is_string($templatePathConfig) ? $templatePathConfig : 'template'
         );
 
         if (!class_exists($engineClass)) {
