@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace Lunar\Command;
 
-use Lunar\Cli\Attribute\Command;
 use Lunar\Attribute\Route;
 use Lunar\Cli\AbstractCommand;
+use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\Helper\ConsoleHelper as C;
 
 /**
@@ -52,7 +52,7 @@ class MakeControllerCommand extends AbstractCommand
 
         // Chemin vers le fichier à générer
         $controllerPath = dirname(__DIR__, 2)."/src/Controller/{$controllerClass}.php";
-        $controllerNamespace = 'App\\Controller';
+        $controllerNamespace = 'App\Controller';
 
         // Création du répertoire si nécessaire
         $dir = dirname($controllerPath);

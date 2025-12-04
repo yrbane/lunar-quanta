@@ -54,8 +54,11 @@ class JsonStorage implements StorageInterface
         $filePath = $dir.'/'.$hash.'.json';
 
         $jsonData = json_encode($user->toArray(), JSON_PRETTY_PRINT);
-        $encryptedData = $this->encryptionService->encrypt($jsonData);
+        if (false === $jsonData) {
+            throw new \RuntimeException('Erreur lors de l\'encodage JSON');
+        }
 
+        $encryptedData = $this->encryptionService->encrypt($jsonData);
         file_put_contents($filePath, $encryptedData);
     }
 
@@ -77,15 +80,25 @@ class JsonStorage implements StorageInterface
         }
 
         $encryptedData = file_get_contents($filePath);
+        if (false === $encryptedData) {
+            return null;
+        }
+
         $jsonData = $this->encryptionService->decrypt($encryptedData);
 
         $data = json_decode($jsonData, true);
-        if (empty($data)) {
+        if (!is_array($data)) {
+            return null;
+        }
+
+        $email = $data['email'] ?? null;
+        $name = $data['name'] ?? null;
+
+        if (!is_string($email) || !is_string($name)) {
             return null;
         }
 
         // Reconstruction simplifiée de l'entité (attention aux mots de passe hashés)
-        return new User($data['email'], $data['name'], ''); // Le password n'est pas re-hashé ici
-        // Attribuer directement les dates si nécessaire, ou les recréer depuis la chaîne ISO8601
+        return new User($email, $name, ''); // Le password n'est pas re-hashé ici
     }
 }

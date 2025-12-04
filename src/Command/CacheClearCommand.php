@@ -1,8 +1,11 @@
 <?php
 /**
+ *
  * @since 0.0.1
  * @link https://nethttp.net
- * @author seb@nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
  */
 
 namespace Lunar\Command;
@@ -38,14 +41,17 @@ class CacheClearCommand implements CommandInterface
             return;
         }
 
-        $files = glob($dir . '/*');
+        $files = glob($dir.'/*');
+        if (false === $files) {
+            return;
+        }
 
         foreach ($files as $file) {
             if (is_dir($file)) {
                 $this->deleteDirContent($file);
                 rmdir($file);
             } else {
-                echo $file . " supprimé.\n";
+                echo $file." supprimé.\n";
                 unlink($file);
             }
         }

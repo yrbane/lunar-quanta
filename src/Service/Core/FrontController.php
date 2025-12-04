@@ -1,8 +1,11 @@
 <?php
 /**
+ *
  * @since 0.0.1
  * @link https://nethttp.net
- * @author seb@nethttp.net
+ * @Author seb@nethttp.net
+ *
+ *
  */
 declare(strict_types=1);
 
@@ -62,9 +65,12 @@ class FrontController
      */
     private function loadEnvironment(): void
     {
-        $envFile = __DIR__ . '/../../../.env';
+        $envFile = __DIR__.'/../../../.env';
         if (file_exists($envFile)) {
             $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            if (false === $lines) {
+                return;
+            }
             foreach ($lines as $line) {
                 $line = trim($line);
                 if ('' === $line || str_starts_with($line, '#')) {

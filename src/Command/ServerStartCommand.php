@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace Lunar\Command;
 
-use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\AbstractCommand;
+use Lunar\Cli\Attribute\Command;
 use Lunar\Cli\CommandInterface;
 use Lunar\Cli\Helper\ConsoleHelper as C;
 
