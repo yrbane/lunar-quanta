@@ -1,11 +1,59 @@
-# Ignorer les dépendances du projet
+# ===================
+# Dependencies
+# ===================
 /vendor/
+/tools/vendor/
 
-# Ignorer les dépendances des outils de développement
-/tools/vendor/.idea
-.php-cs-fixer.cache
-cache/
-log/
+# ===================
+# IDE & Editors
+# ===================
 .idea/
-tools/vendor/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ===================
+# Environment
+# ===================
+.env
+.env.local
+.env.*.local
+
+# ===================
+# Cache & Logs
+# ===================
+/cache/
+/log/
+*.log
+
+# ===================
+# Testing
+# ===================
+.phpunit.cache/
+.phpunit.result.cache
+/coverage/
 phpunit_output.txt
+
+# ===================
+# Code Quality Tools
+# ===================
+.php-cs-fixer.cache
+.phpstan/
+
+# ===================
+# OS Files
+# ===================
+.DS_Store
+Thumbs.db
+
+# ===================
+# AI Tools
+# ===================
+.claude/
+.specify/
+
+# ===================
+# Build & Compiled
+# ===================
+*.phar
