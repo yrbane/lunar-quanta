@@ -202,6 +202,89 @@ final class StaticGeneratorTest extends TestCase
         $this->assertStringContainsString('John Doe', $content);
     }
 
+    public function testGenerateTagPagesCreatesHtmlFiles(): void
+    {
+        // Créer le template de tag
+        $this->createTagTemplate();
+
+        $post1 = $this->postService->create('Article PHP', 'Content');
+        $post1->addTag('php');
+        $post1->addTag('programming');
+        $this->postService->update($post1);
+        $this->postService->publish($post1->getId());
+
+        $post2 = $this->postService->create('Article MySQL', 'Content');
+        $post2->addTag('mysql');
+        $post2->addTag('programming');
+        $this->postService->update($post2);
+        $this->postService->publish($post2->getId());
+
+        $count = $this->generator->generateTagPages();
+
+        $this->assertSame(3, $count); // php, mysql, programming
+        $this->assertFileExists($this->outputPath . '/tags/php.html');
+        $this->assertFileExists($this->outputPath . '/tags/mysql.html');
+        $this->assertFileExists($this->outputPath . '/tags/programming.html');
+
+        // Vérifier le contenu
+        $phpContent = file_get_contents($this->outputPath . '/tags/php.html');
+        $this->assertStringContainsString('Article PHP', $phpContent);
+        $this->assertStringNotContainsString('Article MySQL', $phpContent);
+
+        $programmingContent = file_get_contents($this->outputPath . '/tags/programming.html');
+        $this->assertStringContainsString('Article PHP', $programmingContent);
+        $this->assertStringContainsString('Article MySQL', $programmingContent);
+    }
+
+    public function testGenerateTagPagesReturnsZeroWithoutTemplate(): void
+    {
+        $post = $this->postService->create('Article', 'Content');
+        $post->addTag('test');
+        $this->postService->update($post);
+        $this->postService->publish($post->getId());
+
+        $count = $this->generator->generateTagPages();
+
+        $this->assertSame(0, $count);
+    }
+
+    public function testGenerateAllIncludesTagPages(): void
+    {
+        $this->createTagTemplate();
+
+        $post = $this->postService->create('Article', 'Content');
+        $post->addTag('test');
+        $this->postService->update($post);
+        $this->postService->publish($post->getId());
+
+        $result = $this->generator->generateAll();
+
+        $this->assertSame(1, $result['tags']);
+        $this->assertFileExists($this->outputPath . '/tags/test.html');
+    }
+
+    private function createTagTemplate(): void
+    {
+        $tagTemplate = <<<'HTML'
+<!DOCTYPE html>
+<html>
+<head><title>{{ tag }}</title></head>
+<body>
+    <h1>Articles tagués "{{ tag }}"</h1>
+    <p>{{ count }} article(s)</p>
+    {% if posts|length > 0 %}
+    <ul>
+    {% for post in posts %}
+        <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>
+HTML;
+        file_put_contents($this->templatePath . '/tag.html', $tagTemplate);
+    }
+
     private function createTestTemplates(): void
     {
         // Template pour un article

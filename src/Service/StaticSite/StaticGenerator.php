@@ -124,7 +124,7 @@ final class StaticGenerator
     /**
      * Génère tous les fichiers statiques.
      *
-     * @return array{posts: int, index: bool, rss: bool, sitemap: bool}
+     * @return array{posts: int, index: bool, rss: bool, sitemap: bool, tags: int}
      */
     public function generateAll(): array
     {
@@ -137,6 +137,7 @@ final class StaticGenerator
         }
 
         $this->generateIndex();
+        $tagsCount = $this->generateTagPages();
         $rss = $this->generateRss();
         $sitemap = $this->generateSitemap();
 
@@ -145,7 +146,78 @@ final class StaticGenerator
             'index' => true,
             'rss' => $rss,
             'sitemap' => $sitemap,
+            'tags' => $tagsCount,
         ];
+    }
+
+    /**
+     * Génère les pages de tags.
+     *
+     * @return int Nombre de pages générées
+     */
+    public function generateTagPages(): int
+    {
+        $templatePath = $this->templatePath . '/tag.html';
+        if (!file_exists($templatePath)) {
+            return 0;
+        }
+
+        $template = file_get_contents($templatePath);
+        $posts = $this->postService->findPublished();
+
+        // Collecter tous les tags
+        $taggedPosts = [];
+        foreach ($posts as $post) {
+            foreach ($post->getTags() as $tag) {
+                if (!isset($taggedPosts[$tag])) {
+                    $taggedPosts[$tag] = [];
+                }
+                $taggedPosts[$tag][] = $post;
+            }
+        }
+
+        // Générer une page par tag
+        $count = 0;
+        foreach ($taggedPosts as $tag => $tagPosts) {
+            $this->generateTagPage($template, $tag, $tagPosts);
+            $count++;
+        }
+
+        return $count;
+    }
+
+    /**
+     * Génère une page de tag.
+     *
+     * @param Post[] $posts
+     */
+    private function generateTagPage(string $template, string $tag, array $posts): void
+    {
+        $postsData = array_map(fn($post) => [
+            'title' => $post->getTitle(),
+            'url' => $post->getUrl(),
+            'excerpt' => $post->getExcerpt(),
+            'author' => $post->getAuthor(),
+            'published_at' => $post->getPublishedAt()?->format('d/m/Y'),
+        ], $posts);
+
+        $html = $this->processLengthCondition($template, 'posts', count($postsData) > 0);
+        $html = $this->renderWithLoop($html, 'posts', $postsData);
+        $html = str_replace('{{ tag }}', htmlspecialchars($tag), $html);
+        $html = str_replace('{{ count }}', (string) count($posts), $html);
+        $html = str_replace('{{ year }}', date('Y'), $html);
+
+        $this->writeFile('tags/' . $this->slugify($tag) . '.html', $html);
+    }
+
+    /**
+     * Convertit une chaîne en slug.
+     */
+    private function slugify(string $text): string
+    {
+        $text = transliterator_transliterate('Any-Latin; Latin-ASCII; Lower()', $text);
+        $text = preg_replace('/[^a-z0-9]+/', '-', $text);
+        return trim($text, '-');
     }
 
     /**
@@ -191,7 +263,7 @@ final class StaticGenerator
     /**
      * Nettoie et régénère tout.
      *
-     * @return array{posts: int, index: bool, rss: bool, sitemap: bool}
+     * @return array{posts: int, index: bool, rss: bool, sitemap: bool, tags: int}
      */
     public function regenerate(): array
     {
