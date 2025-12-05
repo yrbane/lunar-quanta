@@ -277,13 +277,24 @@ class PasswordResetToken
      */
     public static function fromArray(array $data): self
     {
-        $token = new self($data['email'], 'placeholder');
+        /** @var string $email */
+        $email = $data['email'];
+        $token = new self($email, 'placeholder');
 
-        $token->id = $data['id'];
-        $token->tokenHash = $data['tokenHash'];
-        $token->expiresAt = new \DateTimeImmutable($data['expiresAt']);
-        $token->used = $data['used'] ?? false;
-        $token->createdAt = new \DateTimeImmutable($data['createdAt']);
+        /** @var string $id */
+        $id = $data['id'];
+        /** @var string $tokenHash */
+        $tokenHash = $data['tokenHash'];
+        /** @var string $expiresAt */
+        $expiresAt = $data['expiresAt'];
+        /** @var string $createdAt */
+        $createdAt = $data['createdAt'];
+
+        $token->id = $id;
+        $token->tokenHash = $tokenHash;
+        $token->expiresAt = new \DateTimeImmutable($expiresAt);
+        $token->used = isset($data['used']) && $data['used'] === true;
+        $token->createdAt = new \DateTimeImmutable($createdAt);
 
         return $token;
     }

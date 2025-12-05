@@ -261,47 +261,53 @@ final class Image
      */
     public static function fromArray(array $data): self
     {
-        $image = new self(
-            $data['filename'],
-            ImageSource::from($data['source'])
-        );
+        /** @var string $filename */
+        $filename = $data['filename'];
+        /** @var string $source */
+        $source = $data['source'];
+
+        $image = new self($filename, ImageSource::from($source));
 
         $reflection = new \ReflectionClass($image);
 
+        /** @var string $id */
+        $id = $data['id'];
         $idProp = $reflection->getProperty('id');
-        $idProp->setValue($image, $data['id']);
+        $idProp->setValue($image, $id);
 
-        if (isset($data['altText'])) {
+        if (isset($data['altText']) && is_string($data['altText'])) {
             $image->altText = $data['altText'];
         }
-        if (isset($data['sourceId'])) {
+        if (isset($data['sourceId']) && is_string($data['sourceId'])) {
             $image->sourceId = $data['sourceId'];
         }
-        if (isset($data['sourceUrl'])) {
+        if (isset($data['sourceUrl']) && is_string($data['sourceUrl'])) {
             $image->sourceUrl = $data['sourceUrl'];
         }
-        if (isset($data['attribution'])) {
+        if (isset($data['attribution']) && is_string($data['attribution'])) {
             $image->attribution = $data['attribution'];
         }
-        if (isset($data['prompt'])) {
+        if (isset($data['prompt']) && is_string($data['prompt'])) {
             $image->prompt = $data['prompt'];
         }
-        if (isset($data['width'])) {
+        if (isset($data['width']) && is_int($data['width'])) {
             $image->width = $data['width'];
         }
-        if (isset($data['height'])) {
+        if (isset($data['height']) && is_int($data['height'])) {
             $image->height = $data['height'];
         }
-        if (isset($data['fileSize'])) {
+        if (isset($data['fileSize']) && is_int($data['fileSize'])) {
             $image->fileSize = $data['fileSize'];
         }
-        if (isset($data['mimeType'])) {
+        if (isset($data['mimeType']) && is_string($data['mimeType'])) {
             $image->mimeType = $data['mimeType'];
         }
-        if (isset($data['optimizedVersions'])) {
-            $image->optimizedVersions = $data['optimizedVersions'];
+        if (isset($data['optimizedVersions']) && is_array($data['optimizedVersions'])) {
+            /** @var array<string, string> $versions */
+            $versions = $data['optimizedVersions'];
+            $image->optimizedVersions = $versions;
         }
-        if (isset($data['createdAt'])) {
+        if (isset($data['createdAt']) && is_string($data['createdAt'])) {
             $createdAtProp = $reflection->getProperty('createdAt');
             $createdAtProp->setValue($image, new \DateTimeImmutable($data['createdAt']));
         }

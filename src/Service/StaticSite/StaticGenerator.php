@@ -36,13 +36,30 @@ final class StaticGenerator
     /** @var callable[] */
     private array $publishCallbacks = [];
 
+    private ?RssGenerator $rssGenerator = null;
+    private ?SitemapGenerator $sitemapGenerator = null;
+
     public function __construct(
         private readonly PostService $postService,
         private readonly MarkdownParser $markdownParser,
         private readonly string $outputPath,
-        private readonly string $templatePath
+        private readonly string $templatePath,
+        private readonly string $siteUrl = ''
     ) {
         $this->ensureDirectories();
+
+        if ($this->siteUrl !== '') {
+            $this->rssGenerator = new RssGenerator(
+                $this->postService,
+                $this->siteUrl,
+                'Blog',
+                'Articles du blog'
+            );
+            $this->sitemapGenerator = new SitemapGenerator(
+                $this->postService,
+                $this->siteUrl
+            );
+        }
     }
 
     /**
@@ -107,7 +124,7 @@ final class StaticGenerator
     /**
      * Génère tous les fichiers statiques.
      *
-     * @return array{posts: int, index: bool}
+     * @return array{posts: int, index: bool, rss: bool, sitemap: bool}
      */
     public function generateAll(): array
     {
@@ -120,11 +137,46 @@ final class StaticGenerator
         }
 
         $this->generateIndex();
+        $rss = $this->generateRss();
+        $sitemap = $this->generateSitemap();
 
         return [
             'posts' => $count,
             'index' => true,
+            'rss' => $rss,
+            'sitemap' => $sitemap,
         ];
+    }
+
+    /**
+     * Génère le flux RSS.
+     */
+    public function generateRss(): bool
+    {
+        if ($this->rssGenerator === null) {
+            return false;
+        }
+
+        $rss = $this->rssGenerator->generate();
+        $this->writeFile('feed.xml', $rss);
+
+        return true;
+    }
+
+    /**
+     * Génère le sitemap.
+     */
+    public function generateSitemap(): bool
+    {
+        if ($this->sitemapGenerator === null) {
+            return false;
+        }
+
+        $sitemap = $this->sitemapGenerator->generate();
+        // Sitemap à la racine du site, pas dans /blog/
+        file_put_contents(dirname($this->outputPath) . '/sitemap.xml', $sitemap);
+
+        return true;
     }
 
     /**
@@ -139,7 +191,7 @@ final class StaticGenerator
     /**
      * Nettoie et régénère tout.
      *
-     * @return array{posts: int, index: bool}
+     * @return array{posts: int, index: bool, rss: bool, sitemap: bool}
      */
     public function regenerate(): array
     {
