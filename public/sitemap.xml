@@ -13,6 +13,18 @@
   <priority>0.8</priority>
 </url>
 <url>
+  <loc>https://lunar-quanta.example.com/blog/posts/console-cli-commandes-personnalisees.html</loc>
+  <lastmod>2025-12-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://lunar-quanta.example.com/blog/posts/events-queue-architecture-decouplee.html</loc>
+  <lastmod>2025-12-06</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
   <loc>https://lunar-quanta.example.com/blog/posts/generation-site-statique-performance-simplicite.html</loc>
   <lastmod>2025-12-05</lastmod>
   <changefreq>monthly</changefreq>
@@ -21,6 +33,12 @@
 <url>
   <loc>https://lunar-quanta.example.com/blog/posts/gestion-medias-ia-pexels-dalle-imagen.html</loc>
   <lastmod>2025-12-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://lunar-quanta.example.com/blog/posts/internationalisation-traductions-i18n.html</loc>
+  <lastmod>2025-12-06</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.8</priority>
 </url>
@@ -37,7 +55,43 @@
   <priority>0.8</priority>
 </url>
 <url>
+  <loc>https://lunar-quanta.example.com/blog/posts/routing-controllers-attributs-php8.html</loc>
+  <lastmod>2025-12-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://lunar-quanta.example.com/blog/posts/securite-authentification-lunar-quanta.html</loc>
+  <lastmod>2025-12-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://lunar-quanta.example.com/blog/posts/stockage-json-base-donnees-fichiers.html</loc>
+  <lastmod>2025-12-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
   <loc>https://lunar-quanta.example.com/blog/posts/systeme-blog-lunar-quanta-puissant-flexible.html</loc>
+  <lastmod>2025-12-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://lunar-quanta.example.com/blog/posts/moteur-templates-syntaxe-jinja-php.html</loc>
+  <lastmod>2025-12-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://lunar-quanta.example.com/blog/posts/tests-unitaires-integration-phpunit.html</loc>
+  <lastmod>2025-12-06</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://lunar-quanta.example.com/blog/posts/validation-formulaires-api-fluide.html</loc>
   <lastmod>2025-12-05</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.8</priority>
