@@ -1,0 +1,10 @@
+{
+    "id": "tutoriels-02",
+    "name": "Tutoriels",
+    "slug": "tutoriels",
+    "description": "Guides pratiques et tutoriels pour bien utiliser Lunar Quanta",
+    "color": "#10b981",
+    "sortOrder": 2,
+    "createdAt": "2025-12-05T18:00:00+00:00",
+    "updatedAt": "2025-12-05T18:00:00+00:00"
+}

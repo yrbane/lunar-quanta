@@ -1,0 +1,10 @@
+{
+    "id": "framework-01",
+    "name": "Framework",
+    "slug": "framework",
+    "description": "Articles sur l'architecture et les composants du framework Lunar Quanta",
+    "color": "#8b5cf6",
+    "sortOrder": 1,
+    "createdAt": "2025-12-05T18:00:00+00:00",
+    "updatedAt": "2025-12-05T18:00:00+00:00"
+}

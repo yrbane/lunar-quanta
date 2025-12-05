@@ -1,0 +1,20 @@
+{
+    "id": "post-lunar-quanta-intro",
+    "title": "Bienvenue sur Lunar Quanta : Un Framework PHP Moderne",
+    "slug": "bienvenue-lunar-quanta-framework-php-moderne",
+    "content": "# Bienvenue sur Lunar Quanta\n\n**Lunar Quanta** est un framework PHP moderne, léger et performant, conçu pour les développeurs qui veulent aller à l'essentiel sans sacrifier la puissance.\n\n## Pourquoi Lunar Quanta ?\n\nDans un écosystème PHP dominé par des frameworks monolithiques, Lunar Quanta propose une approche différente :\n\n- **Légèreté** : Pas de dépendances inutiles, chaque composant a sa raison d'être\n- **Performance** : Conçu pour être rapide, avec un routeur optimisé et un conteneur DI efficace\n- **Modernité** : PHP 8.3+, typage strict, attributs natifs, readonly properties\n- **Simplicité** : Une courbe d'apprentissage douce, une documentation claire\n\n## Architecture\n\nLe framework s'articule autour de composants découplés :\n\n```\nsrc/\n├── Attribute/      # Attributs PHP 8 (Route, Middleware...)\n├── Controller/     # Contrôleurs de base\n├── Entity/         # Entités métier\n├── Service/\n│   ├── Core/       # Noyau (Router, Container, FrontController)\n│   ├── Blog/       # Système de blog\n│   ├── Media/      # Gestion des médias\n│   └── Security/   # Authentification, CSRF, chiffrement\n└── ...\n```\n\n## Fonctionnalités Clés\n\n### Routage par Attributs\n\n```php\n#[Route('/blog/{slug}', methods: ['GET'])]\npublic function show(Request $request, string $slug): Response\n{\n    // Votre logique ici\n}\n```\n\n### Conteneur d'Injection de Dépendances\n\n```php\n$container = new Container();\n$container->singleton(PostService::class, fn() => new PostService($storage));\n\n$service = $container->get(PostService::class);\n```\n\n### Middleware Pipeline\n\n```php\n#[Middleware([AuthMiddleware::class, CsrfMiddleware::class])]\nclass AdminController extends BaseController\n{\n    // Protégé automatiquement\n}\n```\n\n## Le Système de Blog\n\nLunar Quanta inclut un système de blog complet :\n\n- Articles avec Markdown\n- Catégories et tags\n- Génération de site statique\n- Flux RSS automatique\n- Gestion des médias avec IA\n\n## Commencer\n\n```bash\ngit clone https://github.com/yrbane/lunar-quanta.git\ncd lunar-quanta\ncomposer install\nphp -S localhost:8000 -t public\n```\n\nVisitez `http://localhost:8000` et commencez à explorer !\n\n## Prochaines Étapes\n\nDans les prochains articles, nous explorerons en détail :\n\n1. Le système de blog et ses fonctionnalités\n2. La génération de sites statiques\n3. L'intégration des médias avec l'IA\n4. Les bonnes pratiques de développement\n\n**Bienvenue dans l'univers Lunar Quanta !**",
+    "excerpt": "Découvrez Lunar Quanta, un framework PHP moderne et léger conçu pour les développeurs qui veulent aller à l'essentiel sans sacrifier la puissance.",
+    "author": "Équipe Lunar",
+    "categoryId": "framework-01",
+    "featuredImage": null,
+    "status": "published",
+    "tags": [
+        "lunar-quanta",
+        "php",
+        "framework",
+        "introduction"
+    ],
+    "createdAt": "2025-12-05T18:00:00+00:00",
+    "updatedAt": "2025-12-05T18:00:00+00:00",
+    "publishedAt": "2025-12-05T18:00:00+00:00"
+}

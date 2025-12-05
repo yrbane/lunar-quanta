@@ -1,0 +1,21 @@
+{
+    "id": "post-systeme-blog",
+    "title": "Le Système de Blog de Lunar Quanta : Puissant et Flexible",
+    "slug": "systeme-blog-lunar-quanta-puissant-flexible",
+    "content": "# Le Système de Blog de Lunar Quanta\n\nLe blog est au cœur de nombreux projets web. Lunar Quanta propose un système de blog complet, moderne et extensible.\n\n## Architecture du Blog\n\nLe système de blog repose sur plusieurs services interconnectés :\n\n```\nService/Blog/\n├── PostService.php        # CRUD des articles\n├── CategoryService.php    # Gestion des catégories\n├── ContentAnalyzer.php    # Analyse TF-IDF\n├── TagSuggester.php       # Suggestions de tags\n└── CategorySuggester.php  # Suggestions de catégories\n```\n\n## Les Entités\n\n### Post (Article)\n\n```php\nfinal class Post\n{\n    public function __construct(\n        private string $id,\n        private string $title,\n        private string $slug,\n        private string $content,\n        private string $excerpt = '',\n        private string $author = '',\n        private ?string $categoryId = null,\n        private PostStatus $status = PostStatus::Draft,\n        private array $tags = [],\n    ) {}\n}\n```\n\n### Category (Catégorie)\n\n```php\nfinal class Category\n{\n    public function __construct(\n        private string $id,\n        private string $name,\n        private string $slug,\n        private string $description = '',\n        private string $color = '#6b7280',\n        private int $sortOrder = 0,\n    ) {}\n}\n```\n\n## Fonctionnalités Avancées\n\n### Analyse de Contenu avec TF-IDF\n\nLe `ContentAnalyzer` utilise l'algorithme TF-IDF pour extraire les mots-clés pertinents :\n\n```php\n$analyzer = new ContentAnalyzer();\n$keywords = $analyzer->extractKeywords($articleContent, limit: 10);\n// ['php', 'framework', 'blog', 'lunar', ...]\n```\n\n### Suggestions Intelligentes\n\nBasé sur l'analyse du contenu, le système suggère automatiquement :\n\n- **Tags** : À partir des mots-clés extraits et des tags existants\n- **Catégories** : En comparant avec les articles similaires\n\n```php\n$suggester = new TagSuggester($postService);\n$suggestedTags = $suggester->suggest($content, limit: 5);\n```\n\n### Support Markdown Complet\n\nLes articles sont rédigés en Markdown avec support complet :\n\n- Titres et sous-titres\n- **Gras**, *italique*, `code`\n- Listes ordonnées et non-ordonnées\n- Blocs de code avec coloration syntaxique\n- Citations\n- Tableaux\n- Images et liens\n\n## Administration\n\nL'interface d'administration offre :\n\n1. **Liste des articles** avec filtres (publiés, brouillons)\n2. **Éditeur Markdown** avec prévisualisation en temps réel\n3. **Gestion des catégories** avec couleurs personnalisées\n4. **Suggestions automatiques** de tags et catégories\n5. **Publication en un clic** avec génération HTML\n\n## Stockage JSON\n\nLes données sont stockées en JSON pour simplicité :\n\n```\ndata/blog/\n├── posts/\n│   ├── abc123.json\n│   └── def456.json\n└── categories/\n    ├── cat-01.json\n    └── cat-02.json\n```\n\nCe format permet :\n- Versionnement Git facile\n- Pas de base de données requise\n- Migration et backup simples\n- Édition manuelle possible\n\n## API REST\n\nLe blog expose une API pour les opérations AJAX :\n\n```http\nGET  /admin/blog              # Liste des articles\nPOST /admin/blog/create       # Créer un article\nGET  /admin/blog/{id}/edit    # Éditer un article\nPOST /admin/blog/{id}/publish # Publier\nPOST /admin/blog/preview      # Prévisualisation Markdown\n```\n\n## Conclusion\n\nLe système de blog de Lunar Quanta combine simplicité et puissance. Dans le prochain article, nous verrons comment générer un site statique à partir de ce blog dynamique.",
+    "excerpt": "Découvrez le système de blog de Lunar Quanta : articles Markdown, catégories, tags, suggestions intelligentes par TF-IDF et interface d'administration complète.",
+    "author": "Équipe Lunar",
+    "categoryId": "framework-01",
+    "featuredImage": null,
+    "status": "published",
+    "tags": [
+        "blog",
+        "markdown",
+        "tf-idf",
+        "categories",
+        "tags"
+    ],
+    "createdAt": "2025-12-05T18:30:00+00:00",
+    "updatedAt": "2025-12-05T18:30:00+00:00",
+    "publishedAt": "2025-12-05T18:30:00+00:00"
+}
