@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Lunar\Service\StaticSite;
 
+use Lunar\Entity\Category;
 use Lunar\Entity\Post;
+use Lunar\Service\Blog\CategoryService;
 use Lunar\Service\Blog\PostService;
 use Lunar\Service\Content\MarkdownParser;
 
@@ -38,6 +40,7 @@ final class StaticGenerator
 
     private ?RssGenerator $rssGenerator = null;
     private ?SitemapGenerator $sitemapGenerator = null;
+    private ?CategoryService $categoryService = null;
 
     public function __construct(
         private readonly PostService $postService,
@@ -60,6 +63,14 @@ final class StaticGenerator
                 $this->siteUrl
             );
         }
+    }
+
+    /**
+     * Configure le service de catégories.
+     */
+    public function setCategoryService(CategoryService $categoryService): void
+    {
+        $this->categoryService = $categoryService;
     }
 
     /**
@@ -124,7 +135,7 @@ final class StaticGenerator
     /**
      * Génère tous les fichiers statiques.
      *
-     * @return array{posts: int, index: bool, rss: bool, sitemap: bool, tags: int}
+     * @return array{posts: int, index: bool, rss: bool, sitemap: bool, tags: int, categories: int}
      */
     public function generateAll(): array
     {
@@ -138,6 +149,7 @@ final class StaticGenerator
 
         $this->generateIndex();
         $tagsCount = $this->generateTagPages();
+        $categoriesCount = $this->generateCategoryPages();
         $rss = $this->generateRss();
         $sitemap = $this->generateSitemap();
 
@@ -147,6 +159,7 @@ final class StaticGenerator
             'rss' => $rss,
             'sitemap' => $sitemap,
             'tags' => $tagsCount,
+            'categories' => $categoriesCount,
         ];
     }
 
@@ -211,6 +224,67 @@ final class StaticGenerator
     }
 
     /**
+     * Génère les pages de catégories.
+     *
+     * @return int Nombre de pages générées
+     */
+    public function generateCategoryPages(): int
+    {
+        if ($this->categoryService === null) {
+            return 0;
+        }
+
+        $templatePath = $this->templatePath . '/category.html';
+        if (!file_exists($templatePath)) {
+            return 0;
+        }
+
+        $template = file_get_contents($templatePath);
+        $categories = $this->categoryService->all();
+        $posts = $this->postService->findPublished();
+
+        $count = 0;
+        foreach ($categories as $category) {
+            $categoryPosts = array_filter(
+                $posts,
+                fn(Post $post) => $post->getCategoryId() === $category->getId()
+            );
+
+            $this->generateCategoryPage($template, $category, array_values($categoryPosts));
+            $count++;
+        }
+
+        return $count;
+    }
+
+    /**
+     * Génère une page de catégorie.
+     *
+     * @param Post[] $posts
+     */
+    private function generateCategoryPage(string $template, Category $category, array $posts): void
+    {
+        $postsData = array_map(fn($post) => [
+            'title' => $post->getTitle(),
+            'url' => $post->getUrl(),
+            'excerpt' => $post->getExcerpt(),
+            'author' => $post->getAuthor(),
+            'published_at' => $post->getPublishedAt()?->format('d/m/Y'),
+            'reading_time' => $post->getReadingTime(),
+        ], $posts);
+
+        $html = $this->processLengthCondition($template, 'posts', count($postsData) > 0);
+        $html = $this->renderWithLoop($html, 'posts', $postsData);
+        $html = str_replace('{{ category_name }}', htmlspecialchars($category->getName()), $html);
+        $html = str_replace('{{ category_description }}', htmlspecialchars($category->getDescription()), $html);
+        $html = str_replace('{{ category_color }}', htmlspecialchars($category->getColor()), $html);
+        $html = str_replace('{{ count }}', (string) count($posts), $html);
+        $html = str_replace('{{ year }}', date('Y'), $html);
+
+        $this->writeFile('categories/' . $category->getSlug() . '.html', $html);
+    }
+
+    /**
      * Convertit une chaîne en slug.
      */
     private function slugify(string $text): string
@@ -263,7 +337,7 @@ final class StaticGenerator
     /**
      * Nettoie et régénère tout.
      *
-     * @return array{posts: int, index: bool, rss: bool, sitemap: bool, tags: int}
+     * @return array{posts: int, index: bool, rss: bool, sitemap: bool, tags: int, categories: int}
      */
     public function regenerate(): array
     {

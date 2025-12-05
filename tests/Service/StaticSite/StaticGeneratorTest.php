@@ -263,6 +263,68 @@ final class StaticGeneratorTest extends TestCase
         $this->assertFileExists($this->outputPath . '/tags/test.html');
     }
 
+    public function testGenerateCategoryPagesReturnsZeroWithoutService(): void
+    {
+        $this->createCategoryTemplate();
+
+        $result = $this->generator->generateCategoryPages();
+
+        $this->assertSame(0, $result);
+    }
+
+    public function testGenerateCategoryPagesCreatesHtmlFiles(): void
+    {
+        $this->createCategoryTemplate();
+
+        // Créer CategoryService
+        $categoryStorage = new FileStorage($this->storagePath . '/categories');
+        $categoryService = new \Lunar\Service\Blog\CategoryService($categoryStorage);
+
+        $category = $categoryService->create('PHP');
+        $category->setDescription('Articles PHP');
+        $category->setColor('#8892BF');
+        $categoryService->update($category);
+
+        $this->generator->setCategoryService($categoryService);
+
+        $post = $this->postService->create('Article PHP', 'Content');
+        $post->setCategoryId($category->getId());
+        $this->postService->update($post);
+        $this->postService->publish($post->getId());
+
+        $count = $this->generator->generateCategoryPages();
+
+        $this->assertSame(1, $count);
+        $this->assertFileExists($this->outputPath . '/categories/php.html');
+
+        $content = file_get_contents($this->outputPath . '/categories/php.html');
+        $this->assertStringContainsString('PHP', $content);
+        $this->assertStringContainsString('Article PHP', $content);
+    }
+
+    private function createCategoryTemplate(): void
+    {
+        $categoryTemplate = <<<'HTML'
+<!DOCTYPE html>
+<html>
+<head><title>{{ category_name }}</title></head>
+<body>
+    <h1>{{ category_name }}</h1>
+    <p>{{ category_description }}</p>
+    <p>{{ count }} article(s)</p>
+    {% if posts|length > 0 %}
+    <ul>
+    {% for post in posts %}
+        <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>
+HTML;
+        file_put_contents($this->templatePath . '/category.html', $categoryTemplate);
+    }
+
     private function createTagTemplate(): void
     {
         $tagTemplate = <<<'HTML'
