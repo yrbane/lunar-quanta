@@ -1,13 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-  <loc>https://example.com/blog/</loc>
+  <loc>https://lunar-quanta.example.com/blog/</loc>
   <lastmod>2025-12-05</lastmod>
   <changefreq>daily</changefreq>
   <priority>1.0</priority>
 </url>
 <url>
-  <loc>https://example.com/blog/posts/test-article.html</loc>
+  <loc>https://lunar-quanta.example.com/blog/posts/test-article.html</loc>
+  <lastmod>2025-12-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://lunar-quanta.example.com/blog/posts/generation-site-statique-performance-simplicite.html</loc>
+  <lastmod>2025-12-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://lunar-quanta.example.com/blog/posts/gestion-medias-ia-pexels-dalle-imagen.html</loc>
+  <lastmod>2025-12-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://lunar-quanta.example.com/blog/posts/interface-administration-lunar-quanta-guide-complet.html</loc>
+  <lastmod>2025-12-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://lunar-quanta.example.com/blog/posts/bienvenue-lunar-quanta-framework-php-moderne.html</loc>
+  <lastmod>2025-12-05</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://lunar-quanta.example.com/blog/posts/systeme-blog-lunar-quanta-puissant-flexible.html</loc>
   <lastmod>2025-12-05</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.8</priority>

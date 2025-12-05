@@ -469,27 +469,71 @@ final class StaticGenerator
 
     /**
      * Traite {% if var|length > 0 %} ... {% else %} ... {% endif %}.
+     *
+     * Gère correctement les blocs {% if %} imbriqués en comptant les niveaux.
      */
     private function processLengthCondition(string $html, string $var, bool $hasItems): string
     {
-        // Pattern avec {% else %}
-        $patternWithElse = '/\{%\s*if\s+' . preg_quote($var, '/') . '\|length\s*>\s*0\s*%\}(.*?)\{%\s*else\s*%\}(.*?)\{%\s*endif\s*%\}/s';
-
-        if (preg_match($patternWithElse, $html, $matches)) {
-            $ifContent = $matches[1];
-            $elseContent = $matches[2];
-            return preg_replace($patternWithElse, $hasItems ? $ifContent : $elseContent, $html);
+        // Trouver le début du bloc
+        $startPattern = '/\{%\s*if\s+' . preg_quote($var, '/') . '\|length\s*>\s*0\s*%\}/';
+        if (!preg_match($startPattern, $html, $startMatch, PREG_OFFSET_CAPTURE)) {
+            return $html;
         }
 
-        // Pattern sans {% else %}
-        $patternNoElse = '/\{%\s*if\s+' . preg_quote($var, '/') . '\|length\s*>\s*0\s*%\}(.*?)\{%\s*endif\s*%\}/s';
+        $startPos = $startMatch[0][1];
+        $startLen = strlen($startMatch[0][0]);
+        $content = substr($html, $startPos + $startLen);
 
-        if (preg_match($patternNoElse, $html, $matches)) {
-            $ifContent = $matches[1];
-            return preg_replace($patternNoElse, $hasItems ? $ifContent : '', $html);
+        // Trouver le {% else %} et {% endif %} correspondants (en comptant les niveaux)
+        $elsePos = null;
+        $endPos = null;
+        $endLen = 0;
+        $level = 1;
+        $pos = 0;
+
+        // Pattern qui capture: if, else, ou endif (mais pas endfor, for, etc.)
+        // Le pattern .*? est non-greedy et s'arrête au premier %}
+        while ($level > 0 && preg_match('/\{%\s*(if|else|endif)\b[^}]*%\}/', $content, $match, PREG_OFFSET_CAPTURE, $pos)) {
+            $tag = $match[1][0];
+            $tagPos = $match[0][1];
+            $tagLen = strlen($match[0][0]);
+
+            if ($tag === 'if') {
+                $level++;
+            } elseif ($tag === 'else' && $level === 1) {
+                // Seulement capturer le {% else %} au niveau 1 (bloc principal)
+                $elsePos = $tagPos;
+                $elseLen = $tagLen;
+            } elseif ($tag === 'endif') {
+                $level--;
+                if ($level === 0) {
+                    $endPos = $tagPos;
+                    $endLen = $tagLen;
+                }
+            }
+
+            $pos = $tagPos + $tagLen;
         }
 
-        return $html;
+        if ($endPos === null) {
+            return $html;
+        }
+
+        // Extraire les parties
+        if ($elsePos !== null) {
+            $ifContent = substr($content, 0, $elsePos);
+            $elseContent = substr($content, $elsePos + $elseLen, $endPos - $elsePos - $elseLen);
+        } else {
+            $ifContent = substr($content, 0, $endPos);
+            $elseContent = '';
+        }
+
+        // Reconstruire le HTML
+        $before = substr($html, 0, $startPos);
+        $after = substr($html, $startPos + $startLen + $endPos + $endLen);
+        $replacement = $hasItems ? $ifContent : $elseContent;
+
+        return $before . $replacement . $after;
     }
 
     /**
