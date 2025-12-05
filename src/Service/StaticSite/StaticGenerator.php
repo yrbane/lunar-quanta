@@ -88,13 +88,18 @@ final class StaticGenerator
             $categoryName = $category?->getName() ?? '';
         }
 
+        // Récupérer les articles similaires (même catégorie ou tags communs)
+        $relatedPosts = $this->findRelatedPosts($post, 4);
+
         // 1. D'abord traiter les conditions sur featured_image et category
         $html = $this->processSimpleCondition($template, 'featured_image', !empty($post->getFeaturedImage()));
         $html = $this->processSimpleCondition($html, 'category', !empty($categoryName));
         $html = $this->processLengthCondition($html, 'tags', count($post->getTags()) > 0);
+        $html = $this->processLengthCondition($html, 'related_posts', count($relatedPosts) > 0);
 
-        // 2. Traiter les tags (boucle for) - passer directement les valeurs string
+        // 2. Traiter les boucles
         $html = $this->renderWithLoop($html, 'tags', $post->getTags());
+        $html = $this->renderWithLoop($html, 'related_posts', $relatedPosts);
 
         // 3. Enfin remplacer les variables simples
         $html = $this->render($html, [
@@ -119,6 +124,58 @@ final class StaticGenerator
     }
 
     /**
+     * Trouve les articles similaires basés sur la catégorie et les tags.
+     *
+     * @return array<int, array{title: string, url: string, excerpt: string}>
+     */
+    private function findRelatedPosts(Post $currentPost, int $limit = 4): array
+    {
+        $allPosts = $this->postService->findPublished();
+        $currentTags = $currentPost->getTags();
+        $currentCategoryId = $currentPost->getCategoryId();
+
+        // Calculer un score de similarité pour chaque post
+        $scored = [];
+        foreach ($allPosts as $post) {
+            // Ne pas inclure l'article courant
+            if ($post->getId() === $currentPost->getId()) {
+                continue;
+            }
+
+            $score = 0;
+
+            // Score pour catégorie identique
+            if ($currentCategoryId !== null && $post->getCategoryId() === $currentCategoryId) {
+                $score += 10;
+            }
+
+            // Score pour tags en commun
+            $commonTags = array_intersect($currentTags, $post->getTags());
+            $score += count($commonTags) * 5;
+
+            if ($score > 0) {
+                $scored[] = [
+                    'post' => $post,
+                    'score' => $score,
+                ];
+            }
+        }
+
+        // Trier par score décroissant
+        usort($scored, fn($a, $b) => $b['score'] <=> $a['score']);
+
+        // Prendre les meilleurs résultats
+        $related = array_slice($scored, 0, $limit);
+
+        // Formater pour le template
+        return array_map(fn($item) => [
+            'title' => $item['post']->getTitle(),
+            'url' => $item['post']->getUrl(),
+            'excerpt' => $item['post']->getExcerpt(),
+        ], $related);
+    }
+
+    /**
      * Génère la page d'index du blog.
      */
     public function generateIndex(): void
@@ -128,6 +185,29 @@ final class StaticGenerator
 
         // Trier par date décroissante
         usort($posts, fn($a, $b) => $b->getPublishedAt() <=> $a->getPublishedAt());
+
+        // Collecter tous les tags uniques
+        $allTags = [];
+        foreach ($posts as $post) {
+            foreach ($post->getTags() as $tag) {
+                if (!isset($allTags[$tag])) {
+                    $allTags[$tag] = 0;
+                }
+                $allTags[$tag]++;
+            }
+        }
+        arsort($allTags); // Trier par popularité
+
+        // Générer le HTML des tags
+        $tagsHtml = '';
+        foreach ($allTags as $tag => $count) {
+            $slug = $this->slugify($tag);
+            $tagsHtml .= sprintf(
+                '<a href="/blog/tags/%s.html" class="tag-pill">%s</a>',
+                htmlspecialchars($slug),
+                htmlspecialchars($tag)
+            );
+        }
 
         // Préparer les données des posts
         $postsData = array_map(function($post) {
@@ -145,6 +225,8 @@ final class StaticGenerator
                 'reading_time' => $post->getReadingTime(),
                 'featured_image' => $post->getFeaturedImage() ?? '',
                 'category' => $categoryName,
+                'slug' => $post->getSlug(),
+                'tags_string' => implode(', ', $post->getTags()),
             ];
         }, $posts);
 
@@ -155,6 +237,8 @@ final class StaticGenerator
 
         // Remplacer les variables globales
         $html = str_replace('{{ year }}', date('Y'), $html);
+        $html = str_replace('{{ article_count }}', (string) count($posts), $html);
+        $html = str_replace('{{ tags_list }}', $tagsHtml, $html);
 
         $this->writeFile('index.html', $html);
     }

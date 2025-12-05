@@ -33,6 +33,7 @@
             --color-border-light: #f4f4f5;
             --color-code-bg: #1e293b;
             --color-code-text: #e2e8f0;
+            --color-success: #10b981;
             --gradient-primary: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
             --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -208,11 +209,149 @@
             color: rgba(255, 255, 255, 0.3);
         }
 
+        /* Main Layout with TOC */
+        .main-layout {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 240px 1fr;
+            }
+        }
+
+        /* Table of Contents */
+        .toc-sidebar {
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .toc-sidebar {
+                display: block;
+                position: sticky;
+                top: 100px;
+                height: fit-content;
+                max-height: calc(100vh - 140px);
+                overflow-y: auto;
+            }
+        }
+
+        .toc {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+        }
+
+        .toc-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text-muted);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toc-title svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-link {
+            display: block;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8125rem;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            border-left: 2px solid transparent;
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+
+        .toc-link:hover {
+            color: var(--color-primary);
+            background: rgba(124, 58, 237, 0.05);
+        }
+
+        .toc-link.active {
+            color: var(--color-primary);
+            background: rgba(124, 58, 237, 0.1);
+            border-left-color: var(--color-primary);
+        }
+
+        .toc-link.toc-h3 {
+            padding-left: 1.5rem;
+            font-size: 0.75rem;
+        }
+
+        /* Mobile TOC Toggle */
+        .toc-mobile-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+
+        .toc-mobile-toggle svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        @media (min-width: 1024px) {
+            .toc-mobile-toggle {
+                display: none;
+            }
+        }
+
+        .toc-mobile {
+            display: none;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .toc-mobile.show {
+            display: block;
+        }
+
+        @media (min-width: 1024px) {
+            .toc-mobile {
+                display: none !important;
+            }
+        }
+
         /* Article Container */
         .article-container {
             max-width: 800px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
         }
 
         /* Article Header */
@@ -286,6 +425,45 @@
             opacity: 0.6;
         }
 
+        /* Article Actions */
+        .article-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 0.875rem;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .action-btn.active {
+            background: rgba(124, 58, 237, 0.1);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .action-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
         /* Article Content */
         .article-body {
             background: var(--color-surface);
@@ -317,6 +495,19 @@
             letter-spacing: -0.01em;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid var(--color-border-light);
+            scroll-margin-top: 100px;
+        }
+
+        .article-content h2 .heading-anchor {
+            opacity: 0;
+            margin-left: 0.5rem;
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .article-content h2:hover .heading-anchor {
+            opacity: 1;
         }
 
         .article-content h3 {
@@ -324,6 +515,19 @@
             font-weight: 600;
             margin: 2.5rem 0 0.75rem;
             color: var(--color-text);
+            scroll-margin-top: 100px;
+        }
+
+        .article-content h3 .heading-anchor {
+            opacity: 0;
+            margin-left: 0.5rem;
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .article-content h3:hover .heading-anchor {
+            opacity: 1;
         }
 
         .article-content h4 {
@@ -401,17 +605,74 @@
             color: var(--color-primary);
         }
 
+        /* Code Block with Copy Button */
+        .code-block-wrapper {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .code-block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: none;
+        }
+
+        .code-lang {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+        }
+
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .copy-btn.copied {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .copy-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
         .article-content pre {
             background: var(--color-code-bg);
             color: var(--color-code-text);
             padding: 1.5rem;
-            border-radius: var(--radius-md);
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
             overflow-x: auto;
-            margin: 2rem 0;
+            margin: 0;
             font-size: 0.875rem;
             line-height: 1.7;
             box-shadow: var(--shadow-lg);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: none;
         }
 
         .article-content pre code {
@@ -420,6 +681,13 @@
             font-size: inherit;
             color: inherit;
             border-radius: 0;
+        }
+
+        /* Standalone pre (not in wrapper) */
+        .article-content > pre {
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 2rem 0;
         }
 
         .article-content hr {
@@ -485,6 +753,77 @@
         .tag svg {
             width: 14px;
             height: 14px;
+        }
+
+        /* Related Articles */
+        .related-section {
+            background: var(--color-surface);
+            padding: 2rem;
+            border: 1px solid var(--color-border);
+            border-top: none;
+        }
+
+        .related-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .related-title svg {
+            width: 20px;
+            height: 20px;
+            color: var(--color-primary);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .related-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .related-card {
+            display: flex;
+            flex-direction: column;
+            padding: 1.25rem;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .related-card:hover {
+            border-color: var(--color-primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .related-card-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .related-card-excerpt {
+            font-size: 0.8125rem;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         /* Share Section */
@@ -553,7 +892,7 @@
 
         /* Back Navigation */
         .back-nav {
-            max-width: 800px;
+            max-width: 1280px;
             margin: 2rem auto;
             padding: 0 1.5rem;
         }
@@ -582,6 +921,88 @@
         .back-link svg {
             width: 18px;
             height: 18px;
+        }
+
+        /* Scroll to Top */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            box-shadow: var(--shadow-lg);
+            z-index: 50;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .scroll-top:hover {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .scroll-top svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-text);
+            box-shadow: var(--shadow-xl);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Keyboard Shortcut Hint */
+        .kbd {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 1.5rem;
+            height: 1.5rem;
+            padding: 0 0.375rem;
+            background: var(--color-border-light);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
         }
 
         /* Footer */
@@ -662,11 +1083,13 @@
 
         .article-header,
         .article-body,
+        .related-section,
         .share-section {
             animation: fadeIn 0.6s ease forwards;
         }
 
         .article-body { animation-delay: 0.1s; }
+        .related-section { animation-delay: 0.15s; }
         .share-section { animation-delay: 0.2s; }
     </style>
 </head>
@@ -713,94 +1136,165 @@
     </div>
 
     <main>
-        <article class="article-container">
-            <header class="article-header">
-                {% if category %}
-                <span class="article-category">{{ category }}</span>
-                {% endif %}
-                <h1 class="article-title">{{ title }}</h1>
-                {% if excerpt %}
-                <p class="article-excerpt">{{ excerpt }}</p>
-                {% endif %}
-                <div class="article-meta">
-                    {% if author %}
-                    <div class="article-meta-item">
+        <div class="main-layout">
+            <!-- Table of Contents Sidebar -->
+            <aside class="toc-sidebar">
+                <nav class="toc" id="toc">
+                    <div class="toc-title">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="12" x2="15" y2="12"/>
+                            <line x1="3" y1="18" x2="18" y2="18"/>
                         </svg>
-                        <span>{{ author }}</span>
+                        Sommaire
                     </div>
+                    <ul class="toc-list" id="toc-list">
+                        <!-- Generated by JavaScript -->
+                    </ul>
+                </nav>
+            </aside>
+
+            <article class="article-container">
+                <!-- Mobile TOC Toggle -->
+                <button class="toc-mobile-toggle" id="toc-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="15" y2="12"/>
+                        <line x1="3" y1="18" x2="18" y2="18"/>
+                    </svg>
+                    Sommaire
+                </button>
+                <nav class="toc-mobile" id="toc-mobile">
+                    <ul class="toc-list" id="toc-list-mobile">
+                        <!-- Generated by JavaScript -->
+                    </ul>
+                </nav>
+
+                <header class="article-header">
+                    {% if category %}
+                    <span class="article-category">{{ category }}</span>
                     {% endif %}
-                    <div class="article-meta-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
-                        <span>{{ published_at }}</span>
-                    </div>
-                    <div class="article-meta-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                        <span>{{ reading_time }} min de lecture</span>
-                    </div>
-                </div>
-            </header>
-
-            <div class="article-body">
-                <div class="article-content">
-                    {{ content }}
-                </div>
-
-                {% if tags|length > 0 %}
-                <div class="article-tags">
-                    {% for tag in tags %}
-                    <a href="/blog/tags/{{ tag }}.html" class="tag">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-                            <line x1="7" y1="7" x2="7.01" y2="7"/>
-                        </svg>
-                        {{ tag }}
-                    </a>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
-
-            <div class="share-section">
-                <div class="share-inner">
-                    <span class="share-label">Partager</span>
-                    <div class="share-buttons">
-                        <a href="https://twitter.com/intent/tweet?text={{ title }}&url=" class="share-btn" title="Twitter" target="_blank" rel="noopener">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                            </svg>
-                        </a>
-                        <a href="https://www.linkedin.com/shareArticle?mini=true&url=&title={{ title }}" class="share-btn" title="LinkedIn" target="_blank" rel="noopener">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
-                        </a>
-                        <a href="mailto:?subject={{ title }}&body=Je te recommande cet article : " class="share-btn" title="Email">
+                    <h1 class="article-title">{{ title }}</h1>
+                    {% if excerpt %}
+                    <p class="article-excerpt">{{ excerpt }}</p>
+                    {% endif %}
+                    <div class="article-meta">
+                        {% if author %}
+                        <div class="article-meta-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                <polyline points="22,6 12,13 2,6"/>
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
                             </svg>
-                        </a>
-                        <button class="share-btn" title="Copier le lien" onclick="copyLink()">
+                            <span>{{ author }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="article-meta-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
                             </svg>
+                            <span>{{ published_at }}</span>
+                        </div>
+                        <div class="article-meta-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <span>{{ reading_time }} min de lecture</span>
+                        </div>
+                    </div>
+                    <div class="article-actions">
+                        <button class="action-btn" id="bookmark-btn" title="Ajouter aux favoris">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            <span id="bookmark-text">Favoris</span>
+                        </button>
+                        <button class="action-btn" onclick="printArticle()" title="Imprimer">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 6 2 18 2 18 9"/>
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                                <rect x="6" y="14" width="12" height="8"/>
+                            </svg>
+                            Imprimer
                         </button>
                     </div>
+                </header>
+
+                <div class="article-body">
+                    <div class="article-content" id="article-content">
+                        {{ content }}
+                    </div>
+
+                    {% if tags|length > 0 %}
+                    <div class="article-tags">
+                        {% for tag in tags %}
+                        <a href="/blog/tags/{{ tag }}.html" class="tag">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                                <line x1="7" y1="7" x2="7.01" y2="7"/>
+                            </svg>
+                            {{ tag }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
                 </div>
-            </div>
-        </article>
+
+                <!-- Related Articles -->
+                {% if related_posts|length > 0 %}
+                <section class="related-section">
+                    <h2 class="related-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        </svg>
+                        Articles similaires
+                    </h2>
+                    <div class="related-grid">
+                        {% for related in related_posts %}
+                        <a href="{{ related.url }}" class="related-card">
+                            <h3 class="related-card-title">{{ related.title }}</h3>
+                            <p class="related-card-excerpt">{{ related.excerpt }}</p>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endif %}
+
+                <div class="share-section">
+                    <div class="share-inner">
+                        <span class="share-label">Partager</span>
+                        <div class="share-buttons">
+                            <a href="https://twitter.com/intent/tweet?text={{ title }}&url=" class="share-btn" title="Twitter" target="_blank" rel="noopener">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                </svg>
+                            </a>
+                            <a href="https://www.linkedin.com/shareArticle?mini=true&url=&title={{ title }}" class="share-btn" title="LinkedIn" target="_blank" rel="noopener">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                            </a>
+                            <a href="mailto:?subject={{ title }}&body=Je te recommande cet article : " class="share-btn" title="Email">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                            </a>
+                            <button class="share-btn" title="Copier le lien" onclick="copyLink()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
 
         <nav class="back-nav">
             <a href="/blog/" class="back-link">
@@ -812,6 +1306,17 @@
             </a>
         </nav>
     </main>
+
+    <!-- Scroll to Top -->
+    <button class="scroll-top" id="scroll-top" title="Remonter en haut">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="19" x2="12" y2="5"/>
+            <polyline points="5 12 12 5 19 12"/>
+        </svg>
+    </button>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
 
     <footer class="footer">
         <div class="footer-inner">
@@ -836,16 +1341,225 @@
             document.getElementById('progress').style.width = scrolled + '%';
         });
 
+        // Toast notification
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), duration);
+        }
+
         // Copy link to clipboard
         function copyLink() {
             navigator.clipboard.writeText(window.location.href).then(() => {
-                const btn = event.currentTarget;
-                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
-                setTimeout(() => {
-                    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
-                }, 2000);
+                showToast('Lien copie !');
             });
         }
+
+        // Print article
+        function printArticle() {
+            window.print();
+        }
+
+        // Scroll to top
+        const scrollTopBtn = document.getElementById('scroll-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Bookmark functionality
+        const bookmarkBtn = document.getElementById('bookmark-btn');
+        const bookmarkText = document.getElementById('bookmark-text');
+        const articleSlug = window.location.pathname.split('/').pop().replace('.html', '');
+
+        function updateBookmarkState() {
+            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+            const isBookmarked = bookmarks.includes(articleSlug);
+            bookmarkBtn.classList.toggle('active', isBookmarked);
+            bookmarkText.textContent = isBookmarked ? 'Retire' : 'Favoris';
+        }
+
+        bookmarkBtn.addEventListener('click', () => {
+            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+            const index = bookmarks.indexOf(articleSlug);
+            if (index > -1) {
+                bookmarks.splice(index, 1);
+                showToast('Article retire des favoris');
+            } else {
+                bookmarks.push(articleSlug);
+                showToast('Article ajoute aux favoris');
+            }
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            updateBookmarkState();
+        });
+
+        updateBookmarkState();
+
+        // Table of Contents Generation
+        function generateTOC() {
+            const content = document.getElementById('article-content');
+            const tocList = document.getElementById('toc-list');
+            const tocListMobile = document.getElementById('toc-list-mobile');
+            const headings = content.querySelectorAll('h2, h3');
+
+            if (headings.length === 0) {
+                document.querySelector('.toc-sidebar')?.remove();
+                document.getElementById('toc-toggle')?.remove();
+                document.getElementById('toc-mobile')?.remove();
+                return;
+            }
+
+            headings.forEach((heading, index) => {
+                // Add ID to heading if not present
+                if (!heading.id) {
+                    heading.id = 'heading-' + index;
+                }
+
+                // Add anchor link
+                const anchor = document.createElement('a');
+                anchor.href = '#' + heading.id;
+                anchor.className = 'heading-anchor';
+                anchor.textContent = '#';
+                heading.appendChild(anchor);
+
+                // Create TOC item
+                const li = document.createElement('li');
+                li.className = 'toc-item';
+
+                const link = document.createElement('a');
+                link.href = '#' + heading.id;
+                link.className = 'toc-link' + (heading.tagName === 'H3' ? ' toc-h3' : '');
+                link.textContent = heading.textContent.replace('#', '').trim();
+
+                li.appendChild(link);
+                tocList.appendChild(li.cloneNode(true));
+                tocListMobile.appendChild(li);
+            });
+
+            // Active state on scroll
+            const tocLinks = document.querySelectorAll('.toc-link');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        tocLinks.forEach(link => link.classList.remove('active'));
+                        const activeLinks = document.querySelectorAll(`a[href="#${entry.target.id}"]`);
+                        activeLinks.forEach(link => link.classList.add('active'));
+                    }
+                });
+            }, { rootMargin: '-100px 0px -80% 0px' });
+
+            headings.forEach(heading => observer.observe(heading));
+        }
+
+        generateTOC();
+
+        // Mobile TOC Toggle
+        const tocToggle = document.getElementById('toc-toggle');
+        const tocMobile = document.getElementById('toc-mobile');
+
+        tocToggle?.addEventListener('click', () => {
+            tocMobile.classList.toggle('show');
+        });
+
+        // Close mobile TOC when clicking a link
+        tocMobile?.addEventListener('click', (e) => {
+            if (e.target.classList.contains('toc-link')) {
+                tocMobile.classList.remove('show');
+            }
+        });
+
+        // Add copy buttons to code blocks
+        function addCopyButtons() {
+            const codeBlocks = document.querySelectorAll('.article-content pre');
+
+            codeBlocks.forEach((pre, index) => {
+                // Check if already wrapped
+                if (pre.parentElement.classList.contains('code-block-wrapper')) return;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'code-block-wrapper';
+
+                const header = document.createElement('div');
+                header.className = 'code-block-header';
+
+                // Detect language from class
+                const code = pre.querySelector('code');
+                const langClass = code?.className.match(/language-(\w+)/);
+                const lang = langClass ? langClass[1] : 'code';
+
+                const langSpan = document.createElement('span');
+                langSpan.className = 'code-lang';
+                langSpan.textContent = lang;
+
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'copy-btn';
+                copyBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2"/>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                    Copier
+                `;
+
+                copyBtn.addEventListener('click', () => {
+                    const text = pre.textContent;
+                    navigator.clipboard.writeText(text).then(() => {
+                        copyBtn.classList.add('copied');
+                        copyBtn.innerHTML = `
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Copie !
+                        `;
+                        setTimeout(() => {
+                            copyBtn.classList.remove('copied');
+                            copyBtn.innerHTML = `
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                Copier
+                            `;
+                        }, 2000);
+                    });
+                });
+
+                header.appendChild(langSpan);
+                header.appendChild(copyBtn);
+
+                pre.parentNode.insertBefore(wrapper, pre);
+                wrapper.appendChild(header);
+                wrapper.appendChild(pre);
+            });
+        }
+
+        addCopyButtons();
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            switch(e.key) {
+                case 't':
+                case 'T':
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    break;
+                case 'b':
+                case 'B':
+                    bookmarkBtn.click();
+                    break;
+                case 'Escape':
+                    tocMobile?.classList.remove('show');
+                    break;
+            }
+        });
     </script>
 </body>
 </html>
