@@ -81,6 +81,13 @@ final class StaticGenerator
         $template = $this->loadTemplate('post.html');
         $htmlContent = $this->markdownParser->parse($post->getContent());
 
+        // Récupérer la catégorie si disponible
+        $categoryName = '';
+        if ($this->categoryService !== null && $post->getCategoryId() !== null) {
+            $category = $this->categoryService->find($post->getCategoryId());
+            $categoryName = $category?->getName() ?? '';
+        }
+
         $html = $this->render($template, [
             'title' => $post->getTitle(),
             'content' => $htmlContent,
@@ -90,7 +97,20 @@ final class StaticGenerator
             'reading_time' => $post->getReadingTime(),
             'url' => $post->getUrl(),
             'year' => date('Y'),
+            'featured_image' => $post->getFeaturedImage() ?? '',
+            'category' => $categoryName,
         ]);
+
+        // Traiter les tags
+        $html = $this->renderWithLoop($html, 'tags', array_map(
+            fn($tag) => ['tag' => $tag],
+            $post->getTags()
+        ));
+
+        // Traiter les conditions sur featured_image et category
+        $html = $this->processSimpleCondition($html, 'featured_image', !empty($post->getFeaturedImage()));
+        $html = $this->processSimpleCondition($html, 'category', !empty($categoryName));
+        $html = $this->processLengthCondition($html, 'tags', count($post->getTags()) > 0);
 
         $this->writeFile('posts/' . $post->getSlug() . '.html', $html);
 
@@ -112,14 +132,23 @@ final class StaticGenerator
         usort($posts, fn($a, $b) => $b->getPublishedAt() <=> $a->getPublishedAt());
 
         // Préparer les données des posts
-        $postsData = array_map(fn($post) => [
-            'title' => $post->getTitle(),
-            'url' => $post->getUrl(),
-            'excerpt' => $post->getExcerpt(),
-            'author' => $post->getAuthor(),
-            'published_at' => $post->getPublishedAt()?->format('d/m/Y'),
-            'reading_time' => $post->getReadingTime(),
-        ], $posts);
+        $postsData = array_map(function($post) {
+            $categoryName = '';
+            if ($this->categoryService !== null && $post->getCategoryId() !== null) {
+                $category = $this->categoryService->find($post->getCategoryId());
+                $categoryName = $category?->getName() ?? '';
+            }
+            return [
+                'title' => $post->getTitle(),
+                'url' => $post->getUrl(),
+                'excerpt' => $post->getExcerpt(),
+                'author' => $post->getAuthor(),
+                'published_at' => $post->getPublishedAt()?->format('d/m/Y'),
+                'reading_time' => $post->getReadingTime(),
+                'featured_image' => $post->getFeaturedImage() ?? '',
+                'category' => $categoryName,
+            ];
+        }, $posts);
 
         // Gérer {% if posts|length > 0 %} ... {% else %} ... {% endif %}
         $html = $this->processLengthCondition($template, 'posts', count($postsData) > 0);
@@ -413,6 +442,31 @@ final class StaticGenerator
 
             return '';
         }, $html);
+    }
+
+    /**
+     * Traite {% if var %} ... {% else %} ... {% endif %} pour une variable simple.
+     */
+    private function processSimpleCondition(string $html, string $var, bool $hasValue): string
+    {
+        // Pattern avec {% else %}
+        $patternWithElse = '/\{%\s*if\s+' . preg_quote($var, '/') . '\s*%\}(.*?)\{%\s*else\s*%\}(.*?)\{%\s*endif\s*%\}/s';
+
+        if (preg_match($patternWithElse, $html, $matches)) {
+            $ifContent = $matches[1];
+            $elseContent = $matches[2];
+            return preg_replace($patternWithElse, $hasValue ? $ifContent : $elseContent, $html);
+        }
+
+        // Pattern sans {% else %}
+        $patternNoElse = '/\{%\s*if\s+' . preg_quote($var, '/') . '\s*%\}(.*?)\{%\s*endif\s*%\}/s';
+
+        if (preg_match($patternNoElse, $html, $matches)) {
+            $ifContent = $matches[1];
+            return preg_replace($patternNoElse, $hasValue ? $ifContent : '', $html);
+        }
+
+        return $html;
     }
 
     /**

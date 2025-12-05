@@ -6,7 +6,7 @@
     "excerpt": "Découvrez le système de blog de Lunar Quanta : articles Markdown, catégories, tags, suggestions intelligentes par TF-IDF et interface d'administration complète.",
     "author": "Équipe Lunar",
     "categoryId": "framework-01",
-    "featuredImage": null,
+    "featuredImage": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=630&fit=crop",
     "status": "published",
     "tags": [
         "blog",

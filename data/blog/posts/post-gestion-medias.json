@@ -6,7 +6,7 @@
     "excerpt": "Explorez la gestion des médias de Lunar Quanta : recherche Pexels, génération IA avec DALL-E et Imagen, optimisation automatique et interface admin intuitive.",
     "author": "Équipe Lunar",
     "categoryId": "tutoriels-02",
-    "featuredImage": null,
+    "featuredImage": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&h=630&fit=crop",
     "status": "published",
     "tags": [
         "medias",
