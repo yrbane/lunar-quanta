@@ -1,0 +1,923 @@
+openapi: 3.0.3
+info:
+  title: Lunar Quanta Blog Admin API
+  description: API d'administration du blog éco-responsable
+  version: 1.0.0
+  contact:
+    name: Seb
+    email: seb@nethttp.net
+
+servers:
+  - url: /admin/api
+    description: Admin API (requires authentication)
+
+tags:
+  - name: Posts
+    description: Gestion des articles
+  - name: Categories
+    description: Gestion des catégories
+  - name: Tags
+    description: Gestion des tags
+  - name: Images
+    description: Gestion des images
+  - name: Suggestions
+    description: Suggestions automatiques
+
+paths:
+  # ============================================================================
+  # POSTS
+  # ============================================================================
+  /posts:
+    get:
+      tags: [Posts]
+      summary: Liste des articles
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, published, archived]
+        - name: categoryId
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Liste paginée des articles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostList'
+    post:
+      tags: [Posts]
+      summary: Créer un article
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCreate'
+      responses:
+        '201':
+          description: Article créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /posts/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [Posts]
+      summary: Récupérer un article
+      responses:
+        '200':
+          description: Article trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Posts]
+      summary: Mettre à jour un article
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostUpdate'
+      responses:
+        '200':
+          description: Article mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags: [Posts]
+      summary: Supprimer un article
+      responses:
+        '204':
+          description: Article supprimé
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /posts/{id}/publish:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      tags: [Posts]
+      summary: Publier un article (génère HTML statique)
+      responses:
+        '200':
+          description: Article publié
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  post:
+                    $ref: '#/components/schemas/Post'
+                  generatedFiles:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /posts/{id}/unpublish:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      tags: [Posts]
+      summary: Dépublier un article
+      responses:
+        '200':
+          description: Article dépublié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+  /posts/{id}/preview:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [Posts]
+      summary: Prévisualiser le rendu HTML
+      responses:
+        '200':
+          description: HTML rendu
+          content:
+            text/html:
+              schema:
+                type: string
+
+  # ============================================================================
+  # CATEGORIES
+  # ============================================================================
+  /categories:
+    get:
+      tags: [Categories]
+      summary: Liste des catégories (arborescence)
+      responses:
+        '200':
+          description: Arborescence des catégories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryTree'
+    post:
+      tags: [Categories]
+      summary: Créer une catégorie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryCreate'
+      responses:
+        '201':
+          description: Catégorie créée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /categories/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [Categories]
+      summary: Récupérer une catégorie
+      responses:
+        '200':
+          description: Catégorie trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Categories]
+      summary: Mettre à jour une catégorie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryUpdate'
+      responses:
+        '200':
+          description: Catégorie mise à jour
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags: [Categories]
+      summary: Supprimer une catégorie
+      responses:
+        '204':
+          description: Catégorie supprimée
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Catégorie non supprimable (enfants ou articles liés)
+
+  # ============================================================================
+  # TAGS
+  # ============================================================================
+  /tags:
+    get:
+      tags: [Tags]
+      summary: Liste des tags
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Liste des tags
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+    post:
+      tags: [Tags]
+      summary: Créer un tag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagCreate'
+      responses:
+        '201':
+          description: Tag créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+
+  /tags/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    delete:
+      tags: [Tags]
+      summary: Supprimer un tag
+      responses:
+        '204':
+          description: Tag supprimé
+
+  # ============================================================================
+  # IMAGES
+  # ============================================================================
+  /images:
+    get:
+      tags: [Images]
+      summary: Galerie des images
+      parameters:
+        - name: source
+          in: query
+          schema:
+            type: string
+            enum: [upload, pexels, dalle, imagen]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Liste des images
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageList'
+    post:
+      tags: [Images]
+      summary: Upload une image
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                alt:
+                  type: string
+      responses:
+        '201':
+          description: Image uploadée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /images/pexels/search:
+    get:
+      tags: [Images]
+      summary: Rechercher sur Pexels
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Résultats Pexels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PexelsResults'
+
+  /images/pexels/download:
+    post:
+      tags: [Images]
+      summary: Télécharger une image Pexels
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [pexelsId, url]
+              properties:
+                pexelsId:
+                  type: string
+                url:
+                  type: string
+                alt:
+                  type: string
+                credit:
+                  type: string
+      responses:
+        '201':
+          description: Image téléchargée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+
+  /images/generate:
+    post:
+      tags: [Images]
+      summary: Générer une image par IA
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [prompt]
+              properties:
+                prompt:
+                  type: string
+                  maxLength: 1000
+                provider:
+                  type: string
+                  enum: [dalle, imagen]
+                  default: dalle
+      responses:
+        '201':
+          description: Image générée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        '503':
+          description: Service IA indisponible
+
+  # ============================================================================
+  # SUGGESTIONS
+  # ============================================================================
+  /suggestions/tags:
+    post:
+      tags: [Suggestions]
+      summary: Suggérer des tags pour un contenu
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [content]
+              properties:
+                content:
+                  type: string
+                  description: Contenu Markdown de l'article
+                limit:
+                  type: integer
+                  default: 10
+      responses:
+        '200':
+          description: Tags suggérés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagSuggestion'
+
+  /suggestions/categories:
+    post:
+      tags: [Suggestions]
+      summary: Suggérer des catégories pour un contenu
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [content]
+              properties:
+                content:
+                  type: string
+                limit:
+                  type: integer
+                  default: 5
+      responses:
+        '200':
+          description: Catégories suggérées
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategorySuggestion'
+
+  /markdown/preview:
+    post:
+      tags: [Suggestions]
+      summary: Prévisualiser le rendu Markdown
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [content]
+              properties:
+                content:
+                  type: string
+      responses:
+        '200':
+          description: HTML rendu
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  html:
+                    type: string
+
+components:
+  schemas:
+    # --------------------------------------------------------------------------
+    # Post
+    # --------------------------------------------------------------------------
+    Post:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        slug:
+          type: string
+        content:
+          type: string
+        summary:
+          type: string
+        status:
+          type: string
+          enum: [draft, published, archived]
+        ownerId:
+          type: string
+        categoryId:
+          type: string
+          nullable: true
+        tagIds:
+          type: array
+          items:
+            type: string
+        imageId:
+          type: string
+          nullable: true
+        metaTitle:
+          type: string
+          nullable: true
+        metaDescription:
+          type: string
+          nullable: true
+        metaKeywords:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        publishedAt:
+          type: string
+          format: date-time
+          nullable: true
+
+    PostCreate:
+      type: object
+      required: [title, content, summary]
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        content:
+          type: string
+        summary:
+          type: string
+          maxLength: 500
+        categoryId:
+          type: string
+        tagIds:
+          type: array
+          items:
+            type: string
+        imageId:
+          type: string
+        metaTitle:
+          type: string
+        metaDescription:
+          type: string
+        metaKeywords:
+          type: array
+          items:
+            type: string
+
+    PostUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        content:
+          type: string
+        summary:
+          type: string
+          maxLength: 500
+        categoryId:
+          type: string
+          nullable: true
+        tagIds:
+          type: array
+          items:
+            type: string
+        imageId:
+          type: string
+          nullable: true
+        metaTitle:
+          type: string
+        metaDescription:
+          type: string
+        metaKeywords:
+          type: array
+          items:
+            type: string
+
+    PostList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Post'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    # --------------------------------------------------------------------------
+    # Category
+    # --------------------------------------------------------------------------
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+          nullable: true
+        color:
+          type: string
+          nullable: true
+        imageId:
+          type: string
+          nullable: true
+        parentId:
+          type: string
+          nullable: true
+        position:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CategoryTree:
+      allOf:
+        - $ref: '#/components/schemas/Category'
+        - type: object
+          properties:
+            children:
+              type: array
+              items:
+                $ref: '#/components/schemas/CategoryTree'
+            postCount:
+              type: integer
+
+    CategoryCreate:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        color:
+          type: string
+          pattern: '^#[0-9A-Fa-f]{6}$'
+        imageId:
+          type: string
+        parentId:
+          type: string
+
+    CategoryUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        color:
+          type: string
+          pattern: '^#[0-9A-Fa-f]{6}$'
+        imageId:
+          type: string
+          nullable: true
+        parentId:
+          type: string
+          nullable: true
+        position:
+          type: integer
+
+    # --------------------------------------------------------------------------
+    # Tag
+    # --------------------------------------------------------------------------
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    TagCreate:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          maxLength: 50
+
+    TagSuggestion:
+      type: object
+      properties:
+        name:
+          type: string
+        score:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        existing:
+          type: boolean
+        existingId:
+          type: string
+          nullable: true
+
+    # --------------------------------------------------------------------------
+    # Image
+    # --------------------------------------------------------------------------
+    Image:
+      type: object
+      properties:
+        id:
+          type: string
+        filename:
+          type: string
+        originalName:
+          type: string
+        mimeType:
+          type: string
+        size:
+          type: integer
+        width:
+          type: integer
+        height:
+          type: integer
+        alt:
+          type: string
+          nullable: true
+        credit:
+          type: string
+          nullable: true
+        source:
+          type: string
+          enum: [upload, pexels, dalle, imagen]
+        url:
+          type: string
+          description: URL publique de l'image
+        createdAt:
+          type: string
+          format: date-time
+
+    ImageList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    PexelsResults:
+      type: object
+      properties:
+        photos:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              url:
+                type: string
+              photographer:
+                type: string
+              src:
+                type: object
+                properties:
+                  original:
+                    type: string
+                  large:
+                    type: string
+                  medium:
+                    type: string
+                  small:
+                    type: string
+        totalResults:
+          type: integer
+        page:
+          type: integer
+        perPage:
+          type: integer
+
+    # --------------------------------------------------------------------------
+    # Suggestions
+    # --------------------------------------------------------------------------
+    CategorySuggestion:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        score:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+
+    # --------------------------------------------------------------------------
+    # Common
+    # --------------------------------------------------------------------------
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        totalPages:
+          type: integer
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+
+  responses:
+    NotFound:
+      description: Ressource non trouvée
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: Erreur de validation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  securitySchemes:
+    session:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+
+security:
+  - session: []

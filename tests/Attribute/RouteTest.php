@@ -51,7 +51,8 @@ class RouteTest extends TestCase
         $this->assertCount(1, $attributes);
 
         $attr = $attributes[0]->newInstance();
-        $this->assertSame(\Attribute::TARGET_METHOD, $attr->flags);
+        // Route peut cibler les méthodes ET les classes (pour les préfixes de groupe)
+        $this->assertSame(\Attribute::TARGET_METHOD | \Attribute::TARGET_CLASS, $attr->flags);
     }
 
     public function testEmptyPath(): void

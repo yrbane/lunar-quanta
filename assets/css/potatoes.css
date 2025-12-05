@@ -26,6 +26,7 @@
     direction: ltr;
     -moz-font-feature-settings: 'liga';
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'liga';
 }
 
     /* ============================================================================
@@ -100,12 +101,27 @@
 =========================================================================== */
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg-light: #2E2E2E;
-        --bg-dark: #ffffff;
-        --text-light: #333333;
-        --text-dark: #f0f0f0;
+        /* Fonds et textes pour le mode sombre */
+        --bg-light: #121212;   /* utilisé par body et les cartes */
+        --bg-dark: #1f1f1f;    /* surfaces encore plus sombres (ex: dumper) */
+        --text-light: #f5f5f5;
+        --text-dark: #f5f5f5;  /* le texte principal devient clair */
+
+        /* Ombres plus fortes en sombre */
+        --shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+
+        /* Gradients moins flashy en sombre */
+        --gradient1: rgba(255,255,255,.08);
+        --gradient2: rgba(255,255,255,.02);
+
+        /* Palette Dumper adaptée au sombre (on garde le style "console") */
+        --dump-bg: var(--bg-dark);
+        --dump-fg: var(--text-light);
+        --dump-header-bg: color-mix(in srgb, var(--dump-bg) 60%, black);
+        --dump-header-fg: var(--dump-fg);
     }
 }
+
 
 /* ============================================================================
    Reset et styles de base
@@ -244,7 +260,7 @@ h1, h2, h3, h4, h5, h6 {
 =========================================================================== */
 .card {
     background-color: var(--bg-light);
-    border: 1px solid;
+    border: 1px solid color-mix(in srgb, var(--text-dark) 15%, transparent);
     border-radius: 8px;
     padding: 1.5em;
     margin: 1em 0;
@@ -271,11 +287,11 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: space-between;
     padding: 1em;
-    color: #fff;
+    color: var(--text-dark);
     animation: move 5s infinite;
 }
 .navbar a {
-    color: #fff;
+    color: var(--text-dark);
     text-decoration: none;
     margin: 0 0.5em;
 }
@@ -344,8 +360,12 @@ select {
     border: 1px solid var(--color-quaternary);
     border-radius: 4px;
     margin-bottom: 1em;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
     transition: border-color var(--transition-speed) var(--transition-ease),
-    box-shadow var(--transition-speed) var(--transition-ease);
+    box-shadow var(--transition-speed) var(--transition-ease),
+    background-color var(--transition-speed) var(--transition-ease),
+    color var(--transition-speed) var(--transition-ease);
 }
 
 input[type="text"]:focus,
@@ -412,10 +432,19 @@ a:hover {
    Ajout d'une classe "dark" sur le body permet de forcer le mode sombre.
 =========================================================================== */
 body.dark {
-    --bg-light: #2E2E2E;
-    --bg-dark: #ffffff;
-    --text-dark: #f0f0f0;
-    --text-light: #333333;
+    --bg-light: #121212;
+    --bg-dark: #1f1f1f;
+    --text-light: #f5f5f5;
+    --text-dark: #f5f5f5;
+
+    --shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    --gradient1: rgba(255,255,255,.08);
+    --gradient2: rgba(255,255,255,.02);
+
+    --dump-bg: var(--bg-dark);
+    --dump-fg: var(--text-light);
+    --dump-header-bg: color-mix(in srgb, var(--dump-bg) 60%, black);
+    --dump-header-fg: var(--dump-fg);
 }
 
 /* ============================================================================
