@@ -65,9 +65,12 @@ class JsonStorage implements StorageInterface
     /**
      * Charge un utilisateur à partir de l'email.
      *
+     * Utilise User::fromArray() pour reconstruire l'utilisateur
+     * avec toutes ses propriétés (id, rôles, mot de passe hashé, etc.).
+     *
      * @param string $email email de l'utilisateur
      *
-     * @return null|User L'instance User ou null en cas d'erreur
+     * @return null|User L'instance User ou null si non trouvé
      */
     public function loadUser(string $email): ?User
     {
@@ -91,14 +94,12 @@ class JsonStorage implements StorageInterface
             return null;
         }
 
-        $email = $data['email'] ?? null;
-        $name = $data['name'] ?? null;
-
-        if (!is_string($email) || !is_string($name)) {
+        // Vérifie les champs obligatoires
+        if (!isset($data['email'], $data['name'], $data['password'])) {
             return null;
         }
 
-        // Reconstruction simplifiée de l'entité (attention aux mots de passe hashés)
-        return new User($email, $name, ''); // Le password n'est pas re-hashé ici
+        // Utilise fromArray pour une reconstruction complète
+        return User::fromArray($data);
     }
 }
