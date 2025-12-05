@@ -177,4 +177,127 @@ class JsonStorageTest extends TestCase
         $this->assertNotNull($loaded);
         $this->assertSame($email, $loaded->getEmail());
     }
+
+    public function testSaveUserOverwritesExistingFile(): void
+    {
+        $storage = new JsonStorage();
+        $email = 'overwrite@example.com';
+
+        $user1 = new User($email, 'First Name', 'pass1');
+        $storage->saveUser($user1);
+
+        $user2 = new User($email, 'Updated Name', 'pass2');
+        $storage->saveUser($user2);
+
+        $loaded = $storage->loadUser($email);
+        $this->assertNotNull($loaded);
+        $this->assertSame('Updated Name', $loaded->getName());
+    }
+
+    public function testLoadUserWithDifferentEmails(): void
+    {
+        $storage = new JsonStorage();
+
+        $user = new User('test@example.com', 'Test', 'pass');
+        $storage->saveUser($user);
+
+        // Should not find user with different email
+        $wrongUser = $storage->loadUser('wrong@example.com');
+        $this->assertNull($wrongUser);
+    }
+
+    public function testSaveAndLoadPreservesName(): void
+    {
+        $storage = new JsonStorage();
+        $user = new User('name@example.com', 'Special Name With Spaces', 'pass');
+
+        $storage->saveUser($user);
+        $loaded = $storage->loadUser('name@example.com');
+
+        $this->assertNotNull($loaded);
+        $this->assertSame('Special Name With Spaces', $loaded->getName());
+    }
+
+    public function testFilePathUsesHashPrefix(): void
+    {
+        $storage = new JsonStorage();
+        $user = new User('hashtest@example.com', 'Hash Test', 'pass');
+
+        $storage->saveUser($user);
+
+        $hash = $user->getHash();
+        $expectedPrefix = substr($hash, 0, 3);
+        $expectedDir = $this->tempDataPath . '/user/' . $expectedPrefix;
+
+        $this->assertDirectoryExists($expectedDir);
+    }
+
+    public function testInstantiationWithoutEnvVars(): void
+    {
+        // Store current values
+        $currentDataPath = getenv('DATA_PATH');
+        $currentAppKey = getenv('APP_KEY');
+
+        // Clear env vars
+        putenv('DATA_PATH');
+        putenv('APP_KEY');
+
+        // Should not throw
+        $storage = new JsonStorage();
+        $this->assertInstanceOf(JsonStorage::class, $storage);
+
+        // Restore
+        if ($currentDataPath) {
+            putenv('DATA_PATH=' . $currentDataPath);
+        }
+        if ($currentAppKey) {
+            putenv('APP_KEY=' . $currentAppKey);
+        }
+    }
+
+    public function testMultipleSavesToSameDirectory(): void
+    {
+        $storage = new JsonStorage();
+
+        // Create multiple users that might share same subdirectory prefix
+        for ($i = 0; $i < 5; $i++) {
+            $user = new User("user{$i}@example.com", "User {$i}", "pass{$i}");
+            $storage->saveUser($user);
+        }
+
+        // Verify all can be loaded
+        for ($i = 0; $i < 5; $i++) {
+            $loaded = $storage->loadUser("user{$i}@example.com");
+            $this->assertNotNull($loaded);
+            $this->assertSame("User {$i}", $loaded->getName());
+        }
+    }
+
+    public function testSaveUserWithSpecialCharactersInName(): void
+    {
+        $storage = new JsonStorage();
+        $user = new User('special@example.com', 'Naïve Café Résumé', 'pass');
+
+        $storage->saveUser($user);
+        $loaded = $storage->loadUser('special@example.com');
+
+        $this->assertNotNull($loaded);
+        $this->assertSame('Naïve Café Résumé', $loaded->getName());
+    }
+
+    public function testLoadUserIsCaseSensitive(): void
+    {
+        $storage = new JsonStorage();
+        $user = new User('CaseSensitive@Example.Com', 'Case Test', 'pass');
+
+        $storage->saveUser($user);
+
+        // Exact email should work
+        $loaded = $storage->loadUser('CaseSensitive@Example.Com');
+        $this->assertNotNull($loaded);
+
+        // Different case should not find the user
+        $notFound = $storage->loadUser('casesensitive@example.com');
+        $this->assertNull($notFound);
+    }
 }

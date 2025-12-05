@@ -112,6 +112,87 @@ class ContainerTest extends TestCase
         // Create classes that have circular dependency
         $this->container->get(CircularA::class);
     }
+
+    public function testContainerImplementsInterface(): void
+    {
+        $this->assertInstanceOf(\Lunar\Service\Core\ContainerInterface::class, $this->container);
+    }
+
+    public function testMultipleDifferentServicesResolved(): void
+    {
+        $simple = $this->container->get(SimpleService::class);
+        $withDep = $this->container->get(ServiceWithDependency::class);
+        $nested = $this->container->get(ServiceWithNestedDependency::class);
+
+        $this->assertInstanceOf(SimpleService::class, $simple);
+        $this->assertInstanceOf(ServiceWithDependency::class, $withDep);
+        $this->assertInstanceOf(ServiceWithNestedDependency::class, $nested);
+    }
+
+    public function testNewContainerHasEmptyInstances(): void
+    {
+        $container = new Container();
+
+        // Internal instances should be empty but the container should work
+        $this->assertFalse($container->has('NonExistentService'));
+    }
+
+    public function testGetCreatesNewInstanceEachContainer(): void
+    {
+        $container1 = new Container();
+        $container2 = new Container();
+
+        $instance1 = $container1->get(SimpleService::class);
+        $instance2 = $container2->get(SimpleService::class);
+
+        // Different containers should create different instances
+        $this->assertNotSame($instance1, $instance2);
+    }
+
+    public function testHasWorksBeforeGet(): void
+    {
+        $container = new Container();
+
+        // Should return true for existing class even before instantiation
+        $this->assertTrue($container->has(SimpleService::class));
+    }
+
+    public function testDependencySharing(): void
+    {
+        $withDep1 = $this->container->get(ServiceWithDependency::class);
+        $withDep2 = $this->container->get(ServiceWithDependency::class);
+
+        // Same instance
+        $this->assertSame($withDep1, $withDep2);
+        // Same dependency
+        $this->assertSame($withDep1->dependency, $withDep2->dependency);
+    }
+
+    public function testNestedDependenciesShareInstances(): void
+    {
+        $nested = $this->container->get(ServiceWithNestedDependency::class);
+        $withDep = $this->container->get(ServiceWithDependency::class);
+        $simple = $this->container->get(SimpleService::class);
+
+        // All should share the same SimpleService
+        $this->assertSame($simple, $nested->dependency->dependency);
+        $this->assertSame($simple, $withDep->dependency);
+    }
+
+    public function testGetThrowsForInterface(): void
+    {
+        $this->expectException(ContainerException::class);
+
+        $this->container->get(\Stringable::class);
+    }
+
+    public function testGetThrowsForAbstractClass(): void
+    {
+        $this->expectException(ContainerException::class);
+
+        // PDO is not abstract, let's try with a known abstract class
+        $this->container->get(\FilterIterator::class);
+    }
 }
 
 // Test classes for circular dependency

@@ -147,4 +147,156 @@ class EncryptionServiceTest extends TestCase
 
         $differentService->decrypt($encrypted);
     }
+
+    public function testEncryptionImplementsInterface(): void
+    {
+        $this->assertInstanceOf(\Lunar\Service\Security\EncryptionInterface::class, $this->service);
+    }
+
+    public function testEncryptWithNumericString(): void
+    {
+        $data = '1234567890';
+        $encrypted = $this->service->encrypt($data);
+        $decrypted = $this->service->decrypt($encrypted);
+
+        $this->assertSame($data, $decrypted);
+    }
+
+    public function testEncryptWithNewlines(): void
+    {
+        $data = "Line 1\nLine 2\nLine 3";
+        $encrypted = $this->service->encrypt($data);
+        $decrypted = $this->service->decrypt($encrypted);
+
+        $this->assertSame($data, $decrypted);
+    }
+
+    public function testEncryptWithTabs(): void
+    {
+        $data = "Column1\tColumn2\tColumn3";
+        $encrypted = $this->service->encrypt($data);
+        $decrypted = $this->service->decrypt($encrypted);
+
+        $this->assertSame($data, $decrypted);
+    }
+
+    public function testEncryptWithBinaryData(): void
+    {
+        $data = "\x00\x01\x02\x03\x04\x05";
+        $encrypted = $this->service->encrypt($data);
+        $decrypted = $this->service->decrypt($encrypted);
+
+        $this->assertSame($data, $decrypted);
+    }
+
+    public function testEncryptedDataIsBase64(): void
+    {
+        $data = 'Test data';
+        $encrypted = $this->service->encrypt($data);
+
+        // Should be valid base64
+        $decoded = base64_decode($encrypted, true);
+        $this->assertNotFalse($decoded);
+        $this->assertSame($encrypted, base64_encode($decoded));
+    }
+
+    public function testEncryptedDataLengthIsConsistent(): void
+    {
+        // Same length input should produce similar output lengths
+        $data1 = str_repeat('a', 100);
+        $data2 = str_repeat('b', 100);
+
+        $encrypted1 = $this->service->encrypt($data1);
+        $encrypted2 = $this->service->encrypt($data2);
+
+        // Lengths should be approximately the same
+        $this->assertSame(strlen($encrypted1), strlen($encrypted2));
+    }
+
+    public function testDecryptWithEmptyStringThrows(): void
+    {
+        $this->expectException(SecurityException::class);
+
+        $this->service->decrypt('');
+    }
+
+    public function testMultipleEncryptDecryptCycles(): void
+    {
+        $data = 'Original data';
+
+        for ($i = 0; $i < 10; $i++) {
+            $encrypted = $this->service->encrypt($data);
+            $decrypted = $this->service->decrypt($encrypted);
+            $this->assertSame($data, $decrypted);
+        }
+    }
+
+    public function testEncryptWithWhitespaceOnly(): void
+    {
+        $data = '   ';
+        $encrypted = $this->service->encrypt($data);
+        $decrypted = $this->service->decrypt($encrypted);
+
+        $this->assertSame($data, $decrypted);
+    }
+
+    public function testSameKeyProducesSameDecryption(): void
+    {
+        $service1 = new EncryptionService('same_key');
+        $service2 = new EncryptionService('same_key');
+
+        $data = 'Secret data';
+        $encrypted = $service1->encrypt($data);
+        $decrypted = $service2->decrypt($encrypted);
+
+        $this->assertSame($data, $decrypted);
+    }
+
+    public function testDecryptWithModifiedHmacFails(): void
+    {
+        $data = 'Secret data';
+        $encrypted = $this->service->encrypt($data);
+
+        // Modify the last byte (part of HMAC)
+        $decoded = base64_decode($encrypted);
+        $modified = substr($decoded, 0, -1) . chr(ord(substr($decoded, -1)) ^ 0xFF);
+        $modifiedEncrypted = base64_encode($modified);
+
+        $this->expectException(SecurityException::class);
+        $this->service->decrypt($modifiedEncrypted);
+    }
+
+    public function testDecryptWithSwappedBytes(): void
+    {
+        $data = 'Secret data';
+        $encrypted = $this->service->encrypt($data);
+
+        // Swap two bytes in the middle
+        $decoded = base64_decode($encrypted);
+        if (strlen($decoded) > 30) {
+            $swapped = substr($decoded, 0, 20) .
+                       $decoded[21] .
+                       $decoded[20] .
+                       substr($decoded, 22);
+            $swappedEncrypted = base64_encode($swapped);
+
+            $this->expectException(SecurityException::class);
+            $this->service->decrypt($swappedEncrypted);
+        } else {
+            $this->markTestSkipped('Encrypted data too short for swap test');
+        }
+    }
+
+    public function testKeyDerivationIsConsistent(): void
+    {
+        // Same key should always derive the same encryption keys
+        $service1 = new EncryptionService('consistent_key');
+        $service2 = new EncryptionService('consistent_key');
+
+        $data = 'Test data';
+        $encrypted1 = $service1->encrypt($data);
+
+        // Both services should be able to decrypt each other's data
+        $this->assertSame($data, $service2->decrypt($encrypted1));
+    }
 }

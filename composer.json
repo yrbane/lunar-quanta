@@ -37,6 +37,11 @@
         },
         "files": [ "src/Service/Core/Debug/helpers.php" ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "config": {
         "optimize-autoloader": true,
         "sort-packages": true
