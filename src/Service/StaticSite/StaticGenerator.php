@@ -88,7 +88,16 @@ final class StaticGenerator
             $categoryName = $category?->getName() ?? '';
         }
 
-        $html = $this->render($template, [
+        // 1. D'abord traiter les conditions sur featured_image et category
+        $html = $this->processSimpleCondition($template, 'featured_image', !empty($post->getFeaturedImage()));
+        $html = $this->processSimpleCondition($html, 'category', !empty($categoryName));
+        $html = $this->processLengthCondition($html, 'tags', count($post->getTags()) > 0);
+
+        // 2. Traiter les tags (boucle for) - passer directement les valeurs string
+        $html = $this->renderWithLoop($html, 'tags', $post->getTags());
+
+        // 3. Enfin remplacer les variables simples
+        $html = $this->render($html, [
             'title' => $post->getTitle(),
             'content' => $htmlContent,
             'excerpt' => $post->getExcerpt(),
@@ -100,17 +109,6 @@ final class StaticGenerator
             'featured_image' => $post->getFeaturedImage() ?? '',
             'category' => $categoryName,
         ]);
-
-        // Traiter les tags
-        $html = $this->renderWithLoop($html, 'tags', array_map(
-            fn($tag) => ['tag' => $tag],
-            $post->getTags()
-        ));
-
-        // Traiter les conditions sur featured_image et category
-        $html = $this->processSimpleCondition($html, 'featured_image', !empty($post->getFeaturedImage()));
-        $html = $this->processSimpleCondition($html, 'category', !empty($categoryName));
-        $html = $this->processLengthCondition($html, 'tags', count($post->getTags()) > 0);
 
         $this->writeFile('posts/' . $post->getSlug() . '.html', $html);
 
@@ -516,7 +514,19 @@ final class StaticGenerator
         foreach ($items as $item) {
             $itemHtml = $loopTemplate;
 
-            // Gérer les conditions {% if post.var %}
+            // Gérer les conditions {% if post.var %}...{% else %}...{% endif %}
+            $condPatternWithElse = '/\{%\s*if\s+' . preg_quote($itemVar, '/') . '\.(\w+)\s*%\}(.*?)\{%\s*else\s*%\}(.*?)\{%\s*endif\s*%\}/s';
+            $itemHtml = preg_replace_callback($condPatternWithElse, function ($matches) use ($item) {
+                $var = $matches[1];
+                $ifContent = $matches[2];
+                $elseContent = $matches[3];
+                if (isset($item[$var]) && !empty($item[$var])) {
+                    return $ifContent;
+                }
+                return $elseContent;
+            }, $itemHtml);
+
+            // Gérer les conditions {% if post.var %}...{% endif %} (sans else)
             $condPattern = '/\{%\s*if\s+' . preg_quote($itemVar, '/') . '\.(\w+)\s*%\}(.*?)\{%\s*endif\s*%\}/s';
             $itemHtml = preg_replace_callback($condPattern, function ($matches) use ($item) {
                 $var = $matches[1];
@@ -527,11 +537,20 @@ final class StaticGenerator
                 return '';
             }, $itemHtml);
 
-            foreach ($item as $key => $value) {
-                if (is_string($value) || is_numeric($value)) {
-                    $itemHtml = str_replace('{{ ' . $itemVar . '.' . $key . ' }}', (string) $value, $itemHtml);
+            // Si l'item est un tableau associatif, remplacer {{ var.key }}
+            if (is_array($item)) {
+                foreach ($item as $key => $value) {
+                    if (is_string($value) || is_numeric($value)) {
+                        $itemHtml = str_replace('{{ ' . $itemVar . '.' . $key . ' }}', (string) $value, $itemHtml);
+                    }
                 }
             }
+
+            // Si l'item est une valeur scalaire (string ou int), remplacer {{ var }} directement
+            if (is_string($item) || is_numeric($item)) {
+                $itemHtml = str_replace('{{ ' . $itemVar . ' }}', (string) $item, $itemHtml);
+            }
+
             $loopContent .= $itemHtml;
         }
 
