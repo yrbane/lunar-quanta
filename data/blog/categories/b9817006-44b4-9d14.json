@@ -1,0 +1,10 @@
+{
+    "id": "b9817006-44b4-9d14",
+    "name": "Test Category",
+    "slug": "test-category",
+    "description": "Test category for static site generation",
+    "color": "#6b7280",
+    "sortOrder": 0,
+    "createdAt": "2025-12-05T17:29:28+00:00",
+    "updatedAt": "2025-12-05T17:29:28+00:00"
+}

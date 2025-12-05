@@ -1,0 +1,18 @@
+{
+    "id": "4cba7e4f-fb55-1224",
+    "title": "Test Article",
+    "slug": "test-article",
+    "content": "# Welcome to the Test Article\n\nThis is a test article for the static site generator.\n\n## Features\n\n- Markdown support\n- Tag support\n- Category support\n\n## Code Example\n\n```php\necho \"Hello, World!\";\n```\n\n> This is a quote\n\nEnjoy your reading!",
+    "excerpt": "This is a test article for the static site generator.",
+    "author": "Test Author",
+    "categoryId": "b9817006-44b4-9d14",
+    "featuredImage": null,
+    "status": "published",
+    "tags": [
+        "test",
+        "example"
+    ],
+    "createdAt": "2025-12-05T17:29:28+00:00",
+    "updatedAt": "2025-12-05T17:29:28+00:00",
+    "publishedAt": "2025-12-05T17:29:28+00:00"
+}
