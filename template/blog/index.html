@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,279 +8,222 @@
     <link rel="alternate" type="application/rss+xml" title="Lunar Blog RSS" href="/blog/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <!-- External CSS -->
-    <link rel="stylesheet" href="/assets/css/theme.css">
-    <link rel="stylesheet" href="/assets/css/base.css">
-    <link rel="stylesheet" href="/assets/css/components.css">
-    <link rel="stylesheet" href="/assets/css/index.css">
+    <!-- Lunar Aurora CSS Framework -->
+    <link rel="stylesheet" href="/assets/css/lunar-aurora/aurora-blog.css">
 </head>
-<body>
-    <header class="header">
-        <div class="container">
-            <div class="header-inner">
-                <a href="/blog/" class="logo">
-                    <span class="logo-icon">L</span>
-                    <span>Lunar Blog</span>
+<body class="la-blog">
+    <header class="la-blog-header">
+        <div class="la-container">
+            <a href="/blog/" class="la-blog-logo">
+                <span class="la-icon">rocket_launch</span>
+                <span>Lunar Blog</span>
+            </a>
+            <nav class="la-blog-nav">
+                <a href="/blog/" aria-current="page">Articles</a>
+                <button onclick="focusSearch()" title="Rechercher (/)">
+                    <span class="la-icon sm">search</span>
+                </button>
+                <button onclick="showKeyboardShortcuts()" title="Raccourcis (?)">
+                    <span class="la-icon sm">keyboard</span>
+                </button>
+                <a href="/blog/feed.xml" title="Flux RSS">
+                    <span class="la-icon sm">rss_feed</span>
                 </a>
-                <nav class="nav">
-                    <a href="/blog/" class="nav-link">Articles</a>
-                    <button class="nav-link search-trigger" onclick="focusSearch()" title="Rechercher (/)">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"/>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                        </svg>
-                    </button>
-                    <button class="nav-link" onclick="showKeyboardShortcuts()" title="Raccourcis (?)">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="4" width="20" height="16" rx="2"/>
-                            <path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M6 16h12"/>
-                        </svg>
-                    </button>
-                    <a href="/blog/feed.xml" class="nav-link" title="Flux RSS">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 11a9 9 0 0 1 9 9"/>
-                            <path d="M4 4a16 16 0 0 1 16 16"/>
-                            <circle cx="5" cy="19" r="1"/>
-                        </svg>
-                    </a>
-                    <a href="https://github.com/yrbane/lunar-quanta" class="nav-link" target="_blank" title="GitHub">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                    </a>
-                </nav>
-            </div>
+                <a href="https://github.com/yrbane/lunar-quanta" target="_blank" title="GitHub">
+                    <span class="la-icon sm">code</span>
+                </a>
+            </nav>
+            <button class="la-blog-menu-toggle" onclick="toggleMobileNav()">
+                <span class="la-icon">menu</span>
+            </button>
         </div>
     </header>
 
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                        <path d="M2 17l10 5 10-5"/>
-                        <path d="M2 12l10 5 10-5"/>
-                    </svg>
-                    Framework PHP Moderne
+    <section class="la-blog-hero">
+        <div class="la-container la-text-center">
+            <span class="la-badge lg la-mb-4">
+                <span class="la-icon sm">layers</span>
+                Framework PHP Moderne
+            </span>
+            <h1 class="la-blog-hero-title">Le Blog <span class="la-gradient-text">Lunar Quanta</span></h1>
+            <p class="la-blog-hero-subtitle">Tutoriels, guides et bonnes pratiques pour maîtriser le framework PHP sans dépendances.</p>
+            <div class="la-flex la-justify-center la-gap-8 la-mt-8">
+                <div class="la-text-center">
+                    <div class="la-text-4xl la-font-bold" id="articleCount">{{ article_count }}</div>
+                    <div class="la-text-sm la-text-muted">Articles</div>
                 </div>
-                <h1>Le Blog <span class="hero-gradient-text">Lunar Quanta</span></h1>
-                <p>Tutoriels, guides et bonnes pratiques pour maitriser le framework PHP sans dependances.</p>
-                <div class="hero-stats">
-                    <div class="hero-stat">
-                        <div class="hero-stat-value" id="articleCount">{{ article_count }}</div>
-                        <div class="hero-stat-label">Articles</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="hero-stat-value">1200+</div>
-                        <div class="hero-stat-label">Tests</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="hero-stat-value">0</div>
-                        <div class="hero-stat-label">Dependances</div>
-                    </div>
+                <div class="la-text-center">
+                    <div class="la-text-4xl la-font-bold">1200+</div>
+                    <div class="la-text-sm la-text-muted">Tests</div>
                 </div>
-                <div class="hero-search">
-                    <span class="hero-search-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"/>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                        </svg>
-                    </span>
-                    <input type="text" id="searchInput" placeholder="Rechercher un article..." autocomplete="off">
-                    <span class="hero-search-shortcut">/</span>
+                <div class="la-text-center">
+                    <div class="la-text-4xl la-font-bold">0</div>
+                    <div class="la-text-sm la-text-muted">Dépendances</div>
                 </div>
+            </div>
+            <div class="la-search-form la-max-w-md la-mx-auto la-mt-8">
+                <span class="la-icon">search</span>
+                <input type="text" id="searchInput" placeholder="Rechercher un article..." autocomplete="off" class="la-input">
             </div>
         </div>
     </section>
 
-    <main class="main">
-        <div class="container">
+    <main class="la-blog-main">
+        <div class="la-container">
             <!-- Tags Cloud -->
-            <section class="tags-section">
-                <div class="tags-header">
-                    <span class="tags-title">Tags populaires</span>
-                    <button class="tags-toggle" onclick="toggleTags()">Voir tout</button>
+            <section class="la-sidebar-widget la-mb-8">
+                <div class="la-flex la-justify-between la-items-center la-mb-4">
+                    <h3 class="la-sidebar-title la-mb-0">Tags populaires</h3>
+                    <button class="la-btn ghost sm" onclick="toggleTags()">Voir tout</button>
                 </div>
-                <div class="tags-cloud collapsed" id="tagsCloud">
+                <div class="la-tag-cloud collapsed" id="tagsCloud">
                     {{ tags_list }}
                 </div>
             </section>
 
             <!-- Toolbar -->
-            <div class="toolbar">
-                <div class="toolbar-left">
-                    <h2 class="section-title">Articles</h2>
-                    <span class="article-count" id="visibleCount">{{ article_count }}</span>
+            <div class="la-flex la-justify-between la-items-center la-flex-wrap la-gap-4 la-mb-6">
+                <div class="la-flex la-items-center la-gap-3">
+                    <h2 class="la-h3 la-mb-0">Articles</h2>
+                    <span class="la-badge" id="visibleCount">{{ article_count }}</span>
                 </div>
-                <div style="display: flex; gap: 1rem; align-items: center;">
-                    <div class="filter-tabs">
-                        <button class="filter-tab active" data-filter="all">Tous</button>
-                        <button class="filter-tab" data-filter="framework">Framework</button>
-                        <button class="filter-tab" data-filter="tutoriels">Tutoriels</button>
+                <div class="la-flex la-gap-4 la-items-center">
+                    <div class="la-admin-tabs">
+                        <button class="la-admin-tab active" data-filter="all">Tous</button>
+                        <button class="la-admin-tab" data-filter="framework">Framework</button>
+                        <button class="la-admin-tab" data-filter="tutoriels">Tutoriels</button>
                     </div>
-                    <div class="view-toggle">
-                        <button class="view-btn active" data-view="grid" title="Vue grille">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="7" height="7"/>
-                                <rect x="14" y="3" width="7" height="7"/>
-                                <rect x="14" y="14" width="7" height="7"/>
-                                <rect x="3" y="14" width="7" height="7"/>
-                            </svg>
+                    <div class="la-flex la-gap-1">
+                        <button class="la-btn ghost sm active" data-view="grid" title="Vue grille">
+                            <span class="la-icon sm">grid_view</span>
                         </button>
-                        <button class="view-btn" data-view="list" title="Vue liste">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="8" y1="6" x2="21" y2="6"/>
-                                <line x1="8" y1="12" x2="21" y2="12"/>
-                                <line x1="8" y1="18" x2="21" y2="18"/>
-                                <line x1="3" y1="6" x2="3.01" y2="6"/>
-                                <line x1="3" y1="12" x2="3.01" y2="12"/>
-                                <line x1="3" y1="18" x2="3.01" y2="18"/>
-                            </svg>
+                        <button class="la-btn ghost sm" data-view="list" title="Vue liste">
+                            <span class="la-icon sm">view_list</span>
                         </button>
                     </div>
                 </div>
             </div>
 
             {% if posts|length > 0 %}
-            <div class="articles-grid" id="articlesGrid">
+            <div class="la-post-grid" id="articlesGrid">
                 {% for post in posts %}
-                <a href="{{ post.url }}" class="article-card" data-title="{{ post.title }}" data-category="{{ post.category }}" data-tags="{{ post.tags_string }}">
-                    <div class="card-image">
+                <article class="la-post-card" data-title="{{ post.title }}" data-category="{{ post.category }}" data-tags="{{ post.tags_string }}">
+                    <div class="la-post-card-image{% if not post.featured_image %} placeholder{% endif %}">
                         {% if post.featured_image %}
                         <img src="{{ post.featured_image }}" alt="{{ post.title }}" loading="lazy">
                         {% else %}
-                        <div class="card-image-placeholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                                <circle cx="8.5" cy="8.5" r="1.5"/>
-                                <path d="M21 15l-5-5L5 21"/>
-                            </svg>
-                        </div>
+                        <span class="la-icon xl">image</span>
                         {% endif %}
-                        {% if post.category %}
-                        <span class="card-category">{{ post.category }}</span>
-                        {% endif %}
-                        <button class="card-bookmark" onclick="event.preventDefault(); toggleBookmark(this, '{{ post.slug }}')" title="Ajouter aux favoris">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                            </svg>
-                        </button>
                     </div>
-                    <div class="card-body">
-                        <h3 class="card-title">{{ post.title }}</h3>
-                        {% if post.excerpt %}
-                        <p class="card-excerpt">{{ post.excerpt }}</p>
-                        {% endif %}
-                        <div class="card-meta">
-                            {% if post.author %}
-                            <span class="card-meta-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                    <circle cx="12" cy="7" r="4"/>
-                                </svg>
-                                {{ post.author }}
-                            </span>
+                    <div class="la-post-card-content">
+                        <div class="la-post-card-meta">
+                            {% if post.category %}
+                            <a href="/blog/category/{{ post.category|lower }}/" class="la-post-card-category">{{ post.category }}</a>
                             {% endif %}
-                            <span class="card-meta-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="4" width="18" height="18" rx="2"/>
-                                    <line x1="16" y1="2" x2="16" y2="6"/>
-                                    <line x1="8" y1="2" x2="8" y2="6"/>
-                                    <line x1="3" y1="10" x2="21" y2="10"/>
-                                </svg>
+                            <span class="la-post-card-date">
+                                <span class="la-icon xs">calendar_today</span>
                                 {{ post.published_at }}
                             </span>
-                            <span class="card-meta-item">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <polyline points="12 6 12 12 16 14"/>
-                                </svg>
+                        </div>
+                        <h3 class="la-post-card-title">
+                            <a href="{{ post.url }}">{{ post.title }}</a>
+                        </h3>
+                        {% if post.excerpt %}
+                        <p class="la-post-card-excerpt">{{ post.excerpt }}</p>
+                        {% endif %}
+                        <div class="la-post-card-footer">
+                            {% if post.author %}
+                            <div class="la-post-card-author">
+                                <span class="la-avatar sm">
+                                    <span class="la-icon sm">person</span>
+                                </span>
+                                <span>{{ post.author }}</span>
+                            </div>
+                            {% endif %}
+                            <span class="la-post-card-read-time">
+                                <span class="la-icon xs">schedule</span>
                                 {{ post.reading_time }} min
                             </span>
                         </div>
                     </div>
-                </a>
+                </article>
                 {% endfor %}
             </div>
             {% else %}
-            <div class="empty-state">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-                </svg>
-                <h2>Aucun article pour l'instant</h2>
-                <p>Les articles publies apparaitront ici.</p>
+            <div class="la-empty-state">
+                <div class="la-empty-state-icon">
+                    <span class="la-icon xxl">edit_note</span>
+                </div>
+                <h2 class="la-empty-state-title">Aucun article pour l'instant</h2>
+                <p class="la-empty-state-description">Les articles publiés apparaîtront ici.</p>
             </div>
             {% endif %}
         </div>
     </main>
 
     <!-- Scroll to Top -->
-    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="18 15 12 9 6 15"/>
-        </svg>
+    <button class="la-btn primary la-rounded-full la-fixed la-bottom-8 la-right-8 la-z-50 la-opacity-0 la-transition-opacity" id="scrollTop" onclick="scrollToTop()">
+        <span class="la-icon">arrow_upward</span>
     </button>
 
     <!-- Keyboard Shortcuts Modal -->
-    <div class="kbd-modal" id="kbdModal">
-        <div class="kbd-content">
-            <div class="kbd-header">
-                <h3 class="kbd-title">Raccourcis clavier</h3>
-                <button class="kbd-close" onclick="hideKeyboardShortcuts()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
+    <div class="la-modal-backdrop" id="kbdModal">
+        <div class="la-modal">
+            <div class="la-modal-header">
+                <h3 class="la-modal-title">Raccourcis clavier</h3>
+                <button class="la-modal-close" onclick="hideKeyboardShortcuts()">
+                    <span class="la-icon">close</span>
                 </button>
             </div>
-            <div class="kbd-list">
-                <div class="kbd-item">
-                    <span class="kbd-desc">Rechercher</span>
-                    <span class="kbd-key">/</span>
-                </div>
-                <div class="kbd-item">
-                    <span class="kbd-desc">Afficher cette aide</span>
-                    <span class="kbd-key">?</span>
-                </div>
-                <div class="kbd-item">
-                    <span class="kbd-desc">Remonter en haut</span>
-                    <span class="kbd-key">T</span>
-                </div>
-                <div class="kbd-item">
-                    <span class="kbd-desc">Vue grille</span>
-                    <span class="kbd-key">G</span>
-                </div>
-                <div class="kbd-item">
-                    <span class="kbd-desc">Vue liste</span>
-                    <span class="kbd-key">L</span>
-                </div>
-                <div class="kbd-item">
-                    <span class="kbd-desc">Fermer</span>
-                    <span class="kbd-key">Esc</span>
+            <div class="la-modal-body">
+                <div class="la-flex la-flex-col la-gap-3">
+                    <div class="la-flex la-justify-between la-items-center">
+                        <span>Rechercher</span>
+                        <kbd class="la-badge outline">/</kbd>
+                    </div>
+                    <div class="la-flex la-justify-between la-items-center">
+                        <span>Afficher cette aide</span>
+                        <kbd class="la-badge outline">?</kbd>
+                    </div>
+                    <div class="la-flex la-justify-between la-items-center">
+                        <span>Remonter en haut</span>
+                        <kbd class="la-badge outline">T</kbd>
+                    </div>
+                    <div class="la-flex la-justify-between la-items-center">
+                        <span>Vue grille</span>
+                        <kbd class="la-badge outline">G</kbd>
+                    </div>
+                    <div class="la-flex la-justify-between la-items-center">
+                        <span>Vue liste</span>
+                        <kbd class="la-badge outline">L</kbd>
+                    </div>
+                    <div class="la-flex la-justify-between la-items-center">
+                        <span>Fermer</span>
+                        <kbd class="la-badge outline">Esc</kbd>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
+    <div class="la-toast-container" id="toastContainer"></div>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-inner">
-                <div class="footer-brand">
-                    <span class="footer-brand-icon">L</span>
-                    <span>Lunar Quanta</span>
+    <footer class="la-blog-footer">
+        <div class="la-container">
+            <div class="la-blog-footer-bottom">
+                <div class="la-flex la-items-center la-gap-3">
+                    <span class="la-icon">rocket_launch</span>
+                    <span class="la-font-semibold">Lunar Quanta</span>
                 </div>
-                <div class="footer-links">
-                    <a href="/blog/feed.xml" class="footer-link">RSS</a>
-                    <a href="https://github.com/yrbane/lunar-quanta" class="footer-link">GitHub</a>
-                    <a href="/" class="footer-link">Site</a>
+                <div class="la-blog-social">
+                    <a href="/blog/feed.xml" title="RSS"><span class="la-icon sm">rss_feed</span></a>
+                    <a href="https://github.com/yrbane/lunar-quanta" target="_blank" title="GitHub"><span class="la-icon sm">code</span></a>
+                    <a href="/" title="Site"><span class="la-icon sm">home</span></a>
                 </div>
-                <p class="footer-copy">&copy; {{ year }} Lunar Quanta</p>
+                <p>&copy; {{ year }} Lunar Quanta</p>
             </div>
         </div>
     </footer>
@@ -289,7 +232,7 @@
         // Search functionality
         const searchInput = document.getElementById('searchInput');
         const articlesGrid = document.getElementById('articlesGrid');
-        const articles = articlesGrid ? Array.from(articlesGrid.querySelectorAll('.article-card')) : [];
+        const articles = articlesGrid ? Array.from(articlesGrid.querySelectorAll('.la-post-card')) : [];
         const visibleCount = document.getElementById('visibleCount');
 
         function filterArticles() {
@@ -302,7 +245,7 @@
                 const tags = article.dataset.tags?.toLowerCase() || '';
                 const matches = title.includes(query) || category.includes(query) || tags.includes(query);
 
-                article.classList.toggle('hidden', !matches);
+                article.classList.toggle('la-hidden', !matches);
                 if (matches) visible++;
             });
 
@@ -316,9 +259,9 @@
         }
 
         // Filter tabs
-        document.querySelectorAll('.filter-tab').forEach(tab => {
+        document.querySelectorAll('.la-admin-tab').forEach(tab => {
             tab.addEventListener('click', () => {
-                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.la-admin-tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
 
                 const filter = tab.dataset.filter;
@@ -327,7 +270,7 @@
                 articles.forEach(article => {
                     const category = article.dataset.category?.toLowerCase() || '';
                     const matches = filter === 'all' || category.includes(filter);
-                    article.classList.toggle('hidden', !matches);
+                    article.classList.toggle('la-hidden', !matches);
                     if (matches) visible++;
                 });
 
@@ -336,15 +279,17 @@
         });
 
         // View toggle
-        document.querySelectorAll('.view-btn').forEach(btn => {
+        document.querySelectorAll('[data-view]').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
                 if (btn.dataset.view === 'list') {
-                    articlesGrid?.classList.add('list-view');
+                    articlesGrid?.classList.add('la-post-list');
+                    articlesGrid?.classList.remove('la-post-grid');
                 } else {
-                    articlesGrid?.classList.remove('list-view');
+                    articlesGrid?.classList.remove('la-post-list');
+                    articlesGrid?.classList.add('la-post-grid');
                 }
             });
         });
@@ -352,16 +297,25 @@
         // Tags toggle
         function toggleTags() {
             const cloud = document.getElementById('tagsCloud');
-            const btn = document.querySelector('.tags-toggle');
             cloud.classList.toggle('collapsed');
-            btn.textContent = cloud.classList.contains('collapsed') ? 'Voir tout' : 'Reduire';
+        }
+
+        // Mobile nav toggle
+        function toggleMobileNav() {
+            document.querySelector('.la-blog-nav').classList.toggle('is-open');
         }
 
         // Scroll to top
         const scrollTopBtn = document.getElementById('scrollTop');
 
         window.addEventListener('scroll', () => {
-            scrollTopBtn.classList.toggle('visible', window.scrollY > 500);
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.remove('la-opacity-0');
+                scrollTopBtn.classList.add('la-opacity-100');
+            } else {
+                scrollTopBtn.classList.add('la-opacity-0');
+                scrollTopBtn.classList.remove('la-opacity-100');
+            }
         });
 
         function scrollToTop() {
@@ -370,11 +324,11 @@
 
         // Keyboard shortcuts
         function showKeyboardShortcuts() {
-            document.getElementById('kbdModal').classList.add('open');
+            document.getElementById('kbdModal').classList.add('is-open');
         }
 
         function hideKeyboardShortcuts() {
-            document.getElementById('kbdModal').classList.remove('open');
+            document.getElementById('kbdModal').classList.remove('is-open');
         }
 
         document.addEventListener('keydown', (e) => {
@@ -407,51 +361,46 @@
             }
         });
 
-        // Bookmarks
-        function toggleBookmark(btn, slug) {
-            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-            const index = bookmarks.indexOf(slug);
-
-            if (index > -1) {
-                bookmarks.splice(index, 1);
-                btn.classList.remove('active');
-                showToast('Article retire des favoris');
-            } else {
-                bookmarks.push(slug);
-                btn.classList.add('active');
-                showToast('Article ajoute aux favoris');
-            }
-
-            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-        }
-
-        // Load bookmarks on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-            bookmarks.forEach(slug => {
-                const btn = document.querySelector(`[onclick*="${slug}"]`);
-                btn?.classList.add('active');
-            });
-        });
-
         // Toast notifications
-        function showToast(message) {
+        function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.textContent = message;
+            toast.className = `la-toast ${type}`;
+            toast.innerHTML = `
+                <div class="la-toast-icon"><span class="la-icon">info</span></div>
+                <div class="la-toast-content">
+                    <div class="la-toast-message">${message}</div>
+                </div>
+                <button class="la-toast-close" onclick="this.parentElement.remove()">
+                    <span class="la-icon sm">close</span>
+                </button>
+            `;
             container.appendChild(toast);
 
             setTimeout(() => {
-                toast.classList.add('out');
+                toast.style.opacity = '0';
                 setTimeout(() => toast.remove(), 300);
-            }, 2000);
+            }, 3000);
         }
 
         // Click outside to close modal
         document.getElementById('kbdModal').addEventListener('click', (e) => {
-            if (e.target.id === 'kbdModal') hideKeyboardShortcuts();
+            if (e.target.classList.contains('la-modal-backdrop')) hideKeyboardShortcuts();
         });
+
+        // Theme toggle (optional)
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            html.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+            localStorage.setItem('theme', html.getAttribute('data-theme'));
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,427 @@
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║                         LUNAR AURORA - THEMES                               ║
+ * ║                                                                           ║
+ * ║  Theme variants: dark mode, color schemes, and custom themes.            ║
+ * ║  Uses :has() for automatic detection and data attributes for manual.     ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DARK MODE - System Preference
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+
+        /* Surfaces - Dark */
+        --la-surface-0: oklch(12% 0.02 var(--la-hue-primary));
+        --la-surface-1: oklch(16% 0.02 var(--la-hue-primary));
+        --la-surface-2: oklch(20% 0.02 var(--la-hue-primary));
+        --la-surface-3: oklch(24% 0.02 var(--la-hue-primary));
+        --la-surface-raised: oklch(18% 0.02 var(--la-hue-primary));
+        --la-surface-overlay: oklch(15% 0.02 var(--la-hue-primary) / 95%);
+
+        /* Text - Dark */
+        --la-text: oklch(95% 0.01 var(--la-hue-primary));
+        --la-text-secondary: oklch(75% 0.01 var(--la-hue-primary));
+        --la-text-muted: oklch(55% 0.01 var(--la-hue-primary));
+        --la-text-disabled: oklch(40% 0.005 var(--la-hue-primary));
+
+        /* Borders - Dark */
+        --la-border: oklch(28% 0.02 var(--la-hue-primary));
+        --la-border-strong: oklch(38% 0.02 var(--la-hue-primary));
+        --la-border-subtle: oklch(22% 0.01 var(--la-hue-primary));
+
+        /* Adjust primary colors for dark mode (slightly brighter) */
+        --la-primary: oklch(68% 0.22 var(--la-hue-primary));
+        --la-primary-subtle: oklch(22% 0.08 var(--la-hue-primary));
+
+        /* Shadows - darker for dark mode */
+        --la-shadow-sm:
+            0 1px 3px oklch(0% 0 0 / 30%),
+            0 1px 2px oklch(0% 0 0 / 20%);
+        --la-shadow-md:
+            0 4px 6px -1px oklch(0% 0 0 / 40%),
+            0 2px 4px -2px oklch(0% 0 0 / 30%);
+        --la-shadow-lg:
+            0 10px 15px -3px oklch(0% 0 0 / 50%),
+            0 4px 6px -4px oklch(0% 0 0 / 40%);
+
+        /* Gradient Hero - Dark */
+        --la-gradient-hero: linear-gradient(
+            135deg,
+            oklch(12% 0.1 var(--la-hue-primary)) 0%,
+            oklch(15% 0.08 calc(var(--la-hue-primary) + 20)) 50%,
+            oklch(14% 0.12 var(--la-hue-secondary)) 100%
+        );
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DARK MODE - Manual Override via data-theme
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="dark"] {
+    color-scheme: dark;
+
+    --la-surface-0: oklch(12% 0.02 var(--la-hue-primary));
+    --la-surface-1: oklch(16% 0.02 var(--la-hue-primary));
+    --la-surface-2: oklch(20% 0.02 var(--la-hue-primary));
+    --la-surface-3: oklch(24% 0.02 var(--la-hue-primary));
+    --la-surface-raised: oklch(18% 0.02 var(--la-hue-primary));
+    --la-surface-overlay: oklch(15% 0.02 var(--la-hue-primary) / 95%);
+
+    --la-text: oklch(95% 0.01 var(--la-hue-primary));
+    --la-text-secondary: oklch(75% 0.01 var(--la-hue-primary));
+    --la-text-muted: oklch(55% 0.01 var(--la-hue-primary));
+    --la-text-disabled: oklch(40% 0.005 var(--la-hue-primary));
+
+    --la-border: oklch(28% 0.02 var(--la-hue-primary));
+    --la-border-strong: oklch(38% 0.02 var(--la-hue-primary));
+    --la-border-subtle: oklch(22% 0.01 var(--la-hue-primary));
+
+    --la-primary: oklch(68% 0.22 var(--la-hue-primary));
+    --la-primary-subtle: oklch(22% 0.08 var(--la-hue-primary));
+
+    --la-shadow-sm:
+        0 1px 3px oklch(0% 0 0 / 30%),
+        0 1px 2px oklch(0% 0 0 / 20%);
+    --la-shadow-md:
+        0 4px 6px -1px oklch(0% 0 0 / 40%),
+        0 2px 4px -2px oklch(0% 0 0 / 30%);
+    --la-shadow-lg:
+        0 10px 15px -3px oklch(0% 0 0 / 50%),
+        0 4px 6px -4px oklch(0% 0 0 / 40%);
+
+    --la-gradient-hero: linear-gradient(
+        135deg,
+        oklch(12% 0.1 var(--la-hue-primary)) 0%,
+        oklch(15% 0.08 calc(var(--la-hue-primary) + 20)) 50%,
+        oklch(14% 0.12 var(--la-hue-secondary)) 100%
+    );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME: CYBERPUNK - Neon & Glitch
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="cyberpunk"] {
+    color-scheme: dark;
+
+    --la-hue-primary: 300;      /* Magenta */
+    --la-hue-secondary: 180;    /* Cyan */
+    --la-hue-accent: 60;        /* Yellow */
+
+    --la-primary: oklch(65% 0.35 var(--la-hue-primary));
+    --la-primary-light: oklch(75% 0.3 var(--la-hue-primary));
+    --la-primary-dark: oklch(50% 0.35 var(--la-hue-primary));
+    --la-secondary: oklch(75% 0.25 var(--la-hue-secondary));
+    --la-accent: oklch(85% 0.25 var(--la-hue-accent));
+
+    --la-surface-0: oklch(8% 0.03 var(--la-hue-primary));
+    --la-surface-1: oklch(12% 0.04 var(--la-hue-primary));
+    --la-surface-2: oklch(16% 0.05 var(--la-hue-primary));
+    --la-surface-3: oklch(20% 0.05 var(--la-hue-primary));
+
+    --la-text: oklch(95% 0.02 var(--la-hue-secondary));
+    --la-text-secondary: oklch(80% 0.02 var(--la-hue-secondary));
+
+    --la-border: oklch(30% 0.1 var(--la-hue-primary));
+    --la-border-focus: var(--la-secondary);
+
+    --la-shadow-glow: 0 0 30px oklch(60% 0.35 var(--la-hue-primary) / 50%);
+    --la-shadow-glow-primary: 0 0 40px oklch(65% 0.35 var(--la-hue-primary) / 60%);
+
+    --la-gradient-primary: linear-gradient(
+        135deg,
+        var(--la-primary) 0%,
+        var(--la-secondary) 100%
+    );
+
+    --la-gradient-hero: linear-gradient(
+        135deg,
+        oklch(8% 0.15 var(--la-hue-primary)) 0%,
+        oklch(12% 0.1 var(--la-hue-secondary)) 50%,
+        oklch(10% 0.12 var(--la-hue-primary)) 100%
+    );
+
+    /* Radius: Sharp/Angular */
+    --la-radius-factor: 0.5;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME: OCEAN - Deep Blue
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="ocean"] {
+    --la-hue-primary: 210;      /* Blue */
+    --la-hue-secondary: 180;    /* Teal */
+    --la-hue-accent: 45;        /* Gold */
+
+    --la-primary: oklch(55% 0.2 var(--la-hue-primary));
+    --la-primary-light: oklch(68% 0.18 var(--la-hue-primary));
+    --la-primary-dark: oklch(42% 0.22 var(--la-hue-primary));
+    --la-secondary: oklch(60% 0.15 var(--la-hue-secondary));
+    --la-accent: oklch(75% 0.18 var(--la-hue-accent));
+
+    --la-gradient-primary: linear-gradient(
+        135deg,
+        var(--la-primary) 0%,
+        var(--la-secondary) 100%
+    );
+
+    --la-gradient-hero: linear-gradient(
+        135deg,
+        oklch(20% 0.12 var(--la-hue-primary)) 0%,
+        oklch(25% 0.1 var(--la-hue-secondary)) 50%,
+        oklch(22% 0.15 var(--la-hue-primary)) 100%
+    );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME: FOREST - Nature Green
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="forest"] {
+    --la-hue-primary: 142;      /* Green */
+    --la-hue-secondary: 85;     /* Lime */
+    --la-hue-accent: 35;        /* Earth/Brown */
+
+    --la-primary: oklch(55% 0.18 var(--la-hue-primary));
+    --la-primary-light: oklch(68% 0.15 var(--la-hue-primary));
+    --la-primary-dark: oklch(40% 0.2 var(--la-hue-primary));
+    --la-secondary: oklch(65% 0.2 var(--la-hue-secondary));
+    --la-accent: oklch(60% 0.12 var(--la-hue-accent));
+
+    --la-gradient-primary: linear-gradient(
+        135deg,
+        var(--la-primary) 0%,
+        var(--la-secondary) 100%
+    );
+
+    --la-gradient-hero: linear-gradient(
+        135deg,
+        oklch(18% 0.1 var(--la-hue-primary)) 0%,
+        oklch(22% 0.08 var(--la-hue-secondary)) 50%,
+        oklch(20% 0.12 var(--la-hue-primary)) 100%
+    );
+
+    /* Radius: More organic/rounded */
+    --la-radius-factor: 1.5;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME: SUNSET - Warm Orange/Pink
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="sunset"] {
+    --la-hue-primary: 25;       /* Orange */
+    --la-hue-secondary: 340;    /* Pink */
+    --la-hue-accent: 50;        /* Yellow */
+
+    --la-primary: oklch(65% 0.2 var(--la-hue-primary));
+    --la-primary-light: oklch(78% 0.16 var(--la-hue-primary));
+    --la-primary-dark: oklch(52% 0.22 var(--la-hue-primary));
+    --la-secondary: oklch(60% 0.22 var(--la-hue-secondary));
+    --la-accent: oklch(80% 0.18 var(--la-hue-accent));
+
+    --la-gradient-primary: linear-gradient(
+        135deg,
+        var(--la-primary) 0%,
+        var(--la-secondary) 100%
+    );
+
+    --la-gradient-hero: linear-gradient(
+        135deg,
+        oklch(25% 0.15 var(--la-hue-primary)) 0%,
+        oklch(22% 0.18 var(--la-hue-secondary)) 50%,
+        oklch(28% 0.12 var(--la-hue-primary)) 100%
+    );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME: MONOCHROME - Pure Black & White
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="mono"] {
+    --la-hue-primary: 0;
+    --la-hue-secondary: 0;
+    --la-hue-accent: 0;
+
+    --la-primary: oklch(50% 0 0);
+    --la-primary-light: oklch(70% 0 0);
+    --la-primary-dark: oklch(30% 0 0);
+    --la-secondary: oklch(60% 0 0);
+    --la-accent: oklch(40% 0 0);
+
+    --la-text: oklch(15% 0 0);
+    --la-text-secondary: oklch(35% 0 0);
+    --la-text-muted: oklch(55% 0 0);
+
+    --la-surface-0: oklch(100% 0 0);
+    --la-surface-1: oklch(97% 0 0);
+    --la-surface-2: oklch(94% 0 0);
+    --la-surface-3: oklch(91% 0 0);
+
+    --la-border: oklch(85% 0 0);
+    --la-border-strong: oklch(70% 0 0);
+
+    --la-gradient-primary: linear-gradient(
+        135deg,
+        oklch(30% 0 0) 0%,
+        oklch(60% 0 0) 100%
+    );
+
+    --la-gradient-hero: linear-gradient(
+        135deg,
+        oklch(15% 0 0) 0%,
+        oklch(25% 0 0) 50%,
+        oklch(20% 0 0) 100%
+    );
+}
+
+[data-theme="mono-dark"] {
+    color-scheme: dark;
+
+    --la-hue-primary: 0;
+    --la-hue-secondary: 0;
+    --la-hue-accent: 0;
+
+    --la-primary: oklch(70% 0 0);
+    --la-primary-light: oklch(85% 0 0);
+    --la-primary-dark: oklch(55% 0 0);
+
+    --la-text: oklch(95% 0 0);
+    --la-text-secondary: oklch(75% 0 0);
+    --la-text-muted: oklch(55% 0 0);
+
+    --la-surface-0: oklch(10% 0 0);
+    --la-surface-1: oklch(14% 0 0);
+    --la-surface-2: oklch(18% 0 0);
+    --la-surface-3: oklch(22% 0 0);
+
+    --la-border: oklch(25% 0 0);
+    --la-border-strong: oklch(35% 0 0);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME: AURORA - Northern Lights
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="aurora"] {
+    color-scheme: dark;
+
+    --la-hue-primary: 160;      /* Teal/Green */
+    --la-hue-secondary: 280;    /* Purple */
+    --la-hue-accent: 200;       /* Cyan */
+
+    --la-primary: oklch(60% 0.2 var(--la-hue-primary));
+    --la-primary-light: oklch(72% 0.18 var(--la-hue-primary));
+    --la-secondary: oklch(55% 0.25 var(--la-hue-secondary));
+    --la-accent: oklch(70% 0.18 var(--la-hue-accent));
+
+    --la-surface-0: oklch(10% 0.02 220);
+    --la-surface-1: oklch(14% 0.02 220);
+    --la-surface-2: oklch(18% 0.03 220);
+    --la-surface-3: oklch(22% 0.03 220);
+
+    --la-text: oklch(95% 0.01 var(--la-hue-accent));
+    --la-text-secondary: oklch(78% 0.01 var(--la-hue-accent));
+
+    --la-gradient-primary: linear-gradient(
+        135deg,
+        var(--la-primary) 0%,
+        var(--la-secondary) 50%,
+        var(--la-accent) 100%
+    );
+
+    --la-gradient-hero: linear-gradient(
+        135deg,
+        oklch(10% 0.08 var(--la-hue-primary)) 0%,
+        oklch(12% 0.12 var(--la-hue-secondary)) 33%,
+        oklch(11% 0.1 var(--la-hue-accent)) 66%,
+        oklch(10% 0.08 var(--la-hue-primary)) 100%
+    );
+
+    --la-shadow-glow:
+        0 0 20px oklch(60% 0.2 var(--la-hue-primary) / 30%),
+        0 0 40px oklch(55% 0.25 var(--la-hue-secondary) / 20%);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME: LAVENDER - Soft Purple
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="lavender"] {
+    --la-hue-primary: 270;      /* Purple */
+    --la-hue-secondary: 320;    /* Pink */
+    --la-hue-accent: 45;        /* Gold */
+
+    --la-primary: oklch(60% 0.18 var(--la-hue-primary));
+    --la-primary-light: oklch(75% 0.14 var(--la-hue-primary));
+    --la-primary-dark: oklch(45% 0.2 var(--la-hue-primary));
+    --la-secondary: oklch(70% 0.15 var(--la-hue-secondary));
+
+    --la-surface-0: oklch(99% 0.01 var(--la-hue-primary));
+    --la-surface-1: oklch(97% 0.015 var(--la-hue-primary));
+    --la-surface-2: oklch(95% 0.02 var(--la-hue-primary));
+
+    --la-gradient-hero: linear-gradient(
+        135deg,
+        oklch(25% 0.12 var(--la-hue-primary)) 0%,
+        oklch(22% 0.15 var(--la-hue-secondary)) 50%,
+        oklch(27% 0.1 var(--la-hue-primary)) 100%
+    );
+
+    /* Softer radius */
+    --la-radius-factor: 1.25;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTRAST MODES - Accessibility
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-contrast: more) {
+    :root {
+        --la-text: oklch(5% 0 0);
+        --la-text-secondary: oklch(20% 0 0);
+        --la-border: oklch(50% 0.02 var(--la-hue-primary));
+        --la-border-strong: oklch(30% 0.02 var(--la-hue-primary));
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+            --la-text: oklch(100% 0 0);
+            --la-text-secondary: oklch(90% 0 0);
+            --la-border: oklch(60% 0.02 var(--la-hue-primary));
+        }
+    }
+}
+
+@media (prefers-contrast: less) {
+    :root {
+        --la-text: oklch(35% 0.02 var(--la-hue-primary));
+        --la-text-secondary: oklch(50% 0.02 var(--la-hue-primary));
+        --la-border: oklch(92% 0.01 var(--la-hue-primary));
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --la-duration-instant: 0ms;
+        --la-duration-fast: 0ms;
+        --la-duration-base: 0ms;
+        --la-duration-slow: 0ms;
+        --la-duration-slower: 0ms;
+        --la-duration-slowest: 0ms;
+        --la-transition: none;
+        --la-transition-fast: none;
+        --la-transition-slow: none;
+    }
+}

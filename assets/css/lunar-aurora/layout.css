@@ -1,0 +1,471 @@
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║                         LUNAR AURORA - LAYOUT                               ║
+ * ║                                                                           ║
+ * ║  Modern layout: CSS Grid, Flexbox, Container Queries, Auto Grid.         ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTAINER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-container {
+    width: 100%;
+    max-width: var(--la-container-7xl);
+    margin-inline: auto;
+    padding-inline: var(--la-space-4);
+
+    @media (min-width: 640px) {
+        padding-inline: var(--la-space-6);
+    }
+
+    @media (min-width: 1024px) {
+        padding-inline: var(--la-space-8);
+    }
+
+    /* Size variants */
+    &.xs { max-width: var(--la-container-xs); }
+    &.sm { max-width: var(--la-container-sm); }
+    &.md { max-width: var(--la-container-md); }
+    &.lg { max-width: var(--la-container-lg); }
+    &.xl { max-width: var(--la-container-xl); }
+    &.2xl { max-width: var(--la-container-2xl); }
+    &.3xl { max-width: var(--la-container-3xl); }
+    &.4xl { max-width: var(--la-container-4xl); }
+    &.5xl { max-width: var(--la-container-5xl); }
+    &.6xl { max-width: var(--la-container-6xl); }
+    &.7xl { max-width: var(--la-container-7xl); }
+    &.full { max-width: 100%; }
+    &.prose { max-width: var(--la-container-prose); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION - Semantic layout block
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-section {
+    padding-block: var(--la-space-16);
+
+    &.sm { padding-block: var(--la-space-8); }
+    &.lg { padding-block: var(--la-space-24); }
+    &.xl { padding-block: var(--la-space-32); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GRID - CSS Grid Layouts
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-grid {
+    display: grid;
+    gap: var(--la-space-6);
+
+    /* Column utilities */
+    &.cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+    &.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    &.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    &.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    &.cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    &.cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    &.cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+    /* Gap variants */
+    &.gap-0 { gap: 0; }
+    &.gap-1 { gap: var(--la-space-1); }
+    &.gap-2 { gap: var(--la-space-2); }
+    &.gap-3 { gap: var(--la-space-3); }
+    &.gap-4 { gap: var(--la-space-4); }
+    &.gap-5 { gap: var(--la-space-5); }
+    &.gap-6 { gap: var(--la-space-6); }
+    &.gap-8 { gap: var(--la-space-8); }
+    &.gap-10 { gap: var(--la-space-10); }
+    &.gap-12 { gap: var(--la-space-12); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   AUTO GRID - Responsive grid with auto-fit
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-auto-grid {
+    --_min-col-size: 250px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--_min-col-size), 100%), 1fr));
+    gap: var(--la-space-6);
+
+    /* Size variants */
+    &.xs { --_min-col-size: 150px; }
+    &.sm { --_min-col-size: 200px; }
+    &.md { --_min-col-size: 250px; }
+    &.lg { --_min-col-size: 300px; }
+    &.xl { --_min-col-size: 350px; }
+    &.xxl { --_min-col-size: 400px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FLEXBOX UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-flex {
+    display: flex;
+
+    /* Direction */
+    &.row { flex-direction: row; }
+    &.row-reverse { flex-direction: row-reverse; }
+    &.col { flex-direction: column; }
+    &.col-reverse { flex-direction: column-reverse; }
+
+    /* Wrap */
+    &.wrap { flex-wrap: wrap; }
+    &.nowrap { flex-wrap: nowrap; }
+    &.wrap-reverse { flex-wrap: wrap-reverse; }
+
+    /* Justify content */
+    &.justify-start { justify-content: flex-start; }
+    &.justify-end { justify-content: flex-end; }
+    &.justify-center { justify-content: center; }
+    &.justify-between { justify-content: space-between; }
+    &.justify-around { justify-content: space-around; }
+    &.justify-evenly { justify-content: space-evenly; }
+
+    /* Align items */
+    &.items-start { align-items: flex-start; }
+    &.items-end { align-items: flex-end; }
+    &.items-center { align-items: center; }
+    &.items-baseline { align-items: baseline; }
+    &.items-stretch { align-items: stretch; }
+
+    /* Gap */
+    &.gap-0 { gap: 0; }
+    &.gap-1 { gap: var(--la-space-1); }
+    &.gap-2 { gap: var(--la-space-2); }
+    &.gap-3 { gap: var(--la-space-3); }
+    &.gap-4 { gap: var(--la-space-4); }
+    &.gap-5 { gap: var(--la-space-5); }
+    &.gap-6 { gap: var(--la-space-6); }
+    &.gap-8 { gap: var(--la-space-8); }
+}
+
+/* Common flex patterns */
+.la-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.la-flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.la-flex-col-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STACK - Vertical flow with consistent spacing
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--la-space-4);
+
+    &.gap-0 { gap: 0; }
+    &.gap-1 { gap: var(--la-space-1); }
+    &.gap-2 { gap: var(--la-space-2); }
+    &.gap-3 { gap: var(--la-space-3); }
+    &.gap-4 { gap: var(--la-space-4); }
+    &.gap-6 { gap: var(--la-space-6); }
+    &.gap-8 { gap: var(--la-space-8); }
+    &.gap-10 { gap: var(--la-space-10); }
+    &.gap-12 { gap: var(--la-space-12); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CLUSTER - Horizontal flow with wrapping
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-cluster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--la-space-3);
+    align-items: center;
+
+    &.gap-1 { gap: var(--la-space-1); }
+    &.gap-2 { gap: var(--la-space-2); }
+    &.gap-4 { gap: var(--la-space-4); }
+    &.gap-6 { gap: var(--la-space-6); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SIDEBAR LAYOUT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-with-sidebar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--la-space-8);
+
+    & > :first-child {
+        flex-basis: 240px;
+        flex-grow: 1;
+    }
+
+    & > :last-child {
+        flex-basis: 0;
+        flex-grow: 999;
+        min-inline-size: 60%;
+    }
+
+    /* Sidebar on right */
+    &.right {
+        & > :first-child {
+            flex-basis: 0;
+            flex-grow: 999;
+            min-inline-size: 60%;
+        }
+
+        & > :last-child {
+            flex-basis: 240px;
+            flex-grow: 1;
+        }
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTAINER QUERIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-container-query {
+    container-type: inline-size;
+}
+
+/* Example: Card that responds to container size */
+.la-responsive-card {
+    container-type: inline-size;
+
+    & > * {
+        display: grid;
+        gap: var(--la-space-4);
+
+        @container (min-width: 400px) {
+            grid-template-columns: auto 1fr;
+        }
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ASPECT RATIO
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-aspect-square { aspect-ratio: var(--la-aspect-square); }
+.la-aspect-video { aspect-ratio: var(--la-aspect-video); }
+.la-aspect-photo { aspect-ratio: var(--la-aspect-photo); }
+.la-aspect-portrait { aspect-ratio: var(--la-aspect-portrait); }
+.la-aspect-wide { aspect-ratio: var(--la-aspect-wide); }
+.la-aspect-golden { aspect-ratio: var(--la-aspect-golden); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   POSITIONING
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-relative { position: relative; }
+.la-absolute { position: absolute; }
+.la-fixed { position: fixed; }
+.la-sticky { position: sticky; }
+.la-static { position: static; }
+
+/* Inset utilities */
+.la-inset-0 { inset: 0; }
+.la-inset-x-0 { inset-inline: 0; }
+.la-inset-y-0 { inset-block: 0; }
+
+.la-top-0 { top: 0; }
+.la-right-0 { right: 0; }
+.la-bottom-0 { bottom: 0; }
+.la-left-0 { left: 0; }
+
+/* Z-index */
+.la-z-base { z-index: var(--la-z-base); }
+.la-z-raised { z-index: var(--la-z-raised); }
+.la-z-dropdown { z-index: var(--la-z-dropdown); }
+.la-z-sticky { z-index: var(--la-z-sticky); }
+.la-z-header { z-index: var(--la-z-header); }
+.la-z-overlay { z-index: var(--la-z-overlay); }
+.la-z-modal { z-index: var(--la-z-modal); }
+.la-z-popover { z-index: var(--la-z-popover); }
+.la-z-toast { z-index: var(--la-z-toast); }
+.la-z-tooltip { z-index: var(--la-z-tooltip); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPACING UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Margin */
+.la-m-0 { margin: 0; }
+.la-m-1 { margin: var(--la-space-1); }
+.la-m-2 { margin: var(--la-space-2); }
+.la-m-3 { margin: var(--la-space-3); }
+.la-m-4 { margin: var(--la-space-4); }
+.la-m-5 { margin: var(--la-space-5); }
+.la-m-6 { margin: var(--la-space-6); }
+.la-m-8 { margin: var(--la-space-8); }
+.la-m-auto { margin: auto; }
+
+.la-mx-auto { margin-inline: auto; }
+.la-my-auto { margin-block: auto; }
+
+.la-mt-0 { margin-block-start: 0; }
+.la-mt-4 { margin-block-start: var(--la-space-4); }
+.la-mt-6 { margin-block-start: var(--la-space-6); }
+.la-mt-8 { margin-block-start: var(--la-space-8); }
+.la-mt-12 { margin-block-start: var(--la-space-12); }
+
+.la-mb-0 { margin-block-end: 0; }
+.la-mb-4 { margin-block-end: var(--la-space-4); }
+.la-mb-6 { margin-block-end: var(--la-space-6); }
+.la-mb-8 { margin-block-end: var(--la-space-8); }
+.la-mb-12 { margin-block-end: var(--la-space-12); }
+
+/* Padding */
+.la-p-0 { padding: 0; }
+.la-p-1 { padding: var(--la-space-1); }
+.la-p-2 { padding: var(--la-space-2); }
+.la-p-3 { padding: var(--la-space-3); }
+.la-p-4 { padding: var(--la-space-4); }
+.la-p-5 { padding: var(--la-space-5); }
+.la-p-6 { padding: var(--la-space-6); }
+.la-p-8 { padding: var(--la-space-8); }
+.la-p-10 { padding: var(--la-space-10); }
+.la-p-12 { padding: var(--la-space-12); }
+
+.la-px-4 { padding-inline: var(--la-space-4); }
+.la-px-6 { padding-inline: var(--la-space-6); }
+.la-px-8 { padding-inline: var(--la-space-8); }
+
+.la-py-4 { padding-block: var(--la-space-4); }
+.la-py-6 { padding-block: var(--la-space-6); }
+.la-py-8 { padding-block: var(--la-space-8); }
+.la-py-12 { padding-block: var(--la-space-12); }
+.la-py-16 { padding-block: var(--la-space-16); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   WIDTH & HEIGHT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-w-full { width: 100%; }
+.la-w-screen { width: 100vw; }
+.la-w-min { width: min-content; }
+.la-w-max { width: max-content; }
+.la-w-fit { width: fit-content; }
+
+.la-h-full { height: 100%; }
+.la-h-screen { height: 100vh; }
+.la-h-screen-dynamic { height: 100dvh; }
+.la-h-min { height: min-content; }
+.la-h-max { height: max-content; }
+.la-h-fit { height: fit-content; }
+
+.la-min-h-screen { min-height: 100vh; }
+.la-min-h-screen-dynamic { min-height: 100dvh; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   OVERFLOW
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-overflow-auto { overflow: auto; }
+.la-overflow-hidden { overflow: hidden; }
+.la-overflow-visible { overflow: visible; }
+.la-overflow-scroll { overflow: scroll; }
+
+.la-overflow-x-auto { overflow-x: auto; }
+.la-overflow-x-hidden { overflow-x: hidden; }
+.la-overflow-y-auto { overflow-y: auto; }
+.la-overflow-y-hidden { overflow-y: hidden; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VISIBILITY & DISPLAY
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-hidden { display: none; }
+.la-block { display: block; }
+.la-inline { display: inline; }
+.la-inline-block { display: inline-block; }
+.la-inline-flex { display: inline-flex; }
+.la-inline-grid { display: inline-grid; }
+
+.la-visible { visibility: visible; }
+.la-invisible { visibility: hidden; }
+
+.la-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Hide on specific breakpoints */
+@media (max-width: 639px) {
+    .la-hide-mobile { display: none !important; }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+    .la-hide-tablet { display: none !important; }
+}
+
+@media (min-width: 1024px) {
+    .la-hide-desktop { display: none !important; }
+}
+
+/* Show only on specific breakpoints */
+@media (min-width: 640px) {
+    .la-show-mobile { display: none !important; }
+}
+
+@media (max-width: 639px), (min-width: 1024px) {
+    .la-show-tablet { display: none !important; }
+}
+
+@media (max-width: 1023px) {
+    .la-show-desktop { display: none !important; }
+}
+
+/* Responsive grid columns */
+@media (min-width: 640px) {
+    .la-grid {
+        &.sm\:cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        &.sm\:cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        &.sm\:cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+}
+
+@media (min-width: 768px) {
+    .la-grid {
+        &.md\:cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        &.md\:cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        &.md\:cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+}
+
+@media (min-width: 1024px) {
+    .la-grid {
+        &.lg\:cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        &.lg\:cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        &.lg\:cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        &.lg\:cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+        &.lg\:cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    }
+}

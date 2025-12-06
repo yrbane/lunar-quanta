@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,13 +9,10 @@
     <link rel="alternate" type="application/rss+xml" title="Lunar Blog RSS" href="/blog/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <!-- External CSS -->
-    <link rel="stylesheet" href="/assets/css/theme.css">
-    <link rel="stylesheet" href="/assets/css/base.css">
-    <link rel="stylesheet" href="/assets/css/components.css">
-    <link rel="stylesheet" href="/assets/css/post.css">
+    <!-- Lunar Aurora CSS Framework -->
+    <link rel="stylesheet" href="/assets/css/lunar-aurora/aurora-blog.css">
 
     <!-- Open Graph -->
     <meta property="og:title" content="{{ title }}">
@@ -25,232 +22,179 @@
     <meta property="og:image" content="{{ featured_image }}">
     {% endif %}
 </head>
-<body>
-    <div class="progress-bar" id="progress"></div>
+<body class="la-blog">
+    <!-- Reading Progress Bar -->
+    <div class="la-reading-progress">
+        <div class="la-reading-progress-bar" id="progress"></div>
+    </div>
 
-    <header class="header">
-        <div class="header-inner">
-            <a href="/blog/" class="logo">
-                <span class="logo-icon">L</span>
+    <header class="la-blog-header">
+        <div class="la-container">
+            <a href="/blog/" class="la-blog-logo">
+                <span class="la-icon">rocket_launch</span>
                 <span>Lunar Blog</span>
             </a>
-            <nav class="nav">
-                <a href="/blog/" class="nav-link">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="19" y1="12" x2="5" y2="12"/>
-                        <polyline points="12 19 5 12 12 5"/>
-                    </svg>
+            <nav class="la-blog-nav">
+                <a href="/blog/">
+                    <span class="la-icon sm">arrow_back</span>
                     Articles
                 </a>
-                <a href="https://github.com/yrbane/lunar-quanta" class="nav-link" target="_blank">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
+                <a href="https://github.com/yrbane/lunar-quanta" target="_blank" title="GitHub">
+                    <span class="la-icon sm">code</span>
                 </a>
             </nav>
         </div>
     </header>
 
-    <div class="hero-image">
-        {% if featured_image %}
+    {% if featured_image %}
+    <div class="la-post-featured-image">
         <img src="{{ featured_image }}" alt="{{ title }}">
-        {% else %}
-        <div class="hero-image-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <circle cx="8.5" cy="8.5" r="1.5"/>
-                <path d="M21 15l-5-5L5 21"/>
-            </svg>
-        </div>
-        {% endif %}
-        <div class="hero-image-overlay"></div>
     </div>
+    {% endif %}
 
-    <main>
-        <div class="main-layout">
-            <aside class="toc-sidebar">
-                <nav class="toc" id="toc">
-                    <div class="toc-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="3" y1="6" x2="21" y2="6"/>
-                            <line x1="3" y1="12" x2="15" y2="12"/>
-                            <line x1="3" y1="18" x2="18" y2="18"/>
-                        </svg>
+    <main class="la-blog-main">
+        <div class="la-container">
+            <div class="la-with-sidebar" style="--sidebar-width: 250px; --content-min: 60%;">
+                <!-- Table of Contents Sidebar -->
+                <aside class="la-toc" id="toc">
+                    <div class="la-toc-title">
+                        <span class="la-icon sm">list</span>
                         Sommaire
                     </div>
-                    <ul class="toc-list" id="toc-list"></ul>
-                </nav>
-            </aside>
+                    <ul class="la-toc-list" id="toc-list"></ul>
+                </aside>
 
-            <article class="article-container">
-                <button class="toc-mobile-toggle" id="toc-toggle">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <line x1="3" y1="12" x2="15" y2="12"/>
-                        <line x1="3" y1="18" x2="18" y2="18"/>
-                    </svg>
-                    Sommaire
-                </button>
-                <nav class="toc-mobile" id="toc-mobile">
-                    <ul class="toc-list" id="toc-list-mobile"></ul>
-                </nav>
+                <!-- Article Content -->
+                <article class="la-post">
+                    <!-- Mobile TOC Toggle -->
+                    <button class="la-btn outline sm la-mb-6 la-hidden @md:la-block" id="toc-toggle">
+                        <span class="la-icon sm">list</span>
+                        Sommaire
+                    </button>
+                    <nav class="la-card la-mb-6 la-hidden" id="toc-mobile">
+                        <ul class="la-toc-list" id="toc-list-mobile"></ul>
+                    </nav>
 
-                <header class="article-header">
-                    {% if category %}
-                    <span class="article-category">{{ category }}</span>
-                    {% endif %}
-                    <h1 class="article-title">{{ title }}</h1>
-                    {% if excerpt %}
-                    <p class="article-excerpt">{{ excerpt }}</p>
-                    {% endif %}
-                    <div class="article-meta">
-                        {% if author %}
-                        <div class="article-meta-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
-                            </svg>
-                            <span>{{ author }}</span>
-                        </div>
+                    <header class="la-post-header">
+                        {% if category %}
+                        <a href="/blog/category/{{ category|lower }}/" class="la-post-card-category la-mb-4">{{ category }}</a>
                         {% endif %}
-                        <div class="article-meta-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2"/>
-                                <line x1="16" y1="2" x2="16" y2="6"/>
-                                <line x1="8" y1="2" x2="8" y2="6"/>
-                                <line x1="3" y1="10" x2="21" y2="10"/>
-                            </svg>
-                            <span>{{ published_at }}</span>
+                        <h1 class="la-post-title">{{ title }}</h1>
+                        {% if excerpt %}
+                        <p class="la-text-xl la-text-muted la-mt-4">{{ excerpt }}</p>
+                        {% endif %}
+                        <div class="la-post-meta la-mt-6">
+                            {% if author %}
+                            <span>
+                                <span class="la-icon">person</span>
+                                {{ author }}
+                            </span>
+                            {% endif %}
+                            <span>
+                                <span class="la-icon">calendar_today</span>
+                                {{ published_at }}
+                            </span>
+                            <span>
+                                <span class="la-icon">schedule</span>
+                                {{ reading_time }} min de lecture
+                            </span>
                         </div>
-                        <div class="article-meta-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12 6 12 12 16 14"/>
-                            </svg>
-                            <span>{{ reading_time }} min de lecture</span>
+                        <div class="la-flex la-gap-3 la-mt-6 la-justify-center">
+                            <button class="la-btn outline sm" id="bookmark-btn" title="Ajouter aux favoris">
+                                <span class="la-icon sm">bookmark</span>
+                                <span id="bookmark-text">Favoris</span>
+                            </button>
+                            <button class="la-btn outline sm" onclick="printArticle()" title="Imprimer">
+                                <span class="la-icon sm">print</span>
+                                Imprimer
+                            </button>
                         </div>
-                    </div>
-                    <div class="article-actions">
-                        <button class="action-btn" id="bookmark-btn" title="Ajouter aux favoris">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                            </svg>
-                            <span id="bookmark-text">Favoris</span>
-                        </button>
-                        <button class="action-btn" onclick="printArticle()" title="Imprimer">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 6 2 18 2 18 9"/>
-                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-                                <rect x="6" y="14" width="12" height="8"/>
-                            </svg>
-                            Imprimer
-                        </button>
-                    </div>
-                </header>
+                    </header>
 
-                <div class="article-body">
-                    <div class="article-content" id="article-content">
+                    <div class="la-prose la-mt-12" id="article-content">
                         {{ content }}
                     </div>
 
                     {% if tags|length > 0 %}
-                    <div class="article-tags">
+                    <div class="la-post-tags">
                         {% for tag in tags %}
-                        <a href="/blog/tags/{{ tag }}.html" class="tag">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-                                <line x1="7" y1="7" x2="7.01" y2="7"/>
-                            </svg>
+                        <a href="/blog/tags/{{ tag }}.html" class="la-tag">
+                            <span class="la-icon xs">tag</span>
                             {{ tag }}
                         </a>
                         {% endfor %}
                     </div>
                     {% endif %}
-                </div>
 
-                {% if related_posts|length > 0 %}
-                <section class="related-section">
-                    <h2 class="related-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                        </svg>
-                        Articles similaires
-                    </h2>
-                    <div class="related-grid">
-                        {% for related in related_posts %}
-                        <a href="{{ related.url }}" class="related-card">
-                            <h3 class="related-card-title">{{ related.title }}</h3>
-                            <p class="related-card-excerpt">{{ related.excerpt }}</p>
-                        </a>
-                        {% endfor %}
-                    </div>
-                </section>
-                {% endif %}
+                    {% if related_posts|length > 0 %}
+                    <section class="la-mt-16">
+                        <h2 class="la-h3 la-mb-6">
+                            <span class="la-icon">auto_stories</span>
+                            Articles similaires
+                        </h2>
+                        <div class="la-grid la-cols-1 @md:la-cols-2 la-gap-6">
+                            {% for related in related_posts %}
+                            <a href="{{ related.url }}" class="la-card interactive la-p-6">
+                                <h3 class="la-h5 la-mb-2">{{ related.title }}</h3>
+                                <p class="la-text-sm la-text-muted">{{ related.excerpt }}</p>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </section>
+                    {% endif %}
 
-                <div class="share-section">
-                    <div class="share-inner">
-                        <span class="share-label">Partager</span>
-                        <div class="share-buttons">
-                            <a href="https://twitter.com/intent/tweet?text={{ title }}&url=" class="share-btn" title="Twitter" target="_blank" rel="noopener">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                                </svg>
+                    <!-- Share Section -->
+                    <div class="la-card la-mt-12 la-p-6 la-text-center">
+                        <span class="la-text-muted la-mb-4 la-block">Partager cet article</span>
+                        <div class="la-flex la-justify-center la-gap-3">
+                            <a href="https://twitter.com/intent/tweet?text={{ title }}&url=" class="la-btn ghost" title="Twitter" target="_blank" rel="noopener">
+                                <span class="la-icon">share</span>
                             </a>
-                            <a href="https://www.linkedin.com/shareArticle?mini=true&url=&title={{ title }}" class="share-btn" title="LinkedIn" target="_blank" rel="noopener">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                                </svg>
+                            <a href="https://www.linkedin.com/shareArticle?mini=true&url=&title={{ title }}" class="la-btn ghost" title="LinkedIn" target="_blank" rel="noopener">
+                                <span class="la-icon">share</span>
                             </a>
-                            <a href="mailto:?subject={{ title }}&body=Je te recommande cet article : " class="share-btn" title="Email">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                    <polyline points="22,6 12,13 2,6"/>
-                                </svg>
+                            <a href="mailto:?subject={{ title }}&body=Je te recommande cet article : " class="la-btn ghost" title="Email">
+                                <span class="la-icon">email</span>
                             </a>
-                            <button class="share-btn" title="Copier le lien" onclick="copyLink()">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-                                </svg>
+                            <button class="la-btn ghost" title="Copier le lien" onclick="copyLink()">
+                                <span class="la-icon">link</span>
                             </button>
                         </div>
                     </div>
-                </div>
-            </article>
-        </div>
 
-        <nav class="back-nav">
-            <a href="/blog/" class="back-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="19" y1="12" x2="5" y2="12"/>
-                    <polyline points="12 19 5 12 12 5"/>
-                </svg>
-                Retour aux articles
-            </a>
-        </nav>
+                    <!-- Back Navigation -->
+                    <nav class="la-mt-12 la-text-center">
+                        <a href="/blog/" class="la-btn outline">
+                            <span class="la-icon sm">arrow_back</span>
+                            Retour aux articles
+                        </a>
+                    </nav>
+                </article>
+            </div>
+        </div>
     </main>
 
-    <button class="scroll-top" id="scroll-top" title="Remonter en haut">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="19" x2="12" y2="5"/>
-            <polyline points="5 12 12 5 19 12"/>
-        </svg>
+    <!-- Scroll to Top -->
+    <button class="la-btn primary la-rounded-full la-fixed la-bottom-8 la-right-8 la-z-50 la-opacity-0 la-transition-opacity" id="scroll-top">
+        <span class="la-icon">arrow_upward</span>
     </button>
 
-    <div class="toast" id="toast"></div>
+    <!-- Toast Container -->
+    <div class="la-toast-container" id="toastContainer"></div>
 
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-brand">
-                <span class="footer-brand-icon">L</span>
-                <span>Lunar Quanta</span>
+    <footer class="la-blog-footer">
+        <div class="la-container">
+            <div class="la-blog-footer-bottom">
+                <div class="la-flex la-items-center la-gap-3">
+                    <span class="la-icon">rocket_launch</span>
+                    <span class="la-font-semibold">Lunar Quanta</span>
+                </div>
+                <div class="la-blog-social">
+                    <a href="/blog/feed.xml" title="RSS"><span class="la-icon sm">rss_feed</span></a>
+                    <a href="https://github.com/yrbane/lunar-quanta" target="_blank" title="GitHub"><span class="la-icon sm">code</span></a>
+                </div>
+                <p>&copy; {{ year }} Lunar Quanta</p>
             </div>
-            <div class="footer-links">
-                <a href="/blog/feed.xml" class="footer-link">RSS</a>
-                <a href="https://github.com/yrbane/lunar-quanta" class="footer-link">GitHub</a>
-            </div>
-            <p class="footer-copy">&copy; {{ year }} Lunar Quanta</p>
         </div>
     </footer>
 
@@ -263,16 +207,29 @@
         });
 
         // Toast notification
-        function showToast(message, duration = 3000) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), duration);
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `la-toast ${type}`;
+            toast.innerHTML = `
+                <div class="la-toast-icon"><span class="la-icon">info</span></div>
+                <div class="la-toast-content">
+                    <div class="la-toast-message">${message}</div>
+                </div>
+                <button class="la-toast-close" onclick="this.parentElement.remove()">
+                    <span class="la-icon sm">close</span>
+                </button>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
 
         // Copy link
         function copyLink() {
-            navigator.clipboard.writeText(window.location.href).then(() => showToast('Lien copie !'));
+            navigator.clipboard.writeText(window.location.href).then(() => showToast('Lien copié !', 'success'));
         }
 
         // Print
@@ -281,7 +238,13 @@
         // Scroll to top
         const scrollTopBtn = document.getElementById('scroll-top');
         window.addEventListener('scroll', () => {
-            scrollTopBtn.classList.toggle('visible', window.scrollY > 500);
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.remove('la-opacity-0');
+                scrollTopBtn.classList.add('la-opacity-100');
+            } else {
+                scrollTopBtn.classList.add('la-opacity-0');
+                scrollTopBtn.classList.remove('la-opacity-100');
+            }
         });
         scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
@@ -294,7 +257,7 @@
             const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
             const isBookmarked = bookmarks.includes(articleSlug);
             bookmarkBtn.classList.toggle('active', isBookmarked);
-            bookmarkText.textContent = isBookmarked ? 'Retire' : 'Favoris';
+            bookmarkText.textContent = isBookmarked ? 'Retiré' : 'Favoris';
         }
 
         bookmarkBtn.addEventListener('click', () => {
@@ -302,10 +265,10 @@
             const index = bookmarks.indexOf(articleSlug);
             if (index > -1) {
                 bookmarks.splice(index, 1);
-                showToast('Article retire des favoris');
+                showToast('Article retiré des favoris', 'info');
             } else {
                 bookmarks.push(articleSlug);
-                showToast('Article ajoute aux favoris');
+                showToast('Article ajouté aux favoris', 'success');
             }
             localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
             updateBookmarkState();
@@ -320,7 +283,7 @@
             const headings = content.querySelectorAll('h2, h3');
 
             if (headings.length === 0) {
-                document.querySelector('.toc-sidebar')?.remove();
+                document.getElementById('toc')?.remove();
                 document.getElementById('toc-toggle')?.remove();
                 document.getElementById('toc-mobile')?.remove();
                 return;
@@ -328,24 +291,18 @@
 
             headings.forEach((heading, index) => {
                 if (!heading.id) heading.id = 'heading-' + index;
-                const anchor = document.createElement('a');
-                anchor.href = '#' + heading.id;
-                anchor.className = 'heading-anchor';
-                anchor.textContent = '#';
-                heading.appendChild(anchor);
 
                 const li = document.createElement('li');
-                li.className = 'toc-item';
                 const link = document.createElement('a');
                 link.href = '#' + heading.id;
-                link.className = 'toc-link' + (heading.tagName === 'H3' ? ' toc-h3' : '');
-                link.textContent = heading.textContent.replace('#', '').trim();
+                link.className = heading.tagName === 'H3' ? 'level-3' : '';
+                link.textContent = heading.textContent.trim();
                 li.appendChild(link);
                 tocList.appendChild(li.cloneNode(true));
                 tocListMobile.appendChild(li);
             });
 
-            const tocLinks = document.querySelectorAll('.toc-link');
+            const tocLinks = document.querySelectorAll('.la-toc-list a');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -361,50 +318,34 @@
         // Mobile TOC toggle
         const tocToggle = document.getElementById('toc-toggle');
         const tocMobile = document.getElementById('toc-mobile');
-        tocToggle?.addEventListener('click', () => tocMobile.classList.toggle('show'));
+        tocToggle?.addEventListener('click', () => tocMobile.classList.toggle('la-hidden'));
         tocMobile?.addEventListener('click', (e) => {
-            if (e.target.classList.contains('toc-link')) tocMobile.classList.remove('show');
+            if (e.target.tagName === 'A') tocMobile.classList.add('la-hidden');
         });
 
         // Copy buttons for code blocks
         function addCopyButtons() {
-            document.querySelectorAll('.article-content pre').forEach((pre) => {
-                if (pre.closest('.code-block-wrapper')) return;
-
-                const wrapper = document.createElement('div');
-                wrapper.className = 'code-block-wrapper';
-
-                const header = document.createElement('div');
-                header.className = 'code-block-header';
-
-                const code = pre.querySelector('code');
-                const langClass = code?.className.match(/language-(\w+)/);
-                const lang = langClass ? langClass[1] : 'code';
-
-                const langSpan = document.createElement('span');
-                langSpan.className = 'code-lang';
-                langSpan.textContent = lang;
+            document.querySelectorAll('.la-prose pre').forEach((pre) => {
+                if (pre.querySelector('.code-copy-btn')) return;
 
                 const copyBtn = document.createElement('button');
-                copyBtn.className = 'copy-btn';
-                copyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copier';
+                copyBtn.className = 'code-copy-btn';
+                copyBtn.innerHTML = '<span class="la-icon sm">content_copy</span>';
+                copyBtn.title = 'Copier le code';
 
                 copyBtn.addEventListener('click', () => {
                     navigator.clipboard.writeText(pre.textContent).then(() => {
                         copyBtn.classList.add('copied');
-                        copyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Copie !';
+                        copyBtn.innerHTML = '<span class="la-icon sm">check</span>';
                         setTimeout(() => {
                             copyBtn.classList.remove('copied');
-                            copyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copier';
+                            copyBtn.innerHTML = '<span class="la-icon sm">content_copy</span>';
                         }, 2000);
                     });
                 });
 
-                header.appendChild(langSpan);
-                header.appendChild(copyBtn);
-                pre.parentNode.insertBefore(wrapper, pre);
-                wrapper.appendChild(header);
-                wrapper.appendChild(pre);
+                pre.style.position = 'relative';
+                pre.appendChild(copyBtn);
             });
         }
         addCopyButtons();
@@ -415,9 +356,15 @@
             switch(e.key) {
                 case 't': case 'T': window.scrollTo({ top: 0, behavior: 'smooth' }); break;
                 case 'b': case 'B': bookmarkBtn.click(); break;
-                case 'Escape': tocMobile?.classList.remove('show'); break;
+                case 'Escape': tocMobile?.classList.add('la-hidden'); break;
             }
         });
+
+        // Theme persistence
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
     </script>
 
     <!-- Prism.js for Syntax Highlighting -->
