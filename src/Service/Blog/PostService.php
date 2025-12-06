@@ -372,4 +372,118 @@ final class PostService
             'hasPrev' => $page > 1,
         ];
     }
+
+    /**
+     * Recherche full-text dans les articles.
+     *
+     * Recherche dans le titre, contenu, excerpt, auteur et tags.
+     *
+     * @param string $query Terme de recherche
+     * @param bool $publishedOnly Ne rechercher que dans les articles publiés
+     * @return Post[] Articles correspondants triés par pertinence
+     */
+    public function search(string $query, bool $publishedOnly = true): array
+    {
+        $query = mb_strtolower(trim($query));
+        if ($query === '') {
+            return [];
+        }
+
+        $posts = $publishedOnly ? $this->findPublished() : $this->all();
+        $results = [];
+
+        // Tokeniser la requête en mots
+        $terms = array_filter(preg_split('/\s+/', $query));
+
+        foreach ($posts as $post) {
+            $score = $this->calculateSearchScore($post, $terms);
+            if ($score > 0) {
+                $results[] = ['post' => $post, 'score' => $score];
+            }
+        }
+
+        // Trier par score décroissant
+        usort($results, fn($a, $b) => $b['score'] <=> $a['score']);
+
+        return array_map(fn($r) => $r['post'], $results);
+    }
+
+    /**
+     * Recherche paginée.
+     *
+     * @return array{items: Post[], total: int, page: int, perPage: int, totalPages: int, hasNext: bool, hasPrev: bool, query: string}
+     */
+    public function searchPaginated(string $query, int $page = 1, int $perPage = 10, bool $publishedOnly = true): array
+    {
+        $posts = $this->search($query, $publishedOnly);
+
+        $total = count($posts);
+        $totalPages = (int) ceil($total / $perPage);
+        $page = max(1, min($page, $totalPages ?: 1));
+        $offset = ($page - 1) * $perPage;
+
+        return [
+            'items' => array_slice($posts, $offset, $perPage),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage,
+            'totalPages' => $totalPages,
+            'hasNext' => $page < $totalPages,
+            'hasPrev' => $page > 1,
+            'query' => $query,
+        ];
+    }
+
+    /**
+     * Calcule le score de pertinence d'un article pour une recherche.
+     *
+     * @param Post $post
+     * @param string[] $terms
+     * @return int Score (0 si aucun match)
+     */
+    private function calculateSearchScore(Post $post, array $terms): int
+    {
+        $score = 0;
+        $title = mb_strtolower($post->getTitle());
+        $content = mb_strtolower($post->getContent());
+        $excerpt = mb_strtolower($post->getExcerpt() ?? '');
+        $author = mb_strtolower($post->getAuthor());
+        $tags = array_map('mb_strtolower', $post->getTags());
+
+        foreach ($terms as $term) {
+            // Match exact dans le titre (poids élevé)
+            if (str_contains($title, $term)) {
+                $score += 100;
+                // Bonus si le titre commence par le terme
+                if (str_starts_with($title, $term)) {
+                    $score += 50;
+                }
+            }
+
+            // Match dans les tags (poids moyen-élevé)
+            foreach ($tags as $tag) {
+                if (str_contains($tag, $term)) {
+                    $score += 80;
+                }
+            }
+
+            // Match dans l'excerpt (poids moyen)
+            if (str_contains($excerpt, $term)) {
+                $score += 40;
+            }
+
+            // Match dans l'auteur (poids moyen)
+            if (str_contains($author, $term)) {
+                $score += 30;
+            }
+
+            // Match dans le contenu (poids faible mais compte le nombre d'occurrences)
+            $contentMatches = substr_count($content, $term);
+            if ($contentMatches > 0) {
+                $score += min(10 + ($contentMatches * 2), 50); // Max 50 points pour le contenu
+            }
+        }
+
+        return $score;
+    }
 }
