@@ -252,4 +252,124 @@ final class PostService
             fn($post) => $post->getStatus() === $status
         ));
     }
+
+    /**
+     * Retourne les articles paginés.
+     *
+     * @return array{items: Post[], total: int, page: int, perPage: int, totalPages: int, hasNext: bool, hasPrev: bool}
+     */
+    public function paginate(int $page = 1, int $perPage = 10, ?PostStatus $status = null): array
+    {
+        $posts = $status !== null
+            ? array_filter($this->all(), fn($post) => $post->getStatus() === $status)
+            : $this->all();
+
+        // Trier par date de création décroissante
+        usort($posts, fn($a, $b) => $b->getCreatedAt() <=> $a->getCreatedAt());
+
+        $total = count($posts);
+        $totalPages = (int) ceil($total / $perPage);
+        $page = max(1, min($page, $totalPages ?: 1));
+        $offset = ($page - 1) * $perPage;
+
+        return [
+            'items' => array_slice($posts, $offset, $perPage),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage,
+            'totalPages' => $totalPages,
+            'hasNext' => $page < $totalPages,
+            'hasPrev' => $page > 1,
+        ];
+    }
+
+    /**
+     * Retourne les articles publiés paginés.
+     *
+     * @return array{items: Post[], total: int, page: int, perPage: int, totalPages: int, hasNext: bool, hasPrev: bool}
+     */
+    public function paginatePublished(int $page = 1, int $perPage = 10): array
+    {
+        $posts = $this->findPublished();
+
+        // Trier par date de publication décroissante
+        usort($posts, fn($a, $b) => $b->getPublishedAt() <=> $a->getPublishedAt());
+
+        $total = count($posts);
+        $totalPages = (int) ceil($total / $perPage);
+        $page = max(1, min($page, $totalPages ?: 1));
+        $offset = ($page - 1) * $perPage;
+
+        return [
+            'items' => array_slice($posts, $offset, $perPage),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage,
+            'totalPages' => $totalPages,
+            'hasNext' => $page < $totalPages,
+            'hasPrev' => $page > 1,
+        ];
+    }
+
+    /**
+     * Retourne les articles par catégorie paginés.
+     *
+     * @return array{items: Post[], total: int, page: int, perPage: int, totalPages: int, hasNext: bool, hasPrev: bool}
+     */
+    public function paginateByCategory(string $categoryId, int $page = 1, int $perPage = 10): array
+    {
+        $posts = array_filter(
+            $this->findPublished(),
+            fn($post) => $post->getCategoryId() === $categoryId
+        );
+
+        // Trier par date de publication décroissante
+        usort($posts, fn($a, $b) => $b->getPublishedAt() <=> $a->getPublishedAt());
+
+        $total = count($posts);
+        $totalPages = (int) ceil($total / $perPage);
+        $page = max(1, min($page, $totalPages ?: 1));
+        $offset = ($page - 1) * $perPage;
+
+        return [
+            'items' => array_slice($posts, $offset, $perPage),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage,
+            'totalPages' => $totalPages,
+            'hasNext' => $page < $totalPages,
+            'hasPrev' => $page > 1,
+        ];
+    }
+
+    /**
+     * Retourne les articles par tag paginés.
+     *
+     * @return array{items: Post[], total: int, page: int, perPage: int, totalPages: int, hasNext: bool, hasPrev: bool}
+     */
+    public function paginateByTag(string $tagId, int $page = 1, int $perPage = 10): array
+    {
+        $posts = array_filter(
+            $this->findPublished(),
+            fn($post) => $post->hasTag($tagId)
+        );
+
+        // Trier par date de publication décroissante
+        usort($posts, fn($a, $b) => $b->getPublishedAt() <=> $a->getPublishedAt());
+
+        $total = count($posts);
+        $totalPages = (int) ceil($total / $perPage);
+        $page = max(1, min($page, $totalPages ?: 1));
+        $offset = ($page - 1) * $perPage;
+
+        return [
+            'items' => array_slice($posts, $offset, $perPage),
+            'total' => $total,
+            'page' => $page,
+            'perPage' => $perPage,
+            'totalPages' => $totalPages,
+            'hasNext' => $page < $totalPages,
+            'hasPrev' => $page > 1,
+        ];
+    }
 }
