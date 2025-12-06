@@ -1,0 +1,355 @@
+/**
+ * Lunar Blog - Shared Components
+ *
+ * Reusable components across pages.
+ */
+
+/* ============================================
+   HEADER
+   ============================================ */
+.header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: var(--header-height);
+    background: var(--header-bg);
+    backdrop-filter: blur(var(--header-blur));
+    -webkit-backdrop-filter: blur(var(--header-blur));
+    border-bottom: var(--border-width) solid var(--color-border);
+    z-index: var(--z-header);
+}
+
+.header-inner {
+    max-width: var(--container-max);
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ============================================
+   LOGO
+   ============================================ */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: var(--text-lg);
+}
+
+.logo-icon {
+    width: var(--logo-size);
+    height: var(--logo-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-inverse);
+    font-weight: 800;
+    font-size: var(--text-base);
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+.nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--btn-padding);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    transition: all var(--duration-normal) var(--ease-out);
+}
+
+.nav-link:hover {
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb), 0.1);
+}
+
+.nav-link svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--btn-padding);
+    background: var(--color-bg);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-out);
+}
+
+.action-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.action-btn.active {
+    background: rgba(var(--color-primary-rgb), 0.1);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.action-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ============================================
+   TAGS
+   ============================================ */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--tag-padding);
+    background: rgba(var(--color-primary-rgb), 0.1);
+    color: var(--color-primary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    transition: all var(--duration-normal) var(--ease-out);
+}
+
+.tag:hover {
+    background: rgba(var(--color-primary-rgb), 0.2);
+    transform: translateY(-1px);
+}
+
+.tag svg {
+    width: 14px;
+    height: 14px;
+}
+
+.tag-pill {
+    padding: var(--space-1) var(--space-3);
+    background: var(--color-border-light);
+    color: var(--color-text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    transition: all var(--duration-normal);
+    border: var(--border-width) solid transparent;
+}
+
+.tag-pill:hover {
+    background: rgba(var(--color-primary-rgb), 0.1);
+    color: var(--color-primary);
+    border-color: var(--color-primary-light);
+}
+
+.tag-pill.active {
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+
+/* ============================================
+   SCROLL TO TOP
+   ============================================ */
+.scroll-top {
+    position: fixed;
+    bottom: var(--space-8);
+    right: var(--space-8);
+    width: var(--scroll-top-size);
+    height: var(--scroll-top-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-full);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all var(--duration-slow) var(--ease-out);
+    z-index: var(--z-sticky);
+}
+
+.scroll-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scroll-top:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    transform: translateY(-2px);
+}
+
+.scroll-top svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* ============================================
+   TOAST
+   ============================================ */
+.toast {
+    position: fixed;
+    bottom: var(--space-8);
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: var(--space-4) var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    box-shadow: var(--shadow-xl);
+    opacity: 0;
+    transition: all var(--duration-slow) var(--ease-out);
+    z-index: var(--z-toast);
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast-container {
+    position: fixed;
+    bottom: var(--space-8);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: var(--z-toast);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.toast-container .toast {
+    position: static;
+    transform: none;
+    animation: toastIn var(--duration-slow) var(--ease-out);
+}
+
+.toast-container .toast.out {
+    animation: toastOut var(--duration-slow) var(--ease-out) forwards;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+    margin-top: auto;
+    padding: var(--space-10) 0;
+    background: var(--color-surface);
+    border-top: var(--border-width) solid var(--color-border);
+}
+
+.footer-inner {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    text-align: center;
+}
+
+@media (min-width: 640px) {
+    .footer-inner {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+    }
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.footer-brand-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-primary);
+    border-radius: 6px;
+    color: var(--color-text-inverse);
+    font-weight: 800;
+    font-size: var(--text-xs);
+}
+
+.footer-links {
+    display: flex;
+    gap: var(--space-6);
+}
+
+.footer-link {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--duration-normal);
+}
+
+.footer-link:hover {
+    color: var(--color-primary);
+}
+
+.footer-copy {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+}
+
+/* ============================================
+   CONTAINER
+   ============================================ */
+.container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+}
+
+@media (min-width: 640px) {
+    .container {
+        padding: 0 var(--space-6);
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        padding: 0 var(--space-8);
+    }
+}

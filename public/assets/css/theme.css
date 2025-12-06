@@ -1,0 +1,226 @@
+/**
+ * Lunar Blog - Theme Variables
+ *
+ * All CSS variables for theming.
+ * Override these in your own stylesheet to customize.
+ */
+
+:root {
+    /* ============================================
+       COLORS - BRAND
+       ============================================ */
+    --color-primary: #7c3aed;
+    --color-primary-light: #a78bfa;
+    --color-primary-dark: #6d28d9;
+    --color-primary-rgb: 124, 58, 237;
+    --color-secondary: #06b6d4;
+    --color-secondary-light: #22d3ee;
+    --color-accent: #f59e0b;
+
+    /* ============================================
+       COLORS - SEMANTIC
+       ============================================ */
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+
+    /* ============================================
+       COLORS - SURFACE (LIGHT)
+       ============================================ */
+    --color-bg: #fafafa;
+    --color-bg-alt: #f4f4f5;
+    --color-surface: #ffffff;
+    --color-surface-hover: #f9fafb;
+
+    /* ============================================
+       COLORS - TEXT (LIGHT)
+       ============================================ */
+    --color-text: #18181b;
+    --color-text-secondary: #52525b;
+    --color-text-muted: #a1a1aa;
+    --color-text-inverse: #ffffff;
+
+    /* ============================================
+       COLORS - BORDER (LIGHT)
+       ============================================ */
+    --color-border: #e4e4e7;
+    --color-border-light: #f4f4f5;
+
+    /* ============================================
+       COLORS - CODE
+       ============================================ */
+    --color-code-bg: #0d1117;
+    --color-code-text: #c9d1d9;
+    --color-code-header: #161b22;
+    --color-code-border: rgba(255, 255, 255, 0.1);
+    --color-code-lang: #7ee787;
+
+    /* ============================================
+       SYNTAX HIGHLIGHTING
+       ============================================ */
+    --syntax-comment: #8b949e;
+    --syntax-punctuation: #c9d1d9;
+    --syntax-property: #79c0ff;
+    --syntax-string: #a5d6ff;
+    --syntax-operator: #ff7b72;
+    --syntax-keyword: #ff7b72;
+    --syntax-function: #d2a8ff;
+    --syntax-variable: #ffa657;
+
+    /* ============================================
+       GRADIENTS
+       ============================================ */
+    --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    --gradient-overlay: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.7) 100%);
+    --gradient-hero: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --leading-tight: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.7;
+    --leading-loose: 1.8;
+
+    /* ============================================
+       SPACING
+       ============================================ */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+
+    /* ============================================
+       LAYOUT
+       ============================================ */
+    --container-max: 1280px;
+    --content-max: 800px;
+    --header-height: 64px;
+    --sidebar-width: 240px;
+    --toc-top: 100px;
+
+    /* ============================================
+       BORDERS & RADIUS
+       ============================================ */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+    --border-width: 1px;
+
+    /* ============================================
+       SHADOWS
+       ============================================ */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-glow: 0 0 6px var(--color-code-lang);
+
+    /* ============================================
+       TRANSITIONS
+       ============================================ */
+    --duration-fast: 0.1s;
+    --duration-normal: 0.2s;
+    --duration-slow: 0.3s;
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+    /* ============================================
+       Z-INDEX
+       ============================================ */
+    --z-sticky: 20;
+    --z-header: 100;
+    --z-progress: 200;
+    --z-toast: 1000;
+
+    /* ============================================
+       HEADER
+       ============================================ */
+    --header-bg: rgba(250, 250, 250, 0.9);
+    --header-blur: 20px;
+
+    /* ============================================
+       COMPONENTS
+       ============================================ */
+    --logo-size: 36px;
+    --btn-padding: var(--space-2) var(--space-3);
+    --card-padding: var(--space-6);
+    --tag-padding: var(--space-2) var(--space-4);
+    --scroll-top-size: 48px;
+    --progress-height: 3px;
+}
+
+/* ============================================
+   DARK THEME
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #09090b;
+        --color-bg-alt: #18181b;
+        --color-surface: #18181b;
+        --color-surface-hover: #27272a;
+        --color-text: #fafafa;
+        --color-text-secondary: #a1a1aa;
+        --color-text-muted: #71717a;
+        --color-border: #27272a;
+        --color-border-light: #3f3f46;
+        --header-bg: rgba(9, 9, 11, 0.9);
+        --gradient-hero: linear-gradient(135deg, #0c0a09 0%, #1c1917 50%, #292524 100%);
+    }
+}
+
+/* ============================================
+   ALTERNATIVE THEMES
+   ============================================ */
+[data-theme="cyberpunk"] {
+    --color-primary: #ff00ff;
+    --color-primary-light: #ff66ff;
+    --color-primary-rgb: 255, 0, 255;
+    --color-secondary: #00ffff;
+    --color-bg: #0a0a0f;
+    --color-surface: #1a1a2e;
+    --color-text: #eaeaea;
+    --gradient-primary: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
+    --color-code-lang: #00ffff;
+}
+
+[data-theme="forest"] {
+    --color-primary: #22c55e;
+    --color-primary-light: #4ade80;
+    --color-primary-rgb: 34, 197, 94;
+    --color-secondary: #84cc16;
+    --gradient-primary: linear-gradient(135deg, #22c55e 0%, #84cc16 100%);
+    --color-code-lang: #4ade80;
+}
+
+[data-theme="ocean"] {
+    --color-primary: #0ea5e9;
+    --color-primary-light: #38bdf8;
+    --color-primary-rgb: 14, 165, 233;
+    --color-secondary: #06b6d4;
+    --gradient-primary: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+    --color-code-lang: #38bdf8;
+}
+
+[data-theme="sunset"] {
+    --color-primary: #f97316;
+    --color-primary-light: #fb923c;
+    --color-primary-rgb: 249, 115, 22;
+    --color-secondary: #ec4899;
+    --gradient-primary: linear-gradient(135deg, #f97316 0%, #ec4899 100%);
+    --color-code-lang: #fb923c;
+}
