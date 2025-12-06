@@ -1480,8 +1480,8 @@
             const codeBlocks = document.querySelectorAll('.article-content pre');
 
             codeBlocks.forEach((pre, index) => {
-                // Check if already wrapped
-                if (pre.parentElement.classList.contains('code-block-wrapper')) return;
+                // Check if already wrapped (check ancestors, not just parent)
+                if (pre.closest('.code-block-wrapper')) return;
 
                 const wrapper = document.createElement('div');
                 wrapper.className = 'code-block-wrapper';
