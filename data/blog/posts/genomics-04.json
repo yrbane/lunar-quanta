@@ -1,0 +1,36 @@
+{
+    "id": "genomics-04",
+    "title": "Spatial transcriptomics : Cartographier l'expression génique",
+    "slug": "spatial-transcriptomics-cartographier-l-expression-genique",
+    "content": "# Transcriptomique Spatiale (Spatial Transcriptomics) : Cartographier l'Expression Génique dans le Contexte Tissulaire\n\nLa transcriptomique spatiale est une révolution en biologie moléculaire qui permet de mesurer l'expression de milliers de gènes simultanément, tout en conservant leur localisation précise dans un tissu. Contrairement au séquençage cellule unique (scRNA-seq) qui dissocie les cellules et perd l'information spatiale, la transcriptomique spatiale fournit une carte de l'activité génique, essentielle pour comprendre l'architecture tissulaire, les interactions cellulaires et les microenvironnements des maladies comme le cancer.\n\n## 1. Le Problème de l'Hétérogénéité Spatiale\n\n*   **scRNA-seq :** Révèle l'hétérogénéité des populations cellulaires, mais ne dit pas où ces cellules se trouvent dans le tissu.\n*   **Bulk RNA-seq :** Fournit une moyenne de l'expression génique pour tout l'échantillon, masquant l'information sur les variations locales.\n\nLa transcriptomique spatiale résout ce problème en intégrant l'information spatiale et génique.\n\n## 2. Technologies de Transcriptomique Spatiale\n\nIl existe plusieurs plateformes, chacune avec des compromis entre la résolution spatiale et le nombre de gènes mesurés.\n\n### 2.1. 10x Genomics Visium\n*   **Principe :** Des sections de tissu sont déposées sur une lame de verre spéciale recouverte de milliers de \"spots\" (points) d'oligonucleotides. Chaque spot contient des séquences d'ADN avec un barcode spatial unique et un barcode de capture d'ARNm (poly(dT)).\n*   **Processus :**\n    1.  Perméabilisation du tissu pour libérer l'ARNm.\n    2.  L'ARNm se lie aux oligonucleotides sur les spots.\n    3.  Synthèse d'ADNc, puis préparation de librairies NGS.\n    4.  Séquençage de l'ADNc, et alignement des reads sur les barcodes spatiaux pour reconstruire la carte d'expression.\n*   **Résolution :** Résolution par spot (55 µm), correspondant à environ 1-10 cellules par spot.\n*   **Avantages :** Haut débit, mesure de milliers de gènes, capture une vue d'ensemble du tissu.\n\n### 2.2. slide-seq (Broad Institute)\n*   **Principe :** Utilise des billes microscopiques (10 µm) encapsulant des barcodes spatiaux uniques, déposées sur une surface. Les sections de tissu sont placées sur ces billes.\n*   **Résolution :** Résolution cellule unique ou subcellulaire.\n*   **Avantages :** Haute résolution.\n*   **Limites :** Plus complexe à mettre en œuvre et à analyser.\n\n### 2.3. FISH (Fluorescence In Situ Hybridization) Basée sur l'Imagerie\n*   **Principe :** Utilise des sondes fluorescentes pour détecter et localiser des ARN spécifiques directement dans le tissu.\n*   **Exemples :** MERFISH, seqFISH, GeoMx DSP.\n*   **Résolution :** Résolution cellule unique ou subcellulaire.\n*   **Avantages :** Très haute résolution spatiale.\n*   **Limites :** Généralement pour un nombre limité de gènes à la fois.\n\n## 3. Applications en Biologie et Médecine\n\n### 3.1. Oncologie\n*   **Microenvironnement Tumoral :** Cartographier l'hétérogénéité des cellules cancéreuses, les cellules immunitaires infiltrantes et le stroma dans la tumeur, ce qui influence la progression et la réponse au traitement.\n*   **Biomarqueurs Spatiaux :** Découverte de signatures géniques spécifiques à des régions tumorales (ex: interface tumeur-immunité).\n\n### 3.2. Neurosciences\n*   **Architecture du Cerveau :** Étudier l'organisation spatiale des populations neuronales et l'expression des gènes dans des régions spécifiques du cerveau.\n\n### 3.3. Développement Embryonnaire\n*   Comprendre comment l'expression génique est orchestrée spatialement lors de la formation des organes.\n\n### 3.4. Maladies Inflammatoires\n*   Analyser la distribution des cellules immunitaires et des médiateurs inflammatoires dans les tissus affectés.\n\n## 4. Analyse Bioinformatique\n\n*   **Intégration :** L'analyse des données de transcriptomique spatiale nécessite d'intégrer l'information spatiale avec les données d'expression génique.\n*   **Clustering Spatial :** Identifier des régions tissulaires avec des profils d'expression génique similaires.\n*   **Inférence d'Interactions Cellulaires :** Déduire les interactions entre les cellules à partir de leur proximité spatiale et de leurs profils d'expression.\n\n## 5. Conclusion\n\nLa transcriptomique spatiale a ouvert une nouvelle dimension dans l'étude des systèmes biologiques en révélant la complexité de l'expression génique dans son contexte tissulaire. Elle est devenue un outil indispensable pour la compréhension des maladies, le développement de biomarqueurs et la médecine de précision.\n\n**Références Académiques :**\n*   *High-definition spatial transcriptomics reveals the molecular architecture of tissues*, Science, 2021.\n*   *Spatial transcriptomics: a review of technologies and biological applications*, Nature Methods, 2021.\n",
+    "excerpt": "Découvrez les dernières avancées : Spatial transcriptomics : Cartographier l'expression génique",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "genomics",
+    "featuredImage": "\/blog\/images\/spatial-transcriptomics-cartographier-l-expression-genique.jpg",
+    "status": "published",
+    "tags": [
+        "genomics",
+        "spatial",
+        "transcriptomics",
+        "10x-visium"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 3,
+        "depth": 4,
+        "clarity": 4,
+        "freshness": 4,
+        "usefulness": 3
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2025-11-19T23:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2025-11-19T23:00:00+00:00"
+}

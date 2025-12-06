@@ -10,485 +10,397 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-    <!-- Lunar Aurora CSS Framework -->
-    <link rel="stylesheet" href="/assets/css/lunar-aurora/aurora-blog.css">
-
-    <!-- Open Graph -->
+    <link rel="stylesheet" href="/css/lunar-aurora/aurora-blog.css">
     <meta property="og:title" content="{{ title }}">
     <meta property="og:description" content="{{ excerpt }}">
     <meta property="og:type" content="article">
-    {% if featured_image %}
     <meta property="og:image" content="{{ featured_image }}">
-    {% endif %}
+    <style>
+        .la-rating-badge { display: inline-flex; align-items: center; gap: var(--la-space-2); padding: var(--la-space-2) var(--la-space-4); background: var(--la-surface-2); border-radius: var(--la-radius-full); font-size: var(--la-text-sm); font-weight: var(--la-weight-semibold); }
+        .la-rating-badge .la-icon { color: var(--la-warning, #f59e0b); }
+        .la-author-box { display: flex; gap: var(--la-space-6); padding: var(--la-space-8); background: linear-gradient(135deg, var(--la-surface-1) 0%, var(--la-surface-2) 100%); border-radius: var(--la-radius-2xl); border: 1px solid var(--la-border); position: relative; overflow: hidden; }
+        .la-author-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--la-gradient-primary); }
+        .la-author-avatar { flex-shrink: 0; width: 100px; height: 100px; border-radius: var(--la-radius-full); overflow: hidden; border: 3px solid var(--la-primary); box-shadow: var(--la-shadow-lg); }
+        .la-author-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .la-author-avatar-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--la-gradient-primary); color: white; font-size: 2.5rem; }
+        .la-author-info { flex: 1; }
+        .la-author-name { font-size: var(--la-text-xl); font-weight: var(--la-weight-bold); margin-bottom: var(--la-space-1); }
+        .la-author-institution { font-size: var(--la-text-sm); color: var(--la-primary); font-weight: var(--la-weight-medium); margin-bottom: var(--la-space-3); }
+        .la-author-bio { color: var(--la-text-secondary); line-height: 1.6; }
+        .la-author-badge { display: inline-flex; align-items: center; gap: var(--la-space-1); padding: var(--la-space-1) var(--la-space-3); background: var(--la-surface-3); border-radius: var(--la-radius-full); font-size: var(--la-text-xs); color: var(--la-text-muted); margin-top: var(--la-space-3); }
+        .la-sources-box { padding: var(--la-space-6); background: var(--la-surface-1); border-radius: var(--la-radius-xl); border: 1px solid var(--la-border); border-left: 4px solid var(--la-primary); margin-top: var(--la-space-12); }
+        .la-sources-title { display: flex; align-items: center; gap: var(--la-space-2); font-size: var(--la-text-lg); font-weight: var(--la-weight-semibold); margin-bottom: var(--la-space-4); }
+        .la-source-item { display: flex; align-items: flex-start; gap: var(--la-space-3); padding: var(--la-space-3) 0; border-bottom: 1px solid var(--la-border-subtle); }
+        .la-source-item:last-child { border-bottom: none; }
+        .la-source-icon { flex-shrink: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--la-surface-2); border-radius: var(--la-radius-md); color: var(--la-primary); }
+        .la-source-content { flex: 1; min-width: 0; }
+        .la-source-title { font-weight: var(--la-weight-medium); color: var(--la-text); }
+        .la-source-title a { color: inherit; text-decoration: none; }
+        .la-source-title a:hover { color: var(--la-primary); text-decoration: underline; }
+        .la-source-domain { font-size: var(--la-text-xs); color: var(--la-text-muted); }
+        .la-license-badge { display: inline-flex; align-items: center; gap: var(--la-space-2); padding: var(--la-space-2) var(--la-space-4); background: rgba(34, 197, 94, 0.15); color: var(--la-success, #22c55e); border-radius: var(--la-radius-full); font-size: var(--la-text-xs); font-weight: var(--la-weight-medium); }
+        .la-locked-badge { display: inline-flex; align-items: center; gap: var(--la-space-2); padding: var(--la-space-2) var(--la-space-4); background: rgba(245, 158, 11, 0.15); color: var(--la-warning, #f59e0b); border-radius: var(--la-radius-full); font-size: var(--la-text-xs); font-weight: var(--la-weight-medium); }
+        .la-comments-section { margin-top: var(--la-space-16); }
+        .la-comment-form { padding: var(--la-space-6); background: var(--la-surface-1); border-radius: var(--la-radius-xl); border: 1px solid var(--la-border); margin-bottom: var(--la-space-8); }
+        .la-comment-form textarea { width: 100%; min-height: 120px; padding: var(--la-space-4); background: var(--la-surface-2); border: 1px solid var(--la-border); border-radius: var(--la-radius-lg); color: var(--la-text); font-family: inherit; resize: vertical; }
+        .la-comment-form textarea:focus { outline: none; border-color: var(--la-primary); }
+        .la-comment-form-row { display: flex; gap: var(--la-space-4); margin-bottom: var(--la-space-4); }
+        .la-comment-form-row input { flex: 1; padding: var(--la-space-3) var(--la-space-4); background: var(--la-surface-2); border: 1px solid var(--la-border); border-radius: var(--la-radius-lg); color: var(--la-text); font-family: inherit; }
+        .la-comment-form-row input:focus { outline: none; border-color: var(--la-primary); }
+        .la-comments-list { display: flex; flex-direction: column; gap: var(--la-space-4); }
+        .la-comment { padding: var(--la-space-5); background: var(--la-surface-1); border-radius: var(--la-radius-lg); border: 1px solid var(--la-border-subtle); }
+        .la-comment-header { display: flex; align-items: center; gap: var(--la-space-3); margin-bottom: var(--la-space-3); }
+        .la-comment-avatar { width: 40px; height: 40px; border-radius: var(--la-radius-full); background: var(--la-gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: var(--la-weight-bold); }
+        .la-comment-author { font-weight: var(--la-weight-semibold); }
+        .la-comment-date { font-size: var(--la-text-xs); color: var(--la-text-muted); }
+        .la-comment-content { color: var(--la-text-secondary); line-height: 1.6; }
+        .la-no-comments { padding: var(--la-space-8); text-align: center; color: var(--la-text-muted); background: var(--la-surface-1); border-radius: var(--la-radius-xl); }
+        .la-rating-module { background: linear-gradient(135deg, var(--la-surface-1) 0%, var(--la-surface-2) 100%); border-radius: var(--la-radius-2xl); border: 1px solid var(--la-border); overflow: hidden; }
+        .la-rating-header { display: flex; justify-content: space-between; align-items: center; padding: var(--la-space-6); background: var(--la-surface-2); border-bottom: 1px solid var(--la-border); }
+        .la-rating-score { display: flex; align-items: center; gap: var(--la-space-4); }
+        .la-rating-score-number { font-size: var(--la-text-4xl); font-weight: var(--la-weight-bold); color: var(--la-warning, #f59e0b); line-height: 1; }
+        .la-rating-score-details { display: flex; flex-direction: column; }
+        .la-rating-body { padding: var(--la-space-6); }
+        .la-original-source-box { margin-top: var(--la-space-8); padding: var(--la-space-6); background: var(--la-surface-2); border-radius: var(--la-radius-xl); text-align: center; }
+        @media (max-width: 640px) { .la-author-box { flex-direction: column; text-align: center; } .la-author-avatar { margin: 0 auto; } .la-comment-form-row { flex-direction: column; } }
+    </style>
 </head>
 <body class="la-blog">
-    <!-- Reading Progress Bar -->
-    <div class="la-reading-progress">
-        <div class="la-reading-progress-bar" id="progress"></div>
-    </div>
+    <div class="la-reading-progress"><div class="la-reading-progress-bar" id="progress"></div></div>
 
     <header class="la-blog-header">
         <div class="la-container">
-            <a href="/blog/" class="la-blog-logo">
-                <span class="la-icon">rocket_launch</span>
-                <span>Lunar Blog</span>
-            </a>
+            <a href="/blog/" class="la-blog-logo"><span class="la-icon">rocket_launch</span><span>Lunar Blog</span></a>
             <nav class="la-blog-nav">
-                <a href="/blog/">
-                    <span class="la-icon sm">arrow_back</span>
-                    Articles
-                </a>
-                <!-- Theme Switcher -->
-                <div class="la-theme-switcher">
-                    <button class="la-theme-trigger" title="Changer le thème">
-                        <span class="la-icon">palette</span>
-                        <span class="la-theme-current">Thème</span>
-                        <span class="la-icon sm">expand_more</span>
-                    </button>
-                    <div class="la-theme-dropdown">
-                        <div class="la-theme-group">
-                            <div class="la-theme-group-title">Base</div>
-                            <button class="la-theme-option" data-theme="dark"><span class="la-theme-preview"></span><span class="la-theme-name">Dark</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="light"><span class="la-theme-preview"></span><span class="la-theme-name">Light</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                        </div>
-                        <div class="la-theme-group">
-                            <div class="la-theme-group-title">Couleurs</div>
-                            <button class="la-theme-option" data-theme="cyberpunk"><span class="la-theme-preview"></span><span class="la-theme-name">Cyberpunk</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="ocean"><span class="la-theme-preview"></span><span class="la-theme-name">Ocean</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="forest"><span class="la-theme-preview"></span><span class="la-theme-name">Forest</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="sunset"><span class="la-theme-preview"></span><span class="la-theme-name">Sunset</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="aurora"><span class="la-theme-preview"></span><span class="la-theme-name">Aurora</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="lavender"><span class="la-theme-preview"></span><span class="la-theme-name">Lavender</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                        </div>
-                        <div class="la-theme-group">
-                            <div class="la-theme-group-title">Rétro / Arcade</div>
-                            <button class="la-theme-option" data-theme="8bits"><span class="la-theme-preview"></span><span class="la-theme-name">8-Bits</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="8bits-dark"><span class="la-theme-preview"></span><span class="la-theme-name">8-Bits</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="bubble"><span class="la-theme-preview"></span><span class="la-theme-name">Bubble Bobble</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="bubble-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Bubble Bobble</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="galaxian"><span class="la-theme-preview"></span><span class="la-theme-name">Galaxian</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="galaxian-light"><span class="la-theme-preview"></span><span class="la-theme-name">Galaxian</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="mario"><span class="la-theme-preview"></span><span class="la-theme-name">Mario</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="mario-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Mario</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                        </div>
-                        <div class="la-theme-group">
-                            <div class="la-theme-group-title">Geek</div>
-                            <button class="la-theme-option" data-theme="web90"><span class="la-theme-preview"></span><span class="la-theme-name">Web 90s</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="web90-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Web 90s</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="geek"><span class="la-theme-preview"></span><span class="la-theme-name">Geek</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="geek-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Geek</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="hacker"><span class="la-theme-preview"></span><span class="la-theme-name">Hacker</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="hacker-light"><span class="la-theme-preview"></span><span class="la-theme-name">Hacker</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="eco"><span class="la-theme-preview"></span><span class="la-theme-name">Eco</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="eco-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Eco</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                        </div>
-                        <div class="la-theme-group">
-                            <div class="la-theme-group-title">Système</div>
-                            <button class="la-theme-option" data-theme="win95"><span class="la-theme-preview"></span><span class="la-theme-name">Windows 95</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="win95-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Windows 95</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="bsod"><span class="la-theme-preview"></span><span class="la-theme-name">BSOD</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="bsod-light"><span class="la-theme-preview"></span><span class="la-theme-name">BSOD</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                        </div>
-                    </div>
-                </div>
-                <a href="https://github.com/yrbane/lunar-quanta" target="_blank" title="GitHub">
-                    <span class="la-icon sm">code</span>
-                </a>
+                <a href="/blog/"><span class="la-icon sm">arrow_back</span> Articles</a>
+                <a href="https://github.com/yrbane/lunar-quanta" target="_blank" title="GitHub"><span class="la-icon sm">code</span></a>
             </nav>
         </div>
     </header>
 
-    {% if featured_image %}
-    <div class="la-post-featured-image">
-        <img src="{{ featured_image }}" alt="{{ title }}">
+    <div class="la-post-featured-image" id="featured-image-container" style="display:none;">
+        <img src="{{ featured_image }}" alt="{{ title }}" id="featured-img">
     </div>
-    {% endif %}
 
     <main class="la-blog-main">
         <div class="la-container">
-            <div class="la-with-sidebar" style="--sidebar-width: 250px; --content-min: 60%;">
-                <!-- Table of Contents Sidebar -->
+            <div class="la-with-sidebar" style="--sidebar-width: 220px; --content-min: 65%;">
                 <aside class="la-toc" id="toc">
-                    <div class="la-toc-title">
-                        <span class="la-icon sm">list</span>
-                        Sommaire
+                    <div class="la-rating-badge la-mb-6">
+                        <span class="la-icon sm">star</span>
+                        <span id="sidebar-rating">{{ average_rating }}</span>/5
                     </div>
+                    <div class="la-toc-title"><span class="la-icon sm">list</span> Sommaire</div>
                     <ul class="la-toc-list" id="toc-list"></ul>
                 </aside>
 
-                <!-- Article Content -->
                 <article class="la-post">
-                    <!-- Mobile TOC Toggle -->
-                    <button class="la-btn outline sm la-mb-6 la-hidden @md:la-block" id="toc-toggle">
-                        <span class="la-icon sm">list</span>
-                        Sommaire
-                    </button>
-                    <nav class="la-card la-mb-6 la-hidden" id="toc-mobile">
-                        <ul class="la-toc-list" id="toc-list-mobile"></ul>
-                    </nav>
-
                     <header class="la-post-header">
-                        {% if category %}
-                        <a href="/blog/category/{{ category|lower }}/" class="la-post-card-category la-mb-4">{{ category }}</a>
-                        {% endif %}
+                        <div class="la-flex la-gap-3 la-justify-center la-flex-wrap la-mb-4">
+                            <a href="/blog/category/{{ category_slug }}.html" class="la-post-card-category" id="category-link">{{ category }}</a>
+                            <div class="la-rating-badge"><span class="la-icon sm">star</span><span>{{ average_rating }}/5</span></div>
+                            <span class="la-license-badge" id="license-badge" style="display:none;"><span class="la-icon xs">verified</span> <span id="license-text">{{ license }}</span></span>
+                            <span class="la-locked-badge" id="locked-badge" style="display:none;"><span class="la-icon xs">lock</span> Article protege</span>
+                        </div>
                         <h1 class="la-post-title">{{ title }}</h1>
-                        {% if excerpt %}
                         <p class="la-text-xl la-text-muted la-mt-4">{{ excerpt }}</p>
-                        {% endif %}
                         <div class="la-post-meta la-mt-6">
-                            {% if author %}
-                            <span>
-                                <span class="la-icon">person</span>
-                                {{ author }}
-                            </span>
-                            {% endif %}
-                            <span>
-                                <span class="la-icon">calendar_today</span>
-                                {{ published_at }}
-                            </span>
-                            <span>
-                                <span class="la-icon">schedule</span>
-                                {{ reading_time }} min de lecture
-                            </span>
+                            <span><span class="la-icon">person</span> {{ author }}</span>
+                            <span id="institution-span" style="display:none;" class="la-text-primary">{{ author_institution }}</span>
+                            <span><span class="la-icon">calendar_today</span> {{ published_at }}</span>
+                            <span><span class="la-icon">schedule</span> {{ reading_time }} min</span>
                         </div>
                         <div class="la-flex la-gap-3 la-mt-6 la-justify-center">
-                            <button class="la-btn outline sm" id="bookmark-btn" title="Ajouter aux favoris">
-                                <span class="la-icon sm">bookmark</span>
-                                <span id="bookmark-text">Favoris</span>
-                            </button>
-                            <button class="la-btn outline sm" onclick="printArticle()" title="Imprimer">
-                                <span class="la-icon sm">print</span>
-                                Imprimer
-                            </button>
+                            <button class="la-btn outline sm" id="bookmark-btn" title="Favoris"><span class="la-icon sm">bookmark</span><span id="bookmark-text">Favoris</span></button>
+                            <button class="la-btn outline sm" onclick="window.print()" title="Imprimer"><span class="la-icon sm">print</span></button>
+                            <button class="la-btn outline sm" onclick="navigator.clipboard.writeText(window.location.href)" title="Copier le lien"><span class="la-icon sm">link</span></button>
                         </div>
                     </header>
+
+                    <section class="la-author-box la-mt-8">
+                        <div class="la-author-avatar">
+                            <img src="{{ author_avatar }}" alt="{{ author }}" id="author-avatar-img" style="display:none;">
+                            <div class="la-author-avatar-placeholder" id="author-avatar-placeholder"><span class="la-icon">person</span></div>
+                        </div>
+                        <div class="la-author-info">
+                            <div class="la-flex la-items-center la-gap-3 la-flex-wrap">
+                                <h3 class="la-author-name">{{ author }}</h3>
+                                <span class="la-badge sm" id="original-source-badge" style="display:none;">via {{ original_source }}</span>
+                            </div>
+                            <p class="la-author-institution" id="author-institution" style="display:none;">{{ author_institution }}</p>
+                            <p class="la-author-bio" id="author-bio">{{ author_bio }}</p>
+                            <div class="la-author-badge" id="locked-author-badge" style="display:none;"><span class="la-icon xs">verified</span> Contenu original protege</div>
+                        </div>
+                    </section>
 
                     <div class="la-prose la-mt-12" id="article-content">
                         {{ content }}
                     </div>
 
-                    {% if tags|length > 0 %}
-                    <div class="la-post-tags">
-                        {% for tag in tags %}
-                        <a href="/blog/tags/{{ tag }}.html" class="la-tag">
-                            <span class="la-icon xs">tag</span>
-                            {{ tag }}
-                        </a>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
+                    <div class="la-post-tags" id="tags-container"></div>
 
-                    {% if related_posts|length > 0 %}
-                    <section class="la-mt-16">
-                        <h2 class="la-h3 la-mb-6">
-                            <span class="la-icon">auto_stories</span>
-                            Articles similaires
-                        </h2>
-                        <div class="la-grid la-cols-1 @md:la-cols-2 la-gap-6">
-                            {% for related in related_posts %}
-                            <a href="{{ related.url }}" class="la-card interactive la-p-6">
-                                <h3 class="la-h5 la-mb-2">{{ related.title }}</h3>
-                                <p class="la-text-sm la-text-muted">{{ related.excerpt }}</p>
-                            </a>
-                            {% endfor %}
+                    <section class="la-sources-box" id="sources-section" style="display:none;">
+                        <h3 class="la-sources-title"><span class="la-icon">link</span> Sources et References</h3>
+                        <div class="la-sources-list" id="sources-list"></div>
+                    </section>
+
+                    <div class="la-original-source-box" id="original-source-section" style="display:none;">
+                        <p class="la-text-sm la-text-muted la-mb-3"><span class="la-icon sm">open_in_new</span> Article original publie sur <span id="original-source-name">{{ original_source }}</span></p>
+                        <a href="{{ original_url }}" target="_blank" rel="noopener" class="la-btn primary sm" id="original-url-link">Lire l'article original</a>
+                    </div>
+
+                    <section class="la-rating-module la-mt-12" id="rating-section">
+                        <div class="la-rating-header">
+                            <h3 class="la-h5 la-mb-0 la-flex la-items-center la-gap-2"><span class="la-icon">star</span> Evaluez cet article</h3>
+                            <div class="la-rating-score">
+                                <span class="la-rating-score-number">{{ average_rating }}</span>
+                                <div class="la-rating-score-details">
+                                    <div class="la-rating-stars" id="display-stars"></div>
+                                    <span class="la-text-xs la-text-muted">sur 5 criteres</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="la-rating-body" id="rating-form">
+                            <p class="la-text-sm la-text-muted la-mb-4">Notez cet article selon 5 criteres :</p>
+                            <div class="la-rating-details">
+                                <div class="la-rating-criterion" data-criterion="relevance"><div class="la-rating-criterion-header"><span class="la-rating-criterion-name"><span class="la-icon xs">check_circle</span> Pertinence</span><span class="la-rating-criterion-value">0/5</span></div><div class="la-rating-interactive"><button class="la-rating-btn" data-value="1"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="2"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="3"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="4"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="5"><span class="la-icon sm">star_outline</span></button></div></div>
+                                <div class="la-rating-criterion" data-criterion="depth"><div class="la-rating-criterion-header"><span class="la-rating-criterion-name"><span class="la-icon xs">layers</span> Profondeur</span><span class="la-rating-criterion-value">0/5</span></div><div class="la-rating-interactive"><button class="la-rating-btn" data-value="1"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="2"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="3"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="4"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="5"><span class="la-icon sm">star_outline</span></button></div></div>
+                                <div class="la-rating-criterion" data-criterion="clarity"><div class="la-rating-criterion-header"><span class="la-rating-criterion-name"><span class="la-icon xs">visibility</span> Clarte</span><span class="la-rating-criterion-value">0/5</span></div><div class="la-rating-interactive"><button class="la-rating-btn" data-value="1"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="2"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="3"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="4"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="5"><span class="la-icon sm">star_outline</span></button></div></div>
+                                <div class="la-rating-criterion" data-criterion="freshness"><div class="la-rating-criterion-header"><span class="la-rating-criterion-name"><span class="la-icon xs">update</span> Actualite</span><span class="la-rating-criterion-value">0/5</span></div><div class="la-rating-interactive"><button class="la-rating-btn" data-value="1"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="2"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="3"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="4"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="5"><span class="la-icon sm">star_outline</span></button></div></div>
+                                <div class="la-rating-criterion" data-criterion="usefulness"><div class="la-rating-criterion-header"><span class="la-rating-criterion-name"><span class="la-icon xs">thumb_up</span> Utilite</span><span class="la-rating-criterion-value">0/5</span></div><div class="la-rating-interactive"><button class="la-rating-btn" data-value="1"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="2"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="3"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="4"><span class="la-icon sm">star_outline</span></button><button class="la-rating-btn" data-value="5"><span class="la-icon sm">star_outline</span></button></div></div>
+                            </div>
+                            <div class="la-text-center la-mt-6"><button class="la-btn primary" id="submit-rating" disabled><span class="la-icon sm">send</span> Envoyer</button></div>
+                        </div>
+                        <div id="rating-thanks" class="la-hidden la-text-center la-py-12"><span class="la-icon xxl la-text-success la-mb-4">check_circle</span><p class="la-h5">Merci !</p></div>
+                    </section>
+
+                    <section class="la-comments-section la-mt-12">
+                        <h2 class="la-h4 la-mb-6 la-flex la-items-center la-gap-2"><span class="la-icon">chat</span> Commentaires <span class="la-badge sm" id="comments-count">0</span></h2>
+                        <div class="la-comment-form">
+                            <h4 class="la-h6 la-mb-4">Laisser un commentaire</h4>
+                            <div class="la-comment-form-row"><input type="text" id="comment-name" placeholder="Votre nom" required><input type="email" id="comment-email" placeholder="Email (optionnel)"></div>
+                            <textarea id="comment-content" placeholder="Votre commentaire..." required></textarea>
+                            <div class="la-flex la-justify-between la-items-center la-mt-4"><span class="la-text-xs la-text-muted">Les commentaires sont moderes.</span><button class="la-btn primary" id="submit-comment"><span class="la-icon sm">send</span> Envoyer</button></div>
+                        </div>
+                        <div class="la-comments-list" id="comments-list">
+                            <div class="la-no-comments" id="no-comments"><span class="la-icon xl la-text-muted la-mb-3">chat_bubble_outline</span><p>Soyez le premier a commenter !</p></div>
                         </div>
                     </section>
-                    {% endif %}
 
-                    <!-- Share Section -->
-                    <div class="la-card la-mt-12 la-p-6 la-text-center">
-                        <span class="la-text-muted la-mb-4 la-block">Partager cet article</span>
-                        <div class="la-flex la-justify-center la-gap-3">
-                            <a href="https://twitter.com/intent/tweet?text={{ title }}&url=" class="la-btn ghost" title="Twitter" target="_blank" rel="noopener">
-                                <span class="la-icon">share</span>
-                            </a>
-                            <a href="https://www.linkedin.com/shareArticle?mini=true&url=&title={{ title }}" class="la-btn ghost" title="LinkedIn" target="_blank" rel="noopener">
-                                <span class="la-icon">share</span>
-                            </a>
-                            <a href="mailto:?subject={{ title }}&body=Je te recommande cet article : " class="la-btn ghost" title="Email">
-                                <span class="la-icon">email</span>
-                            </a>
-                            <button class="la-btn ghost" title="Copier le lien" onclick="copyLink()">
-                                <span class="la-icon">link</span>
-                            </button>
-                        </div>
-                    </div>
+                    <section class="la-mt-16 la-pt-8" id="related-section" style="border-top: 1px solid var(--la-border); display:none;">
+                        <h2 class="la-h3 la-mb-6"><span class="la-icon">auto_stories</span> Articles similaires</h2>
+                        <div class="la-grid la-cols-1 la-gap-6" id="related-posts"></div>
+                    </section>
 
-                    <!-- Back Navigation -->
-                    <nav class="la-mt-12 la-text-center">
-                        <a href="/blog/" class="la-btn outline">
-                            <span class="la-icon sm">arrow_back</span>
-                            Retour aux articles
-                        </a>
-                    </nav>
+                    <nav class="la-mt-12 la-text-center"><a href="/blog/" class="la-btn outline"><span class="la-icon sm">arrow_back</span> Retour</a></nav>
                 </article>
             </div>
         </div>
     </main>
 
-    <!-- Scroll to Top -->
-    <button class="la-btn primary la-rounded-full la-fixed la-bottom-8 la-right-8 la-z-50 la-opacity-0 la-transition-opacity" id="scroll-top">
-        <span class="la-icon">arrow_upward</span>
-    </button>
-
-    <!-- Toast Container -->
+    <button class="la-btn primary la-rounded-full la-fixed la-bottom-8 la-right-8 la-z-50 la-opacity-0 la-transition-opacity" id="scroll-top"><span class="la-icon">arrow_upward</span></button>
     <div class="la-toast-container" id="toastContainer"></div>
 
     <footer class="la-blog-footer">
         <div class="la-container">
             <div class="la-blog-footer-bottom">
-                <div class="la-flex la-items-center la-gap-3">
-                    <span class="la-icon">rocket_launch</span>
-                    <span class="la-font-semibold">Lunar Quanta</span>
-                </div>
-                <div class="la-blog-social">
-                    <a href="/blog/feed.xml" title="RSS"><span class="la-icon sm">rss_feed</span></a>
-                    <a href="https://github.com/yrbane/lunar-quanta" target="_blank" title="GitHub"><span class="la-icon sm">code</span></a>
-                </div>
+                <div class="la-flex la-items-center la-gap-3"><span class="la-icon">rocket_launch</span><span class="la-font-semibold">Lunar Quanta</span></div>
+                <div class="la-blog-social"><a href="/blog/feed.xml" title="RSS"><span class="la-icon sm">rss_feed</span></a></div>
                 <p>&copy; {{ year }} Lunar Quanta</p>
             </div>
         </div>
     </footer>
 
+    <!-- Data embedded by generator -->
+    <script id="post-data" type="application/json">
+    {
+        "tags": {{ tags_json }},
+        "sources": {{ sources_json }},
+        "related": {{ related_json }},
+        "hasAvatar": {{ has_avatar }},
+        "hasInstitution": {{ has_institution }},
+        "hasBio": {{ has_bio }},
+        "hasLicense": {{ has_license }},
+        "isLocked": {{ is_locked }},
+        "hasOriginalSource": {{ has_original_source }},
+        "hasFeaturedImage": {{ has_featured_image }}
+    }
+    </script>
+
     <script>
-        // Reading progress bar
+    document.addEventListener('DOMContentLoaded', function() {
+        const data = JSON.parse(document.getElementById('post-data').textContent);
+
+        // Featured image
+        if (data.hasFeaturedImage) {
+            document.getElementById('featured-image-container').style.display = 'block';
+        }
+
+        // Author avatar
+        if (data.hasAvatar) {
+            document.getElementById('author-avatar-img').style.display = 'block';
+            document.getElementById('author-avatar-placeholder').style.display = 'none';
+        }
+
+        // Institution
+        if (data.hasInstitution) {
+            document.getElementById('institution-span').style.display = 'inline';
+            document.getElementById('author-institution').style.display = 'block';
+        }
+
+        // Bio - show default if empty
+        if (!data.hasBio) {
+            document.getElementById('author-bio').textContent = 'Auteur de cet article.';
+            document.getElementById('author-bio').classList.add('la-text-muted');
+        }
+
+        // License
+        if (data.hasLicense) {
+            document.getElementById('license-badge').style.display = 'inline-flex';
+        }
+
+        // Locked
+        if (data.isLocked) {
+            document.getElementById('locked-badge').style.display = 'inline-flex';
+            document.getElementById('locked-author-badge').style.display = 'inline-flex';
+        }
+
+        // Original source
+        if (data.hasOriginalSource) {
+            document.getElementById('original-source-badge').style.display = 'inline';
+            document.getElementById('original-source-section').style.display = 'block';
+        }
+
+        // Tags
+        const tagsContainer = document.getElementById('tags-container');
+        if (data.tags && data.tags.length > 0) {
+            tagsContainer.innerHTML = data.tags.map(tag =>
+                `<a href="/blog/tags/${tag}.html" class="la-tag"><span class="la-icon xs">tag</span> ${tag}</a>`
+            ).join('');
+        }
+
+        // Sources
+        if (data.sources && data.sources.length > 0) {
+            document.getElementById('sources-section').style.display = 'block';
+            document.getElementById('sources-list').innerHTML = data.sources.map(s =>
+                `<div class="la-source-item"><div class="la-source-icon"><span class="la-icon sm">article</span></div><div class="la-source-content"><div class="la-source-title"><a href="${s.url}" target="_blank">${s.title}</a></div><div class="la-source-domain">${s.domain}</div></div></div>`
+            ).join('');
+        }
+
+        // Related posts
+        if (data.related && data.related.length > 0) {
+            document.getElementById('related-section').style.display = 'block';
+            document.getElementById('related-posts').innerHTML = data.related.map(r =>
+                `<a href="${r.url}" class="la-card interactive la-p-6"><h3 class="la-h5 la-mb-2">${r.title}</h3><p class="la-text-sm la-text-muted">${r.excerpt}</p></a>`
+            ).join('');
+        }
+
+        // Category link - hide if empty
+        const catLink = document.getElementById('category-link');
+        if (!catLink.textContent.trim()) catLink.style.display = 'none';
+
+        // Reading progress
         window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            document.getElementById('progress').style.width = (winScroll / height) * 100 + '%';
+            const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById('progress').style.width = (window.scrollY / h) * 100 + '%';
         });
 
-        // Toast notification
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `la-toast ${type}`;
-            toast.innerHTML = `
-                <div class="la-toast-icon"><span class="la-icon">info</span></div>
-                <div class="la-toast-content">
-                    <div class="la-toast-message">${message}</div>
-                </div>
-                <button class="la-toast-close" onclick="this.parentElement.remove()">
-                    <span class="la-icon sm">close</span>
-                </button>
-            `;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // Copy link
-        function copyLink() {
-            navigator.clipboard.writeText(window.location.href).then(() => showToast('Lien copié !', 'success'));
-        }
-
-        // Print
-        function printArticle() { window.print(); }
-
-        // Scroll to top
+        // Scroll top
         const scrollTopBtn = document.getElementById('scroll-top');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 500) {
-                scrollTopBtn.classList.remove('la-opacity-0');
-                scrollTopBtn.classList.add('la-opacity-100');
-            } else {
-                scrollTopBtn.classList.add('la-opacity-0');
-                scrollTopBtn.classList.remove('la-opacity-100');
-            }
+            scrollTopBtn.style.opacity = window.scrollY > 500 ? '1' : '0';
         });
         scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
+        // TOC generation
+        const content = document.getElementById('article-content');
+        const tocList = document.getElementById('toc-list');
+        const headings = content.querySelectorAll('h2, h3');
+        if (headings.length === 0) { document.getElementById('toc').style.display = 'none'; }
+        headings.forEach((h, i) => {
+            if (!h.id) h.id = 'heading-' + i;
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = '#' + h.id;
+            a.className = h.tagName === 'H3' ? 'level-3' : '';
+            a.textContent = h.textContent.trim();
+            li.appendChild(a);
+            tocList.appendChild(li);
+        });
+
         // Bookmarks
+        const articleSlug = window.location.pathname.split('/').pop().replace('.html', '');
         const bookmarkBtn = document.getElementById('bookmark-btn');
         const bookmarkText = document.getElementById('bookmark-text');
-        const articleSlug = window.location.pathname.split('/').pop().replace('.html', '');
-
-        function updateBookmarkState() {
-            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-            const isBookmarked = bookmarks.includes(articleSlug);
-            bookmarkBtn.classList.toggle('active', isBookmarked);
-            bookmarkText.textContent = isBookmarked ? 'Retiré' : 'Favoris';
+        function updateBookmark() {
+            const bm = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+            const is = bm.includes(articleSlug);
+            bookmarkBtn.classList.toggle('active', is);
+            bookmarkText.textContent = is ? 'Retire' : 'Favoris';
         }
-
         bookmarkBtn.addEventListener('click', () => {
-            const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-            const index = bookmarks.indexOf(articleSlug);
-            if (index > -1) {
-                bookmarks.splice(index, 1);
-                showToast('Article retiré des favoris', 'info');
-            } else {
-                bookmarks.push(articleSlug);
-                showToast('Article ajouté aux favoris', 'success');
-            }
-            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-            updateBookmarkState();
+            const bm = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+            const i = bm.indexOf(articleSlug);
+            if (i > -1) bm.splice(i, 1); else bm.push(articleSlug);
+            localStorage.setItem('bookmarks', JSON.stringify(bm));
+            updateBookmark();
         });
-        updateBookmarkState();
+        updateBookmark();
 
-        // Table of Contents
-        function generateTOC() {
-            const content = document.getElementById('article-content');
-            const tocList = document.getElementById('toc-list');
-            const tocListMobile = document.getElementById('toc-list-mobile');
-            const headings = content.querySelectorAll('h2, h3');
-
-            if (headings.length === 0) {
-                document.getElementById('toc')?.remove();
-                document.getElementById('toc-toggle')?.remove();
-                document.getElementById('toc-mobile')?.remove();
-                return;
-            }
-
-            headings.forEach((heading, index) => {
-                if (!heading.id) heading.id = 'heading-' + index;
-
-                const li = document.createElement('li');
-                const link = document.createElement('a');
-                link.href = '#' + heading.id;
-                link.className = heading.tagName === 'H3' ? 'level-3' : '';
-                link.textContent = heading.textContent.trim();
-                li.appendChild(link);
-                tocList.appendChild(li.cloneNode(true));
-                tocListMobile.appendChild(li);
+        // Rating
+        const ratings = {};
+        document.querySelectorAll('.la-rating-criterion').forEach(c => {
+            const name = c.dataset.criterion;
+            c.querySelectorAll('.la-rating-btn').forEach((btn, i) => {
+                btn.addEventListener('click', () => {
+                    ratings[name] = i + 1;
+                    c.querySelectorAll('.la-rating-btn').forEach((b, j) => {
+                        b.querySelector('.la-icon').textContent = j <= i ? 'star' : 'star_outline';
+                        b.classList.toggle('filled', j <= i);
+                    });
+                    c.querySelector('.la-rating-criterion-value').textContent = (i+1) + '/5';
+                    document.getElementById('submit-rating').disabled = Object.keys(ratings).length < 5;
+                });
             });
-
-            const tocLinks = document.querySelectorAll('.la-toc-list a');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        tocLinks.forEach(link => link.classList.remove('active'));
-                        document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(link => link.classList.add('active'));
-                    }
-                });
-            }, { rootMargin: '-100px 0px -80% 0px' });
-            headings.forEach(heading => observer.observe(heading));
+        });
+        const votes = JSON.parse(localStorage.getItem('lunar-votes') || '{}');
+        if (votes[articleSlug]) {
+            document.getElementById('rating-form').classList.add('la-hidden');
+            document.getElementById('rating-thanks').classList.remove('la-hidden');
         }
-        generateTOC();
-
-        // Mobile TOC toggle
-        const tocToggle = document.getElementById('toc-toggle');
-        const tocMobile = document.getElementById('toc-mobile');
-        tocToggle?.addEventListener('click', () => tocMobile.classList.toggle('la-hidden'));
-        tocMobile?.addEventListener('click', (e) => {
-            if (e.target.tagName === 'A') tocMobile.classList.add('la-hidden');
+        document.getElementById('submit-rating').addEventListener('click', () => {
+            votes[articleSlug] = ratings;
+            localStorage.setItem('lunar-votes', JSON.stringify(votes));
+            document.getElementById('rating-form').classList.add('la-hidden');
+            document.getElementById('rating-thanks').classList.remove('la-hidden');
         });
 
-        // Copy buttons for code blocks
-        function addCopyButtons() {
-            document.querySelectorAll('.la-prose pre').forEach((pre) => {
-                if (pre.querySelector('.code-copy-btn')) return;
-
-                const copyBtn = document.createElement('button');
-                copyBtn.className = 'code-copy-btn';
-                copyBtn.innerHTML = '<span class="la-icon sm">content_copy</span>';
-                copyBtn.title = 'Copier le code';
-
-                copyBtn.addEventListener('click', () => {
-                    navigator.clipboard.writeText(pre.textContent).then(() => {
-                        copyBtn.classList.add('copied');
-                        copyBtn.innerHTML = '<span class="la-icon sm">check</span>';
-                        setTimeout(() => {
-                            copyBtn.classList.remove('copied');
-                            copyBtn.innerHTML = '<span class="la-icon sm">content_copy</span>';
-                        }, 2000);
-                    });
-                });
-
-                pre.style.position = 'relative';
-                pre.appendChild(copyBtn);
-            });
+        // Comments
+        const comments = JSON.parse(localStorage.getItem('lunar-comments') || '{}');
+        const postComments = comments[articleSlug] || [];
+        function renderComments() {
+            const list = document.getElementById('comments-list');
+            if (postComments.length > 0) {
+                document.getElementById('no-comments').style.display = 'none';
+                list.innerHTML = postComments.map(c =>
+                    `<div class="la-comment"><div class="la-comment-header"><div class="la-comment-avatar">${c.author.charAt(0).toUpperCase()}</div><div><div class="la-comment-author">${c.author}</div><div class="la-comment-date">${c.date}</div></div></div><div class="la-comment-content">${c.content}</div></div>`
+                ).join('');
+            }
+            document.getElementById('comments-count').textContent = postComments.length;
         }
-        addCopyButtons();
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-            switch(e.key) {
-                case 't': case 'T': window.scrollTo({ top: 0, behavior: 'smooth' }); break;
-                case 'b': case 'B': bookmarkBtn.click(); break;
-                case 'Escape':
-                    tocMobile?.classList.add('la-hidden');
-                    document.querySelectorAll('.la-theme-dropdown.is-open').forEach(d => d.classList.remove('is-open'));
-                    break;
-            }
+        renderComments();
+        document.getElementById('submit-comment').addEventListener('click', () => {
+            const name = document.getElementById('comment-name').value.trim();
+            const content = document.getElementById('comment-content').value.trim();
+            if (!name || !content) return;
+            postComments.push({ author: name, content: content, date: new Date().toLocaleDateString('fr-FR') });
+            comments[articleSlug] = postComments;
+            localStorage.setItem('lunar-comments', JSON.stringify(comments));
+            document.getElementById('comment-name').value = '';
+            document.getElementById('comment-content').value = '';
+            renderComments();
         });
-
-        // ═══════════════════════════════════════════════════════════════════
-        // THEME SWITCHER
-        // ═══════════════════════════════════════════════════════════════════
-        const ThemeSwitcher = {
-            storageKey: 'lunar-theme',
-
-            init() {
-                const savedTheme = localStorage.getItem(this.storageKey);
-                if (savedTheme) this.setTheme(savedTheme, false);
-
-                document.querySelectorAll('.la-theme-switcher').forEach(s => this.initSwitcher(s));
-
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.la-theme-switcher')) {
-                        document.querySelectorAll('.la-theme-dropdown.is-open').forEach(d => d.classList.remove('is-open'));
-                    }
-                });
-            },
-
-            initSwitcher(container) {
-                const trigger = container.querySelector('.la-theme-trigger');
-                const dropdown = container.querySelector('.la-theme-dropdown');
-
-                trigger?.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    document.querySelectorAll('.la-theme-dropdown.is-open').forEach(d => {
-                        if (d !== dropdown) d.classList.remove('is-open');
-                    });
-                    dropdown.classList.toggle('is-open');
-                });
-
-                dropdown?.querySelectorAll('.la-theme-option').forEach(option => {
-                    option.addEventListener('click', () => {
-                        this.setTheme(option.dataset.theme);
-                        dropdown.classList.remove('is-open');
-                    });
-                });
-
-                this.updateActiveState(container);
-            },
-
-            setTheme(themeName, save = true) {
-                document.documentElement.setAttribute('data-theme', themeName);
-                if (save) localStorage.setItem(this.storageKey, themeName);
-
-                document.querySelectorAll('.la-theme-switcher').forEach(switcher => {
-                    this.updateActiveState(switcher);
-                    const label = switcher.querySelector('.la-theme-current');
-                    const activeOption = switcher.querySelector(`.la-theme-option[data-theme="${themeName}"] .la-theme-name`);
-                    if (label && activeOption) label.textContent = activeOption.textContent;
-                });
-            },
-
-            updateActiveState(container) {
-                const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-                container.querySelectorAll('.la-theme-option').forEach(option => {
-                    option.classList.toggle('is-active', option.dataset.theme === currentTheme);
-                });
-            }
-        };
-
-        ThemeSwitcher.init();
-    </script>
-
-    <!-- Prism.js for Syntax Highlighting -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-    <script>
-        Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
-        document.querySelectorAll('pre code').forEach(block => {
-            if (!block.className.match(/language-/)) block.classList.add('language-plaintext');
-            Prism.highlightElement(block);
-        });
+    });
     </script>
 </body>
 </html>

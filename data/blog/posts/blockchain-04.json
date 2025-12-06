@@ -1,0 +1,36 @@
+{
+    "id": "blockchain-04",
+    "title": "NFTs au-delà de l'art : Applications pratiques",
+    "slug": "nfts-au-dela-de-l-art-applications-pratiques",
+    "content": "# NFTs et Tokenisation : Propriété Numérique et Standards ERC\n\nLes Non-Fungible Tokens (NFTs) ont souvent été réduits à l'art numérique spéculatif (JPEGs), mais ils représentent techniquement une primitive fondamentale pour la gestion de la propriété unique et de la rareté numérique vérifiable sur une blockchain.\n\n## 1. Standards Techniques Ethereum\n\n### 1.1. ERC-721 : L'Atomicité\nC'est le standard original. Chaque token est lié à un Smart Contract et possède un `tokenId` unique.\n*   **Structure :** Mapping `(address _owner, uint256 _tokenId)`.\n*   **Limitation :** Transférer 10 NFTs nécessite 10 transactions distinctes (coûteux en Gas).\n\n### 1.2. ERC-1155 : Le Multi-Token\nStandard développé par Enjin, permettant de gérer des tokens fongibles (monnaie), non-fongibles (épée unique) et semi-fongibles (100 potions de soin) dans un *seul* contrat intelligent.\n*   **Avantage :** \"Batch Transfer\". Possibilité d'envoyer 50 objets différents en une seule transaction. Réduction massive des coûts de Gas.\n\n## 2. Stockage des Métadonnées et IPFS\n\nUn NFT ne stocke généralement pas l'image ou la vidéo \"on-chain\" (trop coûteux : ~50$\/kB). Il stocke une URI (`tokenURI`) pointant vers les métadonnées (JSON).\n*   **Fragilité :** Si l'URI pointe vers un serveur centralisé (AWS, Google Cloud), le lien peut casser (Link Rot).\n*   **Solution :** IPFS (InterPlanetary File System). Utilisation de l'adressage par le contenu (Content Addressing via Hash CID) plutôt que par la localisation. Le lien pointe vers *ce qu'est* le fichier, pas *où* il se trouve, garantissant l'immuabilité.\n\n## 3. Applications Pratiques Hors-Art\n\n### 3.1. Tokenisation d'Actifs Réels (RWA - Real World Assets)\n*   **Immobilier :** Fractionnement de la propriété d'un immeuble en 1000 NFTs. Permet la liquidité sur un marché illiquide.\n*   **Finance :** Factures d'affacturage tokenisées utilisées comme collatéral en DeFi.\n\n### 3.2. Propriété Intellectuelle (IP) et Royalties\nLe standard EIP-2981 tente d'harmoniser le paiement des royalties (droits de suite) lors des reventes secondaires, mais son application reste dépendante du bon vouloir des marketplaces (l'application des royalties ne peut pas être techniquement forcée on-chain si le transfert se fait de pair-à-pair).\n\n### 3.3. Soulbound Tokens (SBT)\nProposés par Vitalik Buterin. Ce sont des NFTs non-transférables.\n*   **Usage :** Diplômes universitaires, Certificats médicaux, Historique de crédit. Ils constituent l'identité et la réputation de l'utilisateur.\n\n## 4. Conclusion\n\nLes NFTs sont des conteneurs de droits de propriété. Le défi juridique actuel est de lier contractuellement la possession du token (droit cryptographique) aux droits d'exploitation réels (droit de la propriété intellectuelle), souvent mal définis dans les projets actuels.\n\n**Référence Académique :**\n*   *Decentralized Society: Finding Web3's Soul*, Weyl, Ohlhaver, & Buterin, 2022.\n",
+    "excerpt": "Découvrez les concepts clés, meilleures pratiques et tendances actuelles : NFTs au-delà de l'art : Applications pratiques",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "blockchain",
+    "featuredImage": "\/blog\/images\/nfts-au-dela-de-l-art-applications-pratiques.jpg",
+    "status": "published",
+    "tags": [
+        "blockchain",
+        "nft",
+        "applications",
+        "tokenisation"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 1,
+        "depth": 4,
+        "clarity": 2,
+        "freshness": 1,
+        "usefulness": 5
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2026-02-22T10:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2026-02-22T10:00:00+00:00"
+}

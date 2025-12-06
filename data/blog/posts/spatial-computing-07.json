@@ -1,0 +1,36 @@
+{
+    "id": "spatial-computing-07",
+    "title": "Spatial Audio : Immersion sonore en XR",
+    "slug": "spatial-audio-immersion-sonore-en-xr",
+    "content": "# Audio Spatial et Psycho-acoustique : L'Immersion Sonore en XR\n\nL'immersion visuelle en Réalité Étendue (XR) est incomplète sans une spatialisation sonore cohérente. Le cerveau humain utilise des indices auditifs complexes pour localiser les objets dans l'espace 3D, un processus que les moteurs audio modernes doivent simuler en temps réel via des fonctions de transfert relatives à la tête (HRTF - Head-Related Transfer Functions).\n\n## 1. Principes de la Localisation Auditive\n\nLa spatialisation repose sur trois indices psycho-acoustiques primaires traités par le cortex auditif :\n\n1.  **ITD (Interaural Time Difference) :** La différence de temps d'arrivée du son entre les deux oreilles (utile pour les basses fréquences < 1.5 kHz).\n2.  **ILD (Interaural Level Difference) :** La différence d'intensité sonore due à l'ombre acoustique de la tête (prédominant pour les hautes fréquences > 1.5 kHz).\n3.  **Indices Spectraux :** Les modifications fréquentielles induites par la forme du pavillon de l'oreille, permettant la localisation verticale (élévation).\n\n## 2. HRTF et Personnalisation\n\nUne fonction HRTF est un ensemble de filtres qui modélise comment une onde sonore est modifiée avant d'atteindre le tympan.\n*   **Problème :** Les HRTF sont biométriques (dépendent de la forme de la tête\/oreilles). Une HRTF générique crée des erreurs de localisation (notamment la confusion avant\/arrière).\n*   **Solution :** L'utilisation de la photogrammétrie (scan de l'oreille via smartphone) pour générer un profil HRTF personnalisé (ex: Apple Personalized Spatial Audio, Genelec Aural ID).\n\n## 3. Acoustique Géométrique et Ray Tracing Audio\n\nPour un réalisme accru, le son doit interagir avec l'environnement virtuel.\n*   **Occlusion :** Atténuation des fréquences lorsqu'un objet s'interpose (Low-pass filter).\n*   **Réverbération :** Simulation des réflexions tardives. Les moteurs comme *Steam Audio* ou *Oculus Audio SDK* utilisent le Ray Tracing Audio pour calculer les réflexions en temps réel sur la géométrie de la scène (matériaux absorbants vs réfléchissants).\n\n## 4. Ambisonie vs Audio Orienté Objet\n\n*   **Ambisonie (Ambisonics) :** Format de champ sonore sphérique (Ordre 1, 2 ou 3). Idéal pour les fonds sonores environnementaux (skybox audio).\n*   **Object-Based Audio :** Chaque source sonore est un point émetteur indépendant avec ses métadonnées (position XYZ, gain, directivité). C'est le standard pour les éléments interactifs en XR (Dolby Atmos).\n\n## 5. Conclusion\n\nL'audio spatial n'est pas une simple couche esthétique, c'est un vecteur d'information critique. En réalité augmentée, la précision de l'ancrage audio (Audio Anchoring) sur les objets réels est déterminante pour la crédibilité de l'expérience mixte.\n\n**Données Clés :**\n*   La précision de localisation humaine est d'environ 1° devant soi, mais chute à 10° sur les côtés.\n*   Latence audio maximale tolérable pour la synchronisation labiale : 40ms.\n",
+    "excerpt": "Découvrez les concepts clés, meilleures pratiques et tendances actuelles : Spatial Audio : Immersion sonore en XR",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "spatial-computing",
+    "featuredImage": "\/blog\/images\/spatial-audio-immersion-sonore-en-xr.jpg",
+    "status": "published",
+    "tags": [
+        "spatial-computing",
+        "spatial-audio",
+        "audio",
+        "immersion"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 3,
+        "depth": 5,
+        "clarity": 5,
+        "freshness": 3,
+        "usefulness": 4
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2026-03-07T01:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2026-03-07T01:00:00+00:00"
+}

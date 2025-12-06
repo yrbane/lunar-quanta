@@ -1,0 +1,10 @@
+{
+    "id": "quantum-algorithms",
+    "name": "Quantum Algorithms",
+    "slug": "quantum-algorithms",
+    "description": "Algorithmes quantiques et applications",
+    "color": "#8b5cf6",
+    "sortOrder": 72,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

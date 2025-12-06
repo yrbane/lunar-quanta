@@ -1,0 +1,36 @@
+{
+    "id": "nlp-advanced-10",
+    "title": "Semantic search : Recherche sémantique",
+    "slug": "semantic-search-recherche-semantique",
+    "content": "# Recherche Sémantique (Semantic Search) : Au-delà des Mots-Clés, Comprendre l'Intention de l'Utilisateur\n\nLa recherche sémantique est une approche de la recherche d'informations qui va au-delà de la simple correspondance de mots-clés pour comprendre l'intention et le contexte d'une requête utilisateur. En utilisant des techniques de Traitement du Langage Naturel (NLP) basées sur les Large Language Models (LLMs) et les modèles d'embedding, elle permet de trouver des documents ou des informations pertinentes même si les mots-clés exacts ne sont pas présents, révolutionnant les moteurs de recherche, les systèmes de recommandation et les bases de connaissances.\n\n## 1. Limites de la Recherche par Mots-Clés (Keyword Search)\n\n*   **Synonymie :** Ne peut pas trouver des documents qui utilisent des synonymes du mot-clé (ex: \"voiture\" vs \"automobile\").\n*   **Polysémie :** Difficulté à distinguer les différents sens d'un mot (ex: \"banque\" financière vs \"banque\" de sable).\n*   **Absence de Contexte :** Ne comprend pas l'intention réelle derrière la requête (ex: \"comment faire un gâteau\" vs \"recette de gâteau\").\n\n## 2. Principes de la Recherche Sémantique\n\nLa recherche sémantique repose sur la capacité des modèles d'IA à comprendre le sens (sémantique) des mots et des phrases.\n\n### 2.1. Embeddings (Plongements Sémantiques)\n*   **Principe :** Convertir des mots, des phrases ou des documents entiers en vecteurs numériques (embeddings) dans un espace de haute dimension.\n*   **Propriété :** Dans cet espace, les mots ou phrases ayant une signification similaire sont représentés par des vecteurs proches, tandis que ceux ayant des significations différentes sont éloignés.\n*   **Modèles :** Word2Vec, GloVe (historique), puis BERT, RoBERTa, et les modèles d'embedding des LLMs.\n\n### 2.2. Recherche de Similarité Vectorielle\n*   **Principe :** Au lieu de chercher une correspondance exacte de mots-clés, la recherche sémantique trouve les documents dont les embeddings sont les plus proches de l'embedding de la requête.\n*   **Mesures de Similarité :** Similarité cosinus, distance euclidienne.\n*   **Bases de Données Vectorielles (Vector Databases) :** Des bases de données spécialisées (Pinecone, Weaviate, Milvus, Chroma) sont utilisées pour stocker et rechercher efficacement des millions ou des milliards de vecteurs.\n    *   **Algorithmes :** ANNS (Approximate Nearest Neighbor Search) pour une recherche rapide dans des espaces de haute dimension.\n\n## 3. Architectures de Recherche Sémantique\n\n### 3.1. Approche Bi-Encodeur\n1.  **Indexation :** Tous les documents de la base de données sont encodés en embeddings (par un modèle d'embedding) et stockés.\n2.  **Requête :** La requête de l'utilisateur est encodée en embedding.\n3.  **Recherche :** L'embedding de la requête est comparé à tous les embeddings des documents pour trouver les plus similaires.\n*   **Avantages :** Rapide à l'inférence.\n*   **Inconvénients :** Peut manquer de précision si le modèle d'embedding n'est pas très contextuel.\n\n### 3.2. Approche Cross-Encodeur\n1.  **Indexation :** Seulement les embeddings des documents sont stockés (comme le bi-encodeur).\n2.  **Requête et Ré-ordonnancement :** Le modèle prend le texte de la requête et le texte de quelques-uns des documents les plus pertinents (trouvés par bi-encodeur ou mots-clés) et les passe à un modèle de langage (souvent un Transformer) qui les traite *ensemble* pour calculer un score de pertinence plus précis.\n*   **Avantages :** Très précis car il prend en compte le contexte complet de la requête et du document.\n*   **Inconvénients :** Plus lent à l'inférence car il doit exécuter un grand modèle de langage à chaque requête.\n\n### 3.3. Recherche Augmentée par Génération (RAG)\n*   La recherche sémantique est un composant clé du RAG, où les informations récupérées sont ensuite passées à un LLM pour générer une réponse synthétisée.\n\n## 4. Applications Pratiques\n\n*   **Moteurs de Recherche d'Entreprise :** Trouver rapidement des informations pertinentes dans les bases de connaissances internes, les documents juridiques, les rapports techniques.\n*   **Recommandation de Produits\/Contenus :** Recommander des articles, des produits ou des vidéos qui sont sémantiquement similaires à ce que l'utilisateur recherche.\n*   **Support Client :** Améliorer la pertinence des réponses des chatbots en comprenant mieux l'intention des utilisateurs.\n*   **Recherche de Brevets \/ Scientifique :** Trouver des documents pertinents sur des concepts abstraits.\n*   **Gestion de Connaissances :** Organiser et naviguer dans de vastes corpus de texte.\n\n## 5. Défis et Limites\n\n*   **Qualité des Embeddings :** Dépend fortement de la qualité du modèle d'embedding.\n*   **Volume de Données :** L'indexation de milliards de documents est coûteuse.\n*   **Mise à Jour des Index :** Maintenir les index à jour pour refléter les nouvelles informations.\n*   **Ambiguïté :** Résoudre l'ambiguïté de certaines requêtes.\n\n## 6. Conclusion\n\nLa recherche sémantique, grâce aux avancées des LLMs et des bases de données vectorielles, transforme la manière dont nous accédons à l'information. En allant au-delà des mots-clés pour comprendre l'intention de l'utilisateur, elle permet des expériences de recherche plus intuitives, plus précises et plus pertinentes, marquant une nouvelle ère pour la gestion et l'exploration de la connaissance.\n\n**Références Académiques :**\n*   *Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks*, EMNLP, 2019.\n*   *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*, NeurIPS, 2020.\n*   *Vector Databases: The New Heart of AI Applications*, Pinecone.\n",
+    "excerpt": "Découvrez les dernières avancées : Semantic search : Recherche sémantique",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "nlp-advanced",
+    "featuredImage": "\/blog\/images\/semantic-search-recherche-semantique.jpg",
+    "status": "published",
+    "tags": [
+        "advanced-nlp",
+        "semantic-search",
+        "embeddings",
+        "retrieval"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 5,
+        "depth": 2,
+        "clarity": 3,
+        "freshness": 4,
+        "usefulness": 4
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2025-12-23T02:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2025-12-23T02:00:00+00:00"
+}

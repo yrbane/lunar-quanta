@@ -853,10 +853,18 @@
         min-width: 280px;
         max-height: 400px;
         overflow-y: auto;
-        background: var(--la-surface-1);
-        border: 1px solid var(--la-border);
+
+        /* Force consistent dark colors in dropdown regardless of theme */
+        --la-dropdown-text: #e4e4e7;
+        --la-dropdown-text-muted: #a1a1aa;
+        --la-dropdown-bg: #1f1f23;
+        --la-dropdown-border: #3f3f46;
+        --la-dropdown-hover: #2a2a30;
+
+        background: var(--la-dropdown-bg);
+        border: 1px solid var(--la-dropdown-border);
         border-radius: var(--la-radius-lg);
-        box-shadow: var(--la-shadow-lg);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         opacity: 0;
         visibility: hidden;
         transform: translateY(-8px);
@@ -873,7 +881,7 @@
         padding: var(--la-space-2);
 
         &:not(:last-child) {
-            border-bottom: 1px solid var(--la-border);
+            border-bottom: 1px solid var(--la-dropdown-border);
         }
     }
 
@@ -881,7 +889,7 @@
         padding: var(--la-space-2) var(--la-space-3);
         font-size: var(--la-text-xs);
         font-weight: var(--la-weight-semibold);
-        color: var(--la-text-muted);
+        color: var(--la-dropdown-text-muted);
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
@@ -896,18 +904,31 @@
         border: none;
         border-radius: var(--la-radius-sm);
         font-size: var(--la-text-sm);
-        color: var(--la-text);
         cursor: pointer;
         transition: all var(--la-transition-fast);
         text-align: left;
 
+        /* Force text color for readability in dropdown */
+        color: var(--la-dropdown-text, var(--la-text));
+
+        & .la-theme-name {
+            color: var(--la-dropdown-text, var(--la-text));
+        }
+
+        & .la-theme-variant {
+            color: var(--la-dropdown-text-muted, var(--la-text-muted));
+        }
+
         &:hover {
-            background: var(--la-surface-2);
+            background: var(--la-dropdown-hover);
         }
 
         &.is-active {
-            background: var(--la-primary-subtle);
-            color: var(--la-primary);
+            background: rgba(139, 92, 246, 0.2);
+
+            & .la-theme-name {
+                color: var(--la-primary);
+            }
 
             & .la-theme-check {
                 opacity: 1;
@@ -982,3 +1003,78 @@
 .la-theme-option[data-theme="bsod-light"] .la-theme-preview { background: linear-gradient(90deg, #3b82f6 50%, #dbeafe 50%); }
 .la-theme-option[data-theme="mario"] .la-theme-preview { background: linear-gradient(90deg, #dc2626 25%, #22c55e 50%, #60a5fa 75%, #facc15 100%); }
 .la-theme-option[data-theme="mario-dark"] .la-theme-preview { background: linear-gradient(90deg, #ef4444 25%, #22c55e 50%, #0f172a 75%, #fbbf24 100%); }
+.la-theme-option[data-theme="default"] .la-theme-preview { background: linear-gradient(135deg, #7c3aed 50%, #06b6d4 50%); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODE TOGGLE (Dark/Light switch)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-mode-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: var(--la-radius-full);
+    background: var(--la-surface-2);
+    cursor: pointer;
+    overflow: hidden;
+    transition: all var(--la-transition-fast);
+
+    &:hover {
+        background: var(--la-surface-3);
+        transform: scale(1.05);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    & .la-icon {
+        position: absolute;
+        font-size: 1.25rem;
+        transition: all 0.3s ease;
+    }
+
+    /* Light mode icon (sun) - visible in dark mode */
+    & .la-mode-icon-light {
+        color: #fbbf24;
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+    }
+
+    /* Dark mode icon (moon) - hidden in dark mode */
+    & .la-mode-icon-dark {
+        color: #6366f1;
+        opacity: 0;
+        transform: rotate(-90deg) scale(0.5);
+    }
+
+    /* When in light mode */
+    &.is-light {
+        background: var(--la-surface-1);
+
+        & .la-mode-icon-light {
+            opacity: 0;
+            transform: rotate(90deg) scale(0.5);
+        }
+
+        & .la-mode-icon-dark {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+    }
+}
+
+/* Animation keyframes for sun rays */
+@keyframes sun-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.la-mode-toggle:hover .la-mode-icon-light {
+    animation: sun-spin 4s linear infinite;
+}

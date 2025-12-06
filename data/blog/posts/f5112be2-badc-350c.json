@@ -1,0 +1,41 @@
+{
+    "id": "f5112be2-badc-350c",
+    "title": "Knock-Knock: Black-Box, Platform-Agnostic DRAM Address-Mapping Reverse Engineering",
+    "slug": "knock-knock-black-box-platform-agnostic-dram-address-mapping-reverse-engineering",
+    "content": "# Knock-Knock: Black-Box, Platform-Agnostic DRAM Address-Mapping Reverse Engineering\n\n**Auteurs** : Antoine Plin, Lorenzo Casalino, Thomas Rokicki, Ruben Salvador\n\n## Résumé\n\nModern Systems-on-Chip (SoCs) employ undocumented linear address-scrambling functions to obfuscate DRAM addressing, which complicates DRAM-aware performance optimizations and hinders proactive security analysis of DRAM-based attacks; most notably, Rowhammer. Although previous work tackled the issue of reversing physical-to-DRAM mapping, existing heuristic-based reverse-engineering approaches are partial, costly, and impractical for comprehensive recovery. This paper establishes a rigorous theoretical foundation and provides efficient practical algorithms for black-box, complete physical-to-DRAM address-mapping recovery. We first formulate the reverse-engineering problem within a linear algebraic model over the finite field GF(2). We characterize the timing fingerprints of row-buffer conflicts, proving a relationship between a bank addressing matrix and an empirically constructed matrix of physical addresses. Based on this characterization, we develop an efficient, noise-robust, and fully platform-agnostic algorithm to recover the full bankmask basis in polynomial time, a significant improvement over the exponential search from previous works. We further generalize our model to complex row mappings, introducing new hardware-based hypotheses that enable the automatic recovery of a row basis instead of previous human-guided contributions. Evaluations across embedded and server-class architectures confirm our method's effectiveness, successfully reconstructing known mappings and uncovering previously unknown scrambling functions. Our method provides a 99% recall and accuracy on all tested platforms. Most notably, Knock-Knock runs in under a few minutes, even on systems with more than 500GB of DRAM, showcasing the scalability of our method. Our approach provides an automated, principled pathway to accurate DRAM reverse engineering.\n\n---\n\n📄 *Article disponible sur [HAL Archives Ouvertes](https:\/\/hal.science\/hal-05273255v1).*",
+    "excerpt": "Modern Systems-on-Chip (SoCs) employ undocumented linear address-scrambling functions to obfuscate DRAM addressing, which complicates DRAM-aware performance optimizations and hinders proactive security analysis of DRAM-based attacks; most notably, Rowhammer. Although previous work tackled the issue ...",
+    "author": "Antoine Plin, Lorenzo Casalino, Thomas Rokicki, Ruben Salvador",
+    "authorBio": "Chercheurs - HAL Archives Ouvertes",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": null,
+    "featuredImage": "\/blog\/images\/knock-knock-black-box-platform-agnostic-dram-address-mapping-reverse-engineering.jpg",
+    "status": "published",
+    "tags": [
+        "recherche",
+        "science"
+    ],
+    "sources": [
+        {
+            "title": "Article HAL",
+            "url": "https:\/\/hal.science\/hal-05273255v1",
+            "domain": "hal.science",
+            "description": "Archive ouverte française"
+        }
+    ],
+    "ratings": {
+        "relevance": 0,
+        "depth": 0,
+        "clarity": 0,
+        "freshness": 0,
+        "usefulness": 0
+    },
+    "comments": [],
+    "locked": true,
+    "license": "CC BY",
+    "originalUrl": "https:\/\/hal.science\/hal-05273255v1",
+    "originalSource": "HAL Archives Ouvertes",
+    "createdAt": "2025-12-06T17:00:22+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2025-12-06T17:00:22+00:00"
+}

@@ -1,0 +1,10 @@
+{
+    "id": "genomics",
+    "name": "Genomics & Sequencing",
+    "slug": "genomics-sequencing",
+    "description": "Génomique et séquençage nouvelle génération",
+    "color": "#8b5cf6",
+    "sortOrder": 54,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

@@ -1,0 +1,10 @@
+{
+    "id": "generative-models",
+    "name": "Generative Models",
+    "slug": "generative-models",
+    "description": "Modèles génératifs et création de contenu",
+    "color": "#a855f7",
+    "sortOrder": 59,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

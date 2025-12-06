@@ -1,0 +1,36 @@
+{
+    "id": "low-code-08",
+    "title": "Citizen Development : Former vos équipes métier",
+    "slug": "citizen-development-former-vos-equipes-metier",
+    "content": "# Citizen Development : Former vos équipes métier\n\nDécouvrez tout ce que vous devez savoir sur ce sujet passionnant dans le domaine de la technologie en 2025.\n\n**Tags** : **low-code**, **citizen-development**, **formation**, **adoption**\n\n## Pourquoi c'est important ?\n\nCette technologie transforme la façon dont les entreprises et les développeurs abordent leurs projets. Voici les raisons principales :\n\n- Amélioration de la productivité des équipes\n- Réduction des coûts opérationnels\n- Innovation et avantage concurrentiel\n- Meilleure expérience utilisateur\n\n## Comment commencer ?\n\n1. **Comprendre les fondamentaux** - Avant de plonger dans l'implémentation\n2. **Choisir les bons outils** - Sélectionner la stack adaptée à vos besoins\n3. **Pratiquer** - Rien ne remplace l'expérience pratique\n4. **Itérer** - Améliorer continuellement votre approche\n\n```bash\n# Exemple de commande pour démarrer\nnpm install @example\/package\n# ou\npip install example-package\n```\n\n## Ressources complémentaires\n\n- Documentation officielle\n- Tutoriels et guides\n- Communauté et forums\n\n## Conclusion\n\nCette technologie continue d'évoluer rapidement. Restez informé des dernières tendances et n'hésitez pas à expérimenter pour rester compétitif dans ce domaine en constante évolution.\n",
+    "excerpt": "Découvrez les concepts clés, meilleures pratiques et tendances actuelles : Citizen Development : Former vos équipes métier",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "low-code",
+    "featuredImage": "\/blog\/images\/citizen-development-former-vos-equipes-metier.jpg",
+    "status": "published",
+    "tags": [
+        "low-code",
+        "citizen-development",
+        "formation",
+        "adoption"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 3,
+        "depth": 3,
+        "clarity": 2,
+        "freshness": 5,
+        "usefulness": 3
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2026-01-27T12:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2026-01-27T12:00:00+00:00"
+}

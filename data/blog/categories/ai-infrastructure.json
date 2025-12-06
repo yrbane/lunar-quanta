@@ -1,0 +1,10 @@
+{
+    "id": "ai-infrastructure",
+    "name": "AI Infrastructure",
+    "slug": "ai-infrastructure",
+    "description": "Infrastructure et MLOps pour l'IA",
+    "color": "#3b82f6",
+    "sortOrder": 28,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

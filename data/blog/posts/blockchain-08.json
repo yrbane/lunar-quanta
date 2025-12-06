@@ -1,0 +1,36 @@
+{
+    "id": "blockchain-08",
+    "title": "Identité décentralisée (DID) et Verifiable Credentials",
+    "slug": "identite-decentralisee-did-et-verifiable-credentials",
+    "content": "# Identité Décentralisée (DID) et Verifiable Credentials (VC) : Paradigme de la Souveraineté Numérique\n\nL'Identité Décentralisée (DID) et les Informations d'Identification Vérifiables (VC) sont les piliers d'un nouveau modèle d'identité numérique qui octroie à l'utilisateur le contrôle sur ses données personnelles, à l'opposé des modèles centralisés actuels (ex: OAuth, fournisseurs d'identité institutionnels). Ces standards du W3C cherchent à restaurer la souveraineté numérique individuelle.\n\n## 1. Principes du DID (Decentralized Identifier)\n\nUn DID est un identifiant globalement unique, résolvable cryptographiquement via des DID Resolvers vers un DID Document.\n*   **Structure :** `did:<method>:<identifier>` (ex: `did:ethr:0xab12...`).\n*   **DID Document :** Contient des clés publiques, des endpoints de services (pour la messagerie chiffrée), et d'autres informations vérifiables par les pairs.\n*   **Méthodes DID :** `did:ethr` (Ethereum), `did:ion` (ION, basé sur Bitcoin\/Sidetree), `did:web`.\n\n## 2. VC (Verifiable Credentials) : Preuve d'Attributs\n\nUn VC est une preuve d'attributs numériques (ex: diplôme, permis de conduire, preuve de majorité) signée cryptographiquement. Il est composé de trois acteurs principaux :\n1.  **Émetteur (Issuer) :** L'entité qui atteste un attribut (ex: Université, Gouvernement).\n2.  **Détenteur (Holder) :** La personne qui reçoit le VC et le stocke dans son portefeuille numérique (Self-Sovereign Identity Wallet).\n3.  **Vérificateur (Verifier) :** L'entité qui demande et valide le VC (ex: Employeur, Bar).\n\n### 2.1. Flux de Vérification\n\n1.  Le Détenteur présente un VC (ou une Preuve de Présentation) au Vérificateur.\n2.  Le Vérificateur déconstruit la chaîne de confiance :\n    *   Vérifie la signature de l'Émetteur sur le VC.\n    *   Vérifie la révocation du VC (le VC a-t-il été annulé par l'Émetteur ?).\n    *   Vérifie la validité du DID de l'Émetteur (résolution du DID vers le DID Document de l'Émetteur pour récupérer sa clé publique).\n3.  Le Vérificateur vérifie la non-altération du VC.\n\n### 2.2. Preuves à Divulgation Nulle (Zero-Knowledge Proofs - ZKP)\n\nPour garantir la confidentialité, le Détenteur peut prouver qu'il possède un attribut sans révéler l'attribut lui-même.\n*   *Exemple :* Prouver que l'on a plus de 18 ans sans révéler sa date de naissance exacte.\n*   **Technologie :** ZKP (zk-SNARKs, zk-STARKs) qui génèrent une preuve cryptographique concis et rapide à vérifier.\n\n## 3. Interopérabilité et Standards\n\nLes standards du W3C garantissent l'interopérabilité entre les différentes implémentations.\n*   **DID Core :** La spécification de base des Identifiants Décentralisés.\n*   **Verifiable Credentials Data Model :** Le modèle de données pour les VC.\n\n## 4. Conclusion et Enjeux\n\nLes DID et VC déplacent le centre de gravité de l'identité de l'institution vers l'individu. Les enjeux actuels résident dans l'adoption de ces standards par les gouvernements et les entreprises, ainsi que dans la simplification de l'expérience utilisateur des portefeuilles SSI.\n\n**Références :**\n*   *Decentralized Identifiers (DIDs) v1.0*, W3C Recommendation, 2022.\n*   *Verifiable Credentials Data Model v1.1*, W3C Recommendation, 2022.\n",
+    "excerpt": "Découvrez les concepts clés, meilleures pratiques et tendances actuelles : Identité décentralisée (DID) et Verifiable Credentials",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "blockchain",
+    "featuredImage": "\/blog\/images\/identite-decentralisee-did-et-verifiable-credentials.jpg",
+    "status": "published",
+    "tags": [
+        "blockchain",
+        "did",
+        "identite",
+        "credentials"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 5,
+        "depth": 4,
+        "clarity": 4,
+        "freshness": 3,
+        "usefulness": 3
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2026-02-26T04:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2026-02-26T04:00:00+00:00"
+}

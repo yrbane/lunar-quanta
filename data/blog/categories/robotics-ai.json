@@ -1,0 +1,10 @@
+{
+    "id": "robotics-ai",
+    "name": "Robotics & AI",
+    "slug": "robotics-ai",
+    "description": "Intelligence artificielle pour la robotique",
+    "color": "#64748b",
+    "sortOrder": 55,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

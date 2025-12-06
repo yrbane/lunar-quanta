@@ -1,0 +1,10 @@
+{
+    "id": "python-data",
+    "name": "Python & Data",
+    "slug": "python-data",
+    "description": "Python, Data Science et Machine Learning",
+    "color": "#fbbf24",
+    "sortOrder": 80,
+    "createdAt": "2025-12-06T14:34:54+00:00",
+    "updatedAt": "2025-12-06T14:34:54+00:00"
+}

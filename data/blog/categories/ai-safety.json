@@ -1,0 +1,10 @@
+{
+    "id": "ai-safety",
+    "name": "AI Safety & Alignment",
+    "slug": "ai-safety-alignment",
+    "description": "Sécurité et alignement de l'IA",
+    "color": "#ef4444",
+    "sortOrder": 31,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

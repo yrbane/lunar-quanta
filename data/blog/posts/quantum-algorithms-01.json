@@ -1,0 +1,36 @@
+{
+    "id": "quantum-algorithms-01",
+    "title": "Shor's algorithm : Factorisation et cryptographie",
+    "slug": "shor-s-algorithm-factorisation-et-cryptographie",
+    "content": "# Algorithme de Shor : Factorisation d'Entiers et Bris de la Cryptographie à Clé Publique\n\nL'algorithme de Shor, découvert par Peter Shor en 1994, est un algorithme quantique qui a démontré le potentiel révolutionnaire de l'informatique quantique en prouvant qu'un ordinateur quantique pouvait factoriser de grands nombres entiers beaucoup plus rapidement que n'importe quel algorithme classique connu. Cette capacité a des implications profondes pour la sécurité de la cryptographie à clé publique moderne, en particulier le chiffrement RSA, qui repose sur la difficulté de la factorisation.\n\n## 1. La Problématique de la Factorisation d'Entiers\n\n*   **RSA (Rivest-Shamir-Adleman) :** L'algorithme RSA, largement utilisé pour le chiffrement des communications et des données, tire sa sécurité de la difficulté computationnelle de factoriser un grand nombre semi-premier (produit de deux grands nombres premiers).\n*   **Algorithmes Classiques :** Les algorithmes classiques les plus efficaces (ex: Crible Général de Corps de Nombres - GNFS) ont une complexité sous-exponentielle, mais leur temps d'exécution augmente très rapidement avec la taille du nombre à factoriser, rendant la factorisation de clés RSA de 2048 ou 4096 bits pratiquement impossible avec les ordinateurs actuels.\n\n## 2. Le Principe de l'Algorithme de Shor\n\nL'algorithme de Shor réduit le problème de la factorisation d'entiers à un problème de recherche de période (period-finding) d'une fonction, qui peut être résolu efficacement sur un ordinateur quantique grâce à la Transformée de Fourier Quantique (QFT).\n\n### 2.1. Réduction au Problème de Recherche de Période\nPour factoriser un entier $N$, l'algorithme de Shor utilise la propriété que pour un nombre $a$ coprime avec $N$, la fonction $f(x) = a^x \\pmod N$ est périodique. C'est-à-dire, il existe un plus petit entier $r$ (la période) tel que $a^r \\equiv 1 \\pmod N$. Si $r$ est pair et $a^{r\/2} \\not\\equiv -1 \\pmod N$, alors $N$ peut être factorisé en calculant le PGCD de $N$ et de $a^{r\/2} \\pm 1$.\n\n### 2.2. Utilisation de la Transformée de Fourier Quantique (QFT)\n*   **Superposition :** L'ordinateur quantique prépare un registre d'entrée dans une superposition de tous les entiers.\n*   **Calcul de la Fonction :** Un circuit quantique calcule la fonction $f(x) = a^x \\pmod N$ pour tous les éléments de la superposition simultanément.\n*   **QFT :** La QFT est appliquée au registre de sortie. Elle permet de détecter la période $r$ de la fonction avec une haute probabilité.\n*   **Mesure :** Une mesure du registre de sortie permet d'obtenir un multiple de $1\/r$, à partir duquel $r$ peut être déduit.\n\n## 3. Complexité et Performance\n\n*   **Ordinateur Classique :** Complexité sous-exponentielle (environ $O(e^{N^{1\/3}}))$.\n*   **Ordinateur Quantique (Algorithme de Shor) :** Complexité polynomiale, $O(\\log(N)^2 \\log(\\log(N)) \\log(\\log(\\log(N))))$ pour les portes quantiques. C'est une accélération exponentielle.\n\n## 4. Implications pour la Cryptographie\n\n*   **Bris du RSA :** Un ordinateur quantique suffisamment puissant exécutant l'algorithme de Shor pourrait factoriser les clés RSA de taille standard en un temps raisonnable (secondes à heures, selon la taille de la clé et la puissance de l'ordinateur quantique).\n*   **Bris de la Cryptographie à Courbes Elliptiques (ECC) :** L'algorithme de Shor peut également résoudre le problème du logarithme discret, sur lequel repose la sécurité de l'ECC.\n*   **Transition vers la Cryptographie Post-Quantique (PQC) :** Le développement et l'implémentation d'algorithmes cryptographiques résistants aux attaques quantiques sont devenus une priorité mondiale.\n\n## 5. Défis d'Implémentation\n\n*   **Nombre de Qubits :** Pour factoriser une clé RSA de 2048 bits, un ordinateur quantique nécessiterait plusieurs milliers de qubits physiques avec une faible taux d'erreur. Les ordinateurs quantiques actuels n'ont que quelques centaines de qubits bruyants.\n*   **Correction d'Erreurs Quantiques :** Les qubits sont très sensibles aux erreurs. Des techniques de correction d'erreurs quantiques sont nécessaires pour construire un ordinateur quantique tolérant aux pannes, ce qui augmente considérablement le nombre de qubits physiques requis.\n\n## 6. Conclusion\n\nL'algorithme de Shor est un pilier théorique de l'informatique quantique, démontrant sa capacité à résoudre des problèmes considérés comme infaisables pour les ordinateurs classiques. Bien qu'un ordinateur quantique capable de briser la cryptographie RSA ne soit pas encore une réalité, la menace est suffisamment sérieuse pour inciter à une transition proactive vers des algorithmes post-quantiques.\n\n**Références Académiques :**\n*   *Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer*, SIAM Journal on Computing, 1997.\n*   *Quantum computing and the factorization problem*, Reviews of Modern Physics, 2018.\n*   *The looming quantum threat to data security*, Nature, 2022.\n",
+    "excerpt": "Découvrez les dernières avancées : Shor's algorithm : Factorisation et cryptographie",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "quantum-algorithms",
+    "featuredImage": "\/blog\/images\/shor-s-algorithm-factorisation-et-cryptographie.jpg",
+    "status": "published",
+    "tags": [
+        "quantum-algorithms",
+        "shor",
+        "factoring",
+        "rsa"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 5,
+        "depth": 2,
+        "clarity": 5,
+        "freshness": 5,
+        "usefulness": 1
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2025-12-29T20:00:00+00:00",
+    "updatedAt": "2025-12-06T17:31:20+00:00",
+    "publishedAt": "2025-12-29T20:00:00+00:00"
+}

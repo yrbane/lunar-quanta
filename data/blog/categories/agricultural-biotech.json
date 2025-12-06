@@ -1,0 +1,10 @@
+{
+    "id": "agricultural-biotech",
+    "name": "Agricultural Biotech",
+    "slug": "agricultural-biotech",
+    "description": "Biotechnologies agricoles et sécurité alimentaire",
+    "color": "#84cc16",
+    "sortOrder": 34,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

@@ -1,0 +1,37 @@
+{
+    "id": "spatial-computing-02",
+    "title": "WebXR : Créer des expériences AR\/VR dans le navigateur",
+    "slug": "webxr-creer-des-experiences-ar-vr-dans-le-navigateur",
+    "content": "# WebXR : Architectures et Standards pour le Web Immersif\n\nWebXR (Web Extended Reality) représente la standardisation par le W3C des interfaces permettant l'accès aux dispositifs de réalité virtuelle (VR) et augmentée (AR) directement via un navigateur web. Cette technologie démocratise l'accès au contenu immersif en éliminant la friction liée à l'installation d'applications natives (les \"Walled Gardens\").\n\n## L'API WebXR Device\n\nL'API WebXR Device est le cœur du système. Elle permet aux développeurs web de :\n1.  Détecter les capacités du matériel XR (casque VR, lunettes AR, mobile).\n2.  Interroger la position et l'orientation du dispositif (pose tracking).\n3.  Effectuer le rendu d'une scène 3D synchronisée avec le taux de rafraîchissement de l'écran.\n\n### Cycle de Vie d'une Session WebXR\n\nUne session typique suit ce workflow :\n1.  **Requête de session :** `navigator.xr.requestSession('immersive-vr')`.\n2.  **Boucle de rendu :** Utilisation de `XRSession.requestAnimationFrame` au lieu du `window.requestAnimationFrame` classique pour se synchroniser avec le matériel.\n3.  **Gestion des \"Reference Spaces\" :** Définition du système de coordonnées (Local, Viewer, Bounded-floor) pour positionner l'utilisateur.\n\n```javascript\n\/\/ Initialisation d'une session VR\nconst session = await navigator.xr.requestSession('immersive-vr', {\n  requiredFeatures: ['local-floor']\n});\nconst referenceSpace = await session.requestReferenceSpace('local-floor');\n```\n\n## Moteurs de Rendu et Frameworks\n\nBien que l'API WebXR gère la communication matérielle, elle ne fournit pas de moteur de rendu. Le développement repose sur des bibliothèques WebGL\/WebGPU :\n\n### Three.js\nLa bibliothèque standard de facto pour la 3D sur le web. Elle offre une abstraction robuste sur WebGL et intègre un support WebXR natif via `WebARManager` et `WebVRManager`.\n\n### Babylon.js\nUn moteur complet maintenu par Microsoft, particulièrement performant pour les expériences complexes. Il propose un support WebXR \"clé en main\" incluant la téléportation, la gestion des contrôleurs et l'UI 3D.\n\n### A-Frame\nUn framework déclaratif basé sur HTML (Entity-Component architecture). Il permet de créer des scènes VR avec des balises HTML simples `<a-scene>`, rendant la technologie accessible aux développeurs front-end classiques.\n\n## Enjeux de Performance : WebGL vs WebGPU\n\nLa performance est critique en VR pour éviter la cinétose (motion sickness) : le maintien constant de 90 FPS (ou plus) est impératif.\n*   **WebGL 2.0 :** Actuellement le standard, mais limité par l'API OpenGL vieillissante.\n*   **WebGPU :** La nouvelle norme qui offre un accès plus bas niveau au GPU, réduisant l'overhead du CPU et permettant des calculs plus complexes (Compute Shaders). C'est l'avenir du WebXR haute fidélité.\n\n## Progressive Enhancement et Accessibilité\n\nUne stratégie de \"Progressive Enhancement\" est essentielle :\n1.  **VR :** Expérience complète pour casques (Meta Quest, HTC Vive).\n2.  **AR Mobile :** Utilisation de la caméra du smartphone pour le passthrough (via WebXR AR Module).\n3.  **Fallback 2D :** Une version interactive sur écran classique pour les utilisateurs sans matériel XR.\n\n## Conclusion\n\nWebXR transforme le navigateur en une plateforme de distribution universelle pour le métavers ouvert. Avec l'arrivée de WebGPU et l'amélioration des navigateurs sur les casques autonomes, l'écart de performance avec le natif se réduit, faisant du web le vecteur privilégié pour les expériences immersives grand public.\n",
+    "excerpt": "Découvrez les concepts clés, meilleures pratiques et tendances actuelles : WebXR : Créer des expériences AR\/VR dans le navigateur",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "spatial-computing",
+    "featuredImage": "\/blog\/images\/webxr-creer-des-experiences-ar-vr-dans-le-navigateur.jpg",
+    "status": "published",
+    "tags": [
+        "spatial-computing",
+        "webxr",
+        "ar",
+        "vr",
+        "web"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 3,
+        "depth": 3,
+        "clarity": 3,
+        "freshness": 2,
+        "usefulness": 4
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2026-03-02T11:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2026-03-02T11:00:00+00:00"
+}

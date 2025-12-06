@@ -1,0 +1,37 @@
+{
+    "id": "spatial-computing-03",
+    "title": "Unity vs Unreal pour le développement XR",
+    "slug": "unity-vs-unreal-pour-le-developpement-xr",
+    "content": "# Unity vs Unreal Engine : Analyse Comparative pour le Développement XR\n\nLe choix d'un moteur graphique est la décision technique la plus critique au début d'un projet de Réalité Étendue (XR). Si Unity et Unreal Engine (UE) dominent le marché, leurs architectures, leurs workflows et leurs philosophies de rendu diffèrent fondamentalement, influençant la viabilité du projet selon la plateforme cible (Mobile VR autonome vs PC VR haute fidélité).\n\n## Architecture et Langages de Programmation\n\n### Unity\n*   **Langage :** C# (Managé via Mono\/IL2CPP).\n*   **Philosophie :** Component-Based. Très modulaire et flexible.\n*   **Avantages :** Itération rapide, courbe d'apprentissage plus douce, énorme écosystème de packages (Asset Store).\n*   **Inconvénients :** Le Garbage Collector (GC) de C# peut causer des micro-saccades (stuttering) critiques en VR si mal géré. L'architecture DOTS (Data-Oriented Technology Stack) vise à résoudre cela mais complexifie le code.\n\n### Unreal Engine\n*   **Langage :** C++ et Blueprints (Scripting visuel).\n*   **Philosophie :** Monolithique et intégré. De nombreux outils sont inclus par défaut.\n*   **Avantages :** Performance brute du C++, gestion mémoire manuelle, système de Blueprints puissant pour les designers, rendu graphique photoréaliste \"out of the box\".\n*   **Inconvénients :** Courbe d'apprentissage abrupte, binaires finaux plus lourds (problématique pour le mobile).\n\n## Pipelines de Rendu (Rendering Pipelines)\n\n### Unity : URP vs HDRP\nPour la XR, Unity propose deux pipelines principaux scriptables (SRP) :\n*   **URP (Universal Render Pipeline) :** Le choix par défaut pour la **VR autonome** (Quest 3, Pico 4). Optimisé pour les GPU mobiles (tile-based rendering), il sacrifie certains effets avancés pour la performance.\n*   **HDRP (High Definition Render Pipeline) :** Destiné au **PC VR**. Supporte le Ray Tracing, les matériaux volumétriques complexes, mais est trop lourd pour les chipsets mobiles actuels.\n\n### Unreal Engine 5 : Nanite et Lumen\nUE5 a introduit deux technologies révolutionnaires, mais leur application en XR est nuancée :\n*   **Nanite (Géométrie virtualisée) :** Permet d'afficher des millions de polygones sans LOD (Level of Detail) manuels. Commence à être supporté en VR, mais avec un coût significatif.\n*   **Lumen (Illumination globale dynamique) :** Incroyable pour le réalisme, mais extrêmement coûteux en ressources. En VR autonome, l'éclairage \"bakers\" (pré-calculé via Lightmass) reste la norme pour maintenir les 72\/90 FPS.\n\n## Support Hardware et SDKs\n\n*   **Unity :** Historiquement le leader du mobile. L'intégration d'AR Foundation (abstraction pour ARKit\/ARCore) est excellente. Meta fournit souvent ses SDKs (Interaction SDK, Building Blocks) en priorité sur Unity.\n*   **Unreal :** A rattrapé son retard avec OpenXR. Préféré pour les expériences de production virtuelle (Virtual Production) et les simulateurs industriels complexes où la fidélité visuelle prime sur la portabilité mobile.\n\n## Conclusion : Lequel choisir ?\n\n*   **Choisissez Unity si :** Vous visez principalement les casques autonomes (Quest, Pico, Vision Pro), le mobile AR, ou si votre équipe a une forte expertise C#. C'est le standard de l'industrie pour le jeu mobile et les applications B2B légères.\n*   **Choisissez Unreal si :** Vous développez une expérience PC VR haut de gamme, une simulation architecturale photoréaliste, ou une production virtuelle. La puissance de rendu est inégalée, mais demande une machine cible robuste.\n",
+    "excerpt": "Découvrez les concepts clés, meilleures pratiques et tendances actuelles : Unity vs Unreal pour le développement XR",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "spatial-computing",
+    "featuredImage": "\/blog\/images\/unity-vs-unreal-pour-le-developpement-xr.jpg",
+    "status": "published",
+    "tags": [
+        "spatial-computing",
+        "unity",
+        "unreal",
+        "xr",
+        "comparaison"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 4,
+        "depth": 3,
+        "clarity": 4,
+        "freshness": 1,
+        "usefulness": 4
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2026-03-03T09:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2026-03-03T09:00:00+00:00"
+}

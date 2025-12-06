@@ -1,0 +1,36 @@
+{
+    "id": "llm-optimization-08",
+    "title": "Continuous batching : Maximiser le throughput",
+    "slug": "continuous-batching-maximiser-le-throughput",
+    "content": "# Continuous Batching : Maximiser le Throughput et l'Utilisation du GPU pour l'Inférence des LLMs\n\nLe *Continuous Batching*, également appelé *dynamic batching*, est une technique d'optimisation de l'inférence pour les Large Language Models (LLMs) qui vise à maximiser l'utilisation des GPUs et le *throughput* (nombre de tokens générés par seconde) en traitant dynamiquement plusieurs requêtes simultanément, même si elles ont des longueurs de séquence différentes. Il surmonte les limitations du batching statique traditionnel, qui est inefficace pour les LLMs.\n\n## 1. Le Problème du Batching Statique pour les LLMs\n\n### 1.1. Batching Statique (Static Batching)\n*   **Principe :** Les requêtes sont regroupées en \"batchs\" de taille fixe. Chaque séquence du batch est paddée à la longueur maximale de la séquence du batch.\n*   **Inconvénients pour les LLMs :**\n    *   **Perte de Calcul (Padding Waste) :** Le padding introduit des calculs inutiles pour les tokens générés par le LLM (qui sont toujours de longueur 1 à chaque étape de génération).\n    *   **Sous-utilisation du GPU :** Le GPU reste souvent inactif à la fin des séquences plus courtes, attendant que la plus longue du batch soit complétée.\n    *   **Latence Accrue :** Les requêtes doivent attendre que le batch soit rempli avant d'être traitées.\n\n## 2. Principe du Continuous Batching\n\nLe Continuous Batching maintient un batch dynamique de requêtes en cours, ajoutant de nouvelles requêtes et retirant celles qui sont terminées, pour optimiser l'utilisation du GPU.\n\n### 2.1. Fonctionnement\n1.  **Queue de Requêtes :** Les requêtes entrantes sont placées dans une file d'attente.\n2.  **Gestion Dynamique du Batch :** À chaque étape de génération de tokens :\n    *   Le système alloue de la mémoire GPU pour le KV Cache (Key-Value Cache) de chaque requête.\n    *   Il sélectionne le nombre maximum de requêtes pouvant être traitées simultanément, en fonction de la VRAM disponible pour le KV Cache et des capacités de calcul du GPU.\n    *   Les requêtes sont traitées en parallèle pour générer le prochain token pour *chaque* séquence active du batch.\n    *   Une fois qu'une requête a généré son token de fin, elle est retirée du batch, et de nouvelles requêtes de la file d'attente peuvent être ajoutées au batch à l'étape suivante.\n\n### 2.2. Optimisation de la Mémoire (KV Cache)\n*   Le Continuous Batching est souvent combiné avec des techniques d'optimisation du KV Cache (ex: Paged Attention) pour gérer la mémoire VRAM de manière plus granulaire et efficace.\n*   **Paged Attention :** Le KV Cache est alloué en \"pages\" de mémoire non contiguës, évitant la fragmentation et la copie des données lors de l'ajout\/suppression de requêtes.\n\n## 3. Avantages du Continuous Batching\n\n*   **Augmentation du Throughput :** Le nombre de tokens générés par seconde peut être multiplié par 2 à 4x (voire plus) par rapport au batching statique.\n*   **Meilleure Utilisation du GPU :** Réduit les périodes d'inactivité du GPU, maximisant l'utilisation des ressources.\n*   **Réduction de la Latence :** Les requêtes sont traitées dès qu'elles arrivent, sans attendre que le batch soit rempli.\n*   **Flexibilité :** Gère efficacement les requêtes avec des longueurs de prompt et de génération très différentes.\n\n## 4. Implémentations et Frameworks\n\n*   **vLLM (UC Berkeley) :** Un framework d'inférence très populaire pour les LLMs qui implémente le Continuous Batching et la Paged Attention. Il est devenu un standard pour le déploiement de LLMs open source.\n*   **TensorRT-LLM (NVIDIA) :** Offre également des optimisations similaires pour maximiser le throughput.\n\n## 5. Défis et Limites\n\n*   **Complexité d'Implémentation :** Nécessite une gestion sophistiquée de la mémoire GPU et des mécanismes de planification des requêtes.\n*   **Performance du GPU :** Les gains sont maximisés sur des GPUs à haute capacité de calcul et de bande passante mémoire.\n*   **Goulot d'Étranglement CPU :** Dans certains cas, le CPU peut devenir un goulot d'étranglement pour la gestion des requêtes.\n\n## 6. Conclusion\n\nLe Continuous Batching est une technique d'optimisation indispensable pour le déploiement de Large Language Models à grande échelle. En maximisant l'utilisation du GPU et en réduisant la latence, il permet d'offrir des services d'inférence LLM plus rapides, plus économiques et plus scalables, débloquant des applications qui étaient auparavant irréalisables.\n\n**Références Techniques :**\n*   *Efficient Memory Management for Large Language Model Serving with PagedAttention*, arXiv, 2023.\n*   *vLLM: A High-Throughput and Memory-Efficient Serving Engine for Large Language Models*, vllm.ai.\n*   *Continuous Batching for LLM Inference*, NVIDIA Developer Blog.\n",
+    "excerpt": "Découvrez les dernières avancées : Continuous batching : Maximiser le throughput",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "llm-optimization",
+    "featuredImage": "\/blog\/images\/continuous-batching-maximiser-le-throughput.jpg",
+    "status": "published",
+    "tags": [
+        "llm-optimization",
+        "batching",
+        "throughput",
+        "serving"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 4,
+        "depth": 5,
+        "clarity": 1,
+        "freshness": 4,
+        "usefulness": 5
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2025-12-11T16:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2025-12-11T16:00:00+00:00"
+}

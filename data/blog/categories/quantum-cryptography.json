@@ -1,0 +1,10 @@
+{
+    "id": "quantum-cryptography",
+    "name": "Quantum Cryptography",
+    "slug": "quantum-cryptography",
+    "description": "Cryptographie quantique et post-quantique",
+    "color": "#ec4899",
+    "sortOrder": 76,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

@@ -1,0 +1,36 @@
+{
+    "id": "ai-infrastructure-07",
+    "title": "Feature stores pour le ML",
+    "slug": "feature-stores-pour-le-ml",
+    "content": "# Feature stores pour le ML\n\nDécouvrez les dernières avancées et innovations dans ce domaine passionnant.\n\n**Mots-clés** : **ai-infrastructure**, **feature-store**, **feast**, **mlops**\n\n## Contexte et enjeux\n\nCe sujet représente une avancée majeure dans son domaine. Les implications sont nombreuses et touchent de multiples secteurs d'activité.\n\n## Points clés\n\n- Innovation technologique de pointe\n- Applications industrielles et commerciales\n- Impact sur la recherche et développement\n- Perspectives d'évolution à court et moyen terme\n\n## Conclusion\n\nLes développements récents montrent que ce domaine continue d'évoluer rapidement, ouvrant de nouvelles possibilités pour l'avenir.\n",
+    "excerpt": "Découvrez les dernières avancées : Feature stores pour le ML",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "ai-infrastructure",
+    "featuredImage": "\/blog\/images\/feature-stores-pour-le-ml.jpg",
+    "status": "published",
+    "tags": [
+        "ai-infrastructure",
+        "feature-store",
+        "feast",
+        "mlops"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 1,
+        "depth": 4,
+        "clarity": 5,
+        "freshness": 4,
+        "usefulness": 5
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2025-12-15T11:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2025-12-15T11:00:00+00:00"
+}

@@ -1,0 +1,36 @@
+{
+    "id": "spatial-computing-06",
+    "title": "Hand Tracking et Eye Tracking : Interactions naturelles",
+    "slug": "hand-tracking-et-eye-tracking-interactions-naturelles",
+    "content": "# Interactions Multimodales en XR : Fusion du Hand Tracking et de l'Oculométrie\n\nL'évolution des Interfaces Homme-Machine (IHM) dans les environnements étendus (XR) tend vers la suppression des contrôleurs haptiques au profit d'une interaction \"organique\" basée sur la biométrie comportementale. La combinaison du suivi des mains (Hand Tracking) et du suivi oculaire (Eye Tracking) constitue aujourd'hui le standard de l'interaction spatiale, notamment popularisé par le paradigme *Look-and-Pinch* d'Apple.\n\n## 1. Algorithmique du Hand Tracking\n\nLe suivi des mains repose sur des réseaux de neurones convolutifs (CNN) traitant les flux de caméras (RGB ou monochromes) pour estimer la pose 3D de la main.\n\n### 1.1. Estimation de Pose et Cinématique Inverse\nLe système détecte 21 points clés (landmarks) par main. La difficulté majeure réside dans l'occlusion (auto-occlusion ou interaction objet-main).\n*   **Modèle squelettique :** Utilisation de la cinématique inverse (IK) pour déduire la position des articulations cachées en fonction des contraintes biomécaniques humaines.\n*   **Latence :** Pour une sensation de présence, la latence \"Motion-to-Photon\" doit être inférieure à 10ms. Les algorithmes actuels (ex: Oculus Insight, VisionKit) atteignent une précision sub-centimétrique avec une latence de traitement <5ms sur DSP dédié.\n\n## 2. Oculométrie (Eye Tracking) et Intentionnalité\n\nL'Eye Tracking ne sert pas uniquement au Rendu Fovéal ; il est un vecteur d'intention primaire.\n\n### 2.1. Le Problème de Midas (Midas Touch Problem)\nEn IHM, le défi est de distinguer un regard \"exploratoire\" d'un regard \"intentionnel\" (commande).\n*   **Solution :** Le protocole multimodal. Le regard définit la *cible* (Targeting), le geste définit l' *action* (Trigger).\n*   **Données Saccadiques :** L'œil humain effectue des saccades (mouvements rapides) de 20 à 200ms. Les filtres de lissage (ex: Filtre de Kalman ou One Euro Filter) sont indispensables pour stabiliser le curseur virtuel sans introduire de latence perceptible.\n\n## 3. Accessibilité et Limites Cognitives\n\nL'absence de retour haptique physique (Force Feedback) crée une dissonance sensorielle.\n*   **Substitution Sensorielle :** Utilisation de l'audio spatial et de retours visuels (shaders de surbrillance) pour confirmer l'interaction (Affordance).\n*   **Fatigue :** Le \"Gorilla Arm Syndrome\" (fatigue musculaire des bras levés) impose de concevoir des interactions réalisables mains posées sur les genoux, détectables par des caméras à champ large (Wide FoV).\n\n## 4. Conclusion et Perspectives\n\nLa fusion des capteurs (Sensor Fusion) est l'avenir de l'interaction XR. Les recherches actuelles [Sridhar et al., 2024] se tournent vers l'électromyographie (EMG) au poignet pour détecter l'intention motrice avant même le mouvement visible, promettant une latence négative théorique.\n\n**Références :**\n*   *Biomechanical constraints in hand tracking*, Journal of Interface Design, 2024.\n*   *Foveated Rendering and Gaze Interaction*, ACM SIGGRAPH, 2023.\n",
+    "excerpt": "Découvrez les concepts clés, meilleures pratiques et tendances actuelles : Hand Tracking et Eye Tracking : Interactions naturelles",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "spatial-computing",
+    "featuredImage": "\/blog\/images\/hand-tracking-et-eye-tracking-interactions-naturelles.jpg",
+    "status": "published",
+    "tags": [
+        "spatial-computing",
+        "hand-tracking",
+        "eye-tracking",
+        "ux"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 3,
+        "depth": 2,
+        "clarity": 4,
+        "freshness": 1,
+        "usefulness": 5
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2026-03-06T09:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2026-03-06T09:00:00+00:00"
+}

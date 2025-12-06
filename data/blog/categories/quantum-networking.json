@@ -1,0 +1,10 @@
+{
+    "id": "quantum-networking",
+    "name": "Quantum Networking",
+    "slug": "quantum-networking",
+    "description": "Réseaux quantiques et internet quantique",
+    "color": "#10b981",
+    "sortOrder": 22,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

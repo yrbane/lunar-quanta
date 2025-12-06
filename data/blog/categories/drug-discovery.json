@@ -1,0 +1,10 @@
+{
+    "id": "drug-discovery",
+    "name": "Drug Discovery",
+    "slug": "drug-discovery",
+    "description": "Découverte de médicaments et développement pharmaceutique",
+    "color": "#f59e0b",
+    "sortOrder": 97,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

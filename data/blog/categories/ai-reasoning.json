@@ -1,0 +1,10 @@
+{
+    "id": "ai-reasoning",
+    "name": "AI Reasoning",
+    "slug": "ai-reasoning",
+    "description": "Raisonnement et cognition en IA",
+    "color": "#8b5cf6",
+    "sortOrder": 41,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

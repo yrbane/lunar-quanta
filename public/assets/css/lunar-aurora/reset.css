@@ -1,0 +1,350 @@
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║                         LUNAR AURORA - RESET                                ║
+ * ║                                                                           ║
+ * ║  Modern CSS reset with sensible defaults. Opinionated but minimal.       ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BOX SIZING
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MARGIN RESET
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+* {
+    margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DOCUMENT DEFAULTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+html {
+    /* Prevent font size inflation */
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+
+    /* Smooth scrolling */
+    scroll-behavior: smooth;
+
+    /* Color scheme hint */
+    color-scheme: light dark;
+
+    /* Better tap highlighting on mobile */
+    -webkit-tap-highlight-color: transparent;
+
+    /* Prevent horizontal overflow */
+    overflow-x: hidden;
+
+    /* Scrollbar gutter to prevent layout shift */
+    scrollbar-gutter: stable;
+}
+
+/* Disable smooth scroll for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BODY DEFAULTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for mobile */
+
+    /* Typography defaults */
+    font-family: var(--la-font-sans, system-ui, sans-serif);
+    font-size: var(--la-text-base, 1rem);
+    line-height: var(--la-leading-normal, 1.5);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+
+    /* Color defaults */
+    background-color: var(--la-surface-0, #fff);
+    color: var(--la-text, #1a1a1a);
+
+    /* Flex layout for sticky footer pattern */
+    display: flex;
+    flex-direction: column;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TYPOGRAPHY RESET
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+h1, h2, h3, h4, h5, h6 {
+    /* Balance text wrapping for headings */
+    text-wrap: balance;
+
+    /* Inherit line-height for headings */
+    line-height: var(--la-leading-tight, 1.2);
+
+    /* Prevent orphans */
+    overflow-wrap: break-word;
+}
+
+p, li, figcaption {
+    /* Improve text wrapping */
+    text-wrap: pretty;
+
+    /* Prevent orphans on paragraphs */
+    overflow-wrap: break-word;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   INTERACTIVE ELEMENTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+a {
+    color: inherit;
+    text-decoration-skip-ink: auto;
+}
+
+a:not([class]) {
+    text-decoration-color: var(--la-primary, currentColor);
+}
+
+/* Button and input reset */
+button,
+input,
+select,
+textarea {
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+}
+
+button {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+/* Remove default button styling on iOS */
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+    -webkit-appearance: button;
+    appearance: button;
+}
+
+/* Disabled state */
+:disabled {
+    cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FORM ELEMENTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+input,
+textarea,
+select {
+    background: transparent;
+}
+
+textarea {
+    /* Only vertical resize */
+    resize: vertical;
+
+    /* Remove default scrollbar on some browsers */
+    overflow: auto;
+}
+
+/* Search input cleanup */
+[type="search"] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+}
+
+[type="search"]::-webkit-search-decoration,
+[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+}
+
+/* Number input spinners */
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+    height: auto;
+}
+
+/* Placeholder styling */
+::placeholder {
+    color: var(--la-text-muted, #999);
+    opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MEDIA
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+img,
+video {
+    height: auto;
+}
+
+/* Preserve aspect ratio */
+img,
+video {
+    object-fit: cover;
+}
+
+/* Lazy loaded images */
+img[loading="lazy"] {
+    background-color: var(--la-surface-2, #f0f0f0);
+}
+
+/* SVG defaults */
+svg {
+    fill: currentColor;
+}
+
+svg:not([fill]) {
+    fill: currentColor;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABLE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-indent: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LISTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+ul,
+ol {
+    list-style: none;
+    padding: 0;
+}
+
+/* Restore list styling for prose/content areas */
+.la-prose ul,
+.la-prose ol,
+[data-prose] ul,
+[data-prose] ol {
+    list-style: revert;
+    padding-left: 1.5em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MISC
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Remove quotes around blockquote */
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote::before,
+blockquote::after,
+q::before,
+q::after {
+    content: '';
+}
+
+/* Summary cursor */
+summary {
+    cursor: pointer;
+}
+
+/* Horizontal rule */
+hr {
+    border: none;
+    border-top: 1px solid var(--la-border, #e0e0e0);
+    height: 0;
+}
+
+/* Remove the inner border and padding in Firefox */
+::-moz-focus-inner {
+    border-style: none;
+    padding: 0;
+}
+
+/* Focus ring for keyboard navigation */
+:focus-visible {
+    outline: 2px solid var(--la-border-focus, var(--la-primary, #7c3aed));
+    outline-offset: 2px;
+}
+
+/* Hide focus ring for mouse users */
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Hidden attribute */
+[hidden] {
+    display: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SELECTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+::selection {
+    background-color: var(--la-primary-subtle, oklch(95% 0.05 262));
+    color: var(--la-text, inherit);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLLBAR (WebKit/Blink)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--la-surface-1, #f5f5f5);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--la-border-strong, #ccc);
+    border-radius: var(--la-radius-full, 9999px);
+    border: 2px solid var(--la-surface-1, #f5f5f5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--la-text-muted, #999);
+}
+
+/* Firefox scrollbar */
+@supports (scrollbar-color: auto) {
+    * {
+        scrollbar-color: var(--la-border-strong, #ccc) var(--la-surface-1, #f5f5f5);
+        scrollbar-width: thin;
+    }
+}

@@ -1,0 +1,377 @@
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║                         LUNAR AURORA - DESIGN TOKENS                        ║
+ * ║                                                                           ║
+ * ║  Core design tokens: the atomic values that power the entire system.     ║
+ * ║  Uses CSS custom properties with @property for type safety.              ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   REGISTERED CUSTOM PROPERTIES (Type-safe CSS variables)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@property --la-hue-primary {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 262;
+}
+
+@property --la-hue-secondary {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 187;
+}
+
+@property --la-hue-accent {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 38;
+}
+
+@property --la-saturation {
+    syntax: '<percentage>';
+    inherits: true;
+    initial-value: 80%;
+}
+
+@property --la-lightness-base {
+    syntax: '<percentage>';
+    inherits: true;
+    initial-value: 50%;
+}
+
+@property --la-radius-factor {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 1;
+}
+
+@property --la-space-unit {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 0.25rem;
+}
+
+@property --la-duration-base {
+    syntax: '<time>';
+    inherits: true;
+    initial-value: 200ms;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ROOT TOKENS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+    /* ─────────────────────────────────────────────────────────────────────────
+       COLOR SYSTEM - HSL-based for easy manipulation
+       ───────────────────────────────────────────────────────────────────────── */
+
+    /* Primary Hues */
+    --la-hue-primary: 262;      /* Violet */
+    --la-hue-secondary: 187;    /* Cyan */
+    --la-hue-accent: 38;        /* Amber */
+
+    /* Semantic Hues */
+    --la-hue-success: 142;
+    --la-hue-warning: 38;
+    --la-hue-error: 0;
+    --la-hue-info: 210;
+
+    /* Saturation & Lightness Controls */
+    --la-saturation: 80%;
+    --la-saturation-muted: 30%;
+    --la-lightness-base: 50%;
+
+    /* Generated Colors (computed from hues) */
+    --la-primary: oklch(62% 0.25 var(--la-hue-primary));
+    --la-primary-light: oklch(75% 0.2 var(--la-hue-primary));
+    --la-primary-dark: oklch(45% 0.25 var(--la-hue-primary));
+    --la-primary-subtle: oklch(95% 0.05 var(--la-hue-primary));
+
+    --la-secondary: oklch(65% 0.15 var(--la-hue-secondary));
+    --la-secondary-light: oklch(78% 0.12 var(--la-hue-secondary));
+    --la-secondary-dark: oklch(50% 0.18 var(--la-hue-secondary));
+
+    --la-accent: oklch(75% 0.18 var(--la-hue-accent));
+    --la-accent-light: oklch(85% 0.12 var(--la-hue-accent));
+    --la-accent-dark: oklch(60% 0.2 var(--la-hue-accent));
+
+    /* Semantic Colors */
+    --la-success: oklch(65% 0.2 var(--la-hue-success));
+    --la-warning: oklch(80% 0.18 var(--la-hue-warning));
+    --la-error: oklch(55% 0.25 var(--la-hue-error));
+    --la-info: oklch(60% 0.18 var(--la-hue-info));
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       SURFACE COLORS (Light Mode Default)
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-surface-0: oklch(100% 0 0);           /* Pure white */
+    --la-surface-1: oklch(98% 0.002 var(--la-hue-primary));
+    --la-surface-2: oklch(96% 0.004 var(--la-hue-primary));
+    --la-surface-3: oklch(94% 0.006 var(--la-hue-primary));
+    --la-surface-raised: oklch(100% 0 0);
+    --la-surface-overlay: oklch(100% 0 0 / 90%);
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       TEXT COLORS
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-text: oklch(20% 0.02 var(--la-hue-primary));
+    --la-text-secondary: oklch(40% 0.02 var(--la-hue-primary));
+    --la-text-muted: oklch(55% 0.01 var(--la-hue-primary));
+    --la-text-disabled: oklch(70% 0.005 var(--la-hue-primary));
+    --la-text-inverse: oklch(98% 0 0);
+    --la-text-on-primary: oklch(100% 0 0);
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       BORDER COLORS
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-border: oklch(88% 0.01 var(--la-hue-primary));
+    --la-border-strong: oklch(75% 0.02 var(--la-hue-primary));
+    --la-border-subtle: oklch(94% 0.005 var(--la-hue-primary));
+    --la-border-focus: var(--la-primary);
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       SPACING SCALE (Geometric progression: 4px base)
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-space-unit: 0.25rem;   /* 4px */
+
+    --la-space-0: 0;
+    --la-space-px: 1px;
+    --la-space-0-5: calc(var(--la-space-unit) * 0.5);    /* 2px */
+    --la-space-1: var(--la-space-unit);                   /* 4px */
+    --la-space-1-5: calc(var(--la-space-unit) * 1.5);    /* 6px */
+    --la-space-2: calc(var(--la-space-unit) * 2);        /* 8px */
+    --la-space-2-5: calc(var(--la-space-unit) * 2.5);    /* 10px */
+    --la-space-3: calc(var(--la-space-unit) * 3);        /* 12px */
+    --la-space-4: calc(var(--la-space-unit) * 4);        /* 16px */
+    --la-space-5: calc(var(--la-space-unit) * 5);        /* 20px */
+    --la-space-6: calc(var(--la-space-unit) * 6);        /* 24px */
+    --la-space-8: calc(var(--la-space-unit) * 8);        /* 32px */
+    --la-space-10: calc(var(--la-space-unit) * 10);      /* 40px */
+    --la-space-12: calc(var(--la-space-unit) * 12);      /* 48px */
+    --la-space-16: calc(var(--la-space-unit) * 16);      /* 64px */
+    --la-space-20: calc(var(--la-space-unit) * 20);      /* 80px */
+    --la-space-24: calc(var(--la-space-unit) * 24);      /* 96px */
+    --la-space-32: calc(var(--la-space-unit) * 32);      /* 128px */
+    --la-space-40: calc(var(--la-space-unit) * 40);      /* 160px */
+    --la-space-48: calc(var(--la-space-unit) * 48);      /* 192px */
+    --la-space-64: calc(var(--la-space-unit) * 64);      /* 256px */
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       TYPOGRAPHY SCALE (Minor Third: 1.2 ratio)
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --la-font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+    --la-font-display: 'Special Gothic Expanded One', 'Inter', system-ui, sans-serif;
+
+    --la-text-xs: clamp(0.64rem, 0.6rem + 0.2vw, 0.75rem);      /* ~12px */
+    --la-text-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.875rem);    /* ~14px */
+    --la-text-base: clamp(1rem, 0.95rem + 0.25vw, 1rem);        /* 16px */
+    --la-text-md: clamp(1.1rem, 1rem + 0.5vw, 1.125rem);        /* ~18px */
+    --la-text-lg: clamp(1.2rem, 1.1rem + 0.5vw, 1.25rem);       /* ~20px */
+    --la-text-xl: clamp(1.44rem, 1.3rem + 0.7vw, 1.5rem);       /* ~24px */
+    --la-text-2xl: clamp(1.728rem, 1.5rem + 1.2vw, 1.875rem);   /* ~30px */
+    --la-text-3xl: clamp(2.074rem, 1.8rem + 1.4vw, 2.25rem);    /* ~36px */
+    --la-text-4xl: clamp(2.488rem, 2rem + 2.4vw, 3rem);         /* ~48px */
+    --la-text-5xl: clamp(2.986rem, 2.5rem + 2.5vw, 3.75rem);    /* ~60px */
+    --la-text-6xl: clamp(3.583rem, 3rem + 3vw, 4.5rem);         /* ~72px */
+
+    /* Line Heights */
+    --la-leading-none: 1;
+    --la-leading-tight: 1.2;
+    --la-leading-snug: 1.375;
+    --la-leading-normal: 1.5;
+    --la-leading-relaxed: 1.625;
+    --la-leading-loose: 1.8;
+    --la-leading-prose: 1.75;
+
+    /* Font Weights */
+    --la-weight-thin: 100;
+    --la-weight-light: 300;
+    --la-weight-normal: 400;
+    --la-weight-medium: 500;
+    --la-weight-semibold: 600;
+    --la-weight-bold: 700;
+    --la-weight-extrabold: 800;
+    --la-weight-black: 900;
+
+    /* Letter Spacing */
+    --la-tracking-tighter: -0.05em;
+    --la-tracking-tight: -0.025em;
+    --la-tracking-normal: 0;
+    --la-tracking-wide: 0.025em;
+    --la-tracking-wider: 0.05em;
+    --la-tracking-widest: 0.1em;
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       BORDER RADIUS (Multiplicative scale)
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-radius-factor: 1;
+
+    --la-radius-none: 0;
+    --la-radius-sm: calc(4px * var(--la-radius-factor));
+    --la-radius-md: calc(8px * var(--la-radius-factor));
+    --la-radius-lg: calc(12px * var(--la-radius-factor));
+    --la-radius-xl: calc(16px * var(--la-radius-factor));
+    --la-radius-2xl: calc(24px * var(--la-radius-factor));
+    --la-radius-3xl: calc(32px * var(--la-radius-factor));
+    --la-radius-full: 9999px;
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       SHADOWS (Layered, with color tint)
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-shadow-color: var(--la-hue-primary);
+
+    --la-shadow-xs:
+        0 1px 2px oklch(20% 0.02 var(--la-shadow-color) / 5%);
+
+    --la-shadow-sm:
+        0 1px 3px oklch(20% 0.02 var(--la-shadow-color) / 10%),
+        0 1px 2px oklch(20% 0.02 var(--la-shadow-color) / 6%);
+
+    --la-shadow-md:
+        0 4px 6px -1px oklch(20% 0.02 var(--la-shadow-color) / 10%),
+        0 2px 4px -2px oklch(20% 0.02 var(--la-shadow-color) / 10%);
+
+    --la-shadow-lg:
+        0 10px 15px -3px oklch(20% 0.02 var(--la-shadow-color) / 10%),
+        0 4px 6px -4px oklch(20% 0.02 var(--la-shadow-color) / 10%);
+
+    --la-shadow-xl:
+        0 20px 25px -5px oklch(20% 0.02 var(--la-shadow-color) / 10%),
+        0 8px 10px -6px oklch(20% 0.02 var(--la-shadow-color) / 10%);
+
+    --la-shadow-2xl:
+        0 25px 50px -12px oklch(20% 0.02 var(--la-shadow-color) / 25%);
+
+    --la-shadow-inner:
+        inset 0 2px 4px 0 oklch(20% 0.02 var(--la-shadow-color) / 5%);
+
+    --la-shadow-glow:
+        0 0 20px oklch(60% 0.2 var(--la-hue-primary) / 30%);
+
+    --la-shadow-glow-primary:
+        0 0 30px oklch(60% 0.25 var(--la-hue-primary) / 40%);
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       TRANSITIONS & ANIMATIONS
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-duration-instant: 50ms;
+    --la-duration-fast: 100ms;
+    --la-duration-base: 200ms;
+    --la-duration-slow: 300ms;
+    --la-duration-slower: 500ms;
+    --la-duration-slowest: 700ms;
+
+    /* Easing Curves */
+    --la-ease-linear: linear;
+    --la-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --la-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --la-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --la-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --la-ease-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    --la-ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    /* Default Transition */
+    --la-transition: var(--la-duration-base) var(--la-ease-out);
+    --la-transition-fast: var(--la-duration-fast) var(--la-ease-out);
+    --la-transition-slow: var(--la-duration-slow) var(--la-ease-out);
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       Z-INDEX SCALE
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-z-deep: -999;
+    --la-z-base: 0;
+    --la-z-raised: 1;
+    --la-z-dropdown: 100;
+    --la-z-sticky: 200;
+    --la-z-header: 300;
+    --la-z-overlay: 400;
+    --la-z-modal: 500;
+    --la-z-popover: 600;
+    --la-z-toast: 700;
+    --la-z-tooltip: 800;
+    --la-z-max: 9999;
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       LAYOUT
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-container-xs: 20rem;     /* 320px */
+    --la-container-sm: 24rem;     /* 384px */
+    --la-container-md: 28rem;     /* 448px */
+    --la-container-lg: 32rem;     /* 512px */
+    --la-container-xl: 36rem;     /* 576px */
+    --la-container-2xl: 42rem;    /* 672px */
+    --la-container-3xl: 48rem;    /* 768px */
+    --la-container-4xl: 56rem;    /* 896px */
+    --la-container-5xl: 64rem;    /* 1024px */
+    --la-container-6xl: 72rem;    /* 1152px */
+    --la-container-7xl: 80rem;    /* 1280px */
+    --la-container-full: 100%;
+    --la-container-prose: 65ch;
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       BREAKPOINTS (for reference in @container queries)
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-breakpoint-xs: 480px;
+    --la-breakpoint-sm: 640px;
+    --la-breakpoint-md: 768px;
+    --la-breakpoint-lg: 1024px;
+    --la-breakpoint-xl: 1280px;
+    --la-breakpoint-2xl: 1536px;
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       ASPECT RATIOS
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-aspect-square: 1 / 1;
+    --la-aspect-video: 16 / 9;
+    --la-aspect-photo: 4 / 3;
+    --la-aspect-portrait: 3 / 4;
+    --la-aspect-wide: 21 / 9;
+    --la-aspect-golden: 1.618 / 1;
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       GRADIENTS
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-gradient-primary: linear-gradient(
+        135deg,
+        var(--la-primary) 0%,
+        var(--la-secondary) 100%
+    );
+
+    --la-gradient-primary-radial: radial-gradient(
+        ellipse at top left,
+        var(--la-primary-light) 0%,
+        var(--la-primary) 50%,
+        var(--la-primary-dark) 100%
+    );
+
+    --la-gradient-hero: linear-gradient(
+        135deg,
+        oklch(25% 0.15 var(--la-hue-primary)) 0%,
+        oklch(30% 0.12 calc(var(--la-hue-primary) + 20)) 50%,
+        oklch(28% 0.18 var(--la-hue-secondary)) 100%
+    );
+
+    --la-gradient-mesh:
+        radial-gradient(at 40% 20%, var(--la-primary-light) 0%, transparent 50%),
+        radial-gradient(at 80% 0%, var(--la-secondary-light) 0%, transparent 50%),
+        radial-gradient(at 0% 50%, var(--la-accent-light) 0%, transparent 50%),
+        radial-gradient(at 80% 50%, var(--la-primary) 0%, transparent 50%),
+        radial-gradient(at 0% 100%, var(--la-secondary) 0%, transparent 50%);
+
+    --la-gradient-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+    /* ─────────────────────────────────────────────────────────────────────────
+       BLUR
+       ───────────────────────────────────────────────────────────────────────── */
+    --la-blur-xs: 2px;
+    --la-blur-sm: 4px;
+    --la-blur-md: 8px;
+    --la-blur-lg: 16px;
+    --la-blur-xl: 24px;
+    --la-blur-2xl: 40px;
+    --la-blur-3xl: 64px;
+}

@@ -1,0 +1,14 @@
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║                         LUNAR AURORA - ADMIN BUNDLE                         ║
+ * ║                                                                           ║
+ * ║  Complete CSS bundle for admin dashboard.                                ║
+ * ║  Includes core framework + admin-specific components.                    ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+
+/* Core Lunar Aurora framework */
+@import url('./aurora.css');
+
+/* Admin-specific components */
+@import url('./admin.css');

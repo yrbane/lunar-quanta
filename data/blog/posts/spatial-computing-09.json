@@ -1,0 +1,36 @@
+{
+    "id": "spatial-computing-09",
+    "title": "Performance et optimisation en VR\/AR",
+    "slug": "performance-et-optimisation-en-vr-ar",
+    "content": "# Optimisation du Pipeline de Rendu pour la VR\/AR Mobile\n\nLe développement d'applications XR (Réalité Étendue) sur des processeurs mobiles (Snapdragon XR2, Apple M2) impose des contraintes de performance drastiques. Contrairement au jeu vidéo classique (30\/60 FPS), la VR exige une stabilité absolue à 72Hz, 90Hz ou 120Hz pour prévenir la cinétose (Motion Sickness).\n\n## 1. Le Budget de Rendu (Render Budget)\n\nPour une cible à 90 FPS, le temps de rendu total par frame est de **11.11 ms**.\n*   Sur ce total, environ 2-3 ms sont réservées au système (TimeWarp, Tracking).\n*   Il reste ~8 ms au développeur pour le Game Logic, la Physique et le Rendu GPU.\n\n## 2. Techniques d'Optimisation Géométrique\n\n### 2.1. Draw Calls et Batching\nLe CPU est souvent le goulot d'étranglement (CPU-bound) à cause du coût d'envoi des commandes au GPU (Draw Calls).\n*   **GPU Instancing :** Rendu de multiples copies du même maillage en un seul appel.\n*   **Static Batching :** Fusion des maillages statiques en un seul gros maillage (attention à la consommation mémoire).\n\n### 2.2. LOD (Level of Detail)\nRéduction dynamique de la complexité polygonale en fonction de la distance.\n*   *Nanite (Unreal 5)* commence à automatiser cela via la géométrie virtualisée, mais reste coûteux sur mobile.\n\n## 3. Optimisation du Rendu (Shading & Lighting)\n\n### 3.1. Forward vs Deferred Rendering\nEn VR mobile, le **Forward Rendering** (ou Forward+) est impératif. Le Deferred Rendering consomme trop de bande passante mémoire (G-Buffer) et gère mal l'MSAA (Multisample Anti-Aliasing), crucial pour éviter l'aliasing scintillant en VR.\n\n### 3.2. Foveated Rendering\nExploitation de l'anatomie de l'œil humain. Seule la fovéa (centre du regard, ~5° de champ) nécessite une haute résolution.\n*   **Fixed Foveated Rendering (FFR) :** Réduit la résolution sur les bords de l'écran (statique).\n*   **Dynamic Foveated Rendering (DFR) :** Nécessite l'Eye Tracking. Réduit la charge GPU de 30% à 50% en dégradant la périphérie du regard en temps réel.\n\n## 4. Optimisation des Textures et Bande Passante\n\n*   **Compression :** Utilisation obligatoire de formats compressés (ASTC pour Android\/Quest).\n*   **Texture Atlasing :** Regroupement de textures pour réduire les changements d'état du GPU.\n*   **Mipmapping :** Essentiel pour la performance du cache de texture et la qualité visuelle à distance.\n\n## 5. Outils de Profiling\n\nL'optimisation ne se fait pas à l'aveugle.\n*   **RenderDoc :** Analyse frame par frame des appels graphiques.\n*   **OVR Metrics Tool :** Overlay temps réel sur le casque (FPS, chaleur, usage CPU\/GPU).\n\n## Conclusion\n\nL'optimisation XR est un exercice d'équilibre constant entre fidélité visuelle et latence. La moindre chute de framerate brise l'immersion et peut causer un inconfort physique immédiat à l'utilisateur.\n",
+    "excerpt": "Découvrez les concepts clés, meilleures pratiques et tendances actuelles : Performance et optimisation en VR\/AR",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "spatial-computing",
+    "featuredImage": "\/blog\/images\/performance-et-optimisation-en-vr-ar.jpg",
+    "status": "published",
+    "tags": [
+        "spatial-computing",
+        "performance",
+        "optimisation",
+        "fps"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 3,
+        "depth": 1,
+        "clarity": 5,
+        "freshness": 5,
+        "usefulness": 4
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2026-03-09T05:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2026-03-09T05:00:00+00:00"
+}

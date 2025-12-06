@@ -1,0 +1,10 @@
+{
+    "id": "ai-coding",
+    "name": "AI Coding",
+    "slug": "ai-coding",
+    "description": "Assistants de code IA et développement augmenté",
+    "color": "#06b6d4",
+    "sortOrder": 30,
+    "createdAt": "2025-12-06T14:34:54+00:00",
+    "updatedAt": "2025-12-06T14:34:54+00:00"
+}

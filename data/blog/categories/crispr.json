@@ -1,0 +1,10 @@
+{
+    "id": "crispr",
+    "name": "CRISPR & Gene Editing",
+    "slug": "crispr-gene-editing",
+    "description": "Édition génétique CRISPR-Cas9 et biotechnologies",
+    "color": "#22c55e",
+    "sortOrder": 86,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

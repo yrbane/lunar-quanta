@@ -1,0 +1,10 @@
+{
+    "id": "cloud-native",
+    "name": "Cloud Native",
+    "slug": "cloud-native",
+    "description": "Kubernetes, containers et architecture cloud",
+    "color": "#3b82f6",
+    "sortOrder": 50,
+    "createdAt": "2025-12-06T14:34:54+00:00",
+    "updatedAt": "2025-12-06T14:34:54+00:00"
+}

@@ -38,6 +38,9 @@ final class StaticGenerator
     /** @var callable[] */
     private array $publishCallbacks = [];
 
+    /** @var callable|null Callback de progression (current, total, type, item) */
+    private $progressCallback = null;
+
     private ?RssGenerator $rssGenerator = null;
     private ?SitemapGenerator $sitemapGenerator = null;
     private ?CategoryService $categoryService = null;
@@ -83,36 +86,53 @@ final class StaticGenerator
 
         // Récupérer la catégorie si disponible
         $categoryName = '';
+        $categorySlug = '';
         if ($this->categoryService !== null && $post->getCategoryId() !== null) {
             $category = $this->categoryService->find($post->getCategoryId());
             $categoryName = $category?->getName() ?? '';
+            $categorySlug = $this->slugify($categoryName);
         }
 
         // Récupérer les articles similaires (même catégorie ou tags communs)
         $relatedPosts = $this->findRelatedPosts($post, 4);
 
-        // 1. D'abord traiter les conditions sur featured_image et category
-        $html = $this->processSimpleCondition($template, 'featured_image', !empty($post->getFeaturedImage()));
-        $html = $this->processSimpleCondition($html, 'category', !empty($categoryName));
-        $html = $this->processLengthCondition($html, 'tags', count($post->getTags()) > 0);
-        $html = $this->processLengthCondition($html, 'related_posts', count($relatedPosts) > 0);
+        // Calculer la note moyenne
+        $averageRating = $post->getAverageRating();
 
-        // 2. Traiter les boucles
-        $html = $this->renderWithLoop($html, 'tags', $post->getTags());
-        $html = $this->renderWithLoop($html, 'related_posts', $relatedPosts);
+        // Récupérer les sources
+        $sources = $post->getSources();
 
-        // 3. Enfin remplacer les variables simples
-        $html = $this->render($html, [
+        // Remplacer les variables simples + données JSON
+        $html = $this->render($template, [
             'title' => $post->getTitle(),
             'content' => $htmlContent,
             'excerpt' => $post->getExcerpt(),
             'author' => $post->getAuthor(),
+            'author_bio' => $post->getAuthorBio(),
+            'author_avatar' => $post->getAuthorAvatar(),
+            'author_institution' => $post->getAuthorInstitution(),
             'published_at' => $post->getPublishedAt()?->format('d/m/Y'),
             'reading_time' => $post->getReadingTime(),
             'url' => $post->getUrl(),
             'year' => date('Y'),
             'featured_image' => $post->getFeaturedImage() ?? '',
             'category' => $categoryName,
+            'category_slug' => $categorySlug,
+            'average_rating' => $averageRating > 0 ? number_format($averageRating, 1) : '0',
+            'license' => $post->getLicense(),
+            'original_url' => $post->getOriginalUrl(),
+            'original_source' => $post->getOriginalSource(),
+            // JSON data for JavaScript
+            'tags_json' => json_encode($post->getTags()),
+            'sources_json' => json_encode($sources),
+            'related_json' => json_encode($relatedPosts),
+            'has_avatar' => !empty($post->getAuthorAvatar()) ? 'true' : 'false',
+            'has_institution' => !empty($post->getAuthorInstitution()) ? 'true' : 'false',
+            'has_bio' => !empty($post->getAuthorBio()) ? 'true' : 'false',
+            'has_license' => !empty($post->getLicense()) ? 'true' : 'false',
+            'is_locked' => $post->isLocked() ? 'true' : 'false',
+            'has_original_source' => !empty($post->getOriginalSource()) ? 'true' : 'false',
+            'has_featured_image' => !empty($post->getFeaturedImage()) ? 'true' : 'false',
         ]);
 
         $this->writeFile('posts/' . $post->getSlug() . '.html', $html);
@@ -198,24 +218,80 @@ final class StaticGenerator
         }
         arsort($allTags); // Trier par popularité
 
+        // Collecter toutes les catégories uniques
+        $allCategories = [];
+        foreach ($posts as $post) {
+            $catId = $post->getCategoryId();
+            if ($catId !== null && !isset($allCategories[$catId])) {
+                $allCategories[$catId] = true;
+            }
+        }
+
         // Générer le HTML des tags
         $tagsHtml = '';
         foreach ($allTags as $tag => $count) {
-            $slug = $this->slugify($tag);
+            $tagStr = (string) $tag;
+            $slug = $this->slugify($tagStr);
             $tagsHtml .= sprintf(
                 '<a href="/blog/tags/%s.html" class="tag-pill">%s</a>',
                 htmlspecialchars($slug),
-                htmlspecialchars($tag)
+                htmlspecialchars($tagStr)
+            );
+        }
+
+        // Générer le slider des 10 derniers articles (pleine largeur)
+        $sliderHtml = '';
+        $latestPosts = array_slice($posts, 0, 10);
+        foreach ($latestPosts as $post) {
+            $categoryName = '';
+            if ($this->categoryService !== null && $post->getCategoryId() !== null) {
+                $category = $this->categoryService->find($post->getCategoryId());
+                $categoryName = $category?->getName() ?? '';
+            }
+            $sliderHtml .= sprintf(
+                '<article class="la-hero-slide">
+                    <div class="la-hero-slide-image">
+                        <img src="%s" alt="%s">
+                    </div>
+                    <div class="la-hero-slide-content">
+                        <span class="la-hero-slide-category">%s</span>
+                        <h2 class="la-hero-slide-title">%s</h2>
+                        <p class="la-hero-slide-excerpt">%s</p>
+                        <div class="la-hero-slide-meta">
+                            <span>%s</span>
+                            <span>•</span>
+                            <span>%d min de lecture</span>
+                        </div>
+                        <a href="%s" class="la-hero-slide-link">
+                            Lire l\'article <span class="la-icon">arrow_forward</span>
+                        </a>
+                    </div>
+                </article>',
+                htmlspecialchars($post->getFeaturedImage() ?? ''),
+                htmlspecialchars($post->getTitle()),
+                htmlspecialchars($categoryName),
+                htmlspecialchars($post->getTitle()),
+                htmlspecialchars($post->getExcerpt() ?? ''),
+                $post->getPublishedAt()?->format('d M Y') ?? '',
+                $post->getReadingTime() ?? 5,
+                htmlspecialchars($post->getUrl())
             );
         }
 
         // Préparer les données des posts
         $postsData = array_map(function($post) {
             $categoryName = '';
+            $categorySlug = '';
             if ($this->categoryService !== null && $post->getCategoryId() !== null) {
                 $category = $this->categoryService->find($post->getCategoryId());
                 $categoryName = $category?->getName() ?? '';
+                $categorySlug = $this->slugify($categoryName);
             }
+
+            // Generate rating stars HTML
+            $avgRating = $post->getAverageRating();
+            $ratingStars = $this->generateRatingStarsHtml($avgRating);
+
             return [
                 'title' => $post->getTitle(),
                 'url' => $post->getUrl(),
@@ -225,8 +301,12 @@ final class StaticGenerator
                 'reading_time' => $post->getReadingTime(),
                 'featured_image' => $post->getFeaturedImage() ?? '',
                 'category' => $categoryName,
+                'category_slug' => $categorySlug,
                 'slug' => $post->getSlug(),
                 'tags_string' => implode(', ', $post->getTags()),
+                'average_rating' => $avgRating,
+                'rating_stars' => $ratingStars,
+                'ratings' => $post->getRatings(),
             ];
         }, $posts);
 
@@ -238,7 +318,10 @@ final class StaticGenerator
         // Remplacer les variables globales
         $html = str_replace('{{ year }}', date('Y'), $html);
         $html = str_replace('{{ article_count }}', (string) count($posts), $html);
+        $html = str_replace('{{ categories_count }}', (string) count($allCategories), $html);
+        $html = str_replace('{{ tags_count }}', (string) count($allTags), $html);
         $html = str_replace('{{ tags_list }}', $tagsHtml, $html);
+        $html = str_replace('{{ slider_items }}', $sliderHtml, $html);
 
         $this->writeFile('index.html', $html);
     }
@@ -251,17 +334,25 @@ final class StaticGenerator
     public function generateAll(): array
     {
         $posts = $this->postService->findPublished();
+        $totalPosts = count($posts);
         $count = 0;
 
         foreach ($posts as $post) {
-            $this->generatePost($post);
             $count++;
+            $this->reportProgress($count, $totalPosts, 'post', $post->getTitle());
+            $this->generatePost($post);
         }
 
+        $this->reportProgress(1, 1, 'index', 'index.html');
         $this->generateIndex();
-        $tagsCount = $this->generateTagPages();
-        $categoriesCount = $this->generateCategoryPages();
+
+        $tagsCount = $this->generateTagPagesWithProgress();
+        $categoriesCount = $this->generateCategoryPagesWithProgress();
+
+        $this->reportProgress(1, 1, 'rss', 'feed.xml');
         $rss = $this->generateRss();
+
+        $this->reportProgress(1, 1, 'sitemap', 'sitemap.xml');
         $sitemap = $this->generateSitemap();
 
         return [
@@ -280,6 +371,17 @@ final class StaticGenerator
      * @return int Nombre de pages générées
      */
     public function generateTagPages(): int
+    {
+        return $this->generateTagPagesWithProgress(false);
+    }
+
+    /**
+     * Génère les pages de tags avec progression.
+     *
+     * @param bool $reportProgress Signaler la progression
+     * @return int Nombre de pages générées
+     */
+    private function generateTagPagesWithProgress(bool $reportProgress = true): int
     {
         $templatePath = $this->templatePath . '/tag.html';
         if (!file_exists($templatePath)) {
@@ -301,10 +403,14 @@ final class StaticGenerator
         }
 
         // Générer une page par tag
+        $total = count($taggedPosts);
         $count = 0;
         foreach ($taggedPosts as $tag => $tagPosts) {
-            $this->generateTagPage($template, $tag, $tagPosts);
             $count++;
+            if ($reportProgress) {
+                $this->reportProgress($count, $total, 'tag', (string) $tag);
+            }
+            $this->generateTagPage($template, (string) $tag, $tagPosts);
         }
 
         return $count;
@@ -341,6 +447,17 @@ final class StaticGenerator
      */
     public function generateCategoryPages(): int
     {
+        return $this->generateCategoryPagesWithProgress(false);
+    }
+
+    /**
+     * Génère les pages de catégories avec progression.
+     *
+     * @param bool $reportProgress Signaler la progression
+     * @return int Nombre de pages générées
+     */
+    private function generateCategoryPagesWithProgress(bool $reportProgress = true): int
+    {
         if ($this->categoryService === null) {
             return 0;
         }
@@ -354,15 +471,20 @@ final class StaticGenerator
         $categories = $this->categoryService->all();
         $posts = $this->postService->findPublished();
 
+        $total = count($categories);
         $count = 0;
         foreach ($categories as $category) {
+            $count++;
+            if ($reportProgress) {
+                $this->reportProgress($count, $total, 'category', $category->getName());
+            }
+
             $categoryPosts = array_filter(
                 $posts,
                 fn(Post $post) => $post->getCategoryId() === $category->getId()
             );
 
             $this->generateCategoryPage($template, $category, array_values($categoryPosts));
-            $count++;
         }
 
         return $count;
@@ -466,6 +588,30 @@ final class StaticGenerator
     }
 
     /**
+     * Définit un callback de progression.
+     *
+     * Le callback reçoit: (int $current, int $total, string $type, string $item)
+     * - $current: numéro de l'élément en cours
+     * - $total: nombre total d'éléments
+     * - $type: type d'élément ('post', 'tag', 'category', 'index', 'rss', 'sitemap')
+     * - $item: nom/titre de l'élément en cours
+     */
+    public function onProgress(callable $callback): void
+    {
+        $this->progressCallback = $callback;
+    }
+
+    /**
+     * Appelle le callback de progression s'il est défini.
+     */
+    private function reportProgress(int $current, int $total, string $type, string $item): void
+    {
+        if ($this->progressCallback !== null) {
+            ($this->progressCallback)($current, $total, $type, $item);
+        }
+    }
+
+    /**
      * Charge un template.
      */
     private function loadTemplate(string $name): string
@@ -531,22 +677,19 @@ final class StaticGenerator
      */
     private function processSimpleCondition(string $html, string $var, bool $hasValue): string
     {
-        // Pattern avec {% else %}
-        $patternWithElse = '/\{%\s*if\s+' . preg_quote($var, '/') . '\s*%\}(.*?)\{%\s*else\s*%\}(.*?)\{%\s*endif\s*%\}/s';
+        // Pattern avec {% else %} - utilise un pattern non-greedy plus précis
+        $patternWithElse = '/\{%\s*if\s+' . preg_quote($var, '/') . '\s*%\}((?:(?!\{%\s*(?:if|endif|else)\s*%\}).)*?)\{%\s*else\s*%\}((?:(?!\{%\s*(?:if|endif)\s*%\}).)*?)\{%\s*endif\s*%\}/s';
 
-        if (preg_match($patternWithElse, $html, $matches)) {
-            $ifContent = $matches[1];
-            $elseContent = $matches[2];
-            return preg_replace($patternWithElse, $hasValue ? $ifContent : $elseContent, $html);
-        }
+        $html = preg_replace_callback($patternWithElse, function($matches) use ($hasValue) {
+            return $hasValue ? $matches[1] : $matches[2];
+        }, $html);
 
         // Pattern sans {% else %}
-        $patternNoElse = '/\{%\s*if\s+' . preg_quote($var, '/') . '\s*%\}(.*?)\{%\s*endif\s*%\}/s';
+        $patternNoElse = '/\{%\s*if\s+' . preg_quote($var, '/') . '\s*%\}((?:(?!\{%\s*(?:if|endif)\s*%\}).)*?)\{%\s*endif\s*%\}/s';
 
-        if (preg_match($patternNoElse, $html, $matches)) {
-            $ifContent = $matches[1];
-            return preg_replace($patternNoElse, $hasValue ? $ifContent : '', $html);
-        }
+        $html = preg_replace_callback($patternNoElse, function($matches) use ($hasValue) {
+            return $hasValue ? $matches[1] : '';
+        }, $html);
 
         return $html;
     }
@@ -642,6 +785,28 @@ final class StaticGenerator
         foreach ($items as $item) {
             $itemHtml = $loopTemplate;
 
+            // Gérer les conditions avec comparaison {% if post.var > 0 %}...{% endif %}
+            $compPattern = '/\{%\s*if\s+' . preg_quote($itemVar, '/') . '\.(\w+)\s*(>|<|>=|<=|==|!=)\s*(\d+(?:\.\d+)?)\s*%\}(.*?)\{%\s*endif\s*%\}/s';
+            $itemHtml = preg_replace_callback($compPattern, function ($matches) use ($item) {
+                $var = $matches[1];
+                $operator = $matches[2];
+                $compareValue = (float) $matches[3];
+                $content = $matches[4];
+                $itemValue = isset($item[$var]) ? (float) $item[$var] : 0;
+
+                $result = match ($operator) {
+                    '>' => $itemValue > $compareValue,
+                    '<' => $itemValue < $compareValue,
+                    '>=' => $itemValue >= $compareValue,
+                    '<=' => $itemValue <= $compareValue,
+                    '==' => $itemValue == $compareValue,
+                    '!=' => $itemValue != $compareValue,
+                    default => false,
+                };
+
+                return $result ? $content : '';
+            }, $itemHtml);
+
             // Gérer les conditions {% if post.var %}...{% else %}...{% endif %}
             $condPatternWithElse = '/\{%\s*if\s+' . preg_quote($itemVar, '/') . '\.(\w+)\s*%\}(.*?)\{%\s*else\s*%\}(.*?)\{%\s*endif\s*%\}/s';
             $itemHtml = preg_replace_callback($condPatternWithElse, function ($matches) use ($item) {
@@ -665,11 +830,21 @@ final class StaticGenerator
                 return '';
             }, $itemHtml);
 
-            // Si l'item est un tableau associatif, remplacer {{ var.key }}
+            // Si l'item est un tableau associatif, remplacer {{ var.key }} et {{ var.key|filter }}
             if (is_array($item)) {
                 foreach ($item as $key => $value) {
                     if (is_string($value) || is_numeric($value)) {
+                        // Standard replacement
                         $itemHtml = str_replace('{{ ' . $itemVar . '.' . $key . ' }}', (string) $value, $itemHtml);
+
+                        // With |lower filter
+                        $itemHtml = str_replace('{{ ' . $itemVar . '.' . $key . '|lower }}', strtolower((string) $value), $itemHtml);
+
+                        // With |upper filter
+                        $itemHtml = str_replace('{{ ' . $itemVar . '.' . $key . '|upper }}', strtoupper((string) $value), $itemHtml);
+
+                        // With |slug filter
+                        $itemHtml = str_replace('{{ ' . $itemVar . '.' . $key . '|slug }}', $this->slugify((string) $value), $itemHtml);
                     }
                 }
             }
@@ -740,5 +915,37 @@ final class StaticGenerator
         if (!is_dir($this->outputPath . '/posts')) {
             mkdir($this->outputPath . '/posts', 0755, true);
         }
+    }
+
+    /**
+     * Generate HTML for rating stars display.
+     */
+    private function generateRatingStarsHtml(float $rating): string
+    {
+        if ($rating <= 0) {
+            return '';
+        }
+
+        $html = '';
+        $fullStars = (int) floor($rating);
+        $hasHalf = ($rating - $fullStars) >= 0.5;
+        $emptyStars = 5 - $fullStars - ($hasHalf ? 1 : 0);
+
+        // Full stars
+        for ($i = 0; $i < $fullStars; $i++) {
+            $html .= '<span class="la-rating-star filled"><span class="la-icon xs">star</span></span>';
+        }
+
+        // Half star
+        if ($hasHalf) {
+            $html .= '<span class="la-rating-star half"><span class="la-icon xs">star_half</span></span>';
+        }
+
+        // Empty stars
+        for ($i = 0; $i < $emptyStars; $i++) {
+            $html .= '<span class="la-rating-star"><span class="la-icon xs">star_outline</span></span>';
+        }
+
+        return $html;
     }
 }

@@ -1,0 +1,36 @@
+{
+    "id": "drug-discovery-10",
+    "title": "Phenotypic screening : Retour au drug discovery classique",
+    "slug": "phenotypic-screening-retour-au-drug-discovery-classique",
+    "content": "# Criblage Phénotypique : Retour aux Sources et Réinvention du Drug Discovery\n\nLe criblage phénotypique (Phenotypic Screening) est une stratégie de découverte de médicaments qui évalue la capacité de composés à modifier un phénotype cellulaire ou physiologique (ex: prolifération cellulaire, migration, morphologie, survie) sans connaître *a priori* leur cible moléculaire. Après des décennies dominées par le criblage basé sur des cibles moléculaires spécifiques (Target-Based Screening), le criblage phénotypique connaît un regain d'intérêt, notamment pour les maladies complexes (neurologiques, multifactorielles) où les cibles ne sont pas bien définies.\n\n## 1. Distinction : Phénotypique vs Target-Based Screening\n\n### 1.1. Criblage Basé sur la Cible (Target-Based Screening - TBS)\n*   **Approche :** Part d'une cible moléculaire *connue* (protéine, enzyme, récepteur) et recherche des molécules qui interagissent avec elle.\n*   **Avantages :** Permet un design rationnel, une optimisation des molécules sur la cible.\n*   **Limites :** Ne fonctionne que si la cible est bien validée. Les \"hits\" peuvent être actifs sur la cible mais sans effet sur la maladie.\n\n### 1.2. Criblage Phénotypique (Phenotypic Screening - PS)\n*   **Approche :** Part d'un phénotype cellulaire ou *in vivo* et recherche des molécules qui le modifient. La cible moléculaire est *inconnue* au départ.\n*   **Avantages :** Peut découvrir des molécules avec de nouveaux mécanismes d'action ou des cibles inattendues. Plus pertinent pour les maladies complexes.\n*   **Limites :** L'identification de la cible post-criblage (Target Deconvolution) est difficile.\n\n## 2. Types de Criblage Phénotypique\n\n### 2.1. Criblage Cellulaire (Cell-Based Phenotypic Screening)\n*   **Modèles :** Cultures cellulaires 2D, cultures 3D (sphéroïdes, organoïdes), cellules iPSC (pluripotentes induites) de patients.\n*   **Phénotypes :** Mesure de la viabilité, de la prolifération, de la migration, de la différenciation, de la morphologie cellulaire, de l'expression de biomarqueurs.\n*   **Méthodes :** Imagerie à haut contenu (High-Content Imaging) pour capturer plusieurs paramètres morphologiques et fonctionnels par cellule.\n\n### 2.2. Criblage In Vivo (Whole Organism Phenotypic Screening)\n*   **Modèles :** Organismes modèles simples (zebrafish, C. elegans, drosophila) qui permettent le criblage à haut débit *in vivo*.\n*   **Phénotypes :** Développement embryonnaire, comportement, survie, progression de maladies.\n*   **Avantages :** Prend en compte les interactions complexes du système biologique entier.\n\n## 3. Workflow et Défis\n\n### 3.1. Préparation de l'Assay Phénotypique\n*   Conception d'un test robuste, reproductible et capable de détecter des changements phénotypiques pertinents.\n\n### 3.2. Criblage des Composés\n*   Utilisation de bibliothèques de composés (souvent plus petites que pour le TBS car la target deconvolution est coûteuse).\n\n### 3.3. Target Deconvolution (Identification de la Cible)\nC'est le défi majeur du PS.\n*   **Approches :**\n    *   **Protéomique d'affinité :** Utilisation de sondes chimiques pour capturer les protéines liées au composé.\n    *   **CRISPR Screening :** Utiliser CRISPR pour identifier les gènes dont la modulation mime ou inverse le phénotype observé.\n    *   **Génétique de Suppression\/Augmentation :** Identifier les gènes dont la modification génétique interagit avec l'effet du composé.\n    *   **Analyse de Réseaux Biologiques :** Utiliser des bases de données pour relier le phénotype observé à des voies de signalisation connues.\n\n## 4. Avantages et Succès\n\n*   **Découverte de Nouveaux Mécanismes d'Action :** Peut conduire à des \"first-in-class drugs\" pour des maladies où les cibles ne sont pas connues.\n*   **Pertinence Biologique :** Les \"hits\" sont validés dans un contexte biologique plus complexe.\n*   **Exemples de Succès :** La découverte d'inhibiteurs de checkpoints immunitaires (immunothérapie du cancer) est en partie issue de criblages phénotypiques.\n\n## 5. Conclusion\n\nLe criblage phénotypique est une stratégie essentielle pour la découverte de médicaments, particulièrement pour les maladies complexes et les \"cibles orphelines\". La combinaison des modèles cellulaires 3D (organoïdes), de l'imagerie à haut contenu et des technologies omics (CRISPR Screening, protéomique) pour la déconvolution des cibles, réinvente cette approche classique et la positionne comme un moteur majeur d'innovation pharmaceutique.\n\n**Références Académiques :**\n*   *Phenotypic screening in drug discovery: past, present, and future*, ACS Chemical Biology, 2012.\n*   *The role of phenotypic screens in the discovery of novel small-molecule cancer drugs*, Nature Reviews Cancer, 2014.\n",
+    "excerpt": "Découvrez les dernières avancées : Phenotypic screening : Retour au drug discovery classique",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "drug-discovery",
+    "featuredImage": "\/blog\/images\/phenotypic-screening-retour-au-drug-discovery-classique.jpg",
+    "status": "published",
+    "tags": [
+        "drug-discovery",
+        "phenotypic",
+        "cell-based",
+        "mechanism"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 2,
+        "depth": 3,
+        "clarity": 4,
+        "freshness": 4,
+        "usefulness": 5
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2025-11-25T17:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2025-11-25T17:00:00+00:00"
+}

@@ -427,8 +427,78 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   THEME VISUALS - Icons, Fonts, Hero Images
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   HERO IMAGES BY THEME AND MODE
+   Each theme has a distinct image for dark and light modes
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Default theme visuals */
+:root {
+    --la-hero-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80');
+    --la-icon-logo: 'rocket_launch';
+}
+
+/* Dark mode - Space/Night imagery */
+[data-theme="dark"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80');
+    --la-icon-logo: 'rocket_launch';
+}
+
+/* Light mode - Bright/Day imagery */
+[data-theme="light"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1517483000871-1dbf64a6e1c6?w=1920&q=80');
+    --la-icon-logo: 'rocket_launch';
+}
+
+/* Cyberpunk - Neon city */
+[data-theme="cyberpunk"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1920&q=80');
+    --la-icon-logo: 'electric_bolt';
+    --la-font-sans: 'Rajdhani', 'Orbitron', sans-serif;
+    --la-font-display: 'Orbitron', 'Rajdhani', sans-serif;
+}
+[data-theme="cyberpunk-light"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1920&q=80');
+    --la-icon-logo: 'electric_bolt';
+    --la-font-sans: 'Rajdhani', 'Orbitron', sans-serif;
+    --la-font-display: 'Orbitron', 'Rajdhani', sans-serif;
+}
+
+/* Aurora - Northern lights */
+[data-theme="aurora"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1920&q=80');
+    --la-icon-logo: 'flare';
+    --la-font-sans: 'Poppins', 'Inter', sans-serif;
+    --la-font-display: 'Poppins', 'Inter', sans-serif;
+}
+[data-theme="aurora-light"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1507400492013-162706c8c05e?w=1920&q=80');
+    --la-icon-logo: 'flare';
+    --la-font-sans: 'Poppins', 'Inter', sans-serif;
+    --la-font-display: 'Poppins', 'Inter', sans-serif;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    THEME: 8BITS - Retro Pixel Art Style
    ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 8bits - Light mode: colorful arcade */
+[data-theme="8bits"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&q=80');
+    --la-icon-logo: 'sports_esports';
+    --la-font-sans: 'VT323', 'Press Start 2P', 'Courier New', monospace;
+    --la-font-display: 'Press Start 2P', 'VT323', monospace;
+}
+/* 8bits - Dark mode: neon arcade night */
+[data-theme="8bits-dark"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1920&q=80');
+    --la-icon-logo: 'sports_esports';
+    --la-font-sans: 'VT323', 'Press Start 2P', 'Courier New', monospace;
+    --la-font-display: 'Press Start 2P', 'VT323', monospace;
+}
 
 [data-theme="8bits"] {
     --la-hue-primary: 280;      /* Purple */
@@ -471,9 +541,6 @@
         oklch(20% 0.12 320) 50%,
         oklch(15% 0.1 280) 100%
     );
-
-    /* Pixel font suggestion */
-    --la-font-display: 'Press Start 2P', 'Courier New', monospace;
 }
 
 [data-theme="8bits-dark"] {
@@ -502,7 +569,6 @@
     --la-border-strong: oklch(50% 0.15 var(--la-hue-primary));
 
     --la-radius-factor: 0;
-    --la-font-display: 'Press Start 2P', 'Courier New', monospace;
 
     --la-gradient-hero: linear-gradient(
         180deg,
@@ -515,6 +581,21 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    THEME: BUBBLE BOBBLE - Cute Pastel Arcade
    ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Bubble - Light mode: pastel bubbles */
+[data-theme="bubble"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80');
+    --la-icon-logo: 'bubble_chart';
+    --la-font-sans: 'Nunito', 'Comic Neue', 'Comic Sans MS', cursive;
+    --la-font-display: 'Fredoka One', 'Nunito', sans-serif;
+}
+/* Bubble - Dark mode: deep sea bubbles */
+[data-theme="bubble-dark"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1530053969600-caed2596d242?w=1920&q=80');
+    --la-icon-logo: 'bubble_chart';
+    --la-font-sans: 'Nunito', 'Comic Neue', 'Comic Sans MS', cursive;
+    --la-font-display: 'Fredoka One', 'Nunito', sans-serif;
+}
 
 [data-theme="bubble"] {
     --la-hue-primary: 145;      /* Green (Bub) */
@@ -598,6 +679,21 @@
    THEME: GALAXIAN - Space Arcade
    ═══════════════════════════════════════════════════════════════════════════ */
 
+/* Galaxian - Dark mode: deep space */
+[data-theme="galaxian"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&q=80');
+    --la-icon-logo: 'auto_awesome';
+    --la-font-sans: 'Orbitron', 'Share Tech Mono', monospace;
+    --la-font-display: 'Orbitron', 'Share Tech Mono', monospace;
+}
+/* Galaxian - Light mode: bright nebula */
+[data-theme="galaxian-light"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=1920&q=80');
+    --la-icon-logo: 'auto_awesome';
+    --la-font-sans: 'Orbitron', 'Share Tech Mono', monospace;
+    --la-font-display: 'Orbitron', 'Share Tech Mono', monospace;
+}
+
 [data-theme="galaxian"] {
     --la-hue-primary: 240;      /* Deep Blue */
     --la-hue-secondary: 60;     /* Yellow (stars) */
@@ -678,6 +774,21 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    THEME: WEB90 - Early Web Bad Taste (GeoCities vibes)
    ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Web90 - Light mode: retro computer */
+[data-theme="web90"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80');
+    --la-icon-logo: 'construction';
+    --la-font-sans: 'Comic Sans MS', 'Comic Neue', cursive;
+    --la-font-display: 'Comic Sans MS', 'Comic Neue', cursive;
+}
+/* Web90 - Dark mode: vintage tech */
+[data-theme="web90-dark"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1920&q=80');
+    --la-icon-logo: 'construction';
+    --la-font-sans: 'Comic Sans MS', 'Comic Neue', cursive;
+    --la-font-display: 'Comic Sans MS', 'Comic Neue', cursive;
+}
 
 [data-theme="web90"] {
     --la-hue-primary: 280;      /* Purple */
@@ -765,6 +876,21 @@
    THEME: GEEK - Terminal/Code Style
    ═══════════════════════════════════════════════════════════════════════════ */
 
+/* Geek - Light mode: clean code */
+[data-theme="geek"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1920&q=80');
+    --la-icon-logo: 'terminal';
+    --la-font-sans: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    --la-font-display: 'JetBrains Mono', 'Fira Code', monospace;
+}
+/* Geek - Dark mode: dark IDE */
+[data-theme="geek-dark"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1920&q=80');
+    --la-icon-logo: 'terminal';
+    --la-font-sans: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    --la-font-display: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
 [data-theme="geek"] {
     --la-hue-primary: 142;      /* Green (terminal) */
     --la-hue-secondary: 200;    /* Blue (links) */
@@ -849,6 +975,21 @@
    THEME: ECO - Nature/Sustainable Green
    ═══════════════════════════════════════════════════════════════════════════ */
 
+/* Eco - Light mode: sunny forest */
+[data-theme="eco"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80');
+    --la-icon-logo: 'eco';
+    --la-font-sans: 'Poppins', 'Quicksand', sans-serif;
+    --la-font-display: 'Quicksand', 'Poppins', sans-serif;
+}
+/* Eco - Dark mode: mystical forest */
+[data-theme="eco-dark"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=1920&q=80');
+    --la-icon-logo: 'eco';
+    --la-font-sans: 'Poppins', 'Quicksand', sans-serif;
+    --la-font-display: 'Quicksand', 'Poppins', sans-serif;
+}
+
 [data-theme="eco"] {
     --la-hue-primary: 130;      /* Fresh Green */
     --la-hue-secondary: 90;     /* Lime */
@@ -926,6 +1067,21 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    THEME: HACKER - Dark Terminal (Matrix vibes)
    ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Hacker - Dark mode: Matrix rain */
+[data-theme="hacker"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1920&q=80');
+    --la-icon-logo: 'security';
+    --la-font-sans: 'Share Tech Mono', 'JetBrains Mono', monospace;
+    --la-font-display: 'Share Tech Mono', 'Courier New', monospace;
+}
+/* Hacker - Light mode: cyber security */
+[data-theme="hacker-light"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1563206767-5b18f218e8de?w=1920&q=80');
+    --la-icon-logo: 'security';
+    --la-font-sans: 'Share Tech Mono', 'JetBrains Mono', monospace;
+    --la-font-display: 'Share Tech Mono', 'Courier New', monospace;
+}
 
 [data-theme="hacker"] {
     color-scheme: dark;
@@ -1014,6 +1170,21 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    THEME: WIN95 - Windows 95 Classic
    ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Win95 - Light mode: classic desktop */
+[data-theme="win95"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1920&q=80');
+    --la-icon-logo: 'desktop_windows';
+    --la-font-sans: 'Segoe UI', 'MS Sans Serif', Tahoma, sans-serif;
+    --la-font-display: 'Segoe UI', 'MS Sans Serif', Tahoma, sans-serif;
+}
+/* Win95 - Dark mode: vintage hardware */
+[data-theme="win95-dark"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=1920&q=80');
+    --la-icon-logo: 'desktop_windows';
+    --la-font-sans: 'Segoe UI', 'MS Sans Serif', Tahoma, sans-serif;
+    --la-font-display: 'Segoe UI', 'MS Sans Serif', Tahoma, sans-serif;
+}
 
 [data-theme="win95"] {
     --la-hue-primary: 210;      /* Windows Blue */
@@ -1113,6 +1284,21 @@
    THEME: BSOD - Blue Screen of Death
    ═══════════════════════════════════════════════════════════════════════════ */
 
+/* BSOD - Dark mode: blue screen */
+[data-theme="bsod"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=1920&q=80');
+    --la-icon-logo: 'error';
+    --la-font-sans: 'Lucida Console', 'Consolas', monospace;
+    --la-font-display: 'Lucida Console', 'Consolas', monospace;
+}
+/* BSOD - Light mode: error screen */
+[data-theme="bsod-light"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1920&q=80');
+    --la-icon-logo: 'error';
+    --la-font-sans: 'Lucida Console', 'Consolas', monospace;
+    --la-font-display: 'Lucida Console', 'Consolas', monospace;
+}
+
 [data-theme="bsod"] {
     color-scheme: dark;
 
@@ -1188,6 +1374,21 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    THEME: MARIO - Super Mario Bros Colors
    ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Mario - Light mode: bright sky */
+[data-theme="mario"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=1920&q=80');
+    --la-icon-logo: 'star';
+    --la-font-sans: 'Press Start 2P', 'VT323', monospace;
+    --la-font-display: 'Press Start 2P', 'VT323', monospace;
+}
+/* Mario - Dark mode: starry night */
+[data-theme="mario-dark"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1920&q=80');
+    --la-icon-logo: 'star';
+    --la-font-sans: 'Press Start 2P', 'VT323', monospace;
+    --la-font-display: 'Press Start 2P', 'VT323', monospace;
+}
 
 [data-theme="mario"] {
     --la-hue-primary: 0;        /* Mario Red */

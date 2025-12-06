@@ -1,0 +1,68 @@
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║                                                                           ║
+ * ║  ██╗     ██╗   ██╗███╗   ██╗ █████╗ ██████╗                               ║
+ * ║  ██║     ██║   ██║████╗  ██║██╔══██╗██╔══██╗                              ║
+ * ║  ██║     ██║   ██║██╔██╗ ██║███████║██████╔╝                              ║
+ * ║  ██║     ██║   ██║██║╚██╗██║██╔══██║██╔══██╗                              ║
+ * ║  ███████╗╚██████╔╝██║ ╚████║██║  ██║██║  ██║                              ║
+ * ║  ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝                              ║
+ * ║                                                                           ║
+ * ║   █████╗ ██╗   ██╗██████╗  ██████╗ ██████╗  █████╗                        ║
+ * ║  ██╔══██╗██║   ██║██╔══██╗██╔═══██╗██╔══██╗██╔══██╗                       ║
+ * ║  ███████║██║   ██║██████╔╝██║   ██║██████╔╝███████║                       ║
+ * ║  ██╔══██║██║   ██║██╔══██╗██║   ██║██╔══██╗██╔══██║                       ║
+ * ║  ██║  ██║╚██████╔╝██║  ██║╚██████╔╝██║  ██║██║  ██║                       ║
+ * ║  ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝                       ║
+ * ║                                                                           ║
+ * ║   A disruptive CSS framework for the Lunar ecosystem                     ║
+ * ║   Using the most avant-garde CSS techniques:                             ║
+ * ║   • OKLCH color space for perceptually uniform colors                    ║
+ * ║   • @property for type-safe CSS custom properties                        ║
+ * ║   • Native CSS nesting                                                   ║
+ * ║   • Container queries for component-level responsiveness                 ║
+ * ║   • Fluid typography with clamp()                                        ║
+ * ║   • Relative color syntax                                                ║
+ * ║   • Modern selectors (:has, :is, :where)                                 ║
+ * ║   • Logical properties for RTL support                                   ║
+ * ║                                                                           ║
+ * ║   Version: 1.0.0                                                         ║
+ * ║   License: MIT                                                           ║
+ * ║   https://github.com/yrbane/lunar-aurora                                 ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LAYER DEFINITIONS
+   Cascade layers for predictable specificity
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer reset, tokens, themes, typography, layout, components, utilities, animations;
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CORE MODULES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Design tokens - CSS custom properties */
+@import url('./tokens.css') layer(tokens);
+
+/* Color themes - dark mode, cyberpunk, ocean, etc. */
+@import url('./themes.css') layer(themes);
+
+/* CSS reset - sensible defaults */
+@import url('./reset.css') layer(reset);
+
+/* Typography - fonts, headings, prose */
+@import url('./typography.css') layer(typography);
+
+/* Layout - grid, flexbox, containers */
+@import url('./layout.css') layer(layout);
+
+/* Components - buttons, cards, forms, etc. */
+@import url('./components.css') layer(components);
+
+/* Animations - keyframes, transitions, hover effects */
+@import url('./animations.css') layer(animations);
+
+/* Utilities - atomic helper classes */
+@import url('./utilities.css') layer(utilities);

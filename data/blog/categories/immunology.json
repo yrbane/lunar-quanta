@@ -1,0 +1,10 @@
+{
+    "id": "immunology",
+    "name": "Immunology & Vaccines",
+    "slug": "immunology-vaccines",
+    "description": "Immunologie et développement de vaccins",
+    "color": "#14b8a6",
+    "sortOrder": 46,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

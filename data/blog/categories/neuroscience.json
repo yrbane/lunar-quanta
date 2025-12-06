@@ -1,0 +1,10 @@
+{
+    "id": "neuroscience",
+    "name": "Neuroscience & Brain",
+    "slug": "neuroscience-brain",
+    "description": "Neurosciences et technologies du cerveau",
+    "color": "#7c3aed",
+    "sortOrder": 74,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

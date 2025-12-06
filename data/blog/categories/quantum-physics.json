@@ -1,0 +1,10 @@
+{
+    "id": "quantum-physics",
+    "name": "Quantum Physics Fundamentals",
+    "slug": "quantum-physics-fundamentals",
+    "description": "Fondamentaux de la physique quantique",
+    "color": "#a855f7",
+    "sortOrder": 82,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

@@ -1,0 +1,10 @@
+{
+    "id": "diagnostics",
+    "name": "Diagnostics & Biosensors",
+    "slug": "diagnostics-biosensors",
+    "description": "Diagnostics moléculaires et biocapteurs",
+    "color": "#f43f5e",
+    "sortOrder": 87,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

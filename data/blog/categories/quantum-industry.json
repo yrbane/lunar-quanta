@@ -1,0 +1,10 @@
+{
+    "id": "quantum-industry",
+    "name": "Quantum Industry",
+    "slug": "quantum-industry",
+    "description": "Industrie et marché du quantique",
+    "color": "#64748b",
+    "sortOrder": 75,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

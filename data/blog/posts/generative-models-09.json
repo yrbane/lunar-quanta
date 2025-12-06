@@ -1,0 +1,36 @@
+{
+    "id": "generative-models-09",
+    "title": "Autoregressive image models",
+    "slug": "autoregressive-image-models",
+    "content": "# Modèles d'Images Autorégressifs : Un Aperçu des Architectures de Génération Pixel par Pixel\n\nLes modèles d'images autorégressifs sont une catégorie de modèles génératifs qui construisent une image pixel par pixel (ou patch par patch) de manière séquentielle, en prédisant chaque nouvel élément en fonction des éléments précédents. Bien qu'ils aient été historiquement très efficaces pour la génération d'images de haute qualité, leur complexité computationnelle pour des résolutions élevées a conduit à l'émergence d'architectures alternatives comme les modèles de diffusion.\n\n## 1. Principes des Modèles Autorégressifs\n\n### 1.1. Modélisation de la Distribution Conditionnelle\n*   **Objectif :** Un modèle autorégressif apprend la distribution de probabilité jointe d'une séquence de données $P(x_1, x_2, ..., x_N)$.\n*   **Mécanisme :** Cette distribution jointe est décomposée en un produit de distributions conditionnelles :\n    $$ P(x) = P(x_1) P(x_2|x_1) P(x_3|x_1, x_2) ... P(x_N|x_1, ..., x_{N-1}) $$\n*   Pour la génération d'images, cela signifie que chaque pixel est généré en conditionnant sur tous les pixels précédemment générés (généralement dans un ordre de balayage raster, de haut en bas, de gauche à droite).\n\n### 1.2. Avantages\n*   **Excellente Qualité :** Capable de générer des images d'une très haute fidélité et cohérence locale.\n*   **Couverture Complète de la Distribution :** Peut théoriquement modéliser n'importe quelle distribution de données.\n*   **Mesure de Log-Likelihood :** Permet une évaluation quantitative directe de la qualité du modèle (contrairement aux GANs).\n\n## 2. Architectures Clés\n\n### 2.1. PixelRNN et PixelCNN\n*   **PixelRNN :** Utilise des réseaux de neurones récurrents (RNN) pour modéliser les dépendances spatiales. Très lent car la génération de chaque pixel dépend de tous les précédents.\n*   **PixelCNN :** Remplace les RNN par des réseaux de neurones convolutifs masqués (Masked Convolutional Neural Networks). Les filtres sont conçus pour ne \"voir\" que les pixels déjà générés, améliorant la vitesse tout en conservant le caractère autorégressif.\n\n### 2.2. VQ-VAE (Vector Quantized Variational Autoencoder)\n*   **Problème :** Générer pixel par pixel dans l'espace RGB est coûteux et lent.\n*   **Solution :** Le VQ-VAE apprend à compresser les images en une grille de \"tokens\" discrets dans un espace latent. Un modèle autorégressif (souvent un Transformer) est ensuite entraîné pour prédire ces tokens dans l'espace latent.\n*   **Exemple :** DALL-E (initialement) utilisait un VQ-VAE pour encoder les images, puis un Transformer pour modéliser la séquence de tokens latents.\n\n### 2.3. Parti (Google Brain)\n*   Modèle autorégressif qui utilise un Vision Transformer pour la génération d'images haute résolution.\n\n## 3. Conditionnement et Contrôle\n\nLes modèles autorégressifs peuvent être conditionnés par :\n*   **Texte :** Un encodeur de texte (ex: CLIP) est utilisé pour générer un embedding qui est ensuite injecté dans le modèle autorégressif à chaque étape de génération.\n*   **Image :** Utiliser des parties d'images comme conditions.\n*   **Classe :** Générer une image d'une catégorie spécifique.\n\n## 4. Limites et Défis\n\n*   **Lenteur de Génération :** Le processus séquentiel pixel par pixel est intrinsèquement lent, surtout pour des images haute résolution.\n*   **Coût Computationnel :** L'entraînement de grands modèles autorégressifs est gourmand en ressources.\n*   **Dépendances Longue Portée :** Maintenir une cohérence globale de l'image sur de grandes distances peut être difficile.\n*   **Absence de Contrôle Global :** Il est difficile d'incorporer des contraintes globales (ex: \"générer une image avec un objet au centre\") de manière naturelle.\n\n## 5. Conclusion\n\nLes modèles d'images autorégressifs ont joué un rôle crucial dans le développement de l'IA générative, démontrant la capacité à générer des images de très haute qualité. Bien que leur lenteur d'inférence ait été un facteur limitant par rapport aux modèles de diffusion, les recherches continuent d'explorer des architectures hybrides ou des améliorations pour les rendre plus efficaces, en particulier dans l'espace latent.\n\n**Références Techniques :**\n*   *Pixel Recurrent Neural Networks*, ICML, 2016.\n*   *Conditional Image Generation with PixelCNN Decoders*, NeurIPS, 2016.\n*   *DALL-E: Creating Images from Text*, OpenAI Blog, 2021 (initialement basé sur VQ-VAE et Transformers autoregressifs).\n",
+    "excerpt": "Découvrez les dernières avancées : Autoregressive image models",
+    "author": "Lunar Tech",
+    "authorBio": "",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": "generative-models",
+    "featuredImage": "\/blog\/images\/autoregressive-image-models.jpg",
+    "status": "published",
+    "tags": [
+        "generative-models",
+        "autoregressive",
+        "transformers",
+        "images"
+    ],
+    "sources": [],
+    "ratings": {
+        "relevance": 5,
+        "depth": 4,
+        "clarity": 3,
+        "freshness": 4,
+        "usefulness": 4
+    },
+    "comments": [],
+    "locked": false,
+    "license": "",
+    "originalUrl": "",
+    "originalSource": "",
+    "createdAt": "2025-12-20T06:00:00+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2025-12-20T06:00:00+00:00"
+}

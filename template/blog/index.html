@@ -8,10 +8,11 @@
     <link rel="alternate" type="application/rss+xml" title="Lunar Blog RSS" href="/blog/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- All theme fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Press+Start+2P&family=VT323&family=Nunito:wght@400;600;700&family=Fredoka+One&family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&family=Poppins:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Lunar Aurora CSS Framework -->
-    <link rel="stylesheet" href="/assets/css/lunar-aurora/aurora-blog.css">
+    <link rel="stylesheet" href="/css/lunar-aurora/aurora-blog.css">
 </head>
 <body class="la-blog">
     <header class="la-blog-header">
@@ -28,6 +29,11 @@
                 <button onclick="showKeyboardShortcuts()" title="Raccourcis (?)">
                     <span class="la-icon sm">keyboard</span>
                 </button>
+                <!-- Dark/Light Mode Toggle -->
+                <button class="la-mode-toggle" id="modeToggle" title="Basculer clair/sombre">
+                    <span class="la-icon la-mode-icon-light">light_mode</span>
+                    <span class="la-icon la-mode-icon-dark">dark_mode</span>
+                </button>
                 <!-- Theme Switcher -->
                 <div class="la-theme-switcher">
                     <button class="la-theme-trigger" title="Changer le thème">
@@ -38,46 +44,28 @@
                     <div class="la-theme-dropdown">
                         <div class="la-theme-group">
                             <div class="la-theme-group-title">Base</div>
-                            <button class="la-theme-option" data-theme="dark"><span class="la-theme-preview"></span><span class="la-theme-name">Dark</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="light"><span class="la-theme-preview"></span><span class="la-theme-name">Light</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="default"><span class="la-theme-preview"></span><span class="la-theme-name">Lunar</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="cyberpunk"><span class="la-theme-preview"></span><span class="la-theme-name">Cyberpunk</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="aurora"><span class="la-theme-preview"></span><span class="la-theme-name">Aurora</span><span class="la-icon sm la-theme-check">check</span></button>
                         </div>
                         <div class="la-theme-group">
-                            <div class="la-theme-group-title">Couleurs</div>
-                            <button class="la-theme-option" data-theme="cyberpunk"><span class="la-theme-preview"></span><span class="la-theme-name">Cyberpunk</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="ocean"><span class="la-theme-preview"></span><span class="la-theme-name">Ocean</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="forest"><span class="la-theme-preview"></span><span class="la-theme-name">Forest</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="sunset"><span class="la-theme-preview"></span><span class="la-theme-name">Sunset</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="aurora"><span class="la-theme-preview"></span><span class="la-theme-name">Aurora</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="lavender"><span class="la-theme-preview"></span><span class="la-theme-name">Lavender</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                        </div>
-                        <div class="la-theme-group">
-                            <div class="la-theme-group-title">Rétro / Arcade</div>
-                            <button class="la-theme-option" data-theme="8bits"><span class="la-theme-preview"></span><span class="la-theme-name">8-Bits</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="8bits-dark"><span class="la-theme-preview"></span><span class="la-theme-name">8-Bits</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="bubble"><span class="la-theme-preview"></span><span class="la-theme-name">Bubble Bobble</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="bubble-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Bubble Bobble</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="galaxian"><span class="la-theme-preview"></span><span class="la-theme-name">Galaxian</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="galaxian-light"><span class="la-theme-preview"></span><span class="la-theme-name">Galaxian</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="mario"><span class="la-theme-preview"></span><span class="la-theme-name">Mario</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="mario-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Mario</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <div class="la-theme-group-title">Rétro</div>
+                            <button class="la-theme-option" data-theme="8bits"><span class="la-theme-preview"></span><span class="la-theme-name">8-Bits</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="bubble"><span class="la-theme-preview"></span><span class="la-theme-name">Bubble</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="galaxian"><span class="la-theme-preview"></span><span class="la-theme-name">Galaxian</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="mario"><span class="la-theme-preview"></span><span class="la-theme-name">Mario</span><span class="la-icon sm la-theme-check">check</span></button>
                         </div>
                         <div class="la-theme-group">
                             <div class="la-theme-group-title">Geek</div>
-                            <button class="la-theme-option" data-theme="web90"><span class="la-theme-preview"></span><span class="la-theme-name">Web 90s</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="web90-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Web 90s</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="geek"><span class="la-theme-preview"></span><span class="la-theme-name">Geek</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="geek-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Geek</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="hacker"><span class="la-theme-preview"></span><span class="la-theme-name">Hacker</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="hacker-light"><span class="la-theme-preview"></span><span class="la-theme-name">Hacker</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="eco"><span class="la-theme-preview"></span><span class="la-theme-name">Eco</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="eco-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Eco</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="web90"><span class="la-theme-preview"></span><span class="la-theme-name">Web 90s</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="geek"><span class="la-theme-preview"></span><span class="la-theme-name">Geek</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="hacker"><span class="la-theme-preview"></span><span class="la-theme-name">Hacker</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="eco"><span class="la-theme-preview"></span><span class="la-theme-name">Eco</span><span class="la-icon sm la-theme-check">check</span></button>
                         </div>
                         <div class="la-theme-group">
                             <div class="la-theme-group-title">Système</div>
-                            <button class="la-theme-option" data-theme="win95"><span class="la-theme-preview"></span><span class="la-theme-name">Windows 95</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="win95-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Windows 95</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="bsod"><span class="la-theme-preview"></span><span class="la-theme-name">BSOD</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="bsod-light"><span class="la-theme-preview"></span><span class="la-theme-name">BSOD</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="win95"><span class="la-theme-preview"></span><span class="la-theme-name">Win95</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="bsod"><span class="la-theme-preview"></span><span class="la-theme-name">BSOD</span><span class="la-icon sm la-theme-check">check</span></button>
                         </div>
                     </div>
                 </div>
@@ -95,47 +83,58 @@
     </header>
 
     <section class="la-blog-hero">
-        <div class="la-container la-text-center">
-            <span class="la-badge lg la-mb-4">
-                <span class="la-icon sm">layers</span>
-                Framework PHP Moderne
-            </span>
-            <h1 class="la-blog-hero-title">Le Blog <span class="la-gradient-text">Lunar Quanta</span></h1>
-            <p class="la-blog-hero-subtitle">Tutoriels, guides et bonnes pratiques pour maîtriser le framework PHP sans dépendances.</p>
-            <div class="la-flex la-justify-center la-gap-8 la-mt-8">
-                <div class="la-text-center">
-                    <div class="la-text-4xl la-font-bold" id="articleCount">{{ article_count }}</div>
-                    <div class="la-text-sm la-text-muted">Articles</div>
+        <div class="la-container">
+            <div class="la-text-center">
+                <span class="la-badge lg la-mb-4">
+                    <span class="la-icon sm">layers</span>
+                    Tech, Science & Innovation
+                </span>
+                <h1 class="la-blog-hero-title">Le Blog <span class="la-gradient-text">Lunar Quanta</span></h1>
+                <p class="la-blog-hero-subtitle">Explorez les dernières tendances en IA, biotechnologie, informatique quantique et bien plus. Articles, tutoriels et analyses pour rester à la pointe de l'innovation.</p>
+
+                <!-- Stats Cards -->
+                <div class="la-hero-stats">
+                    <div class="la-hero-stat">
+                        <div class="la-hero-stat-value" id="articleCount">{{ article_count }}</div>
+                        <div class="la-hero-stat-label">Articles</div>
+                    </div>
+                    <div class="la-hero-stat">
+                        <div class="la-hero-stat-value">{{ categories_count }}</div>
+                        <div class="la-hero-stat-label">Catégories</div>
+                    </div>
+                    <div class="la-hero-stat">
+                        <div class="la-hero-stat-value">{{ tags_count }}</div>
+                        <div class="la-hero-stat-label">Tags</div>
+                    </div>
                 </div>
-                <div class="la-text-center">
-                    <div class="la-text-4xl la-font-bold">1200+</div>
-                    <div class="la-text-sm la-text-muted">Tests</div>
-                </div>
-                <div class="la-text-center">
-                    <div class="la-text-4xl la-font-bold">0</div>
-                    <div class="la-text-sm la-text-muted">Dépendances</div>
+
+                <!-- Search -->
+                <div class="la-search-form la-max-w-md la-mx-auto">
+                    <span class="la-icon">search</span>
+                    <input type="text" id="searchInput" placeholder="Rechercher un article..." autocomplete="off" class="la-input">
                 </div>
             </div>
-            <div class="la-search-form la-max-w-md la-mx-auto la-mt-8">
-                <span class="la-icon">search</span>
-                <input type="text" id="searchInput" placeholder="Rechercher un article..." autocomplete="off" class="la-input">
+
+            <!-- Latest Articles Slider -->
+            <div class="la-hero-slider" id="heroSlider">
+                <div class="la-hero-slider-track" id="sliderTrack">
+                    {{ slider_items }}
+                </div>
+                <div class="la-hero-slider-nav">
+                    <button class="la-hero-slider-btn" id="sliderPrev" aria-label="Article précédent">
+                        <span class="la-icon">chevron_left</span>
+                    </button>
+                    <div class="la-hero-slider-dots" id="sliderDots"></div>
+                    <button class="la-hero-slider-btn" id="sliderNext" aria-label="Article suivant">
+                        <span class="la-icon">chevron_right</span>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
 
     <main class="la-blog-main">
         <div class="la-container">
-            <!-- Tags Cloud -->
-            <section class="la-sidebar-widget la-mb-8">
-                <div class="la-flex la-justify-between la-items-center la-mb-4">
-                    <h3 class="la-sidebar-title la-mb-0">Tags populaires</h3>
-                    <button class="la-btn ghost sm" onclick="toggleTags()">Voir tout</button>
-                </div>
-                <div class="la-tag-cloud collapsed" id="tagsCloud">
-                    {{ tags_list }}
-                </div>
-            </section>
-
             <!-- Toolbar -->
             <div class="la-flex la-justify-between la-items-center la-flex-wrap la-gap-4 la-mb-6">
                 <div class="la-flex la-items-center la-gap-3">
@@ -173,7 +172,7 @@
                     <div class="la-post-card-content">
                         <div class="la-post-card-meta">
                             {% if post.category %}
-                            <a href="/blog/category/{{ post.category|lower }}/" class="la-post-card-category">{{ post.category }}</a>
+                            <a href="/blog/category/{{ post.category_slug }}.html" class="la-post-card-category">{{ post.category }}</a>
                             {% endif %}
                             <span class="la-post-card-date">
                                 <span class="la-icon xs">calendar_today</span>
@@ -200,6 +199,14 @@
                                 {{ post.reading_time }} min
                             </span>
                         </div>
+                        {% if post.average_rating > 0 %}
+                        <div class="la-post-card-rating">
+                            <div class="la-rating-stars">
+                                {{ post.rating_stars }}
+                            </div>
+                            <span class="la-rating-value">{{ post.average_rating }}</span>
+                        </div>
+                        {% endif %}
                     </div>
                 </article>
                 {% endfor %}
@@ -213,6 +220,23 @@
                 <p class="la-empty-state-description">Les articles publiés apparaîtront ici.</p>
             </div>
             {% endif %}
+
+            <!-- Tags Cloud (below articles) -->
+            <section class="la-tags-section la-mt-12">
+                <div class="la-flex la-justify-between la-items-center la-mb-6">
+                    <h3 class="la-h4 la-mb-0">
+                        <span class="la-icon">sell</span>
+                        Explorer par tags
+                    </h3>
+                    <button class="la-btn ghost sm" onclick="toggleTags()">
+                        <span id="tagsToggleText">Voir tout</span>
+                        <span class="la-icon sm">expand_more</span>
+                    </button>
+                </div>
+                <div class="la-tag-cloud collapsed" id="tagsCloud">
+                    {{ tags_list }}
+                </div>
+            </section>
         </div>
     </main>
 
@@ -350,7 +374,12 @@
         // Tags toggle
         function toggleTags() {
             const cloud = document.getElementById('tagsCloud');
+            const toggleText = document.getElementById('tagsToggleText');
             cloud.classList.toggle('collapsed');
+            cloud.classList.toggle('expanded');
+            if (toggleText) {
+                toggleText.textContent = cloud.classList.contains('expanded') ? 'Réduire' : 'Voir tout';
+            }
         }
 
         // Mobile nav toggle
@@ -442,24 +471,30 @@
         });
 
         // ═══════════════════════════════════════════════════════════════════
-        // THEME SWITCHER
+        // THEME & MODE SWITCHER (séparés)
         // ═══════════════════════════════════════════════════════════════════
         const ThemeSwitcher = {
-            storageKey: 'lunar-theme',
+            themeKey: 'lunar-theme',
+            modeKey: 'lunar-mode',
 
             init() {
-                // Load saved theme
-                const savedTheme = localStorage.getItem(this.storageKey);
-                if (savedTheme) {
-                    this.setTheme(savedTheme, false);
-                }
+                // Load saved preferences
+                const savedTheme = localStorage.getItem(this.themeKey) || 'default';
+                const savedMode = localStorage.getItem(this.modeKey) || 'dark';
 
-                // Initialize all switchers
+                this.applyTheme(savedTheme, savedMode, false);
+
+                // Initialize theme dropdown
                 document.querySelectorAll('.la-theme-switcher').forEach(switcher => {
                     this.initSwitcher(switcher);
                 });
 
-                // Close on outside click
+                // Initialize mode toggle
+                document.getElementById('modeToggle')?.addEventListener('click', () => {
+                    this.toggleMode();
+                });
+
+                // Close dropdown on outside click
                 document.addEventListener('click', (e) => {
                     if (!e.target.closest('.la-theme-switcher')) {
                         document.querySelectorAll('.la-theme-dropdown.is-open').forEach(d => d.classList.remove('is-open'));
@@ -470,6 +505,10 @@
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape') {
                         document.querySelectorAll('.la-theme-dropdown.is-open').forEach(d => d.classList.remove('is-open'));
+                    }
+                    // Raccourci D pour basculer dark/light
+                    if (e.key === 'd' || e.key === 'D') {
+                        if (e.target.tagName !== 'INPUT') this.toggleMode();
                     }
                 });
             },
@@ -496,20 +535,66 @@
                 this.updateActiveState(container);
             },
 
-            setTheme(themeName, save = true) {
-                document.documentElement.setAttribute('data-theme', themeName);
-                if (save) localStorage.setItem(this.storageKey, themeName);
+            getMode() {
+                return localStorage.getItem(this.modeKey) || 'dark';
+            },
 
+            getTheme() {
+                return localStorage.getItem(this.themeKey) || 'default';
+            },
+
+            toggleMode() {
+                const currentMode = this.getMode();
+                const newMode = currentMode === 'dark' ? 'light' : 'dark';
+                this.applyTheme(this.getTheme(), newMode, true);
+            },
+
+            setTheme(themeName) {
+                this.applyTheme(themeName, this.getMode(), true);
+            },
+
+            applyTheme(theme, mode, save = true) {
+                // Construct the full theme name
+                let fullTheme;
+                if (theme === 'default') {
+                    fullTheme = mode; // 'dark' or 'light'
+                } else {
+                    // Pour les thèmes spéciaux, ajouter le suffixe de mode
+                    fullTheme = mode === 'dark' ? `${theme}-dark` : theme;
+                    // Cas spéciaux où le thème de base est déjà dark
+                    if (['cyberpunk', 'aurora', 'galaxian', 'hacker', 'bsod'].includes(theme)) {
+                        fullTheme = mode === 'light' ? `${theme}-light` : theme;
+                    }
+                }
+
+                document.documentElement.setAttribute('data-theme', fullTheme);
+                document.documentElement.setAttribute('data-mode', mode);
+
+                if (save) {
+                    localStorage.setItem(this.themeKey, theme);
+                    localStorage.setItem(this.modeKey, mode);
+                }
+
+                // Update UI
+                this.updateModeToggle(mode);
                 document.querySelectorAll('.la-theme-switcher').forEach(switcher => {
                     this.updateActiveState(switcher);
                     const label = switcher.querySelector('.la-theme-current');
-                    const activeOption = switcher.querySelector(`.la-theme-option[data-theme="${themeName}"] .la-theme-name`);
+                    const activeOption = switcher.querySelector(`.la-theme-option[data-theme="${theme}"] .la-theme-name`);
                     if (label && activeOption) label.textContent = activeOption.textContent;
                 });
             },
 
+            updateModeToggle(mode) {
+                const toggle = document.getElementById('modeToggle');
+                if (toggle) {
+                    toggle.classList.toggle('is-light', mode === 'light');
+                    toggle.classList.toggle('is-dark', mode === 'dark');
+                }
+            },
+
             updateActiveState(container) {
-                const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+                const currentTheme = this.getTheme();
                 container.querySelectorAll('.la-theme-option').forEach(option => {
                     option.classList.toggle('is-active', option.dataset.theme === currentTheme);
                 });
@@ -517,6 +602,113 @@
         };
 
         ThemeSwitcher.init();
+
+        // ═══════════════════════════════════════════════════════════════════
+        // HERO SLIDER
+        // ═══════════════════════════════════════════════════════════════════
+        const HeroSlider = {
+            currentSlide: 0,
+            slideCount: 0,
+            autoPlayInterval: null,
+            autoPlayDelay: 5000,
+
+            init() {
+                this.track = document.getElementById('sliderTrack');
+                this.dots = document.getElementById('sliderDots');
+                this.prevBtn = document.getElementById('sliderPrev');
+                this.nextBtn = document.getElementById('sliderNext');
+
+                if (!this.track) return;
+
+                this.slides = this.track.querySelectorAll('.la-hero-slide');
+                this.slideCount = this.slides.length;
+
+                if (this.slideCount === 0) return;
+
+                // Create dots
+                this.createDots();
+
+                // Event listeners
+                this.prevBtn?.addEventListener('click', () => this.prev());
+                this.nextBtn?.addEventListener('click', () => this.next());
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.target.tagName === 'INPUT') return;
+                    if (e.key === 'ArrowLeft') this.prev();
+                    if (e.key === 'ArrowRight') this.next();
+                });
+
+                // Touch/swipe support
+                let touchStartX = 0;
+                this.track.addEventListener('touchstart', (e) => {
+                    touchStartX = e.touches[0].clientX;
+                    this.stopAutoPlay();
+                });
+                this.track.addEventListener('touchend', (e) => {
+                    const diff = touchStartX - e.changedTouches[0].clientX;
+                    if (Math.abs(diff) > 50) {
+                        diff > 0 ? this.next() : this.prev();
+                    }
+                    this.startAutoPlay();
+                });
+
+                // Pause on hover
+                const slider = document.getElementById('heroSlider');
+                slider?.addEventListener('mouseenter', () => this.stopAutoPlay());
+                slider?.addEventListener('mouseleave', () => this.startAutoPlay());
+
+                // Start auto-play
+                this.startAutoPlay();
+            },
+
+            createDots() {
+                if (!this.dots) return;
+                this.dots.innerHTML = '';
+                for (let i = 0; i < this.slideCount; i++) {
+                    const dot = document.createElement('button');
+                    dot.className = 'la-hero-slider-dot' + (i === 0 ? ' active' : '');
+                    dot.setAttribute('aria-label', `Aller à l'article ${i + 1}`);
+                    dot.addEventListener('click', () => this.goTo(i));
+                    this.dots.appendChild(dot);
+                }
+            },
+
+            updateDots() {
+                if (!this.dots) return;
+                this.dots.querySelectorAll('.la-hero-slider-dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === this.currentSlide);
+                });
+            },
+
+            goTo(index) {
+                this.currentSlide = (index + this.slideCount) % this.slideCount;
+                this.track.style.transform = `translateX(-${this.currentSlide * 100}%)`;
+                this.updateDots();
+            },
+
+            prev() {
+                this.goTo(this.currentSlide - 1);
+            },
+
+            next() {
+                this.goTo(this.currentSlide + 1);
+            },
+
+            startAutoPlay() {
+                this.stopAutoPlay();
+                this.autoPlayInterval = setInterval(() => this.next(), this.autoPlayDelay);
+            },
+
+            stopAutoPlay() {
+                if (this.autoPlayInterval) {
+                    clearInterval(this.autoPlayInterval);
+                    this.autoPlayInterval = null;
+                }
+            }
+        };
+
+        HeroSlider.init();
     </script>
 </body>
 </html>

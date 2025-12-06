@@ -1,0 +1,10 @@
+{
+    "id": "quantum-hardware",
+    "name": "Quantum Hardware",
+    "slug": "quantum-hardware",
+    "description": "Hardware et processeurs quantiques",
+    "color": "#3b82f6",
+    "sortOrder": 20,
+    "createdAt": "2025-12-06T15:34:09+00:00",
+    "updatedAt": "2025-12-06T15:34:09+00:00"
+}

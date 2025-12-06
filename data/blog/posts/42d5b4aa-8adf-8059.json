@@ -1,0 +1,41 @@
+{
+    "id": "42d5b4aa-8adf-8059",
+    "title": "Photometric Virtual Visual Servoing based on Gaussian Splatting",
+    "slug": "photometric-virtual-visual-servoing-based-on-gaussian-splatting",
+    "content": "# Photometric Virtual Visual Servoing based on Gaussian Splatting\n\n**Auteurs** : El Houcine Chagouti, Youssef Alj, Guillaume Caron, El Mustapha Mouaddib\n\n## Résumé\n\nWe present a novel approach that integrates pho- tometric Image-Based Virtual Visual Servoing (IBVVS) with Gaussian Splatting (GS), a recent and efficient 3D representa- tion for photo-realistic view synthesis. In our framework, the servoing process is performed entirely in simulation using a GS model trained on a sparse set of images from a scene wheras unseen images serve as target views for photometric IBVVS. At each iteration a rendered image from the GS model simulate the camera’s current view, and the pixel-wise intensity error between the rendered and target images is used to compute control commands for camera pose optimization. This framework removes the need for externally acquired explicit 3D geometry or precomputed dense depth maps from traditional sensors, since depth information is implicitly obtained from the GS representation and used directly in the control loop. The method enables virtual servoing toward novel views that were not captured during training. Experimental results demonstrate accurate and smooth convergence, highlighting the potential of learned view synthesis for 3D camera tracking and visual servoing applications.\n\n---\n\n📄 *Article disponible sur [HAL Archives Ouvertes](https:\/\/hal.science\/hal-05339556v1).*",
+    "excerpt": "We present a novel approach that integrates pho- tometric Image-Based Virtual Visual Servoing (IBVVS) with Gaussian Splatting (GS), a recent and efficient 3D representa- tion for photo-realistic view synthesis. In our framework, the servoing process is performed entirely in simulation using a GS mod...",
+    "author": "El Houcine Chagouti, Youssef Alj, Guillaume Caron, El Mustapha Mouaddib",
+    "authorBio": "Chercheurs - HAL Archives Ouvertes",
+    "authorAvatar": "",
+    "authorInstitution": "",
+    "categoryId": null,
+    "featuredImage": "\/blog\/images\/photometric-virtual-visual-servoing-based-on-gaussian-splatting.jpg",
+    "status": "published",
+    "tags": [
+        "recherche",
+        "science"
+    ],
+    "sources": [
+        {
+            "title": "Article HAL",
+            "url": "https:\/\/hal.science\/hal-05339556v1",
+            "domain": "hal.science",
+            "description": "Archive ouverte française"
+        }
+    ],
+    "ratings": {
+        "relevance": 0,
+        "depth": 0,
+        "clarity": 0,
+        "freshness": 0,
+        "usefulness": 0
+    },
+    "comments": [],
+    "locked": true,
+    "license": "CC BY",
+    "originalUrl": "https:\/\/hal.science\/hal-05339556v1",
+    "originalSource": "HAL Archives Ouvertes",
+    "createdAt": "2025-12-06T17:00:22+00:00",
+    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "publishedAt": "2025-12-06T17:00:22+00:00"
+}
