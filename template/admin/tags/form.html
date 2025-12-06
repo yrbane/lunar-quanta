@@ -1,0 +1,213 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+<div class="la-page-header">
+    <div class="la-flex la-items-center la-gap-4">
+        <a href="/admin/tags" class="la-btn ghost">
+            <span class="la-icon">arrow_back</span>
+        </a>
+        <div>
+            <h1 class="la-h2">{{ title }}</h1>
+            <p class="la-text-muted">{% if isEdit %}Modifier les informations du tag{% else %}Créer un nouveau tag{% endif %}</p>
+        </div>
+    </div>
+</div>
+
+<form method="POST" class="la-form">
+    <div class="la-grid la-grid-cols-1 lg:la-grid-cols-3 la-gap-6">
+        <!-- Formulaire principal -->
+        <div class="lg:la-col-span-2">
+            <div class="la-card">
+                <div class="la-card-header">
+                    <h3 class="la-card-title">Informations du tag</h3>
+                </div>
+                <div class="la-card-body">
+                    <!-- Nom -->
+                    <div class="la-form-group">
+                        <label for="name" class="la-label">Nom du tag <span class="la-text-danger">*</span></label>
+                        <input type="text"
+                               id="name"
+                               name="name"
+                               class="la-input {% if errors.name %}is-invalid{% endif %}"
+                               value="{{ data.name }}"
+                               placeholder="Ex: PHP, JavaScript, DevOps..."
+                               required
+                               autofocus>
+                        {% if errors.name %}
+                        <div class="la-form-error">{{ errors.name }}</div>
+                        {% endif %}
+                        <div class="la-form-hint">Le slug sera généré automatiquement à partir du nom.</div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="la-form-group">
+                        <label for="description" class="la-label">Description</label>
+                        <textarea id="description"
+                                  name="description"
+                                  class="la-textarea"
+                                  rows="3"
+                                  placeholder="Description optionnelle du tag...">{{ data.description }}</textarea>
+                        <div class="la-form-hint">Brève description utilisée dans les pages de listing des tags.</div>
+                    </div>
+
+                    <!-- Couleur -->
+                    <div class="la-form-group">
+                        <label for="color" class="la-label">Couleur</label>
+                        <div class="la-flex la-items-center la-gap-4">
+                            <input type="color"
+                                   id="color-picker"
+                                   value="{{ data.color }}"
+                                   class="la-color-picker"
+                                   onchange="document.getElementById('color').value = this.value; updatePreview();">
+                            <input type="text"
+                                   id="color"
+                                   name="color"
+                                   class="la-input {% if errors.color %}is-invalid{% endif %}"
+                                   value="{{ data.color }}"
+                                   placeholder="#6366f1"
+                                   pattern="^#[0-9A-Fa-f]{6}$"
+                                   style="width: 120px;"
+                                   onchange="document.getElementById('color-picker').value = this.value; updatePreview();">
+                            {% if errors.color %}
+                            <div class="la-form-error">{{ errors.color }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div>
+            <!-- Prévisualisation -->
+            <div class="la-card la-mb-6">
+                <div class="la-card-header">
+                    <h3 class="la-card-title">Prévisualisation</h3>
+                </div>
+                <div class="la-card-body">
+                    <div class="la-flex la-flex-col la-gap-4 la-items-start">
+                        <span class="la-badge" id="preview-badge" style="background-color: {{ data.color }}; color: white; font-size: 1rem; padding: 0.5rem 1rem;">
+                            {{ data.name or 'Nom du tag' }}
+                        </span>
+                        <div class="la-text-sm la-text-muted">
+                            Aperçu du badge tel qu'il apparaîtra sur les articles.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="la-card">
+                <div class="la-card-header">
+                    <h3 class="la-card-title">Actions</h3>
+                </div>
+                <div class="la-card-body">
+                    <div class="la-flex la-flex-col la-gap-3">
+                        <button type="submit" class="la-btn primary la-w-full">
+                            <span class="la-icon">save</span>
+                            {% if isEdit %}Enregistrer{% else %}Créer le tag{% endif %}
+                        </button>
+                        <a href="/admin/tags" class="la-btn ghost la-w-full">
+                            Annuler
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {% if isEdit and tag %}
+            <!-- Informations -->
+            <div class="la-card la-mt-6">
+                <div class="la-card-header">
+                    <h3 class="la-card-title">Informations</h3>
+                </div>
+                <div class="la-card-body">
+                    <dl class="la-description-list">
+                        <div>
+                            <dt>ID</dt>
+                            <dd><code class="la-text-xs">{{ tag.id }}</code></dd>
+                        </div>
+                        <div>
+                            <dt>Slug</dt>
+                            <dd><code>{{ tag.slug }}</code></dd>
+                        </div>
+                        <div>
+                            <dt>Créé le</dt>
+                            <dd>{{ tag.createdAt|date('d/m/Y H:i') }}</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</form>
+
+<style>
+.la-color-picker {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 2px solid var(--la-border);
+    border-radius: var(--la-radius-lg);
+    cursor: pointer;
+    background: none;
+}
+
+.la-color-picker::-webkit-color-swatch-wrapper {
+    padding: 4px;
+}
+
+.la-color-picker::-webkit-color-swatch {
+    border-radius: var(--la-radius-md);
+    border: none;
+}
+
+.la-description-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--la-space-3);
+}
+
+.la-description-list > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: var(--la-space-3);
+    border-bottom: 1px solid var(--la-border-subtle);
+}
+
+.la-description-list > div:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.la-description-list dt {
+    font-size: var(--la-text-sm);
+    color: var(--la-text-muted);
+}
+
+.la-description-list dd {
+    font-weight: var(--la-weight-medium);
+}
+</style>
+
+<script>
+function updatePreview() {
+    const name = document.getElementById('name').value || 'Nom du tag';
+    const color = document.getElementById('color').value || '#6366f1';
+    const badge = document.getElementById('preview-badge');
+
+    badge.textContent = name;
+    badge.style.backgroundColor = color;
+}
+
+document.getElementById('name').addEventListener('input', updatePreview);
+document.getElementById('color').addEventListener('input', function() {
+    document.getElementById('color-picker').value = this.value;
+    updatePreview();
+});
+
+// Mise à jour initiale
+updatePreview();
+</script>
+{% endblock %}

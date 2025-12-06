@@ -1,0 +1,171 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+<div class="la-page-header">
+    <div class="la-flex la-justify-between la-items-center">
+        <div>
+            <h1 class="la-h2">{{ title }}</h1>
+            <p class="la-text-muted">{{ totalTags }} tags - {{ totalPosts }} articles</p>
+        </div>
+        <a href="/admin/tags/create" class="la-btn primary">
+            <span class="la-icon">add</span>
+            Nouveau Tag
+        </a>
+    </div>
+</div>
+
+{% if request.query.created %}
+<div class="la-alert success la-mb-6">
+    <span class="la-icon">check_circle</span>
+    Tag créé avec succès !
+</div>
+{% endif %}
+
+{% if request.query.updated %}
+<div class="la-alert success la-mb-6">
+    <span class="la-icon">check_circle</span>
+    Tag mis à jour avec succès !
+</div>
+{% endif %}
+
+{% if request.query.deleted %}
+<div class="la-alert success la-mb-6">
+    <span class="la-icon">check_circle</span>
+    Tag supprimé avec succès !
+</div>
+{% endif %}
+
+<div class="la-card">
+    <div class="la-card-body la-p-0">
+        {% if tags|length > 0 %}
+        <table class="la-table la-table-hover">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Slug</th>
+                    <th>Couleur</th>
+                    <th>Articles</th>
+                    <th class="la-text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tag in tags %}
+                <tr>
+                    <td>
+                        <div class="la-flex la-items-center la-gap-3">
+                            <span class="la-badge" style="background-color: {{ tag.color }}; color: white;">
+                                {{ tag.name }}
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <code class="la-text-sm">{{ tag.slug }}</code>
+                    </td>
+                    <td>
+                        <div class="la-flex la-items-center la-gap-2">
+                            <span class="la-color-swatch" style="background-color: {{ tag.color }};"></span>
+                            <code class="la-text-xs">{{ tag.color }}</code>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="la-badge outline">{{ tagCounts[tag.name] ?? 0 }}</span>
+                    </td>
+                    <td class="la-text-right">
+                        <div class="la-btn-group">
+                            <a href="/admin/tags/{{ tag.id }}/edit" class="la-btn ghost sm" title="Modifier">
+                                <span class="la-icon">edit</span>
+                            </a>
+                            <button type="button" class="la-btn ghost sm danger"
+                                    onclick="confirmDelete('{{ tag.id }}', '{{ tag.name }}', {{ tagCounts[tag.name] ?? 0 }})"
+                                    title="Supprimer">
+                                <span class="la-icon">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="la-empty-state la-p-12">
+            <span class="la-icon la-text-4xl la-text-muted">label</span>
+            <h3 class="la-h4 la-mt-4">Aucun tag</h3>
+            <p class="la-text-muted">Créez votre premier tag pour organiser vos articles.</p>
+            <a href="/admin/tags/create" class="la-btn primary la-mt-4">
+                <span class="la-icon">add</span>
+                Créer un tag
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal de confirmation de suppression -->
+<div id="delete-modal" class="la-modal" style="display: none;">
+    <div class="la-modal-backdrop" onclick="closeDeleteModal()"></div>
+    <div class="la-modal-content">
+        <div class="la-modal-header">
+            <h3 class="la-h4">Supprimer le tag</h3>
+            <button type="button" class="la-btn ghost sm" onclick="closeDeleteModal()">
+                <span class="la-icon">close</span>
+            </button>
+        </div>
+        <form id="delete-form" method="POST">
+            <div class="la-modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer le tag <strong id="tag-name-display"></strong> ?</p>
+                <div id="posts-warning" class="la-alert warning la-mt-4" style="display: none;">
+                    <span class="la-icon">warning</span>
+                    <span>Ce tag est utilisé par <strong id="post-count-display"></strong> article(s).</span>
+                </div>
+                <div id="remove-from-posts-option" class="la-form-group la-mt-4" style="display: none;">
+                    <label class="la-checkbox">
+                        <input type="checkbox" name="remove_from_posts" value="1">
+                        <span>Retirer ce tag des articles concernés</span>
+                    </label>
+                </div>
+            </div>
+            <div class="la-modal-footer">
+                <button type="button" class="la-btn ghost" onclick="closeDeleteModal()">Annuler</button>
+                <button type="submit" class="la-btn danger">Supprimer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.la-color-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: var(--la-radius-md);
+    border: 2px solid var(--la-border);
+}
+</style>
+
+<script>
+function confirmDelete(tagId, tagName, postCount) {
+    document.getElementById('delete-form').action = '/admin/tags/' + tagId + '/delete';
+    document.getElementById('tag-name-display').textContent = tagName;
+
+    if (postCount > 0) {
+        document.getElementById('posts-warning').style.display = 'flex';
+        document.getElementById('post-count-display').textContent = postCount;
+        document.getElementById('remove-from-posts-option').style.display = 'block';
+    } else {
+        document.getElementById('posts-warning').style.display = 'none';
+        document.getElementById('remove-from-posts-option').style.display = 'none';
+    }
+
+    document.getElementById('delete-modal').style.display = 'flex';
+}
+
+function closeDeleteModal() {
+    document.getElementById('delete-modal').style.display = 'none';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeDeleteModal();
+    }
+});
+</script>
+{% endblock %}
