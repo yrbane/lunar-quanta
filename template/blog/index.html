@@ -28,6 +28,59 @@
                 <button onclick="showKeyboardShortcuts()" title="Raccourcis (?)">
                     <span class="la-icon sm">keyboard</span>
                 </button>
+                <!-- Theme Switcher -->
+                <div class="la-theme-switcher">
+                    <button class="la-theme-trigger" title="Changer le thème">
+                        <span class="la-icon">palette</span>
+                        <span class="la-theme-current">Thème</span>
+                        <span class="la-icon sm">expand_more</span>
+                    </button>
+                    <div class="la-theme-dropdown">
+                        <div class="la-theme-group">
+                            <div class="la-theme-group-title">Base</div>
+                            <button class="la-theme-option" data-theme="dark"><span class="la-theme-preview"></span><span class="la-theme-name">Dark</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="light"><span class="la-theme-preview"></span><span class="la-theme-name">Light</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                        </div>
+                        <div class="la-theme-group">
+                            <div class="la-theme-group-title">Couleurs</div>
+                            <button class="la-theme-option" data-theme="cyberpunk"><span class="la-theme-preview"></span><span class="la-theme-name">Cyberpunk</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="ocean"><span class="la-theme-preview"></span><span class="la-theme-name">Ocean</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="forest"><span class="la-theme-preview"></span><span class="la-theme-name">Forest</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="sunset"><span class="la-theme-preview"></span><span class="la-theme-name">Sunset</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="aurora"><span class="la-theme-preview"></span><span class="la-theme-name">Aurora</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="lavender"><span class="la-theme-preview"></span><span class="la-theme-name">Lavender</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                        </div>
+                        <div class="la-theme-group">
+                            <div class="la-theme-group-title">Rétro / Arcade</div>
+                            <button class="la-theme-option" data-theme="8bits"><span class="la-theme-preview"></span><span class="la-theme-name">8-Bits</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="8bits-dark"><span class="la-theme-preview"></span><span class="la-theme-name">8-Bits</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="bubble"><span class="la-theme-preview"></span><span class="la-theme-name">Bubble Bobble</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="bubble-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Bubble Bobble</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="galaxian"><span class="la-theme-preview"></span><span class="la-theme-name">Galaxian</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="galaxian-light"><span class="la-theme-preview"></span><span class="la-theme-name">Galaxian</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="mario"><span class="la-theme-preview"></span><span class="la-theme-name">Mario</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="mario-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Mario</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                        </div>
+                        <div class="la-theme-group">
+                            <div class="la-theme-group-title">Geek</div>
+                            <button class="la-theme-option" data-theme="web90"><span class="la-theme-preview"></span><span class="la-theme-name">Web 90s</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="web90-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Web 90s</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="geek"><span class="la-theme-preview"></span><span class="la-theme-name">Geek</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="geek-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Geek</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="hacker"><span class="la-theme-preview"></span><span class="la-theme-name">Hacker</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="hacker-light"><span class="la-theme-preview"></span><span class="la-theme-name">Hacker</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="eco"><span class="la-theme-preview"></span><span class="la-theme-name">Eco</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="eco-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Eco</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                        </div>
+                        <div class="la-theme-group">
+                            <div class="la-theme-group-title">Système</div>
+                            <button class="la-theme-option" data-theme="win95"><span class="la-theme-preview"></span><span class="la-theme-name">Windows 95</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="win95-dark"><span class="la-theme-preview"></span><span class="la-theme-name">Windows 95</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="bsod"><span class="la-theme-preview"></span><span class="la-theme-name">BSOD</span><span class="la-theme-variant">Sombre</span><span class="la-icon sm la-theme-check">check</span></button>
+                            <button class="la-theme-option" data-theme="bsod-light"><span class="la-theme-preview"></span><span class="la-theme-name">BSOD</span><span class="la-theme-variant">Clair</span><span class="la-icon sm la-theme-check">check</span></button>
+                        </div>
+                    </div>
+                </div>
                 <a href="/blog/feed.xml" title="Flux RSS">
                     <span class="la-icon sm">rss_feed</span>
                 </a>
@@ -388,19 +441,82 @@
             if (e.target.classList.contains('la-modal-backdrop')) hideKeyboardShortcuts();
         });
 
-        // Theme toggle (optional)
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            html.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
-            localStorage.setItem('theme', html.getAttribute('data-theme'));
-        }
+        // ═══════════════════════════════════════════════════════════════════
+        // THEME SWITCHER
+        // ═══════════════════════════════════════════════════════════════════
+        const ThemeSwitcher = {
+            storageKey: 'lunar-theme',
 
-        // Load saved theme
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        }
+            init() {
+                // Load saved theme
+                const savedTheme = localStorage.getItem(this.storageKey);
+                if (savedTheme) {
+                    this.setTheme(savedTheme, false);
+                }
+
+                // Initialize all switchers
+                document.querySelectorAll('.la-theme-switcher').forEach(switcher => {
+                    this.initSwitcher(switcher);
+                });
+
+                // Close on outside click
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.la-theme-switcher')) {
+                        document.querySelectorAll('.la-theme-dropdown.is-open').forEach(d => d.classList.remove('is-open'));
+                    }
+                });
+
+                // Close on Escape
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        document.querySelectorAll('.la-theme-dropdown.is-open').forEach(d => d.classList.remove('is-open'));
+                    }
+                });
+            },
+
+            initSwitcher(container) {
+                const trigger = container.querySelector('.la-theme-trigger');
+                const dropdown = container.querySelector('.la-theme-dropdown');
+
+                trigger?.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('.la-theme-dropdown.is-open').forEach(d => {
+                        if (d !== dropdown) d.classList.remove('is-open');
+                    });
+                    dropdown.classList.toggle('is-open');
+                });
+
+                dropdown?.querySelectorAll('.la-theme-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        this.setTheme(option.dataset.theme);
+                        dropdown.classList.remove('is-open');
+                    });
+                });
+
+                this.updateActiveState(container);
+            },
+
+            setTheme(themeName, save = true) {
+                document.documentElement.setAttribute('data-theme', themeName);
+                if (save) localStorage.setItem(this.storageKey, themeName);
+
+                document.querySelectorAll('.la-theme-switcher').forEach(switcher => {
+                    this.updateActiveState(switcher);
+                    const label = switcher.querySelector('.la-theme-current');
+                    const activeOption = switcher.querySelector(`.la-theme-option[data-theme="${themeName}"] .la-theme-name`);
+                    if (label && activeOption) label.textContent = activeOption.textContent;
+                });
+            },
+
+            updateActiveState(container) {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+                container.querySelectorAll('.la-theme-option').forEach(option => {
+                    option.classList.toggle('is-active', option.dataset.theme === currentTheme);
+                });
+            }
+        };
+
+        ThemeSwitcher.init();
     </script>
 </body>
 </html>

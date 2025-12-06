@@ -813,3 +813,172 @@
         transform: translateX(-50%) translateY(-8px);
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME SWITCHER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.la-theme-switcher {
+    position: relative;
+
+    & .la-theme-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--la-space-2);
+        padding: var(--la-space-2) var(--la-space-3);
+        background: var(--la-surface-2);
+        border: 1px solid var(--la-border);
+        border-radius: var(--la-radius-md);
+        font-size: var(--la-text-sm);
+        font-weight: var(--la-weight-medium);
+        color: var(--la-text);
+        cursor: pointer;
+        transition: all var(--la-transition-fast);
+
+        &:hover {
+            background: var(--la-surface-3);
+            border-color: var(--la-primary);
+        }
+
+        & .la-icon {
+            font-size: 1.125rem;
+        }
+    }
+
+    & .la-theme-dropdown {
+        position: absolute;
+        top: calc(100% + var(--la-space-2));
+        right: 0;
+        z-index: var(--la-z-dropdown);
+        min-width: 280px;
+        max-height: 400px;
+        overflow-y: auto;
+        background: var(--la-surface-1);
+        border: 1px solid var(--la-border);
+        border-radius: var(--la-radius-lg);
+        box-shadow: var(--la-shadow-lg);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: all var(--la-transition-fast);
+
+        &.is-open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+    }
+
+    & .la-theme-group {
+        padding: var(--la-space-2);
+
+        &:not(:last-child) {
+            border-bottom: 1px solid var(--la-border);
+        }
+    }
+
+    & .la-theme-group-title {
+        padding: var(--la-space-2) var(--la-space-3);
+        font-size: var(--la-text-xs);
+        font-weight: var(--la-weight-semibold);
+        color: var(--la-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    & .la-theme-option {
+        display: flex;
+        align-items: center;
+        gap: var(--la-space-3);
+        width: 100%;
+        padding: var(--la-space-2) var(--la-space-3);
+        background: transparent;
+        border: none;
+        border-radius: var(--la-radius-sm);
+        font-size: var(--la-text-sm);
+        color: var(--la-text);
+        cursor: pointer;
+        transition: all var(--la-transition-fast);
+        text-align: left;
+
+        &:hover {
+            background: var(--la-surface-2);
+        }
+
+        &.is-active {
+            background: var(--la-primary-subtle);
+            color: var(--la-primary);
+
+            & .la-theme-check {
+                opacity: 1;
+            }
+        }
+    }
+
+    & .la-theme-preview {
+        display: flex;
+        gap: 2px;
+        width: 24px;
+        height: 16px;
+        border-radius: 3px;
+        overflow: hidden;
+        flex-shrink: 0;
+        border: 1px solid var(--la-border);
+    }
+
+    & .la-theme-preview-color {
+        flex: 1;
+    }
+
+    & .la-theme-name {
+        flex: 1;
+    }
+
+    & .la-theme-variant {
+        font-size: var(--la-text-xs);
+        color: var(--la-text-muted);
+        padding: var(--la-space-1) var(--la-space-2);
+        background: var(--la-surface-2);
+        border-radius: var(--la-radius-sm);
+    }
+
+    & .la-theme-check {
+        opacity: 0;
+        color: var(--la-primary);
+        transition: opacity var(--la-transition-fast);
+    }
+}
+
+/* Theme Preview Colors - Static swatches for each theme */
+.la-theme-option[data-theme="dark"] .la-theme-preview { background: linear-gradient(90deg, #7c3aed 50%, #18181b 50%); }
+.la-theme-option[data-theme="light"] .la-theme-preview { background: linear-gradient(90deg, #7c3aed 50%, #fafafa 50%); }
+.la-theme-option[data-theme="cyberpunk"] .la-theme-preview { background: linear-gradient(90deg, #e040fb 50%, #0a0a0f 50%); }
+.la-theme-option[data-theme="ocean"] .la-theme-preview { background: linear-gradient(90deg, #0284c7 50%, #0c4a6e 50%); }
+.la-theme-option[data-theme="forest"] .la-theme-preview { background: linear-gradient(90deg, #22c55e 50%, #14532d 50%); }
+.la-theme-option[data-theme="sunset"] .la-theme-preview { background: linear-gradient(90deg, #f97316 50%, #7c2d12 50%); }
+.la-theme-option[data-theme="mono"] .la-theme-preview { background: linear-gradient(90deg, #525252 50%, #fafafa 50%); }
+.la-theme-option[data-theme="mono-dark"] .la-theme-preview { background: linear-gradient(90deg, #a3a3a3 50%, #171717 50%); }
+.la-theme-option[data-theme="aurora"] .la-theme-preview { background: linear-gradient(90deg, #2dd4bf 50%, #8b5cf6 50%); }
+.la-theme-option[data-theme="lavender"] .la-theme-preview { background: linear-gradient(90deg, #a78bfa 50%, #faf5ff 50%); }
+
+/* Retro/Geek Theme Previews */
+.la-theme-option[data-theme="8bits"] .la-theme-preview { background: linear-gradient(90deg, #a855f7 33%, #22d3ee 66%, #fbbf24 100%); }
+.la-theme-option[data-theme="8bits-dark"] .la-theme-preview { background: linear-gradient(90deg, #c084fc 33%, #67e8f9 66%, #0f0f23 100%); }
+.la-theme-option[data-theme="bubble"] .la-theme-preview { background: linear-gradient(90deg, #4ade80 50%, #60a5fa 50%); }
+.la-theme-option[data-theme="bubble-dark"] .la-theme-preview { background: linear-gradient(90deg, #22c55e 50%, #3b82f6 50%); }
+.la-theme-option[data-theme="galaxian"] .la-theme-preview { background: linear-gradient(90deg, #1e3a8a 33%, #facc15 66%, #0a0a20 100%); }
+.la-theme-option[data-theme="galaxian-light"] .la-theme-preview { background: linear-gradient(90deg, #3b82f6 33%, #fde047 66%, #eff6ff 100%); }
+.la-theme-option[data-theme="web90"] .la-theme-preview { background: linear-gradient(90deg, #a855f7 25%, #14b8a6 50%, #facc15 75%, #ef4444 100%); }
+.la-theme-option[data-theme="web90-dark"] .la-theme-preview { background: linear-gradient(90deg, #c084fc 25%, #2dd4bf 50%, #fde047 75%, #1a1a2e 100%); }
+.la-theme-option[data-theme="geek"] .la-theme-preview { background: linear-gradient(90deg, #22c55e 50%, #f5f5f5 50%); }
+.la-theme-option[data-theme="geek-dark"] .la-theme-preview { background: linear-gradient(90deg, #4ade80 50%, #0f1f0f 50%); }
+.la-theme-option[data-theme="eco"] .la-theme-preview { background: linear-gradient(90deg, #16a34a 50%, #f0fdf4 50%); }
+.la-theme-option[data-theme="eco-dark"] .la-theme-preview { background: linear-gradient(90deg, #22c55e 50%, #14532d 50%); }
+.la-theme-option[data-theme="hacker"] .la-theme-preview { background: linear-gradient(90deg, #22c55e 50%, #020202 50%); }
+.la-theme-option[data-theme="hacker-light"] .la-theme-preview { background: linear-gradient(90deg, #15803d 50%, #f0fdf4 50%); }
+.la-theme-option[data-theme="win95"] .la-theme-preview { background: linear-gradient(90deg, #000080 50%, #c0c0c0 50%); }
+.la-theme-option[data-theme="win95-dark"] .la-theme-preview { background: linear-gradient(90deg, #1e40af 50%, #3f3f3f 50%); }
+.la-theme-option[data-theme="bsod"] .la-theme-preview { background: linear-gradient(90deg, #ffffff 50%, #0000aa 50%); }
+.la-theme-option[data-theme="bsod-light"] .la-theme-preview { background: linear-gradient(90deg, #3b82f6 50%, #dbeafe 50%); }
+.la-theme-option[data-theme="mario"] .la-theme-preview { background: linear-gradient(90deg, #dc2626 25%, #22c55e 50%, #60a5fa 75%, #facc15 100%); }
+.la-theme-option[data-theme="mario-dark"] .la-theme-preview { background: linear-gradient(90deg, #ef4444 25%, #22c55e 50%, #0f172a 75%, #fbbf24 100%); }
