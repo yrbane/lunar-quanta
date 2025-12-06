@@ -609,24 +609,39 @@
         .code-block-wrapper {
             position: relative;
             margin: 2rem 0;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
         }
 
         .code-block-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-md) var(--radius-md) 0 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: none;
+            padding: 0.625rem 1rem;
+            background: #0d1117;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .code-lang {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             font-family: var(--font-mono);
             font-size: 0.75rem;
-            color: var(--color-text-muted);
+            font-weight: 600;
+            color: #7ee787;
             text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .code-lang::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #7ee787;
+            box-shadow: 0 0 6px #7ee787;
         }
 
         .copy-btn {
@@ -634,26 +649,26 @@
             align-items: center;
             gap: 0.375rem;
             padding: 0.375rem 0.75rem;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
             font-size: 0.75rem;
             font-weight: 500;
-            color: var(--color-text-muted);
+            color: #8b949e;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .copy-btn:hover {
             background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #c9d1d9;
         }
 
         .copy-btn.copied {
-            background: var(--color-success);
-            border-color: var(--color-success);
-            color: white;
+            background: rgba(126, 231, 135, 0.2);
+            border-color: #7ee787;
+            color: #7ee787;
         }
 
         .copy-btn svg {
@@ -662,17 +677,14 @@
         }
 
         .article-content pre {
-            background: var(--color-code-bg);
-            color: var(--color-code-text);
-            padding: 1.5rem;
-            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            background: #0d1117;
+            color: #c9d1d9;
+            padding: 1.25rem 1rem;
             overflow-x: auto;
             margin: 0;
             font-size: 0.875rem;
             line-height: 1.7;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-top: none;
+            border: none;
         }
 
         .article-content pre code {
@@ -686,9 +698,63 @@
         /* Standalone pre (not in wrapper) */
         .article-content > pre {
             border-radius: var(--radius-md);
-            border: 1px solid rgba(255, 255, 255, 0.1);
             margin: 2rem 0;
+            box-shadow: var(--shadow-lg);
         }
+
+        /* Syntax Highlighting - GitHub Dark Theme */
+        .token.comment,
+        .token.prolog,
+        .token.doctype,
+        .token.cdata { color: #8b949e; font-style: italic; }
+
+        .token.punctuation { color: #c9d1d9; }
+
+        .token.property,
+        .token.tag,
+        .token.boolean,
+        .token.number,
+        .token.constant,
+        .token.symbol,
+        .token.deleted { color: #79c0ff; }
+
+        .token.selector,
+        .token.attr-name,
+        .token.string,
+        .token.char,
+        .token.builtin,
+        .token.inserted { color: #a5d6ff; }
+
+        .token.operator,
+        .token.entity,
+        .token.url,
+        .language-css .token.string,
+        .style .token.string { color: #ff7b72; }
+
+        .token.atrule,
+        .token.attr-value,
+        .token.keyword { color: #ff7b72; }
+
+        .token.function,
+        .token.class-name { color: #d2a8ff; }
+
+        .token.regex,
+        .token.important,
+        .token.variable { color: #ffa657; }
+
+        .token.important,
+        .token.bold { font-weight: bold; }
+
+        .token.italic { font-style: italic; }
+
+        .token.entity { cursor: help; }
+
+        /* PHP specific */
+        .token.delimiter.important { color: #ff7b72; }
+        .token.variable { color: #ffa657; }
+        .token.this { color: #ff7b72; }
+        .token.scope { color: #ff7b72; }
+        .token.class-name-definition { color: #f0883e; }
 
         .article-content hr {
             border: none;
@@ -1559,6 +1625,23 @@
                     tocMobile?.classList.remove('show');
                     break;
             }
+        });
+    </script>
+
+    <!-- Prism.js for Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        // Configure Prism autoloader path
+        Prism.plugins.autoloader.languages_path = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/';
+
+        // Highlight all code blocks
+        document.querySelectorAll('pre code').forEach(block => {
+            // Add language class if not present
+            if (!block.className.match(/language-/)) {
+                block.classList.add('language-plaintext');
+            }
+            Prism.highlightElement(block);
         });
     </script>
 </body>
