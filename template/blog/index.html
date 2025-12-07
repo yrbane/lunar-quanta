@@ -13,6 +13,10 @@
 
     <!-- Lunar Aurora CSS Framework -->
     <link rel="stylesheet" href="/css/lunar-aurora/aurora-blog.css">
+    <link rel="stylesheet" href="/blog/assets/enhanced.css">
+    <link rel="stylesheet" href="/blog/assets/print.css" media="print">
+    {{ schema_org }}
+    {{ head_injections }}
 </head>
 <body class="la-blog">
     <header class="la-blog-header">
@@ -710,5 +714,6 @@
 
         HeroSlider.init();
     </script>
+    {{ body_end_injections }}
 </body>
 </html>
