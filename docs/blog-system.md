@@ -237,8 +237,11 @@ template/
 │       ├── index.html.tpl # Liste articles
 │       └── form.html.tpl  # Formulaire
 └── blog/
-    ├── index.html         # Index statique
-    └── post.html          # Article statique
+    ├── index.html.tpl     # Index blog
+    ├── post.html.tpl      # Article individuel
+    ├── category.html.tpl  # Page catégorie
+    ├── tag.html.tpl       # Page tag
+    └── search.html.tpl    # Résultats recherche
 ```
 
 ## Stockage
@@ -271,26 +274,28 @@ public/blog/
 
 ### Templates statiques
 
-Les templates utilisent une syntaxe simple :
+Les templates utilisent la syntaxe Lunar Template :
 
 ```html
 <!-- Variables -->
-{{ title }}
-{{ content }}
+[[ title ]]
+[[ content ]]
 
 <!-- Conditions -->
-{% if author %}
-<p>Par {{ author }}</p>
-{% endif %}
+[% if author %]
+<p>Par [[ author ]]</p>
+[% endif %]
 
 <!-- Boucles -->
-{% for post in posts %}
+[% for post in posts %]
 <article>
-    <h2>{{ post.title }}</h2>
-    <p>{{ post.excerpt }}</p>
+    <h2>[[ post.title ]]</h2>
+    <p>[[ post.excerpt ]]</p>
 </article>
-{% endfor %}
+[% endfor %]
 ```
+
+**Note** : Les fichiers templates utilisent l'extension `.html.tpl`.
 
 ## Exemple complet
 

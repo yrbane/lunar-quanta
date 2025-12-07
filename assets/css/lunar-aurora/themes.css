@@ -1,71 +1,72 @@
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════╗
- * ║                         LUNAR AURORA - THEMES                               ║
+ * ║                         LUNAR AURORA - THEMES                             ║
  * ║                                                                           ║
- * ║  Theme variants: dark mode, color schemes, and custom themes.            ║
- * ║  Uses :has() for automatic detection and data attributes for manual.     ║
+ * ║  Refactored theme system with minimal duplication.                        ║
+ * ║  Structure:                                                               ║
+ * ║    1. Code & Syntax variables                                             ║
+ * ║    2. Dark mode base (shared)                                             ║
+ * ║    3. Theme definitions (colors + visuals combined)                       ║
+ * ║    4. Accessibility modes                                                 ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
  */
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   DARK MODE - System Preference
+   1. CODE BLOCK & SYNTAX HIGHLIGHTING
    ═══════════════════════════════════════════════════════════════════════════ */
 
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-        color-scheme: dark;
+:root {
+    /* Code Block Colors (light mode) */
+    --la-code-bg: oklch(98% 0.005 var(--la-hue-primary));
+    --la-code-text: oklch(30% 0.02 var(--la-hue-primary));
+    --la-code-header: oklch(95% 0.008 var(--la-hue-primary));
+    --la-code-border: oklch(85% 0.01 var(--la-hue-primary));
+    --la-code-lang: oklch(55% 0.2 142);
+    --la-code-lang-glow: oklch(55% 0.2 142 / 50%);
+    --la-code-inline-bg: oklch(94% 0.01 var(--la-hue-primary));
+    --la-code-selection: oklch(85% 0.08 var(--la-hue-primary));
+    --la-code-line-highlight: oklch(92% 0.03 var(--la-hue-primary));
+    --la-code-line-number: oklch(60% 0.01 var(--la-hue-primary));
 
-        /* Surfaces - Dark */
-        --la-surface-0: oklch(12% 0.02 var(--la-hue-primary));
-        --la-surface-1: oklch(16% 0.02 var(--la-hue-primary));
-        --la-surface-2: oklch(20% 0.02 var(--la-hue-primary));
-        --la-surface-3: oklch(24% 0.02 var(--la-hue-primary));
-        --la-surface-raised: oklch(18% 0.02 var(--la-hue-primary));
-        --la-surface-overlay: oklch(15% 0.02 var(--la-hue-primary) / 95%);
+    /* Syntax Highlighting */
+    --la-syntax-comment: oklch(55% 0.02 var(--la-hue-primary));
+    --la-syntax-punctuation: oklch(40% 0.02 var(--la-hue-primary));
+    --la-syntax-property: oklch(50% 0.18 210);
+    --la-syntax-string: oklch(45% 0.15 142);
+    --la-syntax-operator: oklch(55% 0.22 25);
+    --la-syntax-keyword: oklch(50% 0.2 300);
+    --la-syntax-function: oklch(50% 0.18 270);
+    --la-syntax-variable: oklch(55% 0.15 30);
+    --la-syntax-number: oklch(50% 0.18 210);
+    --la-syntax-class: oklch(55% 0.18 45);
+    --la-syntax-regex: oklch(50% 0.15 0);
+    --la-syntax-tag: oklch(50% 0.2 142);
+    --la-syntax-attribute: oklch(55% 0.15 200);
 
-        /* Text - Dark */
-        --la-text: oklch(95% 0.01 var(--la-hue-primary));
-        --la-text-secondary: oklch(75% 0.01 var(--la-hue-primary));
-        --la-text-muted: oklch(55% 0.01 var(--la-hue-primary));
-        --la-text-disabled: oklch(40% 0.005 var(--la-hue-primary));
-
-        /* Borders - Dark */
-        --la-border: oklch(28% 0.02 var(--la-hue-primary));
-        --la-border-strong: oklch(38% 0.02 var(--la-hue-primary));
-        --la-border-subtle: oklch(22% 0.01 var(--la-hue-primary));
-
-        /* Adjust primary colors for dark mode (slightly brighter) */
-        --la-primary: oklch(68% 0.22 var(--la-hue-primary));
-        --la-primary-subtle: oklch(22% 0.08 var(--la-hue-primary));
-
-        /* Shadows - darker for dark mode */
-        --la-shadow-sm:
-            0 1px 3px oklch(0% 0 0 / 30%),
-            0 1px 2px oklch(0% 0 0 / 20%);
-        --la-shadow-md:
-            0 4px 6px -1px oklch(0% 0 0 / 40%),
-            0 2px 4px -2px oklch(0% 0 0 / 30%);
-        --la-shadow-lg:
-            0 10px 15px -3px oklch(0% 0 0 / 50%),
-            0 4px 6px -4px oklch(0% 0 0 / 40%);
-
-        /* Gradient Hero - Dark */
-        --la-gradient-hero: linear-gradient(
-            135deg,
-            oklch(12% 0.1 var(--la-hue-primary)) 0%,
-            oklch(15% 0.08 calc(var(--la-hue-primary) + 20)) 50%,
-            oklch(14% 0.12 var(--la-hue-secondary)) 100%
-        );
-    }
+    /* Default visuals */
+    --la-hero-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80');
+    --la-icon-logo: 'rocket_launch';
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   DARK MODE - Manual Override via data-theme
+   2. DARK MODE BASE
    ═══════════════════════════════════════════════════════════════════════════ */
 
-[data-theme="dark"] {
-    color-scheme: dark;
+/* System preference dark mode */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+    }
+}
 
+/* Shared dark mode styles - single source of truth */
+:is([data-theme="dark"], :root:not([data-theme="light"])):where(@media (prefers-color-scheme: dark) *) {
+    /* Applied by inheritance from below */
+}
+
+[data-theme="dark"],
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    /* Surfaces */
     --la-surface-0: oklch(12% 0.02 var(--la-hue-primary));
     --la-surface-1: oklch(16% 0.02 var(--la-hue-primary));
     --la-surface-2: oklch(20% 0.02 var(--la-hue-primary));
@@ -73,46 +74,76 @@
     --la-surface-raised: oklch(18% 0.02 var(--la-hue-primary));
     --la-surface-overlay: oklch(15% 0.02 var(--la-hue-primary) / 95%);
 
+    /* Text */
     --la-text: oklch(95% 0.01 var(--la-hue-primary));
     --la-text-secondary: oklch(75% 0.01 var(--la-hue-primary));
     --la-text-muted: oklch(55% 0.01 var(--la-hue-primary));
     --la-text-disabled: oklch(40% 0.005 var(--la-hue-primary));
 
+    /* Borders */
     --la-border: oklch(28% 0.02 var(--la-hue-primary));
     --la-border-strong: oklch(38% 0.02 var(--la-hue-primary));
     --la-border-subtle: oklch(22% 0.01 var(--la-hue-primary));
 
+    /* Primary */
     --la-primary: oklch(68% 0.22 var(--la-hue-primary));
     --la-primary-subtle: oklch(22% 0.08 var(--la-hue-primary));
 
-    --la-shadow-sm:
-        0 1px 3px oklch(0% 0 0 / 30%),
-        0 1px 2px oklch(0% 0 0 / 20%);
-    --la-shadow-md:
-        0 4px 6px -1px oklch(0% 0 0 / 40%),
-        0 2px 4px -2px oklch(0% 0 0 / 30%);
-    --la-shadow-lg:
-        0 10px 15px -3px oklch(0% 0 0 / 50%),
-        0 4px 6px -4px oklch(0% 0 0 / 40%);
+    /* Code (dark) */
+    --la-code-bg: oklch(15% 0.015 var(--la-hue-primary));
+    --la-code-text: oklch(85% 0.01 var(--la-hue-primary));
+    --la-code-header: oklch(12% 0.02 var(--la-hue-primary));
+    --la-code-border: oklch(25% 0.02 var(--la-hue-primary));
+    --la-code-lang: oklch(72% 0.2 142);
+    --la-code-lang-glow: oklch(72% 0.2 142 / 60%);
+    --la-code-inline-bg: oklch(22% 0.02 var(--la-hue-primary));
+    --la-code-selection: oklch(35% 0.1 var(--la-hue-primary));
+    --la-code-line-highlight: oklch(20% 0.04 var(--la-hue-primary));
+    --la-code-line-number: oklch(45% 0.01 var(--la-hue-primary));
 
-    --la-gradient-hero: linear-gradient(
-        135deg,
+    /* Syntax (dark) */
+    --la-syntax-comment: oklch(55% 0.01 var(--la-hue-primary));
+    --la-syntax-punctuation: oklch(80% 0.01 var(--la-hue-primary));
+    --la-syntax-property: oklch(70% 0.15 210);
+    --la-syntax-string: oklch(75% 0.12 200);
+    --la-syntax-operator: oklch(70% 0.2 15);
+    --la-syntax-keyword: oklch(70% 0.2 15);
+    --la-syntax-function: oklch(78% 0.15 280);
+    --la-syntax-variable: oklch(75% 0.15 35);
+    --la-syntax-number: oklch(70% 0.15 210);
+    --la-syntax-class: oklch(70% 0.18 30);
+    --la-syntax-regex: oklch(65% 0.15 0);
+    --la-syntax-tag: oklch(72% 0.18 142);
+    --la-syntax-attribute: oklch(70% 0.12 200);
+
+    /* Shadows */
+    --la-shadow-sm: 0 1px 3px oklch(0% 0 0 / 30%), 0 1px 2px oklch(0% 0 0 / 20%);
+    --la-shadow-md: 0 4px 6px -1px oklch(0% 0 0 / 40%), 0 2px 4px -2px oklch(0% 0 0 / 30%);
+    --la-shadow-lg: 0 10px 15px -3px oklch(0% 0 0 / 50%), 0 4px 6px -4px oklch(0% 0 0 / 40%);
+
+    /* Gradient */
+    --la-gradient-hero: linear-gradient(135deg,
         oklch(12% 0.1 var(--la-hue-primary)) 0%,
         oklch(15% 0.08 calc(var(--la-hue-primary) + 20)) 50%,
-        oklch(14% 0.12 var(--la-hue-secondary)) 100%
-    );
+        oklch(14% 0.12 var(--la-hue-secondary)) 100%);
+}}
+
+[data-theme="light"] {
+    --la-hero-image: url('https://images.unsplash.com/photo-1517483000871-1dbf64a6e1c6?w=1920&q=80');
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   THEME: CYBERPUNK - Neon & Glitch
+   3. THEME DEFINITIONS
    ═══════════════════════════════════════════════════════════════════════════ */
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   CYBERPUNK - Neon & Glitch
+   ───────────────────────────────────────────────────────────────────────────── */
 [data-theme="cyberpunk"] {
     color-scheme: dark;
-
-    --la-hue-primary: 300;      /* Magenta */
-    --la-hue-secondary: 180;    /* Cyan */
-    --la-hue-accent: 60;        /* Yellow */
+    --la-hue-primary: 300;
+    --la-hue-secondary: 180;
+    --la-hue-accent: 60;
 
     --la-primary: oklch(65% 0.35 var(--la-hue-primary));
     --la-primary-light: oklch(75% 0.3 var(--la-hue-primary));
@@ -127,38 +158,71 @@
 
     --la-text: oklch(95% 0.02 var(--la-hue-secondary));
     --la-text-secondary: oklch(80% 0.02 var(--la-hue-secondary));
-
     --la-border: oklch(30% 0.1 var(--la-hue-primary));
     --la-border-focus: var(--la-secondary);
 
+    /* Code - Neon */
+    --la-code-bg: oklch(10% 0.04 var(--la-hue-primary));
+    --la-code-text: oklch(90% 0.02 var(--la-hue-secondary));
+    --la-code-lang: var(--la-secondary);
+    --la-code-lang-glow: oklch(75% 0.25 var(--la-hue-secondary) / 80%);
+    --la-code-border: oklch(25% 0.1 var(--la-hue-primary));
+    --la-syntax-keyword: oklch(70% 0.3 var(--la-hue-primary));
+    --la-syntax-string: oklch(80% 0.2 var(--la-hue-secondary));
+    --la-syntax-function: oklch(85% 0.22 var(--la-hue-accent));
+    --la-syntax-comment: oklch(50% 0.05 var(--la-hue-secondary));
+
     --la-shadow-glow: 0 0 30px oklch(60% 0.35 var(--la-hue-primary) / 50%);
     --la-shadow-glow-primary: 0 0 40px oklch(65% 0.35 var(--la-hue-primary) / 60%);
-
-    --la-gradient-primary: linear-gradient(
-        135deg,
-        var(--la-primary) 0%,
-        var(--la-secondary) 100%
-    );
-
-    --la-gradient-hero: linear-gradient(
-        135deg,
-        oklch(8% 0.15 var(--la-hue-primary)) 0%,
-        oklch(12% 0.1 var(--la-hue-secondary)) 50%,
-        oklch(10% 0.12 var(--la-hue-primary)) 100%
-    );
-
-    /* Radius: Sharp/Angular */
+    --la-gradient-primary: linear-gradient(135deg, var(--la-primary) 0%, var(--la-secondary) 100%);
+    --la-gradient-hero: linear-gradient(135deg, oklch(8% 0.15 var(--la-hue-primary)) 0%, oklch(12% 0.1 var(--la-hue-secondary)) 50%, oklch(10% 0.12 var(--la-hue-primary)) 100%);
     --la-radius-factor: 0.5;
+
+    --la-hero-image: url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1920&q=80');
+    --la-icon-logo: 'electric_bolt';
+    --la-font-sans: 'Rajdhani', 'Orbitron', sans-serif;
+    --la-font-display: 'Orbitron', 'Rajdhani', sans-serif;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: OCEAN - Deep Blue
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────────────────────
+   AURORA - Northern Lights
+   ───────────────────────────────────────────────────────────────────────────── */
+[data-theme="aurora"] {
+    color-scheme: dark;
+    --la-hue-primary: 160;
+    --la-hue-secondary: 280;
+    --la-hue-accent: 200;
 
+    --la-primary: oklch(60% 0.2 var(--la-hue-primary));
+    --la-primary-light: oklch(72% 0.18 var(--la-hue-primary));
+    --la-secondary: oklch(55% 0.25 var(--la-hue-secondary));
+    --la-accent: oklch(70% 0.18 var(--la-hue-accent));
+
+    --la-surface-0: oklch(10% 0.02 220);
+    --la-surface-1: oklch(14% 0.02 220);
+    --la-surface-2: oklch(18% 0.03 220);
+    --la-surface-3: oklch(22% 0.03 220);
+
+    --la-text: oklch(95% 0.01 var(--la-hue-accent));
+    --la-text-secondary: oklch(78% 0.01 var(--la-hue-accent));
+
+    --la-gradient-primary: linear-gradient(135deg, var(--la-primary) 0%, var(--la-secondary) 50%, var(--la-accent) 100%);
+    --la-gradient-hero: linear-gradient(135deg, oklch(10% 0.08 var(--la-hue-primary)) 0%, oklch(12% 0.12 var(--la-hue-secondary)) 33%, oklch(11% 0.1 var(--la-hue-accent)) 66%, oklch(10% 0.08 var(--la-hue-primary)) 100%);
+    --la-shadow-glow: 0 0 20px oklch(60% 0.2 var(--la-hue-primary) / 30%), 0 0 40px oklch(55% 0.25 var(--la-hue-secondary) / 20%);
+
+    --la-hero-image: url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1920&q=80');
+    --la-icon-logo: 'flare';
+    --la-font-sans: 'Poppins', 'Inter', sans-serif;
+    --la-font-display: 'Poppins', 'Inter', sans-serif;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   OCEAN - Deep Blue
+   ───────────────────────────────────────────────────────────────────────────── */
 [data-theme="ocean"] {
-    --la-hue-primary: 210;      /* Blue */
-    --la-hue-secondary: 180;    /* Teal */
-    --la-hue-accent: 45;        /* Gold */
+    --la-hue-primary: 210;
+    --la-hue-secondary: 180;
+    --la-hue-accent: 45;
 
     --la-primary: oklch(55% 0.2 var(--la-hue-primary));
     --la-primary-light: oklch(68% 0.18 var(--la-hue-primary));
@@ -166,28 +230,17 @@
     --la-secondary: oklch(60% 0.15 var(--la-hue-secondary));
     --la-accent: oklch(75% 0.18 var(--la-hue-accent));
 
-    --la-gradient-primary: linear-gradient(
-        135deg,
-        var(--la-primary) 0%,
-        var(--la-secondary) 100%
-    );
-
-    --la-gradient-hero: linear-gradient(
-        135deg,
-        oklch(20% 0.12 var(--la-hue-primary)) 0%,
-        oklch(25% 0.1 var(--la-hue-secondary)) 50%,
-        oklch(22% 0.15 var(--la-hue-primary)) 100%
-    );
+    --la-gradient-primary: linear-gradient(135deg, var(--la-primary) 0%, var(--la-secondary) 100%);
+    --la-gradient-hero: linear-gradient(135deg, oklch(20% 0.12 var(--la-hue-primary)) 0%, oklch(25% 0.1 var(--la-hue-secondary)) 50%, oklch(22% 0.15 var(--la-hue-primary)) 100%);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: FOREST - Nature Green
-   ═══════════════════════════════════════════════════════════════════════════ */
-
+/* ─────────────────────────────────────────────────────────────────────────────
+   FOREST - Nature Green
+   ───────────────────────────────────────────────────────────────────────────── */
 [data-theme="forest"] {
-    --la-hue-primary: 142;      /* Green */
-    --la-hue-secondary: 85;     /* Lime */
-    --la-hue-accent: 35;        /* Earth/Brown */
+    --la-hue-primary: 142;
+    --la-hue-secondary: 85;
+    --la-hue-accent: 35;
 
     --la-primary: oklch(55% 0.18 var(--la-hue-primary));
     --la-primary-light: oklch(68% 0.15 var(--la-hue-primary));
@@ -195,31 +248,18 @@
     --la-secondary: oklch(65% 0.2 var(--la-hue-secondary));
     --la-accent: oklch(60% 0.12 var(--la-hue-accent));
 
-    --la-gradient-primary: linear-gradient(
-        135deg,
-        var(--la-primary) 0%,
-        var(--la-secondary) 100%
-    );
-
-    --la-gradient-hero: linear-gradient(
-        135deg,
-        oklch(18% 0.1 var(--la-hue-primary)) 0%,
-        oklch(22% 0.08 var(--la-hue-secondary)) 50%,
-        oklch(20% 0.12 var(--la-hue-primary)) 100%
-    );
-
-    /* Radius: More organic/rounded */
+    --la-gradient-primary: linear-gradient(135deg, var(--la-primary) 0%, var(--la-secondary) 100%);
+    --la-gradient-hero: linear-gradient(135deg, oklch(18% 0.1 var(--la-hue-primary)) 0%, oklch(22% 0.08 var(--la-hue-secondary)) 50%, oklch(20% 0.12 var(--la-hue-primary)) 100%);
     --la-radius-factor: 1.5;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: SUNSET - Warm Orange/Pink
-   ═══════════════════════════════════════════════════════════════════════════ */
-
+/* ─────────────────────────────────────────────────────────────────────────────
+   SUNSET - Warm Orange/Pink
+   ───────────────────────────────────────────────────────────────────────────── */
 [data-theme="sunset"] {
-    --la-hue-primary: 25;       /* Orange */
-    --la-hue-secondary: 340;    /* Pink */
-    --la-hue-accent: 50;        /* Yellow */
+    --la-hue-primary: 25;
+    --la-hue-secondary: 340;
+    --la-hue-accent: 50;
 
     --la-primary: oklch(65% 0.2 var(--la-hue-primary));
     --la-primary-light: oklch(78% 0.16 var(--la-hue-primary));
@@ -227,24 +267,34 @@
     --la-secondary: oklch(60% 0.22 var(--la-hue-secondary));
     --la-accent: oklch(80% 0.18 var(--la-hue-accent));
 
-    --la-gradient-primary: linear-gradient(
-        135deg,
-        var(--la-primary) 0%,
-        var(--la-secondary) 100%
-    );
-
-    --la-gradient-hero: linear-gradient(
-        135deg,
-        oklch(25% 0.15 var(--la-hue-primary)) 0%,
-        oklch(22% 0.18 var(--la-hue-secondary)) 50%,
-        oklch(28% 0.12 var(--la-hue-primary)) 100%
-    );
+    --la-gradient-primary: linear-gradient(135deg, var(--la-primary) 0%, var(--la-secondary) 100%);
+    --la-gradient-hero: linear-gradient(135deg, oklch(25% 0.15 var(--la-hue-primary)) 0%, oklch(22% 0.18 var(--la-hue-secondary)) 50%, oklch(28% 0.12 var(--la-hue-primary)) 100%);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: MONOCHROME - Pure Black & White
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────────────────────
+   LAVENDER - Soft Purple
+   ───────────────────────────────────────────────────────────────────────────── */
+[data-theme="lavender"] {
+    --la-hue-primary: 270;
+    --la-hue-secondary: 320;
+    --la-hue-accent: 45;
 
+    --la-primary: oklch(60% 0.18 var(--la-hue-primary));
+    --la-primary-light: oklch(75% 0.14 var(--la-hue-primary));
+    --la-primary-dark: oklch(45% 0.2 var(--la-hue-primary));
+    --la-secondary: oklch(70% 0.15 var(--la-hue-secondary));
+
+    --la-surface-0: oklch(99% 0.01 var(--la-hue-primary));
+    --la-surface-1: oklch(97% 0.015 var(--la-hue-primary));
+    --la-surface-2: oklch(95% 0.02 var(--la-hue-primary));
+
+    --la-gradient-hero: linear-gradient(135deg, oklch(25% 0.12 var(--la-hue-primary)) 0%, oklch(22% 0.15 var(--la-hue-secondary)) 50%, oklch(27% 0.1 var(--la-hue-primary)) 100%);
+    --la-radius-factor: 1.25;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MONO - Pure Black & White
+   ───────────────────────────────────────────────────────────────────────────── */
 [data-theme="mono"] {
     --la-hue-primary: 0;
     --la-hue-secondary: 0;
@@ -268,23 +318,12 @@
     --la-border: oklch(85% 0 0);
     --la-border-strong: oklch(70% 0 0);
 
-    --la-gradient-primary: linear-gradient(
-        135deg,
-        oklch(30% 0 0) 0%,
-        oklch(60% 0 0) 100%
-    );
-
-    --la-gradient-hero: linear-gradient(
-        135deg,
-        oklch(15% 0 0) 0%,
-        oklch(25% 0 0) 50%,
-        oklch(20% 0 0) 100%
-    );
+    --la-gradient-primary: linear-gradient(135deg, oklch(30% 0 0) 0%, oklch(60% 0 0) 100%);
+    --la-gradient-hero: linear-gradient(135deg, oklch(15% 0 0) 0%, oklch(25% 0 0) 50%, oklch(20% 0 0) 100%);
 }
 
 [data-theme="mono-dark"] {
     color-scheme: dark;
-
     --la-hue-primary: 0;
     --la-hue-secondary: 0;
     --la-hue-accent: 0;
@@ -306,205 +345,24 @@
     --la-border-strong: oklch(35% 0 0);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: AURORA - Northern Lights
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────────────────────
+   8BITS - Retro Pixel Art
+   ───────────────────────────────────────────────────────────────────────────── */
+[data-theme="8bits"],
+[data-theme="8bits-dark"] {
+    --la-hue-primary: 280;
+    --la-hue-secondary: 180;
+    --la-hue-accent: 45;
+    --la-radius-factor: 0;
 
-[data-theme="aurora"] {
-    color-scheme: dark;
-
-    --la-hue-primary: 160;      /* Teal/Green */
-    --la-hue-secondary: 280;    /* Purple */
-    --la-hue-accent: 200;       /* Cyan */
-
-    --la-primary: oklch(60% 0.2 var(--la-hue-primary));
-    --la-primary-light: oklch(72% 0.18 var(--la-hue-primary));
-    --la-secondary: oklch(55% 0.25 var(--la-hue-secondary));
-    --la-accent: oklch(70% 0.18 var(--la-hue-accent));
-
-    --la-surface-0: oklch(10% 0.02 220);
-    --la-surface-1: oklch(14% 0.02 220);
-    --la-surface-2: oklch(18% 0.03 220);
-    --la-surface-3: oklch(22% 0.03 220);
-
-    --la-text: oklch(95% 0.01 var(--la-hue-accent));
-    --la-text-secondary: oklch(78% 0.01 var(--la-hue-accent));
-
-    --la-gradient-primary: linear-gradient(
-        135deg,
-        var(--la-primary) 0%,
-        var(--la-secondary) 50%,
-        var(--la-accent) 100%
-    );
-
-    --la-gradient-hero: linear-gradient(
-        135deg,
-        oklch(10% 0.08 var(--la-hue-primary)) 0%,
-        oklch(12% 0.12 var(--la-hue-secondary)) 33%,
-        oklch(11% 0.1 var(--la-hue-accent)) 66%,
-        oklch(10% 0.08 var(--la-hue-primary)) 100%
-    );
-
-    --la-shadow-glow:
-        0 0 20px oklch(60% 0.2 var(--la-hue-primary) / 30%),
-        0 0 40px oklch(55% 0.25 var(--la-hue-secondary) / 20%);
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: LAVENDER - Soft Purple
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-[data-theme="lavender"] {
-    --la-hue-primary: 270;      /* Purple */
-    --la-hue-secondary: 320;    /* Pink */
-    --la-hue-accent: 45;        /* Gold */
-
-    --la-primary: oklch(60% 0.18 var(--la-hue-primary));
-    --la-primary-light: oklch(75% 0.14 var(--la-hue-primary));
-    --la-primary-dark: oklch(45% 0.2 var(--la-hue-primary));
-    --la-secondary: oklch(70% 0.15 var(--la-hue-secondary));
-
-    --la-surface-0: oklch(99% 0.01 var(--la-hue-primary));
-    --la-surface-1: oklch(97% 0.015 var(--la-hue-primary));
-    --la-surface-2: oklch(95% 0.02 var(--la-hue-primary));
-
-    --la-gradient-hero: linear-gradient(
-        135deg,
-        oklch(25% 0.12 var(--la-hue-primary)) 0%,
-        oklch(22% 0.15 var(--la-hue-secondary)) 50%,
-        oklch(27% 0.1 var(--la-hue-primary)) 100%
-    );
-
-    /* Softer radius */
-    --la-radius-factor: 1.25;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   CONTRAST MODES - Accessibility
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-@media (prefers-contrast: more) {
-    :root {
-        --la-text: oklch(5% 0 0);
-        --la-text-secondary: oklch(20% 0 0);
-        --la-border: oklch(50% 0.02 var(--la-hue-primary));
-        --la-border-strong: oklch(30% 0.02 var(--la-hue-primary));
-    }
-
-    @media (prefers-color-scheme: dark) {
-        :root:not([data-theme="light"]) {
-            --la-text: oklch(100% 0 0);
-            --la-text-secondary: oklch(90% 0 0);
-            --la-border: oklch(60% 0.02 var(--la-hue-primary));
-        }
-    }
-}
-
-@media (prefers-contrast: less) {
-    :root {
-        --la-text: oklch(35% 0.02 var(--la-hue-primary));
-        --la-text-secondary: oklch(50% 0.02 var(--la-hue-primary));
-        --la-border: oklch(92% 0.01 var(--la-hue-primary));
-    }
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   REDUCED MOTION
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-@media (prefers-reduced-motion: reduce) {
-    :root {
-        --la-duration-instant: 0ms;
-        --la-duration-fast: 0ms;
-        --la-duration-base: 0ms;
-        --la-duration-slow: 0ms;
-        --la-duration-slower: 0ms;
-        --la-duration-slowest: 0ms;
-        --la-transition: none;
-        --la-transition-fast: none;
-        --la-transition-slow: none;
-    }
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME VISUALS - Icons, Fonts, Hero Images
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   HERO IMAGES BY THEME AND MODE
-   Each theme has a distinct image for dark and light modes
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* Default theme visuals */
-:root {
-    --la-hero-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80');
-    --la-icon-logo: 'rocket_launch';
-}
-
-/* Dark mode - Space/Night imagery */
-[data-theme="dark"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80');
-    --la-icon-logo: 'rocket_launch';
-}
-
-/* Light mode - Bright/Day imagery */
-[data-theme="light"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1517483000871-1dbf64a6e1c6?w=1920&q=80');
-    --la-icon-logo: 'rocket_launch';
-}
-
-/* Cyberpunk - Neon city */
-[data-theme="cyberpunk"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1920&q=80');
-    --la-icon-logo: 'electric_bolt';
-    --la-font-sans: 'Rajdhani', 'Orbitron', sans-serif;
-    --la-font-display: 'Orbitron', 'Rajdhani', sans-serif;
-}
-[data-theme="cyberpunk-light"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1920&q=80');
-    --la-icon-logo: 'electric_bolt';
-    --la-font-sans: 'Rajdhani', 'Orbitron', sans-serif;
-    --la-font-display: 'Orbitron', 'Rajdhani', sans-serif;
-}
-
-/* Aurora - Northern lights */
-[data-theme="aurora"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1920&q=80');
-    --la-icon-logo: 'flare';
-    --la-font-sans: 'Poppins', 'Inter', sans-serif;
-    --la-font-display: 'Poppins', 'Inter', sans-serif;
-}
-[data-theme="aurora-light"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1507400492013-162706c8c05e?w=1920&q=80');
-    --la-icon-logo: 'flare';
-    --la-font-sans: 'Poppins', 'Inter', sans-serif;
-    --la-font-display: 'Poppins', 'Inter', sans-serif;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: 8BITS - Retro Pixel Art Style
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* 8bits - Light mode: colorful arcade */
-[data-theme="8bits"] {
     --la-hero-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&q=80');
     --la-icon-logo: 'sports_esports';
     --la-font-sans: 'VT323', 'Press Start 2P', 'Courier New', monospace;
     --la-font-display: 'Press Start 2P', 'VT323', monospace;
-}
-/* 8bits - Dark mode: neon arcade night */
-[data-theme="8bits-dark"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1920&q=80');
-    --la-icon-logo: 'sports_esports';
-    --la-font-sans: 'VT323', 'Press Start 2P', 'Courier New', monospace;
-    --la-font-display: 'Press Start 2P', 'VT323', monospace;
+    --la-gradient-primary: linear-gradient(90deg, oklch(55% 0.3 280) 0%, oklch(60% 0.25 320) 25%, oklch(65% 0.2 180) 50%, oklch(70% 0.22 120) 75%, oklch(75% 0.2 45) 100%);
 }
 
 [data-theme="8bits"] {
-    --la-hue-primary: 280;      /* Purple */
-    --la-hue-secondary: 180;    /* Cyan */
-    --la-hue-accent: 45;        /* Gold */
-
     --la-primary: oklch(55% 0.25 var(--la-hue-primary));
     --la-primary-light: oklch(70% 0.22 var(--la-hue-primary));
     --la-primary-dark: oklch(40% 0.28 var(--la-hue-primary));
@@ -522,33 +380,11 @@
 
     --la-border: oklch(70% 0.1 var(--la-hue-primary));
     --la-border-strong: oklch(50% 0.15 var(--la-hue-primary));
-
-    /* Pixelated look - no border-radius */
-    --la-radius-factor: 0;
-
-    --la-gradient-primary: linear-gradient(
-        90deg,
-        oklch(55% 0.3 280) 0%,
-        oklch(60% 0.25 320) 25%,
-        oklch(65% 0.2 180) 50%,
-        oklch(70% 0.22 120) 75%,
-        oklch(75% 0.2 45) 100%
-    );
-
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(25% 0.15 280) 0%,
-        oklch(20% 0.12 320) 50%,
-        oklch(15% 0.1 280) 100%
-    );
+    --la-gradient-hero: linear-gradient(180deg, oklch(25% 0.15 280) 0%, oklch(20% 0.12 320) 50%, oklch(15% 0.1 280) 100%);
 }
 
 [data-theme="8bits-dark"] {
     color-scheme: dark;
-
-    --la-hue-primary: 280;
-    --la-hue-secondary: 180;
-    --la-hue-accent: 45;
 
     --la-primary: oklch(65% 0.3 var(--la-hue-primary));
     --la-primary-light: oklch(75% 0.25 var(--la-hue-primary));
@@ -568,40 +404,27 @@
     --la-border: oklch(35% 0.1 var(--la-hue-primary));
     --la-border-strong: oklch(50% 0.15 var(--la-hue-primary));
 
-    --la-radius-factor: 0;
-
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(8% 0.15 280) 0%,
-        oklch(12% 0.12 320) 50%,
-        oklch(8% 0.1 180) 100%
-    );
+    --la-hero-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1920&q=80');
+    --la-gradient-hero: linear-gradient(180deg, oklch(8% 0.15 280) 0%, oklch(12% 0.12 320) 50%, oklch(8% 0.1 180) 100%);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: BUBBLE BOBBLE - Cute Pastel Arcade
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* Bubble - Light mode: pastel bubbles */
-[data-theme="bubble"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80');
-    --la-icon-logo: 'bubble_chart';
-    --la-font-sans: 'Nunito', 'Comic Neue', 'Comic Sans MS', cursive;
-    --la-font-display: 'Fredoka One', 'Nunito', sans-serif;
-}
-/* Bubble - Dark mode: deep sea bubbles */
+/* ─────────────────────────────────────────────────────────────────────────────
+   BUBBLE - Cute Pastel Arcade
+   ───────────────────────────────────────────────────────────────────────────── */
+[data-theme="bubble"],
 [data-theme="bubble-dark"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1530053969600-caed2596d242?w=1920&q=80');
+    --la-hue-primary: 145;
+    --la-hue-secondary: 210;
+    --la-hue-accent: 30;
+    --la-radius-factor: 2;
+
     --la-icon-logo: 'bubble_chart';
     --la-font-sans: 'Nunito', 'Comic Neue', 'Comic Sans MS', cursive;
     --la-font-display: 'Fredoka One', 'Nunito', sans-serif;
+    --la-gradient-primary: linear-gradient(135deg, oklch(70% 0.22 145) 0%, oklch(65% 0.2 210) 100%);
 }
 
 [data-theme="bubble"] {
-    --la-hue-primary: 145;      /* Green (Bub) */
-    --la-hue-secondary: 210;    /* Blue (Bob) */
-    --la-hue-accent: 30;        /* Orange */
-
     --la-primary: oklch(70% 0.2 var(--la-hue-primary));
     --la-primary-light: oklch(82% 0.16 var(--la-hue-primary));
     --la-primary-dark: oklch(55% 0.22 var(--la-hue-primary));
@@ -620,31 +443,13 @@
     --la-border: oklch(85% 0.08 var(--la-hue-primary));
     --la-border-strong: oklch(70% 0.12 var(--la-hue-secondary));
 
-    /* Bubbly rounded corners */
-    --la-radius-factor: 2;
-
-    --la-gradient-primary: linear-gradient(
-        135deg,
-        oklch(70% 0.22 145) 0%,
-        oklch(65% 0.2 210) 100%
-    );
-
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(30% 0.12 145) 0%,
-        oklch(25% 0.15 210) 50%,
-        oklch(20% 0.1 180) 100%
-    );
-
+    --la-hero-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80');
+    --la-gradient-hero: linear-gradient(180deg, oklch(30% 0.12 145) 0%, oklch(25% 0.15 210) 50%, oklch(20% 0.1 180) 100%);
     --la-shadow-glow: 0 4px 20px oklch(70% 0.2 145 / 40%);
 }
 
 [data-theme="bubble-dark"] {
     color-scheme: dark;
-
-    --la-hue-primary: 145;
-    --la-hue-secondary: 210;
-    --la-hue-accent: 30;
 
     --la-primary: oklch(65% 0.22 var(--la-hue-primary));
     --la-primary-light: oklch(75% 0.18 var(--la-hue-primary));
@@ -663,41 +468,29 @@
     --la-border: oklch(30% 0.08 180);
     --la-border-strong: oklch(45% 0.1 180);
 
-    --la-radius-factor: 2;
-
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(10% 0.1 145) 0%,
-        oklch(12% 0.12 210) 50%,
-        oklch(8% 0.08 180) 100%
-    );
-
+    --la-hero-image: url('https://images.unsplash.com/photo-1530053969600-caed2596d242?w=1920&q=80');
+    --la-gradient-hero: linear-gradient(180deg, oklch(10% 0.1 145) 0%, oklch(12% 0.12 210) 50%, oklch(8% 0.08 180) 100%);
     --la-shadow-glow: 0 4px 30px oklch(65% 0.22 145 / 50%);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: GALAXIAN - Space Arcade
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* Galaxian - Dark mode: deep space */
-[data-theme="galaxian"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&q=80');
-    --la-icon-logo: 'auto_awesome';
-    --la-font-sans: 'Orbitron', 'Share Tech Mono', monospace;
-    --la-font-display: 'Orbitron', 'Share Tech Mono', monospace;
-}
-/* Galaxian - Light mode: bright nebula */
+/* ─────────────────────────────────────────────────────────────────────────────
+   GALAXIAN - Space Arcade
+   ───────────────────────────────────────────────────────────────────────────── */
+[data-theme="galaxian"],
 [data-theme="galaxian-light"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=1920&q=80');
+    --la-hue-primary: 240;
+    --la-hue-secondary: 60;
+    --la-hue-accent: 0;
+    --la-radius-factor: 0.25;
+
     --la-icon-logo: 'auto_awesome';
     --la-font-sans: 'Orbitron', 'Share Tech Mono', monospace;
     --la-font-display: 'Orbitron', 'Share Tech Mono', monospace;
+    --la-gradient-primary: linear-gradient(180deg, oklch(50% 0.22 240) 0%, oklch(85% 0.2 60) 50%, oklch(60% 0.25 0) 100%);
 }
 
 [data-theme="galaxian"] {
-    --la-hue-primary: 240;      /* Deep Blue */
-    --la-hue-secondary: 60;     /* Yellow (stars) */
-    --la-hue-accent: 0;         /* Red (enemies) */
+    color-scheme: dark;
 
     --la-primary: oklch(50% 0.2 var(--la-hue-primary));
     --la-primary-light: oklch(65% 0.18 var(--la-hue-primary));
@@ -717,33 +510,12 @@
     --la-border: oklch(30% 0.08 var(--la-hue-primary));
     --la-border-strong: oklch(45% 0.1 var(--la-hue-primary));
 
-    --la-radius-factor: 0.25;
-
-    --la-gradient-primary: linear-gradient(
-        180deg,
-        oklch(50% 0.22 240) 0%,
-        oklch(85% 0.2 60) 50%,
-        oklch(60% 0.25 0) 100%
-    );
-
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(5% 0.02 240) 0%,
-        oklch(10% 0.05 240) 50%,
-        oklch(5% 0.02 240) 100%
-    );
-
-    /* Star twinkle effect */
-    --la-shadow-glow:
-        0 0 2px oklch(95% 0.1 60),
-        0 0 10px oklch(85% 0.15 60 / 50%);
+    --la-hero-image: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&q=80');
+    --la-gradient-hero: linear-gradient(180deg, oklch(5% 0.02 240) 0%, oklch(10% 0.05 240) 50%, oklch(5% 0.02 240) 100%);
+    --la-shadow-glow: 0 0 2px oklch(95% 0.1 60), 0 0 10px oklch(85% 0.15 60 / 50%);
 }
 
 [data-theme="galaxian-light"] {
-    --la-hue-primary: 240;
-    --la-hue-secondary: 60;
-    --la-hue-accent: 0;
-
     --la-primary: oklch(45% 0.2 var(--la-hue-primary));
     --la-primary-light: oklch(60% 0.18 var(--la-hue-primary));
     --la-secondary: oklch(75% 0.18 var(--la-hue-secondary));
@@ -761,141 +533,27 @@
     --la-border: oklch(85% 0.05 var(--la-hue-primary));
     --la-border-strong: oklch(70% 0.08 var(--la-hue-primary));
 
-    --la-radius-factor: 0.25;
-
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(30% 0.15 240) 0%,
-        oklch(25% 0.12 240) 50%,
-        oklch(20% 0.1 240) 100%
-    );
+    --la-hero-image: url('https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=1920&q=80');
+    --la-gradient-hero: linear-gradient(180deg, oklch(30% 0.15 240) 0%, oklch(25% 0.12 240) 50%, oklch(20% 0.1 240) 100%);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: WEB90 - Early Web Bad Taste (GeoCities vibes)
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* Web90 - Light mode: retro computer */
-[data-theme="web90"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80');
-    --la-icon-logo: 'construction';
-    --la-font-sans: 'Comic Sans MS', 'Comic Neue', cursive;
-    --la-font-display: 'Comic Sans MS', 'Comic Neue', cursive;
-}
-/* Web90 - Dark mode: vintage tech */
-[data-theme="web90-dark"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1920&q=80');
-    --la-icon-logo: 'construction';
-    --la-font-sans: 'Comic Sans MS', 'Comic Neue', cursive;
-    --la-font-display: 'Comic Sans MS', 'Comic Neue', cursive;
-}
-
-[data-theme="web90"] {
-    --la-hue-primary: 280;      /* Purple */
-    --la-hue-secondary: 180;    /* Teal */
-    --la-hue-accent: 60;        /* Yellow */
-
-    --la-primary: oklch(55% 0.35 var(--la-hue-primary));
-    --la-primary-light: oklch(70% 0.3 var(--la-hue-primary));
-    --la-primary-dark: oklch(40% 0.38 var(--la-hue-primary));
-    --la-secondary: oklch(60% 0.3 var(--la-hue-secondary));
-    --la-accent: oklch(90% 0.25 var(--la-hue-accent));
-
-    --la-surface-0: oklch(95% 0.03 60);
-    --la-surface-1: oklch(90% 0.04 180);
-    --la-surface-2: oklch(85% 0.05 280);
-    --la-surface-3: oklch(80% 0.06 320);
-
-    --la-text: oklch(20% 0.05 280);
-    --la-text-secondary: oklch(40% 0.04 280);
-    --la-text-muted: oklch(55% 0.03 280);
-
-    --la-border: oklch(60% 0.2 var(--la-hue-primary));
-    --la-border-strong: oklch(45% 0.25 var(--la-hue-secondary));
-
-    /* Bevel effect - thick borders */
-    --la-radius-factor: 0;
-
-    --la-gradient-primary: linear-gradient(
-        90deg,
-        oklch(55% 0.35 280) 0%,
-        oklch(60% 0.3 180) 33%,
-        oklch(90% 0.25 60) 66%,
-        oklch(65% 0.35 0) 100%
-    );
-
-    --la-gradient-hero: repeating-linear-gradient(
-        45deg,
-        oklch(55% 0.25 280) 0px,
-        oklch(55% 0.25 280) 10px,
-        oklch(60% 0.2 180) 10px,
-        oklch(60% 0.2 180) 20px
-    );
-
-    /* Comic Sans vibes */
-    --la-font-body: 'Comic Sans MS', 'Comic Sans', cursive;
-}
-
-[data-theme="web90-dark"] {
-    color-scheme: dark;
-
-    --la-hue-primary: 280;
-    --la-hue-secondary: 180;
-    --la-hue-accent: 60;
-
-    --la-primary: oklch(65% 0.38 var(--la-hue-primary));
-    --la-primary-light: oklch(75% 0.32 var(--la-hue-primary));
-    --la-secondary: oklch(70% 0.32 var(--la-hue-secondary));
-    --la-accent: oklch(85% 0.28 var(--la-hue-accent));
-
-    --la-surface-0: oklch(8% 0.05 280);
-    --la-surface-1: oklch(12% 0.06 180);
-    --la-surface-2: oklch(16% 0.07 280);
-    --la-surface-3: oklch(20% 0.08 320);
-
-    --la-text: oklch(95% 0.03 60);
-    --la-text-secondary: oklch(80% 0.03 60);
-    --la-text-muted: oklch(60% 0.02 60);
-
-    --la-border: oklch(50% 0.25 var(--la-hue-primary));
-    --la-border-strong: oklch(60% 0.28 var(--la-hue-secondary));
-
-    --la-radius-factor: 0;
-    --la-font-body: 'Comic Sans MS', 'Comic Sans', cursive;
-
-    --la-gradient-hero: repeating-linear-gradient(
-        45deg,
-        oklch(15% 0.2 280) 0px,
-        oklch(15% 0.2 280) 10px,
-        oklch(20% 0.18 180) 10px,
-        oklch(20% 0.18 180) 20px
-    );
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: GEEK - Terminal/Code Style
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* Geek - Light mode: clean code */
-[data-theme="geek"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1920&q=80');
-    --la-icon-logo: 'terminal';
-    --la-font-sans: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-    --la-font-display: 'JetBrains Mono', 'Fira Code', monospace;
-}
-/* Geek - Dark mode: dark IDE */
+/* ─────────────────────────────────────────────────────────────────────────────
+   GEEK - Terminal/Code Style
+   ───────────────────────────────────────────────────────────────────────────── */
+[data-theme="geek"],
 [data-theme="geek-dark"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1920&q=80');
+    --la-hue-primary: 142;
+    --la-hue-secondary: 200;
+    --la-hue-accent: 35;
+    --la-radius-factor: 0.5;
+
     --la-icon-logo: 'terminal';
     --la-font-sans: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
     --la-font-display: 'JetBrains Mono', 'Fira Code', monospace;
+    --la-font-body: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
 }
 
 [data-theme="geek"] {
-    --la-hue-primary: 142;      /* Green (terminal) */
-    --la-hue-secondary: 200;    /* Blue (links) */
-    --la-hue-accent: 35;        /* Orange (warnings) */
-
     --la-primary: oklch(60% 0.2 var(--la-hue-primary));
     --la-primary-light: oklch(72% 0.18 var(--la-hue-primary));
     --la-primary-dark: oklch(48% 0.22 var(--la-hue-primary));
@@ -914,31 +572,13 @@
     --la-border: oklch(85% 0.03 var(--la-hue-primary));
     --la-border-strong: oklch(70% 0.05 var(--la-hue-primary));
 
-    --la-radius-factor: 0.5;
-
-    /* Monospace font */
-    --la-font-body: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-    --la-font-display: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-
-    --la-gradient-primary: linear-gradient(
-        90deg,
-        oklch(60% 0.2 142) 0%,
-        oklch(55% 0.15 200) 100%
-    );
-
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(20% 0.08 142) 0%,
-        oklch(15% 0.06 200) 100%
-    );
+    --la-hero-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1920&q=80');
+    --la-gradient-primary: linear-gradient(90deg, oklch(60% 0.2 142) 0%, oklch(55% 0.15 200) 100%);
+    --la-gradient-hero: linear-gradient(180deg, oklch(20% 0.08 142) 0%, oklch(15% 0.06 200) 100%);
 }
 
 [data-theme="geek-dark"] {
     color-scheme: dark;
-
-    --la-hue-primary: 142;
-    --la-hue-secondary: 200;
-    --la-hue-accent: 35;
 
     --la-primary: oklch(70% 0.25 var(--la-hue-primary));
     --la-primary-light: oklch(80% 0.2 var(--la-hue-primary));
@@ -957,138 +597,41 @@
     --la-border: oklch(25% 0.04 var(--la-hue-primary));
     --la-border-strong: oklch(40% 0.06 var(--la-hue-primary));
 
-    --la-radius-factor: 0.5;
-    --la-font-body: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-    --la-font-display: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    /* Code - IDE Dark */
+    --la-code-bg: oklch(10% 0.015 var(--la-hue-primary));
+    --la-code-text: oklch(82% 0.12 var(--la-hue-primary));
+    --la-code-lang: oklch(72% 0.22 var(--la-hue-primary));
+    --la-code-lang-glow: oklch(70% 0.22 var(--la-hue-primary) / 50%);
+    --la-code-border: oklch(22% 0.03 var(--la-hue-primary));
+    --la-syntax-keyword: oklch(70% 0.2 280);
+    --la-syntax-string: oklch(72% 0.18 var(--la-hue-primary));
+    --la-syntax-function: oklch(75% 0.15 var(--la-hue-secondary));
+    --la-syntax-comment: oklch(50% 0.05 var(--la-hue-primary));
+    --la-syntax-variable: oklch(78% 0.18 var(--la-hue-accent));
 
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(8% 0.05 142) 0%,
-        oklch(5% 0.03 200) 100%
-    );
-
-    /* Terminal glow */
+    --la-hero-image: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1920&q=80');
+    --la-gradient-hero: linear-gradient(180deg, oklch(8% 0.05 142) 0%, oklch(5% 0.03 200) 100%);
     --la-shadow-glow: 0 0 20px oklch(70% 0.25 142 / 30%);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: ECO - Nature/Sustainable Green
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* Eco - Light mode: sunny forest */
-[data-theme="eco"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80');
-    --la-icon-logo: 'eco';
-    --la-font-sans: 'Poppins', 'Quicksand', sans-serif;
-    --la-font-display: 'Quicksand', 'Poppins', sans-serif;
-}
-/* Eco - Dark mode: mystical forest */
-[data-theme="eco-dark"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=1920&q=80');
-    --la-icon-logo: 'eco';
-    --la-font-sans: 'Poppins', 'Quicksand', sans-serif;
-    --la-font-display: 'Quicksand', 'Poppins', sans-serif;
-}
-
-[data-theme="eco"] {
-    --la-hue-primary: 130;      /* Fresh Green */
-    --la-hue-secondary: 90;     /* Lime */
-    --la-hue-accent: 45;        /* Earth/Sand */
-
-    --la-primary: oklch(55% 0.15 var(--la-hue-primary));
-    --la-primary-light: oklch(70% 0.12 var(--la-hue-primary));
-    --la-primary-dark: oklch(40% 0.18 var(--la-hue-primary));
-    --la-secondary: oklch(65% 0.18 var(--la-hue-secondary));
-    --la-accent: oklch(70% 0.1 var(--la-hue-accent));
-
-    --la-surface-0: oklch(98% 0.01 var(--la-hue-primary));
-    --la-surface-1: oklch(96% 0.015 var(--la-hue-primary));
-    --la-surface-2: oklch(93% 0.02 var(--la-hue-secondary));
-    --la-surface-3: oklch(90% 0.025 var(--la-hue-primary));
-
-    --la-text: oklch(25% 0.03 var(--la-hue-primary));
-    --la-text-secondary: oklch(40% 0.025 var(--la-hue-primary));
-    --la-text-muted: oklch(55% 0.02 var(--la-hue-primary));
-
-    --la-border: oklch(85% 0.06 var(--la-hue-primary));
-    --la-border-strong: oklch(70% 0.08 var(--la-hue-primary));
-
-    /* Organic rounded */
-    --la-radius-factor: 1.5;
-
-    --la-gradient-primary: linear-gradient(
-        135deg,
-        oklch(55% 0.18 130) 0%,
-        oklch(65% 0.2 90) 100%
-    );
-
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(35% 0.12 130) 0%,
-        oklch(30% 0.1 90) 50%,
-        oklch(25% 0.08 45) 100%
-    );
-}
-
-[data-theme="eco-dark"] {
-    color-scheme: dark;
-
-    --la-hue-primary: 130;
-    --la-hue-secondary: 90;
-    --la-hue-accent: 45;
-
-    --la-primary: oklch(60% 0.18 var(--la-hue-primary));
-    --la-primary-light: oklch(72% 0.15 var(--la-hue-primary));
-    --la-secondary: oklch(68% 0.2 var(--la-hue-secondary));
-    --la-accent: oklch(65% 0.12 var(--la-hue-accent));
-
-    --la-surface-0: oklch(12% 0.02 var(--la-hue-primary));
-    --la-surface-1: oklch(16% 0.025 var(--la-hue-primary));
-    --la-surface-2: oklch(20% 0.03 var(--la-hue-primary));
-    --la-surface-3: oklch(24% 0.035 var(--la-hue-primary));
-
-    --la-text: oklch(92% 0.02 var(--la-hue-primary));
-    --la-text-secondary: oklch(75% 0.02 var(--la-hue-primary));
-    --la-text-muted: oklch(55% 0.015 var(--la-hue-primary));
-
-    --la-border: oklch(28% 0.04 var(--la-hue-primary));
-    --la-border-strong: oklch(40% 0.06 var(--la-hue-primary));
-
-    --la-radius-factor: 1.5;
-
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(12% 0.08 130) 0%,
-        oklch(10% 0.06 90) 50%,
-        oklch(8% 0.04 45) 100%
-    );
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: HACKER - Dark Terminal (Matrix vibes)
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* Hacker - Dark mode: Matrix rain */
-[data-theme="hacker"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1920&q=80');
-    --la-icon-logo: 'security';
-    --la-font-sans: 'Share Tech Mono', 'JetBrains Mono', monospace;
-    --la-font-display: 'Share Tech Mono', 'Courier New', monospace;
-}
-/* Hacker - Light mode: cyber security */
+/* ─────────────────────────────────────────────────────────────────────────────
+   HACKER - Matrix Terminal
+   ───────────────────────────────────────────────────────────────────────────── */
+[data-theme="hacker"],
 [data-theme="hacker-light"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1563206767-5b18f218e8de?w=1920&q=80');
+    --la-hue-primary: 120;
+    --la-hue-secondary: 120;
+    --la-hue-accent: 0;
+    --la-radius-factor: 0;
+
     --la-icon-logo: 'security';
     --la-font-sans: 'Share Tech Mono', 'JetBrains Mono', monospace;
     --la-font-display: 'Share Tech Mono', 'Courier New', monospace;
+    --la-font-body: 'JetBrains Mono', 'Courier New', monospace;
 }
 
 [data-theme="hacker"] {
     color-scheme: dark;
-
-    --la-hue-primary: 120;      /* Matrix Green */
-    --la-hue-secondary: 120;
-    --la-hue-accent: 0;         /* Red (danger) */
 
     --la-primary: oklch(65% 0.3 var(--la-hue-primary));
     --la-primary-light: oklch(80% 0.25 var(--la-hue-primary));
@@ -1108,36 +651,26 @@
     --la-border: oklch(20% 0.08 var(--la-hue-primary));
     --la-border-strong: oklch(35% 0.12 var(--la-hue-primary));
 
-    --la-radius-factor: 0;
+    /* Code - Matrix */
+    --la-code-bg: oklch(2% 0.02 var(--la-hue-primary));
+    --la-code-text: oklch(70% 0.28 var(--la-hue-primary));
+    --la-code-lang: oklch(75% 0.3 var(--la-hue-primary));
+    --la-code-lang-glow: oklch(65% 0.3 var(--la-hue-primary) / 90%);
+    --la-code-border: oklch(18% 0.1 var(--la-hue-primary));
+    --la-code-line-number: oklch(40% 0.15 var(--la-hue-primary));
+    --la-syntax-keyword: oklch(72% 0.28 var(--la-hue-primary));
+    --la-syntax-string: oklch(65% 0.25 var(--la-hue-primary));
+    --la-syntax-function: oklch(78% 0.3 var(--la-hue-primary));
+    --la-syntax-comment: oklch(45% 0.12 var(--la-hue-primary));
+    --la-syntax-operator: oklch(60% 0.28 var(--la-hue-accent));
 
-    --la-font-body: 'JetBrains Mono', 'Courier New', monospace;
-    --la-font-display: 'JetBrains Mono', 'Courier New', monospace;
-
-    --la-gradient-primary: linear-gradient(
-        180deg,
-        oklch(65% 0.3 120) 0%,
-        oklch(45% 0.25 120) 100%
-    );
-
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(3% 0.02 120) 0%,
-        oklch(5% 0.03 120) 50%,
-        oklch(3% 0.02 120) 100%
-    );
-
-    /* Matrix glow */
-    --la-shadow-glow:
-        0 0 5px oklch(65% 0.3 120),
-        0 0 20px oklch(65% 0.3 120 / 50%),
-        0 0 40px oklch(65% 0.3 120 / 25%);
+    --la-hero-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1920&q=80');
+    --la-gradient-primary: linear-gradient(180deg, oklch(65% 0.3 120) 0%, oklch(45% 0.25 120) 100%);
+    --la-gradient-hero: linear-gradient(180deg, oklch(3% 0.02 120) 0%, oklch(5% 0.03 120) 50%, oklch(3% 0.02 120) 100%);
+    --la-shadow-glow: 0 0 5px oklch(65% 0.3 120), 0 0 20px oklch(65% 0.3 120 / 50%), 0 0 40px oklch(65% 0.3 120 / 25%);
 }
 
 [data-theme="hacker-light"] {
-    --la-hue-primary: 120;
-    --la-hue-secondary: 120;
-    --la-hue-accent: 0;
-
     --la-primary: oklch(45% 0.25 var(--la-hue-primary));
     --la-primary-light: oklch(60% 0.2 var(--la-hue-primary));
     --la-primary-dark: oklch(30% 0.28 var(--la-hue-primary));
@@ -1156,41 +689,90 @@
     --la-border: oklch(85% 0.04 var(--la-hue-primary));
     --la-border-strong: oklch(70% 0.06 var(--la-hue-primary));
 
-    --la-radius-factor: 0;
-    --la-font-body: 'JetBrains Mono', 'Courier New', monospace;
-    --la-font-display: 'JetBrains Mono', 'Courier New', monospace;
-
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(25% 0.12 120) 0%,
-        oklch(20% 0.1 120) 100%
-    );
+    --la-hero-image: url('https://images.unsplash.com/photo-1563206767-5b18f218e8de?w=1920&q=80');
+    --la-gradient-hero: linear-gradient(180deg, oklch(25% 0.12 120) 0%, oklch(20% 0.1 120) 100%);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: WIN95 - Windows 95 Classic
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────────────────────
+   ECO - Nature/Sustainable
+   ───────────────────────────────────────────────────────────────────────────── */
+[data-theme="eco"],
+[data-theme="eco-dark"] {
+    --la-hue-primary: 130;
+    --la-hue-secondary: 90;
+    --la-hue-accent: 45;
+    --la-radius-factor: 1.5;
 
-/* Win95 - Light mode: classic desktop */
-[data-theme="win95"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1920&q=80');
-    --la-icon-logo: 'desktop_windows';
-    --la-font-sans: 'Segoe UI', 'MS Sans Serif', Tahoma, sans-serif;
-    --la-font-display: 'Segoe UI', 'MS Sans Serif', Tahoma, sans-serif;
+    --la-icon-logo: 'eco';
+    --la-font-sans: 'Poppins', 'Quicksand', sans-serif;
+    --la-font-display: 'Quicksand', 'Poppins', sans-serif;
 }
-/* Win95 - Dark mode: vintage hardware */
+
+[data-theme="eco"] {
+    --la-primary: oklch(55% 0.15 var(--la-hue-primary));
+    --la-primary-light: oklch(70% 0.12 var(--la-hue-primary));
+    --la-primary-dark: oklch(40% 0.18 var(--la-hue-primary));
+    --la-secondary: oklch(65% 0.18 var(--la-hue-secondary));
+    --la-accent: oklch(70% 0.1 var(--la-hue-accent));
+
+    --la-surface-0: oklch(98% 0.01 var(--la-hue-primary));
+    --la-surface-1: oklch(96% 0.015 var(--la-hue-primary));
+    --la-surface-2: oklch(93% 0.02 var(--la-hue-secondary));
+    --la-surface-3: oklch(90% 0.025 var(--la-hue-primary));
+
+    --la-text: oklch(25% 0.03 var(--la-hue-primary));
+    --la-text-secondary: oklch(40% 0.025 var(--la-hue-primary));
+    --la-text-muted: oklch(55% 0.02 var(--la-hue-primary));
+
+    --la-border: oklch(85% 0.06 var(--la-hue-primary));
+    --la-border-strong: oklch(70% 0.08 var(--la-hue-primary));
+
+    --la-hero-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80');
+    --la-gradient-primary: linear-gradient(135deg, oklch(55% 0.18 130) 0%, oklch(65% 0.2 90) 100%);
+    --la-gradient-hero: linear-gradient(180deg, oklch(35% 0.12 130) 0%, oklch(30% 0.1 90) 50%, oklch(25% 0.08 45) 100%);
+}
+
+[data-theme="eco-dark"] {
+    color-scheme: dark;
+
+    --la-primary: oklch(60% 0.18 var(--la-hue-primary));
+    --la-primary-light: oklch(72% 0.15 var(--la-hue-primary));
+    --la-secondary: oklch(68% 0.2 var(--la-hue-secondary));
+    --la-accent: oklch(65% 0.12 var(--la-hue-accent));
+
+    --la-surface-0: oklch(12% 0.02 var(--la-hue-primary));
+    --la-surface-1: oklch(16% 0.025 var(--la-hue-primary));
+    --la-surface-2: oklch(20% 0.03 var(--la-hue-primary));
+    --la-surface-3: oklch(24% 0.035 var(--la-hue-primary));
+
+    --la-text: oklch(92% 0.02 var(--la-hue-primary));
+    --la-text-secondary: oklch(75% 0.02 var(--la-hue-primary));
+    --la-text-muted: oklch(55% 0.015 var(--la-hue-primary));
+
+    --la-border: oklch(28% 0.04 var(--la-hue-primary));
+    --la-border-strong: oklch(40% 0.06 var(--la-hue-primary));
+
+    --la-hero-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=1920&q=80');
+    --la-gradient-hero: linear-gradient(180deg, oklch(12% 0.08 130) 0%, oklch(10% 0.06 90) 50%, oklch(8% 0.04 45) 100%);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   WIN95 - Windows 95 Classic
+   ───────────────────────────────────────────────────────────────────────────── */
+[data-theme="win95"],
 [data-theme="win95-dark"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=1920&q=80');
+    --la-hue-primary: 210;
+    --la-hue-secondary: 0;
+    --la-hue-accent: 120;
+    --la-radius-factor: 0;
+
     --la-icon-logo: 'desktop_windows';
     --la-font-sans: 'Segoe UI', 'MS Sans Serif', Tahoma, sans-serif;
     --la-font-display: 'Segoe UI', 'MS Sans Serif', Tahoma, sans-serif;
+    --la-font-body: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
 }
 
 [data-theme="win95"] {
-    --la-hue-primary: 210;      /* Windows Blue */
-    --la-hue-secondary: 0;      /* Gray */
-    --la-hue-accent: 120;       /* Green (start button) */
-
     --la-primary: oklch(45% 0.15 var(--la-hue-primary));
     --la-primary-light: oklch(55% 0.12 var(--la-hue-primary));
     --la-primary-dark: oklch(30% 0.18 var(--la-hue-primary));
@@ -1209,41 +791,17 @@
     --la-border: oklch(55% 0.01 0);
     --la-border-strong: oklch(35% 0.01 0);
 
-    /* Classic square corners */
-    --la-radius-factor: 0;
+    --la-hero-image: url('https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1920&q=80');
+    --la-gradient-primary: linear-gradient(180deg, oklch(45% 0.15 210) 0%, oklch(30% 0.18 210) 100%);
+    --la-gradient-hero: linear-gradient(90deg, oklch(35% 0.15 210) 0%, oklch(55% 0.12 200) 100%);
 
-    /* System font */
-    --la-font-body: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
-    --la-font-display: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
-
-    --la-gradient-primary: linear-gradient(
-        180deg,
-        oklch(45% 0.15 210) 0%,
-        oklch(30% 0.18 210) 100%
-    );
-
-    /* Classic Windows title bar gradient */
-    --la-gradient-hero: linear-gradient(
-        90deg,
-        oklch(35% 0.15 210) 0%,
-        oklch(55% 0.12 200) 100%
-    );
-
-    /* 3D bevel shadows */
-    --la-shadow-sm:
-        inset -1px -1px 0 oklch(40% 0 0),
-        inset 1px 1px 0 oklch(100% 0 0);
-    --la-shadow-md:
-        inset -2px -2px 0 oklch(40% 0 0),
-        inset 2px 2px 0 oklch(100% 0 0);
+    /* 3D bevel */
+    --la-shadow-sm: inset -1px -1px 0 oklch(40% 0 0), inset 1px 1px 0 oklch(100% 0 0);
+    --la-shadow-md: inset -2px -2px 0 oklch(40% 0 0), inset 2px 2px 0 oklch(100% 0 0);
 }
 
 [data-theme="win95-dark"] {
     color-scheme: dark;
-
-    --la-hue-primary: 210;
-    --la-hue-secondary: 0;
-    --la-hue-accent: 120;
 
     --la-primary: oklch(55% 0.18 var(--la-hue-primary));
     --la-primary-light: oklch(65% 0.15 var(--la-hue-primary));
@@ -1262,49 +820,31 @@
     --la-border: oklch(45% 0.01 0);
     --la-border-strong: oklch(60% 0.01 0);
 
-    --la-radius-factor: 0;
-    --la-font-body: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
-    --la-font-display: 'MS Sans Serif', 'Segoe UI', Tahoma, sans-serif;
+    --la-hero-image: url('https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=1920&q=80');
+    --la-gradient-hero: linear-gradient(90deg, oklch(25% 0.12 210) 0%, oklch(40% 0.1 200) 100%);
 
-    --la-gradient-hero: linear-gradient(
-        90deg,
-        oklch(25% 0.12 210) 0%,
-        oklch(40% 0.1 200) 100%
-    );
-
-    --la-shadow-sm:
-        inset -1px -1px 0 oklch(15% 0 0),
-        inset 1px 1px 0 oklch(50% 0 0);
-    --la-shadow-md:
-        inset -2px -2px 0 oklch(15% 0 0),
-        inset 2px 2px 0 oklch(50% 0 0);
+    --la-shadow-sm: inset -1px -1px 0 oklch(15% 0 0), inset 1px 1px 0 oklch(50% 0 0);
+    --la-shadow-md: inset -2px -2px 0 oklch(15% 0 0), inset 2px 2px 0 oklch(50% 0 0);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: BSOD - Blue Screen of Death
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* BSOD - Dark mode: blue screen */
-[data-theme="bsod"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=1920&q=80');
-    --la-icon-logo: 'error';
-    --la-font-sans: 'Lucida Console', 'Consolas', monospace;
-    --la-font-display: 'Lucida Console', 'Consolas', monospace;
-}
-/* BSOD - Light mode: error screen */
+/* ─────────────────────────────────────────────────────────────────────────────
+   BSOD - Blue Screen of Death
+   ───────────────────────────────────────────────────────────────────────────── */
+[data-theme="bsod"],
 [data-theme="bsod-light"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1920&q=80');
+    --la-hue-primary: 220;
+    --la-hue-secondary: 220;
+    --la-hue-accent: 0;
+    --la-radius-factor: 0;
+
     --la-icon-logo: 'error';
     --la-font-sans: 'Lucida Console', 'Consolas', monospace;
     --la-font-display: 'Lucida Console', 'Consolas', monospace;
+    --la-font-body: 'Lucida Console', 'Consolas', monospace;
 }
 
 [data-theme="bsod"] {
     color-scheme: dark;
-
-    --la-hue-primary: 220;      /* BSOD Blue */
-    --la-hue-secondary: 220;
-    --la-hue-accent: 0;         /* White text */
 
     --la-primary: oklch(40% 0.2 var(--la-hue-primary));
     --la-primary-light: oklch(50% 0.18 var(--la-hue-primary));
@@ -1324,25 +864,12 @@
     --la-border: oklch(50% 0.1 var(--la-hue-primary));
     --la-border-strong: oklch(60% 0.08 var(--la-hue-primary));
 
-    --la-radius-factor: 0;
-
-    --la-font-body: 'Lucida Console', 'Consolas', monospace;
-    --la-font-display: 'Lucida Console', 'Consolas', monospace;
-
-    --la-gradient-primary: linear-gradient(
-        180deg,
-        oklch(35% 0.2 220) 0%,
-        oklch(30% 0.22 220) 100%
-    );
-
+    --la-hero-image: url('https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=1920&q=80');
+    --la-gradient-primary: linear-gradient(180deg, oklch(35% 0.2 220) 0%, oklch(30% 0.22 220) 100%);
     --la-gradient-hero: oklch(30% 0.18 220);
 }
 
 [data-theme="bsod-light"] {
-    --la-hue-primary: 220;
-    --la-hue-secondary: 220;
-    --la-hue-accent: 220;
-
     --la-primary: oklch(50% 0.2 var(--la-hue-primary));
     --la-primary-light: oklch(60% 0.18 var(--la-hue-primary));
     --la-secondary: oklch(55% 0.18 var(--la-hue-secondary));
@@ -1360,51 +887,34 @@
     --la-border: oklch(80% 0.05 var(--la-hue-primary));
     --la-border-strong: oklch(65% 0.08 var(--la-hue-primary));
 
-    --la-radius-factor: 0;
-    --la-font-body: 'Lucida Console', 'Consolas', monospace;
-    --la-font-display: 'Lucida Console', 'Consolas', monospace;
-
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(50% 0.15 220) 0%,
-        oklch(40% 0.18 220) 100%
-    );
+    --la-hero-image: url('https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1920&q=80');
+    --la-gradient-hero: linear-gradient(180deg, oklch(50% 0.15 220) 0%, oklch(40% 0.18 220) 100%);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: MARIO - Super Mario Bros Colors
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* Mario - Light mode: bright sky */
-[data-theme="mario"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=1920&q=80');
-    --la-icon-logo: 'star';
-    --la-font-sans: 'Press Start 2P', 'VT323', monospace;
-    --la-font-display: 'Press Start 2P', 'VT323', monospace;
-}
-/* Mario - Dark mode: starry night */
+/* ─────────────────────────────────────────────────────────────────────────────
+   MARIO - Super Mario Bros
+   ───────────────────────────────────────────────────────────────────────────── */
+[data-theme="mario"],
 [data-theme="mario-dark"] {
-    --la-hero-image: url('https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1920&q=80');
+    --la-hue-primary: 0;
+    --la-hue-secondary: 210;
+    --la-hue-accent: 45;
+    --la-radius-factor: 0;
+
     --la-icon-logo: 'star';
     --la-font-sans: 'Press Start 2P', 'VT323', monospace;
     --la-font-display: 'Press Start 2P', 'VT323', monospace;
+
+    --la-success: oklch(55% 0.2 142);
+    --la-warning: oklch(50% 0.12 35);
 }
 
 [data-theme="mario"] {
-    --la-hue-primary: 0;        /* Mario Red */
-    --la-hue-secondary: 210;    /* Sky Blue */
-    --la-hue-accent: 45;        /* Gold (coins) */
-
     --la-primary: oklch(55% 0.25 var(--la-hue-primary));
     --la-primary-light: oklch(68% 0.22 var(--la-hue-primary));
     --la-primary-dark: oklch(42% 0.28 var(--la-hue-primary));
     --la-secondary: oklch(75% 0.15 var(--la-hue-secondary));
     --la-accent: oklch(80% 0.2 var(--la-hue-accent));
-
-    /* Success green (Luigi/Pipes) */
-    --la-success: oklch(55% 0.2 142);
-    /* Brown (bricks) */
-    --la-warning: oklch(50% 0.12 35);
 
     --la-surface-0: oklch(80% 0.1 var(--la-hue-secondary));
     --la-surface-1: oklch(85% 0.08 var(--la-hue-secondary));
@@ -1418,31 +928,13 @@
     --la-border: oklch(65% 0.08 var(--la-hue-secondary));
     --la-border-strong: oklch(50% 0.1 35);
 
-    /* Pixel perfect */
-    --la-radius-factor: 0;
-
-    --la-gradient-primary: linear-gradient(
-        180deg,
-        oklch(55% 0.25 0) 0%,
-        oklch(45% 0.28 0) 100%
-    );
-
-    /* Sky gradient */
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(75% 0.12 210) 0%,
-        oklch(85% 0.08 200) 100%
-    );
-
-    --la-font-display: 'Press Start 2P', 'Courier New', monospace;
+    --la-hero-image: url('https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=1920&q=80');
+    --la-gradient-primary: linear-gradient(180deg, oklch(55% 0.25 0) 0%, oklch(45% 0.28 0) 100%);
+    --la-gradient-hero: linear-gradient(180deg, oklch(75% 0.12 210) 0%, oklch(85% 0.08 200) 100%);
 }
 
 [data-theme="mario-dark"] {
     color-scheme: dark;
-
-    --la-hue-primary: 0;
-    --la-hue-secondary: 210;
-    --la-hue-accent: 45;
 
     --la-primary: oklch(60% 0.28 var(--la-hue-primary));
     --la-primary-light: oklch(72% 0.24 var(--la-hue-primary));
@@ -1465,16 +957,117 @@
     --la-border: oklch(28% 0.04 240);
     --la-border-strong: oklch(40% 0.06 35);
 
-    --la-radius-factor: 0;
-    --la-font-display: 'Press Start 2P', 'Courier New', monospace;
-
-    /* Night sky */
-    --la-gradient-hero: linear-gradient(
-        180deg,
-        oklch(8% 0.04 240) 0%,
-        oklch(15% 0.06 220) 100%
-    );
-
-    /* Star glow */
+    --la-hero-image: url('https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1920&q=80');
+    --la-gradient-hero: linear-gradient(180deg, oklch(8% 0.04 240) 0%, oklch(15% 0.06 220) 100%);
     --la-shadow-glow: 0 0 10px oklch(80% 0.2 45 / 60%);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   WEB90 - GeoCities Vibes
+   ───────────────────────────────────────────────────────────────────────────── */
+[data-theme="web90"],
+[data-theme="web90-dark"] {
+    --la-hue-primary: 280;
+    --la-hue-secondary: 180;
+    --la-hue-accent: 60;
+    --la-radius-factor: 0;
+
+    --la-icon-logo: 'construction';
+    --la-font-sans: 'Comic Sans MS', 'Comic Neue', cursive;
+    --la-font-display: 'Comic Sans MS', 'Comic Neue', cursive;
+    --la-font-body: 'Comic Sans MS', 'Comic Sans', cursive;
+}
+
+[data-theme="web90"] {
+    --la-primary: oklch(55% 0.35 var(--la-hue-primary));
+    --la-primary-light: oklch(70% 0.3 var(--la-hue-primary));
+    --la-primary-dark: oklch(40% 0.38 var(--la-hue-primary));
+    --la-secondary: oklch(60% 0.3 var(--la-hue-secondary));
+    --la-accent: oklch(90% 0.25 var(--la-hue-accent));
+
+    --la-surface-0: oklch(95% 0.03 60);
+    --la-surface-1: oklch(90% 0.04 180);
+    --la-surface-2: oklch(85% 0.05 280);
+    --la-surface-3: oklch(80% 0.06 320);
+
+    --la-text: oklch(20% 0.05 280);
+    --la-text-secondary: oklch(40% 0.04 280);
+    --la-text-muted: oklch(55% 0.03 280);
+
+    --la-border: oklch(60% 0.2 var(--la-hue-primary));
+    --la-border-strong: oklch(45% 0.25 var(--la-hue-secondary));
+
+    --la-hero-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80');
+    --la-gradient-primary: linear-gradient(90deg, oklch(55% 0.35 280) 0%, oklch(60% 0.3 180) 33%, oklch(90% 0.25 60) 66%, oklch(65% 0.35 0) 100%);
+    --la-gradient-hero: repeating-linear-gradient(45deg, oklch(55% 0.25 280) 0px, oklch(55% 0.25 280) 10px, oklch(60% 0.2 180) 10px, oklch(60% 0.2 180) 20px);
+}
+
+[data-theme="web90-dark"] {
+    color-scheme: dark;
+
+    --la-primary: oklch(65% 0.38 var(--la-hue-primary));
+    --la-primary-light: oklch(75% 0.32 var(--la-hue-primary));
+    --la-secondary: oklch(70% 0.32 var(--la-hue-secondary));
+    --la-accent: oklch(85% 0.28 var(--la-hue-accent));
+
+    --la-surface-0: oklch(8% 0.05 280);
+    --la-surface-1: oklch(12% 0.06 180);
+    --la-surface-2: oklch(16% 0.07 280);
+    --la-surface-3: oklch(20% 0.08 320);
+
+    --la-text: oklch(95% 0.03 60);
+    --la-text-secondary: oklch(80% 0.03 60);
+    --la-text-muted: oklch(60% 0.02 60);
+
+    --la-border: oklch(50% 0.25 var(--la-hue-primary));
+    --la-border-strong: oklch(60% 0.28 var(--la-hue-secondary));
+
+    --la-hero-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1920&q=80');
+    --la-gradient-hero: repeating-linear-gradient(45deg, oklch(15% 0.2 280) 0px, oklch(15% 0.2 280) 10px, oklch(20% 0.18 180) 10px, oklch(20% 0.18 180) 20px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   4. ACCESSIBILITY
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* High Contrast */
+@media (prefers-contrast: more) {
+    :root {
+        --la-text: oklch(5% 0 0);
+        --la-text-secondary: oklch(20% 0 0);
+        --la-border: oklch(50% 0.02 var(--la-hue-primary));
+        --la-border-strong: oklch(30% 0.02 var(--la-hue-primary));
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+            --la-text: oklch(100% 0 0);
+            --la-text-secondary: oklch(90% 0 0);
+            --la-border: oklch(60% 0.02 var(--la-hue-primary));
+        }
+    }
+}
+
+/* Low Contrast */
+@media (prefers-contrast: less) {
+    :root {
+        --la-text: oklch(35% 0.02 var(--la-hue-primary));
+        --la-text-secondary: oklch(50% 0.02 var(--la-hue-primary));
+        --la-border: oklch(92% 0.01 var(--la-hue-primary));
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --la-duration-instant: 0ms;
+        --la-duration-fast: 0ms;
+        --la-duration-base: 0ms;
+        --la-duration-slow: 0ms;
+        --la-duration-slower: 0ms;
+        --la-duration-slowest: 0ms;
+        --la-transition: none;
+        --la-transition-fast: none;
+        --la-transition-slow: none;
+    }
 }
