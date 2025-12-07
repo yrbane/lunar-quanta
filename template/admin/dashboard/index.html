@@ -1,0 +1,243 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+<div class="la-page-header">
+    <h1 class="la-h2">{{ title }}</h1>
+    <p class="la-text-muted">Vue d'ensemble de votre blog</p>
+</div>
+
+<!-- Stats Cards -->
+<div class="la-grid la-grid-cols-2 md:la-grid-cols-4 la-gap-4 la-mb-8">
+    <div class="la-card">
+        <div class="la-card-body la-text-center">
+            <div class="la-text-4xl la-font-bold la-text-primary">{{ statusStats.total }}</div>
+            <div class="la-text-muted la-text-sm">Articles totaux</div>
+        </div>
+    </div>
+    <div class="la-card">
+        <div class="la-card-body la-text-center">
+            <div class="la-text-4xl la-font-bold la-text-success">{{ statusStats.published }}</div>
+            <div class="la-text-muted la-text-sm">Publiés</div>
+        </div>
+    </div>
+    <div class="la-card">
+        <div class="la-card-body la-text-center">
+            <div class="la-text-4xl la-font-bold la-text-warning">{{ statusStats.draft }}</div>
+            <div class="la-text-muted la-text-sm">Brouillons</div>
+        </div>
+    </div>
+    <div class="la-card">
+        <div class="la-card-body la-text-center">
+            <div class="la-text-4xl la-font-bold la-text-info">{{ statusStats.scheduled }}</div>
+            <div class="la-text-muted la-text-sm">Programmés</div>
+        </div>
+    </div>
+</div>
+
+<div class="la-grid la-grid-cols-1 lg:la-grid-cols-3 la-gap-6">
+    <!-- Colonne principale -->
+    <div class="lg:la-col-span-2">
+        <!-- Articles récents -->
+        <div class="la-card la-mb-6">
+            <div class="la-card-header la-flex la-justify-between la-items-center">
+                <h3 class="la-card-title">Articles récents</h3>
+                <a href="/admin/blog" class="la-btn ghost sm">Voir tout</a>
+            </div>
+            <div class="la-card-body la-p-0">
+                <table class="la-table">
+                    <tbody>
+                        {% for post in recentPosts %}
+                        <tr>
+                            <td>
+                                <div class="la-flex la-items-center la-gap-3">
+                                    {% if post.featuredImage %}
+                                    <img src="{{ post.featuredImage }}" alt="" class="la-w-12 la-h-12 la-rounded la-object-cover">
+                                    {% else %}
+                                    <div class="la-w-12 la-h-12 la-rounded la-bg-muted la-flex la-items-center la-justify-center">
+                                        <span class="la-icon la-text-muted">article</span>
+                                    </div>
+                                    {% endif %}
+                                    <div>
+                                        <div class="la-font-medium">{{ post.title|truncate(50) }}</div>
+                                        <div class="la-text-sm la-text-muted">{{ post.author }} • {{ post.publishedAt|date('d/m/Y') }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="la-text-right">
+                                <a href="/admin/blog/{{ post.id }}/edit" class="la-btn ghost sm">
+                                    <span class="la-icon">edit</span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="2" class="la-text-center la-text-muted la-py-8">
+                                Aucun article récent
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Articles programmés -->
+        {% if scheduledPosts|length > 0 %}
+        <div class="la-card la-mb-6">
+            <div class="la-card-header">
+                <h3 class="la-card-title">
+                    <span class="la-icon la-text-info">schedule</span>
+                    Publications programmées
+                </h3>
+            </div>
+            <div class="la-card-body la-p-0">
+                <table class="la-table">
+                    <tbody>
+                        {% for post in scheduledPosts %}
+                        <tr>
+                            <td>{{ post.title }}</td>
+                            <td class="la-text-muted">{{ post.scheduledPublishAt|date('d/m/Y H:i') }}</td>
+                            <td class="la-text-right">
+                                <a href="/admin/blog/{{ post.id }}/edit" class="la-btn ghost sm">
+                                    <span class="la-icon">edit</span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Statistiques de lecture -->
+        <div class="la-card">
+            <div class="la-card-header">
+                <h3 class="la-card-title">Statistiques de lecture</h3>
+            </div>
+            <div class="la-card-body">
+                <div class="la-grid la-grid-cols-2 la-gap-4">
+                    <div class="la-p-4 la-bg-muted la-rounded-lg">
+                        <div class="la-text-2xl la-font-bold">{{ readingStats.totalWords|number_format }}</div>
+                        <div class="la-text-sm la-text-muted">Mots au total</div>
+                    </div>
+                    <div class="la-p-4 la-bg-muted la-rounded-lg">
+                        <div class="la-text-2xl la-font-bold">{{ readingStats.avgWordsPerPost }}</div>
+                        <div class="la-text-sm la-text-muted">Mots/article (moy.)</div>
+                    </div>
+                    <div class="la-p-4 la-bg-muted la-rounded-lg">
+                        <div class="la-text-2xl la-font-bold">{{ readingStats.totalReadingTime }} min</div>
+                        <div class="la-text-sm la-text-muted">Temps de lecture total</div>
+                    </div>
+                    <div class="la-p-4 la-bg-muted la-rounded-lg">
+                        <div class="la-text-2xl la-font-bold">{{ readingStats.avgReadingTime }} min</div>
+                        <div class="la-text-sm la-text-muted">Temps/article (moy.)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div>
+        <!-- Activité récente -->
+        <div class="la-card la-mb-6">
+            <div class="la-card-header">
+                <h3 class="la-card-title">Activité (7 jours)</h3>
+            </div>
+            <div class="la-card-body">
+                <div class="la-flex la-flex-col la-gap-3">
+                    <div class="la-flex la-justify-between la-items-center">
+                        <span class="la-text-muted">Créés</span>
+                        <span class="la-badge success">{{ recentActivity.created }}</span>
+                    </div>
+                    <div class="la-flex la-justify-between la-items-center">
+                        <span class="la-text-muted">Publiés</span>
+                        <span class="la-badge primary">{{ recentActivity.published }}</span>
+                    </div>
+                    <div class="la-flex la-justify-between la-items-center">
+                        <span class="la-text-muted">Modifiés</span>
+                        <span class="la-badge outline">{{ recentActivity.updated }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tags populaires -->
+        <div class="la-card la-mb-6">
+            <div class="la-card-header">
+                <h3 class="la-card-title">Tags populaires</h3>
+            </div>
+            <div class="la-card-body">
+                <div class="la-flex la-flex-wrap la-gap-2">
+                    {% for tag, count in popularTags %}
+                    <span class="la-badge outline">
+                        {{ tag }} <small class="la-opacity-50">({{ count }})</small>
+                    </span>
+                    {% else %}
+                    <span class="la-text-muted">Aucun tag</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Catégories -->
+        <div class="la-card la-mb-6">
+            <div class="la-card-header la-flex la-justify-between la-items-center">
+                <h3 class="la-card-title">Catégories</h3>
+                <a href="/admin/categories" class="la-btn ghost sm">Gérer</a>
+            </div>
+            <div class="la-card-body la-p-0">
+                <ul class="la-list">
+                    {% for category in categories|slice(0, 8) %}
+                    <li class="la-list-item la-flex la-justify-between la-items-center">
+                        <span style="color: {{ category.color }}">
+                            <span class="la-icon">{{ category.icon }}</span>
+                            {{ category.name }}
+                        </span>
+                        <span class="la-badge outline sm">{{ categoryCounts[category.id] ?? 0 }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Notes moyennes -->
+        {% if ratingStats.totalRated > 0 %}
+        <div class="la-card">
+            <div class="la-card-header">
+                <h3 class="la-card-title">Évaluations</h3>
+            </div>
+            <div class="la-card-body la-text-center">
+                <div class="la-text-4xl la-font-bold la-text-warning">{{ ratingStats.avgRating }}/5</div>
+                <div class="la-text-muted">Note moyenne</div>
+                <div class="la-text-sm la-text-muted la-mt-2">{{ ratingStats.totalRated }} articles notés</div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Actions rapides -->
+<div class="la-mt-8">
+    <h3 class="la-h4 la-mb-4">Actions rapides</h3>
+    <div class="la-flex la-flex-wrap la-gap-3">
+        <a href="/admin/blog/create" class="la-btn primary">
+            <span class="la-icon">add</span>
+            Nouvel article
+        </a>
+        <a href="/admin/categories/create" class="la-btn outline">
+            <span class="la-icon">create_new_folder</span>
+            Nouvelle catégorie
+        </a>
+        <a href="/admin/tags/create" class="la-btn outline">
+            <span class="la-icon">new_label</span>
+            Nouveau tag
+        </a>
+        <a href="/admin/blog?filter=drafts" class="la-btn ghost">
+            <span class="la-icon">drafts</span>
+            Voir les brouillons
+        </a>
+    </div>
+</div>
+{% endblock %}
