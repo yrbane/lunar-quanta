@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>#{{ tag }} - Lunar Blog</title>
-    <meta name="description" content="Articles tagués {{ tag }} sur le blog Lunar Quanta">
+    <title>[[ category_name ]] - Lunar Blog</title>
+    <meta name="description" content="[[ category_description ]]">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- All theme fonts -->
@@ -14,7 +14,23 @@
     <link rel="stylesheet" href="/css/lunar-aurora/aurora-blog.css">
     <link rel="stylesheet" href="/blog/assets/enhanced.css">
     <link rel="stylesheet" href="/blog/assets/print.css" media="print">
-    {{ head_injections }}
+    [[ head_injections ]]
+
+    <style>
+        .la-category-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: [[ category_color ]];
+        }
+
+        .la-category-badge {
+            background: [[ category_color ]];
+        }
+    </style>
 </head>
 <body class="la-blog">
     <header class="la-blog-header">
@@ -73,47 +89,67 @@
                 Tous les articles
             </a>
 
-            <section class="la-card la-text-center la-mb-8 la-p-8">
-                <span class="la-badge lg la-mb-4">
-                    <span class="la-icon sm">tag</span>
-                    {{ tag }}
+            <section class="la-card la-category-hero la-text-center la-mb-8 la-p-8" style="position: relative; overflow: hidden;">
+                <span class="la-badge lg la-category-badge la-mb-4" style="color: white;">
+                    <span class="la-icon sm">folder</span>
+                    [[ category_name ]]
                 </span>
-                <h1 class="la-h2 la-mb-4">Articles tagués "{{ tag }}"</h1>
-                <p class="la-text-muted la-text-sm">{{ count }} article(s) trouvé(s)</p>
+                <h1 class="la-h2 la-mb-4">[[ category_name ]]</h1>
+                [% if category_description %]
+                <p class="la-text-secondary la-mb-4" style="max-width: 500px; margin-left: auto; margin-right: auto;">[[ category_description ]]</p>
+                [% endif %]
+                <p class="la-text-muted la-text-sm">[[ count ]] article(s)</p>
             </section>
 
-            {% if posts|length > 0 %}
-            <div class="la-flex la-flex-col la-gap-4">
-                {% for post in posts %}
-                <a href="{{ post.url }}" class="la-card interactive la-p-6">
-                    <h2 class="la-h4 la-mb-2">{{ post.title }}</h2>
-                    {% if post.excerpt %}
-                    <p class="la-text-secondary la-text-sm la-mb-4">{{ post.excerpt }}</p>
-                    {% endif %}
-                    <div class="la-flex la-gap-4 la-text-xs la-text-muted">
-                        {% if post.author %}
-                        <span class="la-flex la-items-center la-gap-1">
-                            <span class="la-icon xs">person</span>
-                            {{ post.author }}
-                        </span>
-                        {% endif %}
-                        <span class="la-flex la-items-center la-gap-1">
-                            <span class="la-icon xs">calendar_today</span>
-                            {{ post.published_at }}
-                        </span>
+            [% if posts %]
+            <div class="la-post-grid">
+                [% for post in posts %]
+                <article class="la-post-card">
+                    <div class="la-post-card-image placeholder">
+                        <span class="la-icon xl">article</span>
                     </div>
-                </a>
-                {% endfor %}
+                    <div class="la-post-card-content">
+                        <div class="la-post-card-meta">
+                            <span class="la-post-card-date">
+                                <span class="la-icon xs">calendar_today</span>
+                                [[ post.published_at ]]
+                            </span>
+                        </div>
+                        <h3 class="la-post-card-title">
+                            <a href="[[ post.url ]]">[[ post.title ]]</a>
+                        </h3>
+                        [% if post.excerpt %]
+                        <p class="la-post-card-excerpt">[[ post.excerpt ]]</p>
+                        [% endif %]
+                        <div class="la-post-card-footer">
+                            [% if post.author %]
+                            <div class="la-post-card-author">
+                                <span class="la-avatar sm">
+                                    <span class="la-icon sm">person</span>
+                                </span>
+                                <span>[[ post.author ]]</span>
+                            </div>
+                            [% endif %]
+                            [% if post.reading_time %]
+                            <span class="la-post-card-read-time">
+                                <span class="la-icon xs">schedule</span>
+                                [[ post.reading_time ]] min
+                            </span>
+                            [% endif %]
+                        </div>
+                    </div>
+                </article>
+                [% endfor %]
             </div>
-            {% else %}
+            [% else %]
             <div class="la-empty-state">
                 <div class="la-empty-state-icon">
-                    <span class="la-icon xxl">label_off</span>
+                    <span class="la-icon xxl">folder_off</span>
                 </div>
-                <h2 class="la-empty-state-title">Aucun article avec ce tag</h2>
-                <p class="la-empty-state-description">Les articles avec ce tag apparaîtront ici.</p>
+                <h2 class="la-empty-state-title">Aucun article dans cette catégorie</h2>
+                <p class="la-empty-state-description">Les articles de cette catégorie apparaîtront ici.</p>
             </div>
-            {% endif %}
+            [% endif %]
         </div>
     </main>
 
@@ -128,7 +164,7 @@
                     <a href="/blog/feed.xml" title="RSS"><span class="la-icon sm">rss_feed</span></a>
                     <a href="https://github.com/yrbane/lunar-quanta" target="_blank" title="GitHub"><span class="la-icon sm">code</span></a>
                 </div>
-                <p>&copy; {{ year }} Lunar Quanta</p>
+                <p>&copy; [[ year ]] Lunar Quanta</p>
             </div>
         </div>
     </footer>
@@ -203,6 +239,6 @@
 
         ThemeSwitcher.init();
     </script>
-    {{ body_end_injections }}
+    [[ body_end_injections ]]
 </body>
 </html>

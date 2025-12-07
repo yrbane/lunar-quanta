@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="/css/lunar-aurora/aurora-blog.css">
     <link rel="stylesheet" href="/blog/assets/enhanced.css">
     <link rel="stylesheet" href="/blog/assets/print.css" media="print">
-    {{ schema_org }}
-    {{ head_injections }}
+    [[ schema_org ]]
+    [[ head_injections ]]
 </head>
 <body class="la-blog">
     <header class="la-blog-header">
@@ -99,15 +99,15 @@
                 <!-- Stats Cards -->
                 <div class="la-hero-stats">
                     <div class="la-hero-stat">
-                        <div class="la-hero-stat-value" id="articleCount">{{ article_count }}</div>
+                        <div class="la-hero-stat-value" id="articleCount">[[ article_count ]]</div>
                         <div class="la-hero-stat-label">Articles</div>
                     </div>
                     <div class="la-hero-stat">
-                        <div class="la-hero-stat-value">{{ categories_count }}</div>
+                        <div class="la-hero-stat-value">[[ categories_count ]]</div>
                         <div class="la-hero-stat-label">Catégories</div>
                     </div>
                     <div class="la-hero-stat">
-                        <div class="la-hero-stat-value">{{ tags_count }}</div>
+                        <div class="la-hero-stat-value">[[ tags_count ]]</div>
                         <div class="la-hero-stat-label">Tags</div>
                     </div>
                 </div>
@@ -134,7 +134,7 @@
             <!-- Latest Articles Slider -->
             <div class="la-hero-slider" id="heroSlider">
                 <div class="la-hero-slider-track" id="sliderTrack">
-                    {{ slider_items }}
+                    [[ slider_items ]]
                 </div>
                 <div class="la-hero-slider-nav">
                     <button class="la-hero-slider-btn" id="sliderPrev" aria-label="Article précédent">
@@ -155,7 +155,7 @@
             <div class="la-flex la-justify-between la-items-center la-flex-wrap la-gap-4 la-mb-6">
                 <div class="la-flex la-items-center la-gap-3">
                     <h2 class="la-h3 la-mb-0">Articles</h2>
-                    <span class="la-badge" id="visibleCount">{{ article_count }}</span>
+                    <span class="la-badge" id="visibleCount">[[ article_count ]]</span>
                 </div>
                 <div class="la-flex la-gap-4 la-items-center">
                     <div class="la-admin-tabs">
@@ -174,60 +174,60 @@
                 </div>
             </div>
 
-            {% if posts|length > 0 %}
+            [% if posts %]
             <div class="la-post-grid" id="articlesGrid">
-                {% for post in posts %}
-                <article class="la-post-card" data-title="{{ post.title }}" data-category="{{ post.category }}" data-tags="{{ post.tags_string }}">
-                    <div class="la-post-card-image{% if not post.featured_image %} placeholder{% endif %}">
-                        {% if post.featured_image %}
-                        <img src="{{ post.featured_image }}" alt="{{ post.title }}" loading="lazy">
-                        {% else %}
+                [% for post in posts %]
+                <article class="la-post-card" data-title="[[ post.title ]]" data-category="[[ post.category ]]" data-tags="[[ post.tags_string ]]">
+                    <div class="la-post-card-image[% if not post.featured_image %] placeholder[% endif %]">
+                        [% if post.featured_image %]
+                        <img src="[[ post.featured_image ]]" alt="[[ post.title ]]" loading="lazy">
+                        [% else %]
                         <span class="la-icon xl">image</span>
-                        {% endif %}
+                        [% endif %]
                     </div>
                     <div class="la-post-card-content">
                         <div class="la-post-card-meta">
-                            {% if post.category %}
-                            <a href="/blog/category/{{ post.category_slug }}.html" class="la-post-card-category">{{ post.category }}</a>
-                            {% endif %}
+                            [% if post.category %]
+                            <a href="/blog/category/[[ post.category_slug ]].html" class="la-post-card-category">[[ post.category ]]</a>
+                            [% endif %]
                             <span class="la-post-card-date">
                                 <span class="la-icon xs">calendar_today</span>
-                                {{ post.published_at }}
+                                [[ post.published_at ]]
                             </span>
                         </div>
                         <h3 class="la-post-card-title">
-                            <a href="{{ post.url }}">{{ post.title }}</a>
+                            <a href="[[ post.url ]]">[[ post.title ]]</a>
                         </h3>
-                        {% if post.excerpt %}
-                        <p class="la-post-card-excerpt">{{ post.excerpt }}</p>
-                        {% endif %}
+                        [% if post.excerpt %]
+                        <p class="la-post-card-excerpt">[[ post.excerpt ]]</p>
+                        [% endif %]
                         <div class="la-post-card-footer">
-                            {% if post.author %}
+                            [% if post.author %]
                             <div class="la-post-card-author">
                                 <span class="la-avatar sm">
                                     <span class="la-icon sm">person</span>
                                 </span>
-                                <span>{{ post.author }}</span>
+                                <span>[[ post.author ]]</span>
                             </div>
-                            {% endif %}
+                            [% endif %]
                             <span class="la-post-card-read-time">
                                 <span class="la-icon xs">schedule</span>
-                                {{ post.reading_time }} min
+                                [[ post.reading_time ]] min
                             </span>
                         </div>
-                        {% if post.average_rating > 0 %}
+                        [% if post.average_rating %]
                         <div class="la-post-card-rating">
                             <div class="la-rating-stars">
-                                {{ post.rating_stars }}
+                                [[ post.rating_stars ]]
                             </div>
-                            <span class="la-rating-value">{{ post.average_rating }}</span>
+                            <span class="la-rating-value">[[ post.average_rating ]]</span>
                         </div>
-                        {% endif %}
+                        [% endif %]
                     </div>
                 </article>
-                {% endfor %}
+                [% endfor %]
             </div>
-            {% else %}
+            [% else %]
             <div class="la-empty-state">
                 <div class="la-empty-state-icon">
                     <span class="la-icon xxl">edit_note</span>
@@ -235,7 +235,7 @@
                 <h2 class="la-empty-state-title">Aucun article pour l'instant</h2>
                 <p class="la-empty-state-description">Les articles publiés apparaîtront ici.</p>
             </div>
-            {% endif %}
+            [% endif %]
 
             <!-- Tags Cloud (below articles) -->
             <section class="la-tags-section la-mt-12">
@@ -250,7 +250,7 @@
                     </button>
                 </div>
                 <div class="la-tag-cloud collapsed" id="tagsCloud">
-                    {{ tags_list }}
+                    [[ tags_list ]]
                 </div>
             </section>
         </div>
@@ -316,7 +316,7 @@
                     <a href="https://github.com/yrbane/lunar-quanta" target="_blank" title="GitHub"><span class="la-icon sm">code</span></a>
                     <a href="/" title="Site"><span class="la-icon sm">home</span></a>
                 </div>
-                <p>&copy; {{ year }} Lunar Quanta</p>
+                <p>&copy; [[ year ]] Lunar Quanta</p>
             </div>
         </div>
     </footer>
@@ -819,6 +819,6 @@
 
         HeroSlider.init();
     </script>
-    {{ body_end_injections }}
+    [[ body_end_injections ]]
 </body>
 </html>

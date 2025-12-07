@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }} - Lunar Blog</title>
-    <meta name="description" content="{{ excerpt }}">
-    <meta name="author" content="{{ author }}">
+    <title>[[ title ]] - Lunar Blog</title>
+    <meta name="description" content="[[ excerpt ]]">
+    <meta name="author" content="[[ author ]]">
     <link rel="alternate" type="application/rss+xml" title="Lunar Blog RSS" href="/blog/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,9 +13,9 @@
     <link rel="stylesheet" href="/css/lunar-aurora/aurora-blog.css">
     <link rel="stylesheet" href="/blog/assets/enhanced.css">
     <link rel="stylesheet" href="/blog/assets/print.css" media="print">
-    {{ meta_tags }}
-    {{ schema_org }}
-    {{ head_injections }}
+    [[ meta_tags ]]
+    [[ schema_org ]]
+    [[ head_injections ]]
     <style>
         .la-rating-badge { display: inline-flex; align-items: center; gap: var(--la-space-2); padding: var(--la-space-2) var(--la-space-4); background: var(--la-surface-2); border-radius: var(--la-radius-full); font-size: var(--la-text-sm); font-weight: var(--la-weight-semibold); }
         .la-rating-badge .la-icon { color: var(--la-warning, #f59e0b); }
@@ -84,7 +84,7 @@
     </header>
 
     <div class="la-post-featured-image" id="featured-image-container" style="display:none;">
-        <img src="{{ featured_image }}" alt="{{ title }}" id="featured-img">
+        <img src="[[ featured_image ]]" alt="[[ title ]]" id="featured-img">
     </div>
 
     <main class="la-blog-main">
@@ -93,7 +93,7 @@
                 <aside class="la-toc" id="toc">
                     <div class="la-rating-badge la-mb-6">
                         <span class="la-icon sm">star</span>
-                        <span id="sidebar-rating">{{ average_rating }}</span>/5
+                        <span id="sidebar-rating">[[ average_rating ]]</span>/5
                     </div>
                     <div class="la-toc-title"><span class="la-icon sm">list</span> Sommaire</div>
                     <ul class="la-toc-list" id="toc-list"></ul>
@@ -102,45 +102,45 @@
                 <article class="la-post">
                     <header class="la-post-header">
                         <div class="la-flex la-gap-3 la-justify-center la-flex-wrap la-mb-4">
-                            <a href="/blog/category/{{ category_slug }}.html" class="la-post-card-category" id="category-link">{{ category }}</a>
-                            <div class="la-rating-badge"><span class="la-icon sm">star</span><span>{{ average_rating }}/5</span></div>
-                            <span class="la-license-badge" id="license-badge" style="display:none;"><span class="la-icon xs">verified</span> <span id="license-text">{{ license }}</span></span>
+                            <a href="/blog/category/[[ category_slug ]].html" class="la-post-card-category" id="category-link">[[ category ]]</a>
+                            <div class="la-rating-badge"><span class="la-icon sm">star</span><span>[[ average_rating ]]/5</span></div>
+                            <span class="la-license-badge" id="license-badge" style="display:none;"><span class="la-icon xs">verified</span> <span id="license-text">[[ license ]]</span></span>
                             <span class="la-locked-badge" id="locked-badge" style="display:none;"><span class="la-icon xs">lock</span> Article protege</span>
                         </div>
-                        <h1 class="la-post-title">{{ title }}</h1>
-                        <p class="la-text-xl la-text-muted la-mt-4">{{ excerpt }}</p>
+                        <h1 class="la-post-title">[[ title ]]</h1>
+                        <p class="la-text-xl la-text-muted la-mt-4">[[ excerpt ]]</p>
                         <div class="la-post-meta la-mt-6">
-                            <span><span class="la-icon">person</span> {{ author }}</span>
-                            <span id="institution-span" style="display:none;" class="la-text-primary">{{ author_institution }}</span>
-                            <span><span class="la-icon">calendar_today</span> {{ published_at }}</span>
-                            <span><span class="la-icon">schedule</span> {{ reading_time }} min</span>
+                            <span><span class="la-icon">person</span> [[ author ]]</span>
+                            <span id="institution-span" style="display:none;" class="la-text-primary">[[ author_institution ]]</span>
+                            <span><span class="la-icon">calendar_today</span> [[ published_at ]]</span>
+                            <span><span class="la-icon">schedule</span> [[ reading_time ]] min</span>
                         </div>
                         <div class="la-flex la-gap-3 la-mt-6 la-justify-center la-flex-wrap">
                             <button class="la-btn outline sm" id="bookmark-btn" title="Favoris"><span class="la-icon sm">bookmark</span><span id="bookmark-text">Favoris</span></button>
                             <button class="la-btn outline sm" onclick="window.print()" title="Imprimer"><span class="la-icon sm">print</span></button>
                             <button class="la-btn outline sm" onclick="navigator.clipboard.writeText(window.location.href)" title="Copier le lien"><span class="la-icon sm">link</span></button>
-                            {{ share_buttons }}
+                            [[ share_buttons ]]
                         </div>
                     </header>
 
                     <section class="la-author-box la-mt-8">
                         <div class="la-author-avatar">
-                            <img src="{{ author_avatar }}" alt="{{ author }}" id="author-avatar-img" style="display:none;">
+                            <img src="[[ author_avatar ]]" alt="[[ author ]]" id="author-avatar-img" style="display:none;">
                             <div class="la-author-avatar-placeholder" id="author-avatar-placeholder"><span class="la-icon">person</span></div>
                         </div>
                         <div class="la-author-info">
                             <div class="la-flex la-items-center la-gap-3 la-flex-wrap">
-                                <h3 class="la-author-name">{{ author }}</h3>
-                                <span class="la-badge sm" id="original-source-badge" style="display:none;">via {{ original_source }}</span>
+                                <h3 class="la-author-name">[[ author ]]</h3>
+                                <span class="la-badge sm" id="original-source-badge" style="display:none;">via [[ original_source ]]</span>
                             </div>
-                            <p class="la-author-institution" id="author-institution" style="display:none;">{{ author_institution }}</p>
-                            <p class="la-author-bio" id="author-bio">{{ author_bio }}</p>
+                            <p class="la-author-institution" id="author-institution" style="display:none;">[[ author_institution ]]</p>
+                            <p class="la-author-bio" id="author-bio">[[ author_bio ]]</p>
                             <div class="la-author-badge" id="locked-author-badge" style="display:none;"><span class="la-icon xs">verified</span> Contenu original protege</div>
                         </div>
                     </section>
 
                     <div class="la-prose la-mt-12" id="article-content">
-                        {{ content }}
+                        [[ content ]]
                     </div>
 
                     <div class="la-post-tags" id="tags-container"></div>
@@ -151,15 +151,15 @@
                     </section>
 
                     <div class="la-original-source-box" id="original-source-section" style="display:none;">
-                        <p class="la-text-sm la-text-muted la-mb-3"><span class="la-icon sm">open_in_new</span> Article original publie sur <span id="original-source-name">{{ original_source }}</span></p>
-                        <a href="{{ original_url }}" target="_blank" rel="noopener" class="la-btn primary sm" id="original-url-link">Lire l'article original</a>
+                        <p class="la-text-sm la-text-muted la-mb-3"><span class="la-icon sm">open_in_new</span> Article original publie sur <span id="original-source-name">[[ original_source ]]</span></p>
+                        <a href="[[ original_url ]]" target="_blank" rel="noopener" class="la-btn primary sm" id="original-url-link">Lire l'article original</a>
                     </div>
 
                     <section class="la-rating-module la-mt-12" id="rating-section">
                         <div class="la-rating-header">
                             <h3 class="la-h5 la-mb-0 la-flex la-items-center la-gap-2"><span class="la-icon">star</span> Evaluez cet article</h3>
                             <div class="la-rating-score">
-                                <span class="la-rating-score-number">{{ average_rating }}</span>
+                                <span class="la-rating-score-number">[[ average_rating ]]</span>
                                 <div class="la-rating-score-details">
                                     <div class="la-rating-stars" id="display-stars"></div>
                                     <span class="la-text-xs la-text-muted">sur 5 criteres</span>
@@ -212,7 +212,7 @@
             <div class="la-blog-footer-bottom">
                 <div class="la-flex la-items-center la-gap-3"><span class="la-icon">rocket_launch</span><span class="la-font-semibold">Lunar Quanta</span></div>
                 <div class="la-blog-social"><a href="/blog/feed.xml" title="RSS"><span class="la-icon sm">rss_feed</span></a></div>
-                <p>&copy; {{ year }} Lunar Quanta</p>
+                <p>&copy; [[ year ]] Lunar Quanta</p>
             </div>
         </div>
     </footer>
@@ -220,16 +220,16 @@
     <!-- Data embedded by generator -->
     <script id="post-data" type="application/json">
     {
-        "tags": {{ tags_json }},
-        "sources": {{ sources_json }},
-        "related": {{ related_json }},
-        "hasAvatar": {{ has_avatar }},
-        "hasInstitution": {{ has_institution }},
-        "hasBio": {{ has_bio }},
-        "hasLicense": {{ has_license }},
-        "isLocked": {{ is_locked }},
-        "hasOriginalSource": {{ has_original_source }},
-        "hasFeaturedImage": {{ has_featured_image }}
+        "tags": [[ tags_json ]],
+        "sources": [[ sources_json ]],
+        "related": [[ related_json ]],
+        "hasAvatar": [[ has_avatar ]],
+        "hasInstitution": [[ has_institution ]],
+        "hasBio": [[ has_bio ]],
+        "hasLicense": [[ has_license ]],
+        "isLocked": [[ is_locked ]],
+        "hasOriginalSource": [[ has_original_source ]],
+        "hasFeaturedImage": [[ has_featured_image ]]
     }
     </script>
 
@@ -408,6 +408,6 @@
         });
     });
     </script>
-    {{ body_end_injections }}
+    [[ body_end_injections ]]
 </body>
 </html>
