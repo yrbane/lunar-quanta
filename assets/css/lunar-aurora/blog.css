@@ -1732,15 +1732,10 @@ kbd.la-badge {
     }
 
     &.half {
-        position: relative;
-        color: var(--la-text-muted);
+        color: var(--la-warning, #f59e0b);
 
-        &::before {
-            content: 'star_half';
-            font-family: 'Material Symbols Rounded';
-            position: absolute;
-            left: 0;
-            color: var(--la-warning, #f59e0b);
+        & .la-icon {
+            color: inherit;
         }
     }
 }
