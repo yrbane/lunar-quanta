@@ -17,7 +17,14 @@
         "attacks",
         "countermeasures"
     ],
-    "sources": [],
+    "sources": [
+        {
+            "title": "Quantum on Wikipedia",
+            "url": "https:\/\/en.wikipedia.org\/wiki\/Quantum",
+            "domain": "en.wikipedia.org",
+            "description": "Suggested generic reference (Automated)"
+        }
+    ],
     "ratings": {
         "relevance": 4,
         "depth": 4,
@@ -30,7 +37,10 @@
     "license": "",
     "originalUrl": "",
     "originalSource": "",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2026-01-10T23:00:00+00:00",
-    "updatedAt": "2025-12-06T18:06:13+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2026-01-10T23:00:00+00:00"
 }

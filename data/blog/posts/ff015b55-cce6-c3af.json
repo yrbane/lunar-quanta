@@ -18,6 +18,66 @@
             "url": "https:\/\/theconversation.com\/fabriquer-du-cartilage-humain-a-partir-de-pommes-267914",
             "domain": "theconversation.com",
             "description": "Cet article est republié à partir de The Conversation sous licence Creative Commons."
+        },
+        {
+            "title": "article dans la revue de référence *Journal of Biological Engineering*",
+            "url": "https:\/\/pubmed.ncbi.nlm.nih.gov\/40264116\/",
+            "domain": "pubmed.ncbi.nlm.nih.gov",
+            "description": "Found in article content"
+        },
+        {
+            "title": "ingénierie tissulaire",
+            "url": "https:\/\/www.eurogct.org\/fr\/quest-ce-que-lingenierie-tissulaire",
+            "domain": "eurogct.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "arthrose",
+            "url": "https:\/\/www.inserm.fr\/dossier\/arthrose\/",
+            "domain": "inserm.fr",
+            "description": "Found in article content"
+        },
+        {
+            "title": "ostéoporose",
+            "url": "https:\/\/www.inserm.fr\/dossier\/osteoporose\/",
+            "domain": "inserm.fr",
+            "description": "Found in article content"
+        },
+        {
+            "title": "Depuis une dizaine d’années",
+            "url": "https:\/\/journals.plos.org\/plosone\/article?id=10.1371\/journal.pone.0097835",
+            "domain": "journals.plos.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "![Image",
+            "url": "https:\/\/images.theconversation.com\/files\/706162\/original\/file-20251203-64-k1vb12.png?ixlib=rb-4.1.0&q=45&auto=format&w=754&fit=clip",
+            "domain": "images.theconversation.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "d’un article scientifique d’une équipe canadienne",
+            "url": "https:\/\/journals.plos.org\/plosone\/article?id=10.1371\/journal.pone.0097835",
+            "domain": "journals.plos.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "The Conversation",
+            "url": "https:\/\/theconversation.com\/fabriquer-du-cartilage-humain-a-partir-de-pommes-267914",
+            "domain": "theconversation.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "Creative Commons BY-ND 4.0",
+            "url": "https:\/\/creativecommons.org\/licenses\/by-nd\/4.0\/deed.fr",
+            "domain": "creativecommons.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "article original",
+            "url": "https:\/\/theconversation.com\/fabriquer-du-cartilage-humain-a-partir-de-pommes-267914",
+            "domain": "theconversation.com",
+            "description": "Found in article content"
         }
     ],
     "ratings": {
@@ -32,7 +92,10 @@
     "license": "CC BY-ND 4.0",
     "originalUrl": "https:\/\/theconversation.com\/fabriquer-du-cartilage-humain-a-partir-de-pommes-267914",
     "originalSource": "The Conversation",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2025-12-06T17:01:48+00:00",
-    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2025-12-06T17:01:48+00:00"
 }

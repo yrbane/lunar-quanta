@@ -18,6 +18,102 @@
             "url": "https:\/\/theconversation.com\/quand-lia-fait-nimporte-quoi-le-cas-du-gratte-ciel-et-du-trombone-a-coulisse-268033",
             "domain": "theconversation.com",
             "description": "Cet article est republié à partir de The Conversation sous licence Creative Commons."
+        },
+        {
+            "title": "![Sur l’image générée par IA on voit que le gratte ciel et le trombone à coulisse ont presque la même taille",
+            "url": "https:\/\/images.theconversation.com\/files\/705534\/original\/file-20251201-56-7p1q83.png?ixlib=rb-4.1.0&q=45&auto=format&w=754&fit=clip",
+            "domain": "images.theconversation.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "800 millions d’utilisateurs",
+            "url": "https:\/\/www.bilan.ch\/story\/chatgpt-openai-annonce-800-millions-dutilisateurs-hebdomadaires-290502935685",
+            "domain": "bilan.ch",
+            "description": "Found in article content"
+        },
+        {
+            "title": "diminue fortement pendant les vacances scolaires",
+            "url": "https:\/\/legrandcontinent.eu\/fr\/2025\/09\/03\/la-croissance-de-lia-est-elle-principalement-soutenue-par-les-etudiants-et-les-adolescents",
+            "domain": "legrandcontinent.eu",
+            "description": "Found in article content"
+        },
+        {
+            "title": "un étudiant sur deux",
+            "url": "https:\/\/www.bestcolleges.com\/research\/most-college-students-have-used-ai-survey\/",
+            "domain": "bestcolleges.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "nouvel appel",
+            "url": "https:\/\/www.lemonde.fr\/pixels\/article\/2025\/10\/22\/superintelligence-artificielle-des-centaines-d-experts-et-personnalites-dont-des-figures-de-l-ia-moderne-appellent-a-stopper-la-course-au-developpement_6648817_4408996.html",
+            "domain": "lemonde.fr",
+            "description": "Found in article content"
+        },
+        {
+            "title": "essai récent",
+            "url": "https:\/\/www.lepoint.fr\/debats\/face-a-la-montee-de-l-ia-ce-livre-vous-invite-a-stopper-vos-etudes-16-10-2025-2601113_2.php",
+            "domain": "lepoint.fr",
+            "description": "Found in article content"
+        },
+        {
+            "title": "![L’IA génère une image d’une banane qui a la même taille qu’un porte-avions",
+            "url": "https:\/\/images.theconversation.com\/files\/705543\/original\/file-20251201-66-hn105x.png?ixlib=rb-4.1.0&q=45&auto=format&w=754&fit=clip",
+            "domain": "images.theconversation.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "réussir l’examen du barreau",
+            "url": "https:\/\/www.capital.fr\/entreprises-marches\/chatgpt-la-nouvelle-version-gpt-4-reussit-lexamen-du-barreau-haut-la-main-1463027",
+            "domain": "capital.fr",
+            "description": "Found in article content"
+        },
+        {
+            "title": "l’interprétation de résultats médicaux",
+            "url": "https:\/\/www.lepoint.fr\/sante\/l-ia-de-google-plus-forte-que-les-medecins-17-01-2024-2550040_40.php",
+            "domain": "lepoint.fr",
+            "description": "Found in article content"
+        },
+        {
+            "title": "cette interaction avec Gemini",
+            "url": "https:\/\/www.arxiv.org\/abs\/2508.01191",
+            "domain": "arxiv.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "année séculaire",
+            "url": "https:\/\/fr.wikipedia.org\/wiki\/Ann%C3%A9e_s%C3%A9culaire#:%7E:text=Dans%20le%20calendrier%20gr%C3%A9gorien%2C%20une,achev%C3%A9%20le%2031%20d%C3%A9cembre%202000%20.",
+            "domain": "fr.wikipedia.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "*glitchs*",
+            "url": "https:\/\/fr.wikipedia.org\/wiki\/Glitch",
+            "domain": "fr.wikipedia.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "autant d’articles publiés sur Internet que les humains",
+            "url": "https:\/\/graphite.io\/five-percent\/more-articles-are-now-created-by-ai-than-humans",
+            "domain": "graphite.io",
+            "description": "Found in article content"
+        },
+        {
+            "title": "The Conversation",
+            "url": "https:\/\/theconversation.com\/quand-lia-fait-nimporte-quoi-le-cas-du-gratte-ciel-et-du-trombone-a-coulisse-268033",
+            "domain": "theconversation.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "Creative Commons BY-ND 4.0",
+            "url": "https:\/\/creativecommons.org\/licenses\/by-nd\/4.0\/deed.fr",
+            "domain": "creativecommons.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "article original",
+            "url": "https:\/\/theconversation.com\/quand-lia-fait-nimporte-quoi-le-cas-du-gratte-ciel-et-du-trombone-a-coulisse-268033",
+            "domain": "theconversation.com",
+            "description": "Found in article content"
         }
     ],
     "ratings": {
@@ -32,7 +128,10 @@
     "license": "CC BY-ND 4.0",
     "originalUrl": "https:\/\/theconversation.com\/quand-lia-fait-nimporte-quoi-le-cas-du-gratte-ciel-et-du-trombone-a-coulisse-268033",
     "originalSource": "The Conversation",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2025-12-06T17:01:49+00:00",
-    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2025-12-06T17:01:49+00:00"
 }

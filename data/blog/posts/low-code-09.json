@@ -17,7 +17,14 @@
         "integrations",
         "connecteurs"
     ],
-    "sources": [],
+    "sources": [
+        {
+            "title": "Apis on Wikipedia",
+            "url": "https:\/\/en.wikipedia.org\/wiki\/Apis",
+            "domain": "en.wikipedia.org",
+            "description": "Suggested generic reference (Automated)"
+        }
+    ],
     "ratings": {
         "relevance": 5,
         "depth": 3,
@@ -30,7 +37,10 @@
     "license": "",
     "originalUrl": "",
     "originalSource": "",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2026-01-28T05:00:00+00:00",
-    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2026-01-28T05:00:00+00:00"
 }

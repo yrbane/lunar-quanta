@@ -18,7 +18,14 @@
         "terminal",
         "automatisation"
     ],
-    "sources": [],
+    "sources": [
+        {
+            "title": "Console on Wikipedia",
+            "url": "https:\/\/en.wikipedia.org\/wiki\/Console",
+            "domain": "en.wikipedia.org",
+            "description": "Suggested generic reference (Automated)"
+        }
+    ],
     "ratings": {
         "relevance": 3,
         "depth": 4,
@@ -31,7 +38,10 @@
     "license": "",
     "originalUrl": "",
     "originalSource": "",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2025-12-05T23:30:00+00:00",
-    "updatedAt": "2025-12-06T19:16:14+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2025-12-05T23:30:00+00:00"
 }

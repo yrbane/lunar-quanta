@@ -18,7 +18,14 @@
         "linkerd",
         "cilium"
     ],
-    "sources": [],
+    "sources": [
+        {
+            "title": "Service on Wikipedia",
+            "url": "https:\/\/en.wikipedia.org\/wiki\/Service",
+            "domain": "en.wikipedia.org",
+            "description": "Suggested generic reference (Automated)"
+        }
+    ],
     "ratings": {
         "relevance": 1,
         "depth": 5,
@@ -31,7 +38,10 @@
     "license": "",
     "originalUrl": "",
     "originalSource": "",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2026-01-13T10:00:00+00:00",
-    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2026-01-13T10:00:00+00:00"
 }

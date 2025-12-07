@@ -18,6 +18,12 @@
             "url": "https:\/\/theconversation.com\/lintelligence-collective-cette-symphonie-invisible-des-grandes-equipes-de-football-270926",
             "domain": "theconversation.com",
             "description": "Cet article est republié à partir de The Conversation sous licence Creative Commons."
+        },
+        {
+            "title": "L on Wikipedia",
+            "url": "https:\/\/en.wikipedia.org\/wiki\/L",
+            "domain": "en.wikipedia.org",
+            "description": "Suggested generic reference (Automated)"
         }
     ],
     "ratings": {
@@ -32,7 +38,10 @@
     "license": "CC BY-ND 4.0",
     "originalUrl": "https:\/\/theconversation.com\/lintelligence-collective-cette-symphonie-invisible-des-grandes-equipes-de-football-270926",
     "originalSource": "The Conversation",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2025-12-06T17:01:48+00:00",
-    "updatedAt": "2025-12-06T19:08:37+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2025-12-06T17:01:48+00:00"
 }

@@ -18,6 +18,78 @@
             "url": "https:\/\/theconversation.com\/quand-des-robots-invisibles-influencent-nos-choix-et-nos-opinions-266857",
             "domain": "theconversation.com",
             "description": "Cet article est republié à partir de The Conversation sous licence Creative Commons."
+        },
+        {
+            "title": "stigmergie",
+            "url": "https:\/\/www.researchgate.net\/publication\/12680033_A_Brief_History_of_Stigmergy",
+            "domain": "researchgate.net",
+            "description": "Found in article content"
+        },
+        {
+            "title": "Pierre-Paul Grassé",
+            "url": "https:\/\/fr.wikipedia.org\/wiki\/Pierre-Paul_Grass%C3%A9",
+            "domain": "fr.wikipedia.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "formation d’un pilier puis d’un dôme",
+            "url": "https:\/\/www.pnas.org\/doi\/10.1073\/pnas.1509829113",
+            "domain": "pnas.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "Centre de recherches sur la cognition animale",
+            "url": "https:\/\/cbi-cognition.cnrs.fr\/",
+            "domain": "cbi-cognition.cnrs.fr",
+            "description": "Found in article content"
+        },
+        {
+            "title": "le Laboratoire de physique théorique",
+            "url": "https:\/\/lpt.univ-tlse3.fr\/",
+            "domain": "lpt.univ-tlse3.fr",
+            "description": "Found in article content"
+        },
+        {
+            "title": "La première série d’expériences",
+            "url": "https:\/\/www.pnas.org\/doi\/10.1073\/pnas.2307880120",
+            "domain": "pnas.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "Un homme de dos regarde un écran où apparaît une grille avec des chiffres de 1 à 99",
+            "url": "https:\/\/images.theconversation.com\/files\/706094\/original\/file-20251203-64-8lxrr4.png?ixlib=rb-4.1.0&q=45&auto=format&w=754&fit=clip",
+            "domain": "images.theconversation.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "même si les joueurs l’ignoraient",
+            "url": "https:\/\/www.researchsquare.com\/article\/rs-7169654\/v1",
+            "domain": "researchsquare.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "![Image",
+            "url": "https:\/\/images.theconversation.com\/files\/706096\/original\/file-20251203-56-sqoch9.png?ixlib=rb-4.1.0&q=45&auto=format&w=754&fit=clip",
+            "domain": "images.theconversation.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "The Conversation",
+            "url": "https:\/\/theconversation.com\/quand-des-robots-invisibles-influencent-nos-choix-et-nos-opinions-266857",
+            "domain": "theconversation.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "Creative Commons BY-ND 4.0",
+            "url": "https:\/\/creativecommons.org\/licenses\/by-nd\/4.0\/deed.fr",
+            "domain": "creativecommons.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "article original",
+            "url": "https:\/\/theconversation.com\/quand-des-robots-invisibles-influencent-nos-choix-et-nos-opinions-266857",
+            "domain": "theconversation.com",
+            "description": "Found in article content"
         }
     ],
     "ratings": {
@@ -32,7 +104,10 @@
     "license": "CC BY-ND 4.0",
     "originalUrl": "https:\/\/theconversation.com\/quand-des-robots-invisibles-influencent-nos-choix-et-nos-opinions-266857",
     "originalSource": "The Conversation",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2025-12-06T17:01:49+00:00",
-    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2025-12-06T17:01:49+00:00"
 }

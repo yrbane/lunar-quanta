@@ -18,7 +18,14 @@
         "architecture",
         "workers"
     ],
-    "sources": [],
+    "sources": [
+        {
+            "title": "Events on Wikipedia",
+            "url": "https:\/\/en.wikipedia.org\/wiki\/Events",
+            "domain": "en.wikipedia.org",
+            "description": "Suggested generic reference (Automated)"
+        }
+    ],
     "ratings": {
         "relevance": 5,
         "depth": 3,
@@ -31,7 +38,10 @@
     "license": "",
     "originalUrl": "",
     "originalSource": "",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2025-12-06T00:00:00+00:00",
-    "updatedAt": "2025-12-06T19:16:14+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2025-12-06T00:00:00+00:00"
 }

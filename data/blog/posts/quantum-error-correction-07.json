@@ -17,7 +17,14 @@
         "real-time",
         "neural"
     ],
-    "sources": [],
+    "sources": [
+        {
+            "title": "Real on Wikipedia",
+            "url": "https:\/\/en.wikipedia.org\/wiki\/Real",
+            "domain": "en.wikipedia.org",
+            "description": "Suggested generic reference (Automated)"
+        }
+    ],
     "ratings": {
         "relevance": 5,
         "depth": 4,
@@ -30,7 +37,10 @@
     "license": "",
     "originalUrl": "",
     "originalSource": "",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2026-01-02T06:00:00+00:00",
-    "updatedAt": "2025-12-06T17:37:53+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2026-01-02T06:00:00+00:00"
 }

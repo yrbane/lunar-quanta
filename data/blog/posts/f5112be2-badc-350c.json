@@ -21,6 +21,18 @@
             "url": "https:\/\/hal.science\/hal-05273255v1",
             "domain": "hal.science",
             "description": "Archive ouverte française"
+        },
+        {
+            "title": "HAL Archives Ouvertes",
+            "url": "https:\/\/hal.science\/hal-05273255v1",
+            "domain": "hal.science",
+            "description": "Found in article content"
+        },
+        {
+            "title": "Knock on Wikipedia",
+            "url": "https:\/\/en.wikipedia.org\/wiki\/Knock",
+            "domain": "en.wikipedia.org",
+            "description": "Suggested generic reference (Automated)"
         }
     ],
     "ratings": {
@@ -35,7 +47,10 @@
     "license": "CC BY",
     "originalUrl": "https:\/\/hal.science\/hal-05273255v1",
     "originalSource": "HAL Archives Ouvertes",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2025-12-06T17:00:22+00:00",
-    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2025-12-06T17:00:22+00:00"
 }

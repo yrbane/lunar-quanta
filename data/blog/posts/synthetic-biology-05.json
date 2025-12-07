@@ -17,7 +17,14 @@
         "nucleotides",
         "innovation"
     ],
-    "sources": [],
+    "sources": [
+        {
+            "title": "Xna on Wikipedia",
+            "url": "https:\/\/en.wikipedia.org\/wiki\/Xna",
+            "domain": "en.wikipedia.org",
+            "description": "Suggested generic reference (Automated)"
+        }
+    ],
     "ratings": {
         "relevance": 4,
         "depth": 3,
@@ -30,7 +37,10 @@
     "license": "",
     "originalUrl": "",
     "originalSource": "",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2025-11-17T22:00:00+00:00",
-    "updatedAt": "2025-12-06T18:54:23+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2025-11-17T22:00:00+00:00"
 }

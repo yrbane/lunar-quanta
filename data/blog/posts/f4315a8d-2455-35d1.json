@@ -18,6 +18,42 @@
             "url": "https:\/\/theconversation.com\/comprendre-la-cuisson-parfaite-des-pates-avec-ou-sans-gluten-grace-a-la-science-269202",
             "domain": "theconversation.com",
             "description": "Cet article est republié à partir de The Conversation sous licence Creative Commons."
+        },
+        {
+            "title": "publiée dans *Food Hydrocolloids*",
+            "url": "https:\/\/www.sciencedirect.com\/science\/article\/abs\/pii\/S0268005X2500815X",
+            "domain": "sciencedirect.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "![Spaghetti is taken out of the pan with tongs",
+            "url": "https:\/\/images.theconversation.com\/files\/698858\/original\/file-20251028-56-570var.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=754&fit=clip",
+            "domain": "images.theconversation.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "Kalashnikov Dmitrii\/Shutterstock",
+            "url": "https:\/\/www.shutterstock.com\/image-photo\/cooking-pasta-spaghetti-taken-out-pan-2320590289",
+            "domain": "shutterstock.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "The Conversation",
+            "url": "https:\/\/theconversation.com\/comprendre-la-cuisson-parfaite-des-pates-avec-ou-sans-gluten-grace-a-la-science-269202",
+            "domain": "theconversation.com",
+            "description": "Found in article content"
+        },
+        {
+            "title": "Creative Commons BY-ND 4.0",
+            "url": "https:\/\/creativecommons.org\/licenses\/by-nd\/4.0\/deed.fr",
+            "domain": "creativecommons.org",
+            "description": "Found in article content"
+        },
+        {
+            "title": "article original",
+            "url": "https:\/\/theconversation.com\/comprendre-la-cuisson-parfaite-des-pates-avec-ou-sans-gluten-grace-a-la-science-269202",
+            "domain": "theconversation.com",
+            "description": "Found in article content"
         }
     ],
     "ratings": {
@@ -32,7 +68,10 @@
     "license": "CC BY-ND 4.0",
     "originalUrl": "https:\/\/theconversation.com\/comprendre-la-cuisson-parfaite-des-pates-avec-ou-sans-gluten-grace-a-la-science-269202",
     "originalSource": "The Conversation",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2025-12-06T17:11:23+00:00",
-    "updatedAt": "2025-12-06T17:11:23+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2025-12-06T17:11:23+00:00"
 }

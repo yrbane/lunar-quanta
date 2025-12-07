@@ -17,7 +17,14 @@
         "immunotherapie",
         "oncologie"
     ],
-    "sources": [],
+    "sources": [
+        {
+            "title": "Crispr on Wikipedia",
+            "url": "https:\/\/en.wikipedia.org\/wiki\/Crispr",
+            "domain": "en.wikipedia.org",
+            "description": "Suggested generic reference (Automated)"
+        }
+    ],
     "ratings": {
         "relevance": 4,
         "depth": 4,
@@ -30,7 +37,10 @@
     "license": "",
     "originalUrl": "",
     "originalSource": "",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2025-11-15T23:00:00+00:00",
-    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2025-11-15T23:00:00+00:00"
 }

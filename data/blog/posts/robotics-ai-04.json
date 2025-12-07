@@ -17,7 +17,14 @@
         "perception",
         "depth"
     ],
-    "sources": [],
+    "sources": [
+        {
+            "title": "Vision on Wikipedia",
+            "url": "https:\/\/en.wikipedia.org\/wiki\/Vision",
+            "domain": "en.wikipedia.org",
+            "description": "Suggested generic reference (Automated)"
+        }
+    ],
     "ratings": {
         "relevance": 1,
         "depth": 4,
@@ -30,7 +37,10 @@
     "license": "",
     "originalUrl": "",
     "originalSource": "",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2025-12-24T00:00:00+00:00",
-    "updatedAt": "2025-12-06T18:54:23+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2025-12-24T00:00:00+00:00"
 }

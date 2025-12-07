@@ -18,7 +18,14 @@
         "codeium",
         "comparaison"
     ],
-    "sources": [],
+    "sources": [
+        {
+            "title": "Github on Wikipedia",
+            "url": "https:\/\/en.wikipedia.org\/wiki\/Github",
+            "domain": "en.wikipedia.org",
+            "description": "Suggested generic reference (Automated)"
+        }
+    ],
     "ratings": {
         "relevance": 5,
         "depth": 4,
@@ -31,7 +38,10 @@
     "license": "",
     "originalUrl": "",
     "originalSource": "",
+    "featured": false,
+    "pinOrder": 0,
+    "scheduledPublishAt": null,
     "createdAt": "2025-12-21T07:00:00+00:00",
-    "updatedAt": "2025-12-06T17:14:05+00:00",
+    "updatedAt": "2025-12-07T07:16:51+00:00",
     "publishedAt": "2025-12-21T07:00:00+00:00"
 }
