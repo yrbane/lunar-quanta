@@ -94,6 +94,21 @@ final class Post
     private array $comments = [];
 
     /**
+     * Whether the article is featured (pinned at top).
+     */
+    private bool $featured = false;
+
+    /**
+     * Pin order for featured articles (lower = higher priority).
+     */
+    private int $pinOrder = 0;
+
+    /**
+     * Scheduled publication date (auto-publish at this date).
+     */
+    private ?\DateTimeImmutable $scheduledPublishAt = null;
+
+    /**
      * Rating criteria (1-5 stars each):
      * - relevance: How well the article addresses its topic
      * - depth: How thoroughly the subject is covered
@@ -690,6 +705,108 @@ final class Post
         return $this->status === PostStatus::ARCHIVED;
     }
 
+    // =========================================================================
+    // FEATURED / PINNED METHODS
+    // =========================================================================
+
+    /**
+     * Check if article is featured (pinned at top).
+     */
+    public function isFeatured(): bool
+    {
+        return $this->featured;
+    }
+
+    /**
+     * Set featured status.
+     */
+    public function setFeatured(bool $featured): self
+    {
+        $this->featured = $featured;
+        $this->touch();
+        return $this;
+    }
+
+    /**
+     * Get pin order.
+     */
+    public function getPinOrder(): int
+    {
+        return $this->pinOrder;
+    }
+
+    /**
+     * Set pin order.
+     */
+    public function setPinOrder(int $order): self
+    {
+        $this->pinOrder = $order;
+        $this->touch();
+        return $this;
+    }
+
+    // =========================================================================
+    // SCHEDULED PUBLISHING METHODS
+    // =========================================================================
+
+    /**
+     * Get scheduled publication date.
+     */
+    public function getScheduledPublishAt(): ?\DateTimeImmutable
+    {
+        return $this->scheduledPublishAt;
+    }
+
+    /**
+     * Set scheduled publication date.
+     */
+    public function setScheduledPublishAt(?\DateTimeImmutable $date): self
+    {
+        $this->scheduledPublishAt = $date;
+        $this->touch();
+        return $this;
+    }
+
+    /**
+     * Schedule publication for a specific date/time.
+     */
+    public function schedulePublication(\DateTimeImmutable $date): self
+    {
+        $this->scheduledPublishAt = $date;
+        $this->touch();
+        return $this;
+    }
+
+    /**
+     * Cancel scheduled publication.
+     */
+    public function cancelScheduledPublication(): self
+    {
+        $this->scheduledPublishAt = null;
+        $this->touch();
+        return $this;
+    }
+
+    /**
+     * Check if article is scheduled for future publication.
+     */
+    public function isScheduled(): bool
+    {
+        return $this->scheduledPublishAt !== null
+            && $this->scheduledPublishAt > new \DateTimeImmutable()
+            && $this->status === PostStatus::DRAFT;
+    }
+
+    /**
+     * Check if scheduled publication time has passed (ready to auto-publish).
+     */
+    public function shouldAutoPublish(): bool
+    {
+        return $this->scheduledPublishAt !== null
+            && $this->scheduledPublishAt <= new \DateTimeImmutable()
+            && $this->status === PostStatus::DRAFT;
+    }
+
     /**
      * Retourne l'URL de l'article.
      */
@@ -751,6 +868,9 @@ final class Post
             'license' => $this->license,
             'originalUrl' => $this->originalUrl,
             'originalSource' => $this->originalSource,
+            'featured' => $this->featured,
+            'pinOrder' => $this->pinOrder,
+            'scheduledPublishAt' => $this->scheduledPublishAt?->format(\DateTimeInterface::ATOM),
             'createdAt' => $this->createdAt->format(\DateTimeInterface::ATOM),
             'updatedAt' => $this->updatedAt->format(\DateTimeInterface::ATOM),
             'publishedAt' => $this->publishedAt?->format(\DateTimeInterface::ATOM),
@@ -819,6 +939,15 @@ final class Post
         }
         if (isset($data['originalSource'])) {
             $post->originalSource = $data['originalSource'];
+        }
+        if (isset($data['featured'])) {
+            $post->featured = (bool) $data['featured'];
+        }
+        if (isset($data['pinOrder'])) {
+            $post->pinOrder = (int) $data['pinOrder'];
+        }
+        if (isset($data['scheduledPublishAt']) && $data['scheduledPublishAt'] !== null) {
+            $post->scheduledPublishAt = new \DateTimeImmutable($data['scheduledPublishAt']);
         }
         if (isset($data['createdAt'])) {
             $createdAtProp = $reflection->getProperty('createdAt');

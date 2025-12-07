@@ -435,6 +435,104 @@ final class PostService
     }
 
     /**
+     * Retourne les articles featured/épinglés.
+     *
+     * @return Post[]
+     */
+    public function findFeatured(): array
+    {
+        $posts = array_filter(
+            $this->findPublished(),
+            fn($post) => $post->isFeatured()
+        );
+
+        // Trier par pinOrder croissant
+        usort($posts, fn($a, $b) => $a->getPinOrder() <=> $b->getPinOrder());
+
+        return $posts;
+    }
+
+    /**
+     * Définit un article comme featured.
+     */
+    public function setFeatured(string $id, bool $featured = true, int $pinOrder = 0): Post
+    {
+        $post = $this->find($id);
+
+        if ($post === null) {
+            throw BlogException::postNotFound($id);
+        }
+
+        $post->setFeatured($featured);
+        $post->setPinOrder($pinOrder);
+        $this->update($post);
+
+        return $post;
+    }
+
+    /**
+     * Retourne les articles programmés pour publication.
+     *
+     * @return Post[]
+     */
+    public function findScheduled(): array
+    {
+        return array_values(array_filter(
+            $this->all(),
+            fn($post) => $post->isScheduled()
+        ));
+    }
+
+    /**
+     * Retourne les articles dont la publication programmée est échue.
+     *
+     * @return Post[]
+     */
+    public function findReadyToPublish(): array
+    {
+        return array_values(array_filter(
+            $this->all(),
+            fn($post) => $post->shouldAutoPublish()
+        ));
+    }
+
+    /**
+     * Publie automatiquement les articles dont la date programmée est passée.
+     *
+     * @return int Nombre d'articles publiés
+     */
+    public function publishScheduled(): int
+    {
+        $posts = $this->findReadyToPublish();
+        $count = 0;
+
+        foreach ($posts as $post) {
+            $post->publish();
+            $this->update($post);
+            $count++;
+        }
+
+        return $count;
+    }
+
+    /**
+     * Programme la publication d'un article.
+     */
+    public function schedulePublication(string $id, \DateTimeImmutable $date): Post
+    {
+        $post = $this->find($id);
+
+        if ($post === null) {
+            throw BlogException::postNotFound($id);
+        }
+
+        $post->schedulePublication($date);
+        $this->update($post);
+
+        return $post;
+    }
+
+    /**
      * Calcule le score de pertinence d'un article pour une recherche.
      *
      * @param Post $post
