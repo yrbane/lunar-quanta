@@ -113,9 +113,21 @@
                 </div>
 
                 <!-- Search -->
-                <div class="la-search-form la-max-w-md la-mx-auto">
-                    <span class="la-icon">search</span>
-                    <input type="text" id="searchInput" placeholder="Rechercher un article..." autocomplete="off" class="la-input">
+                <div class="la-search-wrapper la-max-w-md la-mx-auto">
+                    <div class="la-search-form">
+                        <span class="la-icon">search</span>
+                        <input type="text" id="searchInput" placeholder="Rechercher un article..." autocomplete="off" class="la-input">
+                        <span class="la-search-shortcut">
+                            <kbd>/</kbd>
+                        </span>
+                    </div>
+                    <div class="la-search-results" id="searchResults" style="display: none;">
+                        <div class="la-search-results-list" id="searchResultsList"></div>
+                        <div class="la-search-no-results" id="searchNoResults" style="display: none;">
+                            <span class="la-icon">search_off</span>
+                            <span>Aucun résultat trouvé</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -310,30 +322,123 @@
     </footer>
 
     <script>
-        // Search functionality
+        // Search functionality with live results
         const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const searchResultsList = document.getElementById('searchResultsList');
+        const searchNoResults = document.getElementById('searchNoResults');
         const articlesGrid = document.getElementById('articlesGrid');
         const articles = articlesGrid ? Array.from(articlesGrid.querySelectorAll('.la-post-card')) : [];
         const visibleCount = document.getElementById('visibleCount');
 
-        function filterArticles() {
-            const query = searchInput.value.toLowerCase().trim();
-            let visible = 0;
+        // Build search index from visible articles
+        const searchIndex = articles.map(article => ({
+            title: article.dataset.title || '',
+            category: article.dataset.category || '',
+            tags: article.dataset.tags || '',
+            url: article.querySelector('.la-post-card-title a')?.href || '',
+            excerpt: article.querySelector('.la-post-card-excerpt')?.textContent || '',
+            date: article.querySelector('.la-post-card-date')?.textContent || '',
+            author: article.querySelector('.la-post-card-author span:last-child')?.textContent || '',
+            element: article
+        }));
 
-            articles.forEach(article => {
-                const title = article.dataset.title.toLowerCase();
-                const category = article.dataset.category?.toLowerCase() || '';
-                const tags = article.dataset.tags?.toLowerCase() || '';
-                const matches = title.includes(query) || category.includes(query) || tags.includes(query);
+        let searchTimeout;
 
-                article.classList.toggle('la-hidden', !matches);
-                if (matches) visible++;
+        function performSearch(query) {
+            query = query.toLowerCase().trim();
+
+            if (query.length < 2) {
+                searchResults.style.display = 'none';
+                // Reset article visibility
+                articles.forEach(a => a.classList.remove('la-hidden'));
+                visibleCount.textContent = articles.length;
+                return;
+            }
+
+            const terms = query.split(/\s+/).filter(t => t.length >= 2);
+            const results = [];
+
+            searchIndex.forEach(item => {
+                let score = 0;
+                const titleLower = item.title.toLowerCase();
+                const categoryLower = item.category.toLowerCase();
+                const tagsLower = item.tags.toLowerCase();
+                const excerptLower = item.excerpt.toLowerCase();
+
+                terms.forEach(term => {
+                    // Title match (highest weight)
+                    if (titleLower.includes(term)) score += 10;
+                    // Category match
+                    if (categoryLower.includes(term)) score += 5;
+                    // Tags match
+                    if (tagsLower.includes(term)) score += 5;
+                    // Excerpt match
+                    if (excerptLower.includes(term)) score += 2;
+                });
+
+                if (score > 0) {
+                    results.push({ ...item, score });
+                }
             });
 
+            results.sort((a, b) => b.score - a.score);
+
+            // Update grid visibility
+            let visible = 0;
+            articles.forEach(article => {
+                const inResults = results.some(r => r.element === article);
+                article.classList.toggle('la-hidden', !inResults);
+                if (inResults) visible++;
+            });
             visibleCount.textContent = visible;
+
+            // Show dropdown results
+            if (results.length > 0) {
+                searchNoResults.style.display = 'none';
+                searchResultsList.innerHTML = results.slice(0, 8).map(r => `
+                    <a href="${r.url}" class="la-search-result-item">
+                        <div class="la-search-result-title">${highlightText(r.title, terms)}</div>
+                        <div class="la-search-result-meta">
+                            ${r.category ? `<span class="la-search-result-category">${r.category}</span>` : ''}
+                            ${r.date ? `<span class="la-search-result-date">${r.date}</span>` : ''}
+                        </div>
+                    </a>
+                `).join('');
+                searchResults.style.display = 'block';
+            } else {
+                searchResultsList.innerHTML = '';
+                searchNoResults.style.display = 'flex';
+                searchResults.style.display = 'block';
+            }
         }
 
-        searchInput?.addEventListener('input', filterArticles);
+        function highlightText(text, terms) {
+            let result = text;
+            terms.forEach(term => {
+                const regex = new RegExp(`(${term})`, 'gi');
+                result = result.replace(regex, '<mark>$1</mark>');
+            });
+            return result;
+        }
+
+        searchInput?.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => performSearch(e.target.value), 150);
+        });
+
+        searchInput?.addEventListener('focus', () => {
+            if (searchInput.value.length >= 2) {
+                performSearch(searchInput.value);
+            }
+        });
+
+        // Close search results when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.la-search-wrapper')) {
+                searchResults.style.display = 'none';
+            }
+        });
 
         function focusSearch() {
             searchInput?.focus();
