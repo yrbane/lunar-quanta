@@ -475,6 +475,7 @@ Options :
   --dry-run           Simule la suppression sans modifier les fichiers
   --stats             Affiche les statistiques avant et après
   --type=<type>       Vide seulement un type de cache spécifique
+  --help              Affiche cette aide
 
 Description :
   Cette commande supprime tous les fichiers du répertoire de cache.

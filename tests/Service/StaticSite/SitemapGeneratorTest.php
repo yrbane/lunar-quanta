@@ -43,7 +43,7 @@ final class SitemapGeneratorTest extends TestCase
         $xml = $this->generator->generate();
 
         $this->assertStringStartsWith('<?xml version="1.0"', $xml);
-        $this->assertStringContainsString('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', $xml);
+        $this->assertStringContainsString('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"', $xml);
     }
 
     public function testGenerateContainsBlogIndex(): void

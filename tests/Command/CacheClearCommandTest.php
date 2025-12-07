@@ -199,17 +199,24 @@ class CacheClearCommandTest extends TestCase
         $this->assertEmpty($output);
     }
 
-    public function testDeleteDirContentOutputsDeletedFiles(): void
+    public function testDeleteDirContentOutputsDeletedFilesInVerboseMode(): void
     {
         file_put_contents($this->tempDir . '/test.txt', 'content');
 
         $command = new CacheClearCommand();
 
+        // Execute with verbose flag to enable output
+        ob_start();
+        $command->execute(['-v', '--type=nonexistent']);
+        ob_end_clean();
+
+        // Now test deleteDirContent after verbose is set
         ob_start();
         $command->deleteDirContent($this->tempDir);
         $output = ob_get_clean();
 
-        $this->assertStringContainsString('supprimé', $output);
+        // In verbose mode, files are listed
+        $this->assertStringContainsString('test.txt', $output);
     }
 
     // =========================================================================
