@@ -146,6 +146,11 @@ use Lunar\Config\Config;
 #[Command(name: 'cache:clear', description: 'Supprime les fichiers du cache.')]
 class CacheClearCommand implements CommandInterface
 {
+    private bool $verbose = false;
+    private bool $dryRun = false;
+    private int $filesDeleted = 0;
+    private int $bytesFreed = 0;
+
     /**
      * Exécute la commande de vidage du cache.
      *
@@ -173,20 +178,199 @@ class CacheClearCommand implements CommandInterface
      */
     public function execute(array $args): int
     {
+        $this->verbose = in_array('-v', $args, true) || in_array('--verbose', $args, true);
+        $this->dryRun = in_array('--dry-run', $args, true);
+        $showStats = in_array('--stats', $args, true);
+
+        // Déterminer le type de cache à vider
+        $cacheType = $this->parseType($args);
+
         $cacheDir = Config::resolvePath(
             (string) Config::get('cache', 'cache.dir', 'cache')
         );
 
         if (!is_dir($cacheDir)) {
             echo "Le répertoire de cache n'existe pas.\n";
-
             return 1;
         }
-        $this->deleteDirContent($cacheDir);
 
-        echo "Cache vidé avec succès.\n";
+        // Afficher les stats avant
+        if ($showStats) {
+            $this->displayStats($cacheDir, 'AVANT');
+        }
+
+        // Réinitialiser les compteurs
+        $this->filesDeleted = 0;
+        $this->bytesFreed = 0;
+
+        if ($this->dryRun) {
+            echo "Mode dry-run : aucune modification ne sera effectuée.\n\n";
+        }
+
+        // Vider le cache selon le type
+        if ($cacheType === 'all') {
+            $this->deleteDirContent($cacheDir);
+        } else {
+            $targetDir = $cacheDir . '/' . $cacheType;
+            if (!is_dir($targetDir)) {
+                echo "Le type de cache '{$cacheType}' n'existe pas.\n";
+                return 1;
+            }
+            $this->deleteDirContent($targetDir);
+            if (!$this->dryRun) {
+                @rmdir($targetDir);
+            }
+        }
+
+        // Afficher le résumé
+        echo "\n";
+        if ($this->dryRun) {
+            echo "Simulation terminée :\n";
+        } else {
+            echo "Cache vidé avec succès !\n";
+        }
+
+        echo "  Fichiers supprimés : {$this->filesDeleted}\n";
+        echo "  Espace libéré : " . $this->formatBytes($this->bytesFreed) . "\n";
+
+        // Afficher les stats après
+        if ($showStats && !$this->dryRun) {
+            $this->displayStats($cacheDir, 'APRÈS');
+        }
 
         return 0;
+    }
+
+    /**
+     * Parse le type de cache depuis les arguments.
+     */
+    private function parseType(array $args): string
+    {
+        foreach ($args as $i => $arg) {
+            if ($arg === '--type' && isset($args[$i + 1])) {
+                return $args[$i + 1];
+            }
+            if (str_starts_with($arg, '--type=')) {
+                return substr($arg, 7);
+            }
+        }
+        return 'all';
+    }
+
+    /**
+     * Affiche les statistiques du cache.
+     */
+    private function displayStats(string $cacheDir, string $label): void
+    {
+        $stats = $this->getCacheStats($cacheDir);
+
+        echo "\n┌──────────────────────────────────────────────────────────────┐\n";
+        echo "│                    STATISTIQUES CACHE ({$label})                │\n";
+        echo "├──────────────────────────────────────────────────────────────┤\n";
+        printf("│  %-30s %29s │\n", "Fichiers totaux", $stats['files']);
+        printf("│  %-30s %29s │\n", "Répertoires", $stats['directories']);
+        printf("│  %-30s %29s │\n", "Taille totale", $this->formatBytes($stats['size']));
+        echo "├──────────────────────────────────────────────────────────────┤\n";
+
+        if (!empty($stats['by_type'])) {
+            echo "│  Par type :                                                  │\n";
+            foreach ($stats['by_type'] as $type => $info) {
+                $label = mb_substr($type, 0, 20);
+                printf("│    %-28s %19s (%4d) │\n",
+                    $label,
+                    $this->formatBytes($info['size']),
+                    $info['count']
+                );
+            }
+        }
+        echo "└──────────────────────────────────────────────────────────────┘\n";
+    }
+
+    /**
+     * Calcule les statistiques du cache.
+     */
+    private function getCacheStats(string $dir): array
+    {
+        $stats = [
+            'files' => 0,
+            'directories' => 0,
+            'size' => 0,
+            'by_type' => [],
+        ];
+
+        if (!is_dir($dir)) {
+            return $stats;
+        }
+
+        // Compter les sous-répertoires de premier niveau comme types
+        $items = glob($dir . '/*');
+        if ($items === false) {
+            return $stats;
+        }
+
+        foreach ($items as $item) {
+            if (is_dir($item)) {
+                $typeName = basename($item);
+                $typeStats = $this->countDirStats($item);
+                $stats['by_type'][$typeName] = [
+                    'count' => $typeStats['files'],
+                    'size' => $typeStats['size'],
+                ];
+                $stats['files'] += $typeStats['files'];
+                $stats['directories'] += $typeStats['directories'] + 1;
+                $stats['size'] += $typeStats['size'];
+            } else {
+                $stats['files']++;
+                $stats['size'] += filesize($item);
+            }
+        }
+
+        return $stats;
+    }
+
+    /**
+     * Compte les fichiers et la taille d'un répertoire récursivement.
+     */
+    private function countDirStats(string $dir): array
+    {
+        $stats = ['files' => 0, 'directories' => 0, 'size' => 0];
+
+        $items = glob($dir . '/*');
+        if ($items === false) {
+            return $stats;
+        }
+
+        foreach ($items as $item) {
+            if (is_dir($item)) {
+                $stats['directories']++;
+                $subStats = $this->countDirStats($item);
+                $stats['files'] += $subStats['files'];
+                $stats['directories'] += $subStats['directories'];
+                $stats['size'] += $subStats['size'];
+            } else {
+                $stats['files']++;
+                $stats['size'] += filesize($item);
+            }
+        }
+
+        return $stats;
+    }
+
+    /**
+     * Formate une taille en bytes en format lisible.
+     */
+    private function formatBytes(int $bytes): string
+    {
+        if ($bytes >= 1073741824) {
+            return number_format($bytes / 1073741824, 2) . ' GB';
+        }
+        if ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        }
+        if ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        }
+        return $bytes . ' B';
     }
 
     /**
@@ -240,18 +424,39 @@ class CacheClearCommand implements CommandInterface
             return;
         }
 
-        $files = glob($dir.'/*');
+        $files = glob($dir . '/*');
         if (false === $files) {
             return;
+        }
+
+        // Inclure aussi les fichiers cachés (commençant par .)
+        $hidden = glob($dir . '/.*');
+        if ($hidden !== false) {
+            foreach ($hidden as $h) {
+                if (basename($h) !== '.' && basename($h) !== '..') {
+                    $files[] = $h;
+                }
+            }
         }
 
         foreach ($files as $file) {
             if (is_dir($file)) {
                 $this->deleteDirContent($file);
-                rmdir($file);
+                if (!$this->dryRun) {
+                    @rmdir($file);
+                }
             } else {
-                echo $file." supprimé.\n";
-                unlink($file);
+                $size = filesize($file);
+                $this->filesDeleted++;
+                $this->bytesFreed += $size;
+
+                if ($this->verbose) {
+                    echo "  " . ($this->dryRun ? "[dry-run] " : "") . basename($file) . " (" . $this->formatBytes($size) . ")\n";
+                }
+
+                if (!$this->dryRun) {
+                    unlink($file);
+                }
             }
         }
     }
@@ -263,21 +468,27 @@ Commande : cache:clear
 Supprime les fichiers du cache.
 
 Utilisation :
-  ./bin/console cache:clear [--help]
+  ./bin/console cache:clear [options]
 
 Options :
-    --help         Affiche cette aide
+  -v, --verbose       Affiche chaque fichier supprimé
+  --dry-run           Simule la suppression sans modifier les fichiers
+  --stats             Affiche les statistiques avant et après
+  --type=<type>       Vide seulement un type de cache spécifique
 
 Description :
-    Cette commande supprime tous les fichiers du répertoire de cache.
-    Elle est utile pour libérer de l'espace disque ou résoudre des problèmes liés au cache.
+  Cette commande supprime tous les fichiers du répertoire de cache.
+  Elle est utile pour libérer de l'espace disque ou résoudre des problèmes liés au cache.
 
 Exemples :
-    ./bin/console cache:clear
-    ./bin/console cache:clear --help
+  cache:clear                     # Vide tout le cache
+  cache:clear --verbose           # Vide avec détails
+  cache:clear --dry-run           # Prévisualisation
+  cache:clear --stats             # Affiche les stats avant/après
+  cache:clear --type=templates    # Vide seulement le cache templates
 
 Remarque :
-    Assurez-vous d'avoir les permissions nécessaires pour supprimer les fichiers du cache.
+  Assurez-vous d'avoir les permissions nécessaires pour supprimer les fichiers du cache.
 
 HELP;
     }
