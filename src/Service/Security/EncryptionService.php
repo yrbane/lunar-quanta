@@ -57,7 +57,7 @@ class EncryptionService implements EncryptionInterface
             throw new SecurityException("Cipher {$this->cipher} not supported");
         }
 
-        $iv = openssl_random_pseudo_bytes($ivLength);
+        $iv = random_bytes($ivLength);
         $ciphertext = openssl_encrypt($plaintext, $this->cipher, $this->encryptionKey, OPENSSL_RAW_DATA, $iv);
 
         if (false === $ciphertext) {

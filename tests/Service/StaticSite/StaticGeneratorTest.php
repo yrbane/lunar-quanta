@@ -222,16 +222,16 @@ final class StaticGeneratorTest extends TestCase
         $count = $this->generator->generateTagPages();
 
         $this->assertSame(3, $count); // php, mysql, programming
-        $this->assertFileExists($this->outputPath . '/tags/php.html');
-        $this->assertFileExists($this->outputPath . '/tags/mysql.html');
-        $this->assertFileExists($this->outputPath . '/tags/programming.html');
+        $this->assertFileExists($this->outputPath . '/tag/php.html');
+        $this->assertFileExists($this->outputPath . '/tag/mysql.html');
+        $this->assertFileExists($this->outputPath . '/tag/programming.html');
 
         // Vérifier le contenu
-        $phpContent = file_get_contents($this->outputPath . '/tags/php.html');
+        $phpContent = file_get_contents($this->outputPath . '/tag/php.html');
         $this->assertStringContainsString('Article PHP', $phpContent);
         $this->assertStringNotContainsString('Article MySQL', $phpContent);
 
-        $programmingContent = file_get_contents($this->outputPath . '/tags/programming.html');
+        $programmingContent = file_get_contents($this->outputPath . '/tag/programming.html');
         $this->assertStringContainsString('Article PHP', $programmingContent);
         $this->assertStringContainsString('Article MySQL', $programmingContent);
     }
@@ -260,7 +260,7 @@ final class StaticGeneratorTest extends TestCase
         $result = $this->generator->generateAll();
 
         $this->assertSame(1, $result['tags']);
-        $this->assertFileExists($this->outputPath . '/tags/test.html');
+        $this->assertFileExists($this->outputPath . '/tag/test.html');
     }
 
     public function testGenerateCategoryPagesReturnsZeroWithoutService(): void
@@ -295,11 +295,40 @@ final class StaticGeneratorTest extends TestCase
         $count = $this->generator->generateCategoryPages();
 
         $this->assertSame(1, $count);
-        $this->assertFileExists($this->outputPath . '/categories/php.html');
+        $this->assertFileExists($this->outputPath . '/category/php.html');
 
-        $content = file_get_contents($this->outputPath . '/categories/php.html');
+        $content = file_get_contents($this->outputPath . '/category/php.html');
         $this->assertStringContainsString('PHP', $content);
         $this->assertStringContainsString('Article PHP', $content);
+    }
+
+    public function testGenerateAllWithCategoryServiceDoesNotCallFindPerPost(): void
+    {
+        $this->createCategoryTemplate();
+        $this->createTagTemplate();
+
+        $categoryStorage = new FileStorage($this->storagePath . '/categories');
+        $categoryService = new \Lunar\Service\Blog\CategoryService($categoryStorage);
+
+        $cat = $categoryService->create('PHP');
+        $categoryService->update($cat);
+
+        $this->generator->setCategoryService($categoryService);
+
+        // Create multiple posts with the same category
+        for ($i = 1; $i <= 5; $i++) {
+            $post = $this->postService->create("Post $i", "Content $i");
+            $post->setCategoryId($cat->getId());
+            $post->addTag('php');
+            $this->postService->update($post);
+            $this->postService->publish($post->getId());
+        }
+
+        // This should work efficiently with category cache
+        $result = $this->generator->generateAll();
+
+        $this->assertSame(5, $result['posts']);
+        $this->assertTrue($result['index']);
     }
 
     private function createCategoryTemplate(): void
@@ -307,22 +336,22 @@ final class StaticGeneratorTest extends TestCase
         $categoryTemplate = <<<'HTML'
 <!DOCTYPE html>
 <html>
-<head><title>{{ category_name }}</title></head>
+<head><title>[[ category_name ]]</title></head>
 <body>
-    <h1>{{ category_name }}</h1>
-    <p>{{ category_description }}</p>
-    <p>{{ count }} article(s)</p>
-    {% if posts|length > 0 %}
+    <h1>[[ category_name ]]</h1>
+    <p>[[ category_description ]]</p>
+    <p>[[ count ]] article(s)</p>
+    [% if posts %]
     <ul>
-    {% for post in posts %}
-        <li><a href="{{ post.url }}">{{ post.title }}</a></li>
-    {% endfor %}
+    [% for post in posts %]
+        <li><a href="[[ post.url ]]">[[ post.title ]]</a></li>
+    [% endfor %]
     </ul>
-    {% endif %}
+    [% endif %]
 </body>
 </html>
 HTML;
-        file_put_contents($this->templatePath . '/category.html', $categoryTemplate);
+        file_put_contents($this->templatePath . '/category.html.tpl', $categoryTemplate);
     }
 
     private function createTagTemplate(): void
@@ -330,43 +359,43 @@ HTML;
         $tagTemplate = <<<'HTML'
 <!DOCTYPE html>
 <html>
-<head><title>{{ tag }}</title></head>
+<head><title>[[ tag ]]</title></head>
 <body>
-    <h1>Articles tagués "{{ tag }}"</h1>
-    <p>{{ count }} article(s)</p>
-    {% if posts|length > 0 %}
+    <h1>Articles tagués "[[ tag ]]"</h1>
+    <p>[[ count ]] article(s)</p>
+    [% if posts %]
     <ul>
-    {% for post in posts %}
-        <li><a href="{{ post.url }}">{{ post.title }}</a></li>
-    {% endfor %}
+    [% for post in posts %]
+        <li><a href="[[ post.url ]]">[[ post.title ]]</a></li>
+    [% endfor %]
     </ul>
-    {% endif %}
+    [% endif %]
 </body>
 </html>
 HTML;
-        file_put_contents($this->templatePath . '/tag.html', $tagTemplate);
+        file_put_contents($this->templatePath . '/tag.html.tpl', $tagTemplate);
     }
 
     private function createTestTemplates(): void
     {
-        // Template pour un article
+        // Template pour un article (lunar-template syntax)
         $postTemplate = <<<'HTML'
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ title }}</title>
+    <title>[[ title ]]</title>
 </head>
 <body>
-    <h1>{{ title }}</h1>
-    {% if author %}
-    <p class="author">Par {{ author }}</p>
-    {% endif %}
-    <article>{{ content }}</article>
+    <h1>[[ title ]]</h1>
+    [% if author %]
+    <p class="author">Par [[ author ]]</p>
+    [% endif %]
+    <article>[[ content|raw ]]</article>
 </body>
 </html>
 HTML;
 
-        // Template pour l'index
+        // Template pour l'index (lunar-template syntax)
         $indexTemplate = <<<'HTML'
 <!DOCTYPE html>
 <html>
@@ -376,16 +405,16 @@ HTML;
 <body>
     <h1>Articles</h1>
     <ul>
-    {% for post in posts %}
-        <li><a href="{{ post.url }}">{{ post.title }}</a></li>
-    {% endfor %}
+    [% for post in posts %]
+        <li><a href="[[ post.url ]]">[[ post.title ]]</a></li>
+    [% endfor %]
     </ul>
 </body>
 </html>
 HTML;
 
-        file_put_contents($this->templatePath . '/post.html', $postTemplate);
-        file_put_contents($this->templatePath . '/index.html', $indexTemplate);
+        file_put_contents($this->templatePath . '/post.html.tpl', $postTemplate);
+        file_put_contents($this->templatePath . '/index.html.tpl', $indexTemplate);
     }
 
     private function removeDirectory(string $dir): void

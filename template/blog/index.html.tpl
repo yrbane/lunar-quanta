@@ -1,31 +1,15 @@
-<!DOCTYPE html>
-<html lang="fr" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lunar Blog - Framework PHP Moderne</title>
-    <meta name="description" content="Articles et tutoriels sur Lunar Quanta, le framework PHP moderne sans dépendances.">
-    <link rel="alternate" type="application/rss+xml" title="Lunar Blog RSS" href="/blog/feed.xml">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- All theme fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Press+Start+2P&family=VT323&family=Nunito:wght@400;600;700&family=Fredoka+One&family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&family=Poppins:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+[% extends '_layout.html.tpl' %]
 
-    <!-- Lunar Aurora CSS Framework -->
-    <link rel="stylesheet" href="/css/lunar-aurora/aurora-blog.css">
-    <link rel="stylesheet" href="/blog/assets/enhanced.css">
-    <link rel="stylesheet" href="/blog/assets/print.css" media="print">
-    [[ schema_org ]]
-    [[ head_injections ]]
-</head>
-<body class="la-blog">
-    <header class="la-blog-header">
-        <div class="la-container">
-            <a href="/blog/" class="la-blog-logo">
-                <span class="la-icon">rocket_launch</span>
-                <span>Lunar Blog</span>
-            </a>
-            <nav class="la-blog-nav">
+[% block title %]Lunar Blog - Framework PHP Moderne[% endblock %]
+
+[% block description %]Articles et tutoriels sur Lunar Quanta, le framework PHP moderne sans dépendances.[% endblock %]
+
+[% block head_extra %]
+    [[ schema_org|raw ]]
+    [[ head_injections|raw ]]
+[% endblock %]
+
+[% block nav_items %]
                 <a href="/blog/" aria-current="page">Articles</a>
                 <button onclick="focusSearch()" title="Rechercher (/)">
                     <span class="la-icon sm">search</span>
@@ -33,59 +17,9 @@
                 <button onclick="showKeyboardShortcuts()" title="Raccourcis (?)">
                     <span class="la-icon sm">keyboard</span>
                 </button>
-                <!-- Dark/Light Mode Toggle -->
-                <button class="la-mode-toggle" id="modeToggle" title="Basculer clair/sombre">
-                    <span class="la-icon la-mode-icon-light">light_mode</span>
-                    <span class="la-icon la-mode-icon-dark">dark_mode</span>
-                </button>
-                <!-- Theme Switcher -->
-                <div class="la-theme-switcher">
-                    <button class="la-theme-trigger" title="Changer le thème">
-                        <span class="la-icon">palette</span>
-                        <span class="la-theme-current">Thème</span>
-                        <span class="la-icon sm">expand_more</span>
-                    </button>
-                    <div class="la-theme-dropdown">
-                        <div class="la-theme-group">
-                            <div class="la-theme-group-title">Base</div>
-                            <button class="la-theme-option" data-theme="default"><span class="la-theme-preview"></span><span class="la-theme-name">Lunar</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="cyberpunk"><span class="la-theme-preview"></span><span class="la-theme-name">Cyberpunk</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="aurora"><span class="la-theme-preview"></span><span class="la-theme-name">Aurora</span><span class="la-icon sm la-theme-check">check</span></button>
-                        </div>
-                        <div class="la-theme-group">
-                            <div class="la-theme-group-title">Rétro</div>
-                            <button class="la-theme-option" data-theme="8bits"><span class="la-theme-preview"></span><span class="la-theme-name">8-Bits</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="bubble"><span class="la-theme-preview"></span><span class="la-theme-name">Bubble</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="galaxian"><span class="la-theme-preview"></span><span class="la-theme-name">Galaxian</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="mario"><span class="la-theme-preview"></span><span class="la-theme-name">Mario</span><span class="la-icon sm la-theme-check">check</span></button>
-                        </div>
-                        <div class="la-theme-group">
-                            <div class="la-theme-group-title">Geek</div>
-                            <button class="la-theme-option" data-theme="web90"><span class="la-theme-preview"></span><span class="la-theme-name">Web 90s</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="geek"><span class="la-theme-preview"></span><span class="la-theme-name">Geek</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="hacker"><span class="la-theme-preview"></span><span class="la-theme-name">Hacker</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="eco"><span class="la-theme-preview"></span><span class="la-theme-name">Eco</span><span class="la-icon sm la-theme-check">check</span></button>
-                        </div>
-                        <div class="la-theme-group">
-                            <div class="la-theme-group-title">Système</div>
-                            <button class="la-theme-option" data-theme="win95"><span class="la-theme-preview"></span><span class="la-theme-name">Win95</span><span class="la-icon sm la-theme-check">check</span></button>
-                            <button class="la-theme-option" data-theme="bsod"><span class="la-theme-preview"></span><span class="la-theme-name">BSOD</span><span class="la-icon sm la-theme-check">check</span></button>
-                        </div>
-                    </div>
-                </div>
-                <a href="/blog/feed.xml" title="Flux RSS">
-                    <span class="la-icon sm">rss_feed</span>
-                </a>
-                <a href="https://github.com/yrbane/lunar-quanta" target="_blank" title="GitHub">
-                    <span class="la-icon sm">code</span>
-                </a>
-            </nav>
-            <button class="la-blog-menu-toggle" onclick="toggleMobileNav()">
-                <span class="la-icon">menu</span>
-            </button>
-        </div>
-    </header>
+[% endblock %]
 
+[% block content %]
     <section class="la-blog-hero">
         <div class="la-container">
             <div class="la-text-center">
@@ -116,7 +50,7 @@
                 <div class="la-search-wrapper la-max-w-md la-mx-auto">
                     <div class="la-search-form">
                         <span class="la-icon">search</span>
-                        <input type="text" id="searchInput" placeholder="Rechercher un article..." autocomplete="off" class="la-input">
+                        <input type="search" id="searchInput" placeholder="Rechercher un article..." autocomplete="search" class="la-input" aria-label="Rechercher un article">
                         <span class="la-search-shortcut">
                             <kbd>/</kbd>
                         </span>
@@ -134,7 +68,7 @@
             <!-- Latest Articles Slider -->
             <div class="la-hero-slider" id="heroSlider">
                 <div class="la-hero-slider-track" id="sliderTrack">
-                    [[ slider_items ]]
+                    [[ slider_items|raw ]]
                 </div>
                 <div class="la-hero-slider-nav">
                     <button class="la-hero-slider-btn" id="sliderPrev" aria-label="Article précédent">
@@ -218,7 +152,7 @@
                         [% if post.average_rating %]
                         <div class="la-post-card-rating">
                             <div class="la-rating-stars">
-                                [[ post.rating_stars ]]
+                                [[ post.rating_stars|raw ]]
                             </div>
                             <span class="la-rating-value">[[ post.average_rating ]]</span>
                         </div>
@@ -250,7 +184,7 @@
                     </button>
                 </div>
                 <div class="la-tag-cloud collapsed" id="tagsCloud">
-                    [[ tags_list ]]
+                    [[ tags_list|raw ]]
                 </div>
             </section>
         </div>
@@ -281,6 +215,10 @@
                         <kbd class="la-badge outline">?</kbd>
                     </div>
                     <div class="la-flex la-justify-between la-items-center">
+                        <span>Basculer clair/sombre</span>
+                        <kbd class="la-badge outline">D</kbd>
+                    </div>
+                    <div class="la-flex la-justify-between la-items-center">
                         <span>Remonter en haut</span>
                         <kbd class="la-badge outline">T</kbd>
                     </div>
@@ -303,24 +241,9 @@
 
     <!-- Toast Container -->
     <div class="la-toast-container" id="toastContainer"></div>
+[% endblock %]
 
-    <footer class="la-blog-footer">
-        <div class="la-container">
-            <div class="la-blog-footer-bottom">
-                <div class="la-flex la-items-center la-gap-3">
-                    <span class="la-icon">rocket_launch</span>
-                    <span class="la-font-semibold">Lunar Quanta</span>
-                </div>
-                <div class="la-blog-social">
-                    <a href="/blog/feed.xml" title="RSS"><span class="la-icon sm">rss_feed</span></a>
-                    <a href="https://github.com/yrbane/lunar-quanta" target="_blank" title="GitHub"><span class="la-icon sm">code</span></a>
-                    <a href="/" title="Site"><span class="la-icon sm">home</span></a>
-                </div>
-                <p>&copy; [[ year ]] Lunar Quanta</p>
-            </div>
-        </div>
-    </footer>
-
+[% block scripts %]
     <script>
         // Search functionality with live results
         const searchInput = document.getElementById('searchInput');
@@ -350,7 +273,6 @@
 
             if (query.length < 2) {
                 searchResults.style.display = 'none';
-                // Reset article visibility
                 articles.forEach(a => a.classList.remove('la-hidden'));
                 visibleCount.textContent = articles.length;
                 return;
@@ -367,13 +289,9 @@
                 const excerptLower = item.excerpt.toLowerCase();
 
                 terms.forEach(term => {
-                    // Title match (highest weight)
                     if (titleLower.includes(term)) score += 10;
-                    // Category match
                     if (categoryLower.includes(term)) score += 5;
-                    // Tags match
                     if (tagsLower.includes(term)) score += 5;
-                    // Excerpt match
                     if (excerptLower.includes(term)) score += 2;
                 });
 
@@ -384,7 +302,6 @@
 
             results.sort((a, b) => b.score - a.score);
 
-            // Update grid visibility
             let visible = 0;
             articles.forEach(article => {
                 const inResults = results.some(r => r.element === article);
@@ -393,7 +310,6 @@
             });
             visibleCount.textContent = visible;
 
-            // Show dropdown results
             if (results.length > 0) {
                 searchNoResults.style.display = 'none';
                 searchResultsList.innerHTML = results.slice(0, 8).map(r => `
@@ -433,7 +349,6 @@
             }
         });
 
-        // Close search results when clicking outside
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.la-search-wrapper')) {
                 searchResults.style.display = 'none';
@@ -580,139 +495,6 @@
         });
 
         // ═══════════════════════════════════════════════════════════════════
-        // THEME & MODE SWITCHER (séparés)
-        // ═══════════════════════════════════════════════════════════════════
-        const ThemeSwitcher = {
-            themeKey: 'lunar-theme',
-            modeKey: 'lunar-mode',
-
-            init() {
-                // Load saved preferences
-                const savedTheme = localStorage.getItem(this.themeKey) || 'default';
-                const savedMode = localStorage.getItem(this.modeKey) || 'dark';
-
-                this.applyTheme(savedTheme, savedMode, false);
-
-                // Initialize theme dropdown
-                document.querySelectorAll('.la-theme-switcher').forEach(switcher => {
-                    this.initSwitcher(switcher);
-                });
-
-                // Initialize mode toggle
-                document.getElementById('modeToggle')?.addEventListener('click', () => {
-                    this.toggleMode();
-                });
-
-                // Close dropdown on outside click
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.la-theme-switcher')) {
-                        document.querySelectorAll('.la-theme-dropdown.is-open').forEach(d => d.classList.remove('is-open'));
-                    }
-                });
-
-                // Close on Escape
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape') {
-                        document.querySelectorAll('.la-theme-dropdown.is-open').forEach(d => d.classList.remove('is-open'));
-                    }
-                    // Raccourci D pour basculer dark/light
-                    if (e.key === 'd' || e.key === 'D') {
-                        if (e.target.tagName !== 'INPUT') this.toggleMode();
-                    }
-                });
-            },
-
-            initSwitcher(container) {
-                const trigger = container.querySelector('.la-theme-trigger');
-                const dropdown = container.querySelector('.la-theme-dropdown');
-
-                trigger?.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    document.querySelectorAll('.la-theme-dropdown.is-open').forEach(d => {
-                        if (d !== dropdown) d.classList.remove('is-open');
-                    });
-                    dropdown.classList.toggle('is-open');
-                });
-
-                dropdown?.querySelectorAll('.la-theme-option').forEach(option => {
-                    option.addEventListener('click', () => {
-                        this.setTheme(option.dataset.theme);
-                        dropdown.classList.remove('is-open');
-                    });
-                });
-
-                this.updateActiveState(container);
-            },
-
-            getMode() {
-                return localStorage.getItem(this.modeKey) || 'dark';
-            },
-
-            getTheme() {
-                return localStorage.getItem(this.themeKey) || 'default';
-            },
-
-            toggleMode() {
-                const currentMode = this.getMode();
-                const newMode = currentMode === 'dark' ? 'light' : 'dark';
-                this.applyTheme(this.getTheme(), newMode, true);
-            },
-
-            setTheme(themeName) {
-                this.applyTheme(themeName, this.getMode(), true);
-            },
-
-            applyTheme(theme, mode, save = true) {
-                // Construct the full theme name
-                let fullTheme;
-                if (theme === 'default') {
-                    fullTheme = mode; // 'dark' or 'light'
-                } else {
-                    // Pour les thèmes spéciaux, ajouter le suffixe de mode
-                    fullTheme = mode === 'dark' ? `${theme}-dark` : theme;
-                    // Cas spéciaux où le thème de base est déjà dark
-                    if (['cyberpunk', 'aurora', 'galaxian', 'hacker', 'bsod'].includes(theme)) {
-                        fullTheme = mode === 'light' ? `${theme}-light` : theme;
-                    }
-                }
-
-                document.documentElement.setAttribute('data-theme', fullTheme);
-                document.documentElement.setAttribute('data-mode', mode);
-
-                if (save) {
-                    localStorage.setItem(this.themeKey, theme);
-                    localStorage.setItem(this.modeKey, mode);
-                }
-
-                // Update UI
-                this.updateModeToggle(mode);
-                document.querySelectorAll('.la-theme-switcher').forEach(switcher => {
-                    this.updateActiveState(switcher);
-                    const label = switcher.querySelector('.la-theme-current');
-                    const activeOption = switcher.querySelector(`.la-theme-option[data-theme="${theme}"] .la-theme-name`);
-                    if (label && activeOption) label.textContent = activeOption.textContent;
-                });
-            },
-
-            updateModeToggle(mode) {
-                const toggle = document.getElementById('modeToggle');
-                if (toggle) {
-                    toggle.classList.toggle('is-light', mode === 'light');
-                    toggle.classList.toggle('is-dark', mode === 'dark');
-                }
-            },
-
-            updateActiveState(container) {
-                const currentTheme = this.getTheme();
-                container.querySelectorAll('.la-theme-option').forEach(option => {
-                    option.classList.toggle('is-active', option.dataset.theme === currentTheme);
-                });
-            }
-        };
-
-        ThemeSwitcher.init();
-
-        // ═══════════════════════════════════════════════════════════════════
         // HERO SLIDER
         // ═══════════════════════════════════════════════════════════════════
         const HeroSlider = {
@@ -734,21 +516,17 @@
 
                 if (this.slideCount === 0) return;
 
-                // Create dots
                 this.createDots();
 
-                // Event listeners
                 this.prevBtn?.addEventListener('click', () => this.prev());
                 this.nextBtn?.addEventListener('click', () => this.next());
 
-                // Keyboard navigation
                 document.addEventListener('keydown', (e) => {
                     if (e.target.tagName === 'INPUT') return;
                     if (e.key === 'ArrowLeft') this.prev();
                     if (e.key === 'ArrowRight') this.next();
                 });
 
-                // Touch/swipe support
                 let touchStartX = 0;
                 this.track.addEventListener('touchstart', (e) => {
                     touchStartX = e.touches[0].clientX;
@@ -762,12 +540,10 @@
                     this.startAutoPlay();
                 });
 
-                // Pause on hover
                 const slider = document.getElementById('heroSlider');
                 slider?.addEventListener('mouseenter', () => this.stopAutoPlay());
                 slider?.addEventListener('mouseleave', () => this.startAutoPlay());
 
-                // Start auto-play
                 this.startAutoPlay();
             },
 
@@ -819,6 +595,5 @@
 
         HeroSlider.init();
     </script>
-    [[ body_end_injections ]]
-</body>
-</html>
+    [[ body_end_injections|raw ]]
+[% endblock %]

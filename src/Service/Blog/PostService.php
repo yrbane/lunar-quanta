@@ -27,9 +27,17 @@ use Lunar\Service\Storage\FileStorage;
  */
 final class PostService
 {
+    /** @var Post[]|null */
+    private ?array $cachedAll = null;
+
     public function __construct(
         private readonly FileStorage $storage
     ) {
+    }
+
+    private function invalidateCache(): void
+    {
+        $this->cachedAll = null;
     }
 
     /**
@@ -51,6 +59,7 @@ final class PostService
         }
 
         $this->storage->save($post->getId(), $post->toArray());
+        $this->invalidateCache();
 
         return $post;
     }
@@ -85,6 +94,7 @@ final class PostService
     public function update(Post $post): void
     {
         $this->storage->save($post->getId(), $post->toArray());
+        $this->invalidateCache();
     }
 
     /**
@@ -93,6 +103,7 @@ final class PostService
     public function delete(string $id): void
     {
         $this->storage->delete($id);
+        $this->invalidateCache();
     }
 
     /**
@@ -102,10 +113,16 @@ final class PostService
      */
     public function all(): array
     {
-        return array_map(
+        if ($this->cachedAll !== null) {
+            return $this->cachedAll;
+        }
+
+        $this->cachedAll = array_map(
             fn($data) => Post::fromArray($data),
             $this->storage->all()
         );
+
+        return $this->cachedAll;
     }
 
     /**

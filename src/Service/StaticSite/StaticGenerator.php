@@ -9,6 +9,7 @@ use Lunar\Entity\Post;
 use Lunar\Service\Blog\CategoryService;
 use Lunar\Service\Blog\PostService;
 use Lunar\Service\Content\MarkdownParser;
+use Lunar\Template\AdvancedTemplateEngine;
 
 /**
  * Générateur de site statique pour le blog.
@@ -44,6 +45,10 @@ final class StaticGenerator
     private ?RssGenerator $rssGenerator = null;
     private ?SitemapGenerator $sitemapGenerator = null;
     private ?CategoryService $categoryService = null;
+    private ?AdvancedTemplateEngine $templateEngine = null;
+
+    /** @var array<string, Category> Pre-loaded category cache */
+    private array $categoryCache = [];
 
     public function __construct(
         private readonly PostService $postService,
@@ -53,6 +58,13 @@ final class StaticGenerator
         private readonly string $siteUrl = ''
     ) {
         $this->ensureDirectories();
+
+        // Initialiser le moteur de template lunar-template
+        $cachePath = dirname($this->outputPath) . '/cache/templates';
+        if (!is_dir($cachePath)) {
+            mkdir($cachePath, 0755, true);
+        }
+        $this->templateEngine = new AdvancedTemplateEngine($this->templatePath, $cachePath);
 
         if ($this->siteUrl !== '') {
             $this->rssGenerator = new RssGenerator(
@@ -74,6 +86,25 @@ final class StaticGenerator
     public function setCategoryService(CategoryService $categoryService): void
     {
         $this->categoryService = $categoryService;
+        $this->warmCategoryCache();
+    }
+
+    private function warmCategoryCache(): void
+    {
+        $this->categoryCache = [];
+        if ($this->categoryService !== null) {
+            foreach ($this->categoryService->all() as $category) {
+                $this->categoryCache[$category->getId()] = $category;
+            }
+        }
+    }
+
+    private function getCachedCategory(?string $categoryId): ?Category
+    {
+        if ($categoryId === null) {
+            return null;
+        }
+        return $this->categoryCache[$categoryId] ?? null;
     }
 
     /**
@@ -81,15 +112,14 @@ final class StaticGenerator
      */
     public function generatePost(Post $post): void
     {
-        $template = $this->loadTemplate('post.html');
         $htmlContent = $this->markdownParser->parse($post->getContent());
 
         // Récupérer la catégorie si disponible
         $categoryName = '';
         $categorySlug = '';
-        if ($this->categoryService !== null && $post->getCategoryId() !== null) {
-            $category = $this->categoryService->find($post->getCategoryId());
-            $categoryName = $category?->getName() ?? '';
+        $category = $this->getCachedCategory($post->getCategoryId());
+        if ($category !== null) {
+            $categoryName = $category->getName();
             $categorySlug = $this->slugify($categoryName);
         }
 
@@ -102,16 +132,16 @@ final class StaticGenerator
         // Récupérer les sources
         $sources = $post->getSources();
 
-        // Remplacer les variables simples + données JSON
-        $html = $this->render($template, [
+        // Utiliser le moteur de template lunar-template
+        $html = $this->templateEngine->render('post.html', [
             'title' => $post->getTitle(),
             'content' => $htmlContent,
-            'excerpt' => $post->getExcerpt(),
-            'author' => $post->getAuthor(),
-            'author_bio' => $post->getAuthorBio(),
-            'author_avatar' => $post->getAuthorAvatar(),
-            'author_institution' => $post->getAuthorInstitution(),
-            'published_at' => $post->getPublishedAt()?->format('d/m/Y'),
+            'excerpt' => $post->getExcerpt() ?? '',
+            'author' => $post->getAuthor() ?? '',
+            'author_bio' => $post->getAuthorBio() ?? '',
+            'author_avatar' => $post->getAuthorAvatar() ?? '',
+            'author_institution' => $post->getAuthorInstitution() ?? '',
+            'published_at' => $post->getPublishedAt()?->format('d/m/Y') ?? '',
             'reading_time' => $post->getReadingTime(),
             'url' => $post->getUrl(),
             'year' => date('Y'),
@@ -119,20 +149,24 @@ final class StaticGenerator
             'category' => $categoryName,
             'category_slug' => $categorySlug,
             'average_rating' => $averageRating > 0 ? number_format($averageRating, 1) : '0',
-            'license' => $post->getLicense(),
-            'original_url' => $post->getOriginalUrl(),
-            'original_source' => $post->getOriginalSource(),
+            'license' => $post->getLicense() ?? '',
+            'original_url' => $post->getOriginalUrl() ?? '',
+            'original_source' => $post->getOriginalSource() ?? '',
+            'tags' => $post->getTags(),
+            'sources' => $sources,
+            'related_posts' => $relatedPosts,
             // JSON data for JavaScript
             'tags_json' => json_encode($post->getTags()),
             'sources_json' => json_encode($sources),
             'related_json' => json_encode($relatedPosts),
-            'has_avatar' => !empty($post->getAuthorAvatar()) ? 'true' : 'false',
-            'has_institution' => !empty($post->getAuthorInstitution()) ? 'true' : 'false',
-            'has_bio' => !empty($post->getAuthorBio()) ? 'true' : 'false',
-            'has_license' => !empty($post->getLicense()) ? 'true' : 'false',
+            // Boolean flags for JavaScript (as JSON strings)
+            'has_avatar' => $post->getAuthorAvatar() !== '' ? 'true' : 'false',
+            'has_institution' => $post->getAuthorInstitution() !== '' ? 'true' : 'false',
+            'has_bio' => $post->getAuthorBio() !== '' ? 'true' : 'false',
+            'has_license' => $post->getLicense() !== null && $post->getLicense() !== '' ? 'true' : 'false',
             'is_locked' => $post->isLocked() ? 'true' : 'false',
-            'has_original_source' => !empty($post->getOriginalSource()) ? 'true' : 'false',
-            'has_featured_image' => !empty($post->getFeaturedImage()) ? 'true' : 'false',
+            'has_original_source' => $post->getOriginalSource() !== null && $post->getOriginalSource() !== '' ? 'true' : 'false',
+            'has_featured_image' => $post->getFeaturedImage() !== null && $post->getFeaturedImage() !== '' ? 'true' : 'false',
         ]);
 
         $this->writeFile('posts/' . $post->getSlug() . '.html', $html);
@@ -143,56 +177,86 @@ final class StaticGenerator
         }
     }
 
+    /** @var array<string, array<string, true>> Tag index: tag => [postId => true] */
+    private array $tagIndex = [];
+
+    /** @var array<string, Post> Post index: id => Post */
+    private array $postIndex = [];
+
+    private bool $relatedIndexBuilt = false;
+
+    private function buildRelatedIndex(): void
+    {
+        if ($this->relatedIndexBuilt) {
+            return;
+        }
+
+        $allPosts = $this->postService->findPublished();
+        foreach ($allPosts as $post) {
+            $this->postIndex[$post->getId()] = $post;
+            foreach ($post->getTags() as $tag) {
+                $this->tagIndex[$tag][$post->getId()] = true;
+            }
+        }
+        $this->relatedIndexBuilt = true;
+    }
+
     /**
      * Trouve les articles similaires basés sur la catégorie et les tags.
+     * Utilise un index de tags pour des lookups O(1) au lieu de O(n).
      *
      * @return array<int, array{title: string, url: string, excerpt: string}>
      */
     private function findRelatedPosts(Post $currentPost, int $limit = 4): array
     {
-        $allPosts = $this->postService->findPublished();
+        $this->buildRelatedIndex();
+
+        $currentId = $currentPost->getId();
         $currentTags = $currentPost->getTags();
         $currentCategoryId = $currentPost->getCategoryId();
 
-        // Calculer un score de similarité pour chaque post
-        $scored = [];
-        foreach ($allPosts as $post) {
-            // Ne pas inclure l'article courant
-            if ($post->getId() === $currentPost->getId()) {
-                continue;
-            }
-
-            $score = 0;
-
-            // Score pour catégorie identique
-            if ($currentCategoryId !== null && $post->getCategoryId() === $currentCategoryId) {
-                $score += 10;
-            }
-
-            // Score pour tags en commun
-            $commonTags = array_intersect($currentTags, $post->getTags());
-            $score += count($commonTags) * 5;
-
-            if ($score > 0) {
-                $scored[] = [
-                    'post' => $post,
-                    'score' => $score,
-                ];
+        // Collect candidate post IDs from tag index
+        $scores = [];
+        foreach ($currentTags as $tag) {
+            if (isset($this->tagIndex[$tag])) {
+                foreach ($this->tagIndex[$tag] as $postId => $_) {
+                    if ($postId === $currentId) {
+                        continue;
+                    }
+                    $scores[$postId] = ($scores[$postId] ?? 0) + 5;
+                }
             }
         }
 
-        // Trier par score décroissant
-        usort($scored, fn($a, $b) => $b['score'] <=> $a['score']);
+        // Add category bonus
+        if ($currentCategoryId !== null) {
+            foreach ($this->postIndex as $postId => $post) {
+                if ($postId !== $currentId && $post->getCategoryId() === $currentCategoryId) {
+                    $scores[$postId] = ($scores[$postId] ?? 0) + 10;
+                }
+            }
+        }
 
-        // Prendre les meilleurs résultats
-        $related = array_slice($scored, 0, $limit);
+        // Sort by score descending
+        arsort($scores);
 
-        // Formater pour le template
-        return array_map(fn($item) => [
-            'title' => $item['post']->getTitle(),
-            'url' => $item['post']->getUrl(),
-            'excerpt' => $item['post']->getExcerpt(),
-        ], $related);
+        // Take top results and format
+        $related = [];
+        $count = 0;
+        foreach ($scores as $postId => $score) {
+            if ($count >= $limit) {
+                break;
+            }
+            $post = $this->postIndex[$postId];
+            $related[] = [
+                'title' => $post->getTitle(),
+                'url' => $post->getUrl(),
+                'excerpt' => $post->getExcerpt(),
+            ];
+            $count++;
+        }
+
+        return $related;
     }
 
     /**
@@ -200,7 +264,6 @@ final class StaticGenerator
      */
     public function generateIndex(): void
     {
-        $template = $this->loadTemplate('index.html');
         $posts = $this->postService->findPublished();
 
         // Trier par date décroissante
@@ -244,9 +307,9 @@ final class StaticGenerator
         $latestPosts = array_slice($posts, 0, 10);
         foreach ($latestPosts as $post) {
             $categoryName = '';
-            if ($this->categoryService !== null && $post->getCategoryId() !== null) {
-                $category = $this->categoryService->find($post->getCategoryId());
-                $categoryName = $category?->getName() ?? '';
+            $sliderCategory = $this->getCachedCategory($post->getCategoryId());
+            if ($sliderCategory !== null) {
+                $categoryName = $sliderCategory->getName();
             }
             $sliderHtml .= sprintf(
                 '<article class="la-hero-slide">
@@ -278,13 +341,13 @@ final class StaticGenerator
             );
         }
 
-        // Préparer les données des posts
+        // Préparer les données des posts pour le template
         $postsData = array_map(function($post) {
             $categoryName = '';
             $categorySlug = '';
-            if ($this->categoryService !== null && $post->getCategoryId() !== null) {
-                $category = $this->categoryService->find($post->getCategoryId());
-                $categoryName = $category?->getName() ?? '';
+            $postCategory = $this->getCachedCategory($post->getCategoryId());
+            if ($postCategory !== null) {
+                $categoryName = $postCategory->getName();
                 $categorySlug = $this->slugify($categoryName);
             }
 
@@ -295,33 +358,33 @@ final class StaticGenerator
             return [
                 'title' => $post->getTitle(),
                 'url' => $post->getUrl(),
-                'excerpt' => $post->getExcerpt(),
-                'author' => $post->getAuthor(),
-                'published_at' => $post->getPublishedAt()?->format('d/m/Y'),
+                'excerpt' => $post->getExcerpt() ?? '',
+                'author' => $post->getAuthor() ?? '',
+                'published_at' => $post->getPublishedAt()?->format('d/m/Y') ?? '',
                 'reading_time' => $post->getReadingTime(),
                 'featured_image' => $post->getFeaturedImage() ?? '',
                 'category' => $categoryName,
                 'category_slug' => $categorySlug,
                 'slug' => $post->getSlug(),
                 'tags_string' => implode(', ', $post->getTags()),
-                'average_rating' => $avgRating,
+                'average_rating' => $avgRating > 0 ? number_format($avgRating, 1) : '',
                 'rating_stars' => $ratingStars,
-                'ratings' => $post->getRatings(),
             ];
         }, $posts);
 
-        // Gérer {% if posts|length > 0 %} ... {% else %} ... {% endif %}
-        $html = $this->processLengthCondition($template, 'posts', count($postsData) > 0);
-
-        $html = $this->renderWithLoop($html, 'posts', $postsData);
-
-        // Remplacer les variables globales
-        $html = str_replace('{{ year }}', date('Y'), $html);
-        $html = str_replace('{{ article_count }}', (string) count($posts), $html);
-        $html = str_replace('{{ categories_count }}', (string) count($allCategories), $html);
-        $html = str_replace('{{ tags_count }}', (string) count($allTags), $html);
-        $html = str_replace('{{ tags_list }}', $tagsHtml, $html);
-        $html = str_replace('{{ slider_items }}', $sliderHtml, $html);
+        // Utiliser le moteur de template lunar-template
+        $html = $this->templateEngine->render('index.html', [
+            'posts' => $postsData,
+            'year' => date('Y'),
+            'article_count' => count($posts),
+            'categories_count' => count($allCategories),
+            'tags_count' => count($allTags),
+            'tags_list' => $tagsHtml,
+            'slider_items' => $sliderHtml,
+            'schema_org' => '',
+            'head_injections' => '',
+            'body_end_injections' => '',
+        ]);
 
         $this->writeFile('index.html', $html);
     }
@@ -383,12 +446,13 @@ final class StaticGenerator
      */
     private function generateTagPagesWithProgress(bool $reportProgress = true): int
     {
-        $templatePath = $this->templatePath . '/tag.html';
-        if (!file_exists($templatePath)) {
+        // Vérifier si le template existe (avec ou sans .tpl)
+        $templateExists = file_exists($this->templatePath . '/tag.html.tpl')
+            || file_exists($this->templatePath . '/tag.html');
+        if (!$templateExists) {
             return 0;
         }
 
-        $template = file_get_contents($templatePath);
         $posts = $this->postService->findPublished();
 
         // Collecter tous les tags
@@ -410,7 +474,7 @@ final class StaticGenerator
             if ($reportProgress) {
                 $this->reportProgress($count, $total, 'tag', (string) $tag);
             }
-            $this->generateTagPage($template, (string) $tag, $tagPosts);
+            $this->generateTagPage((string) $tag, $tagPosts);
         }
 
         return $count;
@@ -421,23 +485,44 @@ final class StaticGenerator
      *
      * @param Post[] $posts
      */
-    private function generateTagPage(string $template, string $tag, array $posts): void
+    private function generateTagPage(string $tag, array $posts): void
     {
-        $postsData = array_map(fn($post) => [
-            'title' => $post->getTitle(),
-            'url' => $post->getUrl(),
-            'excerpt' => $post->getExcerpt(),
-            'author' => $post->getAuthor(),
-            'published_at' => $post->getPublishedAt()?->format('d/m/Y'),
-        ], $posts);
+        $postsData = array_map(function($post) {
+            $avgRating = $post->getAverageRating();
+            $ratingStars = $this->generateRatingStarsHtml($avgRating);
 
-        $html = $this->processLengthCondition($template, 'posts', count($postsData) > 0);
-        $html = $this->renderWithLoop($html, 'posts', $postsData);
-        $html = str_replace('{{ tag }}', htmlspecialchars($tag), $html);
-        $html = str_replace('{{ count }}', (string) count($posts), $html);
-        $html = str_replace('{{ year }}', date('Y'), $html);
+            // Get category info from cache
+            $categoryName = '';
+            $categorySlug = '';
+            $tagCategory = $this->getCachedCategory($post->getCategoryId());
+            if ($tagCategory !== null) {
+                $categoryName = $tagCategory->getName();
+                $categorySlug = $tagCategory->getSlug();
+            }
 
-        $this->writeFile('tags/' . $this->slugify($tag) . '.html', $html);
+            return [
+                'title' => $post->getTitle(),
+                'url' => $post->getUrl(),
+                'excerpt' => $post->getExcerpt() ?? '',
+                'author' => $post->getAuthor() ?? '',
+                'published_at' => $post->getPublishedAt()?->format('d/m/Y') ?? '',
+                'featured_image' => $post->getFeaturedImage() ?? '',
+                'reading_time' => $post->getReadingTime(),
+                'category' => $categoryName,
+                'category_slug' => $categorySlug,
+                'average_rating' => $avgRating > 0 ? number_format($avgRating, 1) : '',
+                'rating_stars' => $ratingStars,
+            ];
+        }, $posts);
+
+        $html = $this->templateEngine->render('tag.html', [
+            'tag' => $tag,
+            'posts' => $postsData,
+            'count' => count($posts),
+            'year' => date('Y'),
+        ]);
+
+        $this->writeFile('tag/' . $this->slugify($tag) . '.html', $html);
     }
 
     /**
@@ -462,12 +547,13 @@ final class StaticGenerator
             return 0;
         }
 
-        $templatePath = $this->templatePath . '/category.html';
-        if (!file_exists($templatePath)) {
+        // Vérifier si le template existe (avec ou sans .tpl)
+        $templateExists = file_exists($this->templatePath . '/category.html.tpl')
+            || file_exists($this->templatePath . '/category.html');
+        if (!$templateExists) {
             return 0;
         }
 
-        $template = file_get_contents($templatePath);
         $categories = $this->categoryService->all();
         $posts = $this->postService->findPublished();
 
@@ -484,7 +570,7 @@ final class StaticGenerator
                 fn(Post $post) => $post->getCategoryId() === $category->getId()
             );
 
-            $this->generateCategoryPage($template, $category, array_values($categoryPosts));
+            $this->generateCategoryPage($category, array_values($categoryPosts));
         }
 
         return $count;
@@ -495,26 +581,35 @@ final class StaticGenerator
      *
      * @param Post[] $posts
      */
-    private function generateCategoryPage(string $template, Category $category, array $posts): void
+    private function generateCategoryPage(Category $category, array $posts): void
     {
-        $postsData = array_map(fn($post) => [
-            'title' => $post->getTitle(),
-            'url' => $post->getUrl(),
-            'excerpt' => $post->getExcerpt(),
-            'author' => $post->getAuthor(),
-            'published_at' => $post->getPublishedAt()?->format('d/m/Y'),
-            'reading_time' => $post->getReadingTime(),
-        ], $posts);
+        $postsData = array_map(function($post) {
+            $avgRating = $post->getAverageRating();
+            $ratingStars = $this->generateRatingStarsHtml($avgRating);
 
-        $html = $this->processLengthCondition($template, 'posts', count($postsData) > 0);
-        $html = $this->renderWithLoop($html, 'posts', $postsData);
-        $html = str_replace('{{ category_name }}', htmlspecialchars($category->getName()), $html);
-        $html = str_replace('{{ category_description }}', htmlspecialchars($category->getDescription()), $html);
-        $html = str_replace('{{ category_color }}', htmlspecialchars($category->getColor()), $html);
-        $html = str_replace('{{ count }}', (string) count($posts), $html);
-        $html = str_replace('{{ year }}', date('Y'), $html);
+            return [
+                'title' => $post->getTitle(),
+                'url' => $post->getUrl(),
+                'excerpt' => $post->getExcerpt() ?? '',
+                'author' => $post->getAuthor() ?? '',
+                'published_at' => $post->getPublishedAt()?->format('d/m/Y') ?? '',
+                'featured_image' => $post->getFeaturedImage() ?? '',
+                'reading_time' => $post->getReadingTime(),
+                'average_rating' => $avgRating > 0 ? number_format($avgRating, 1) : '',
+                'rating_stars' => $ratingStars,
+            ];
+        }, $posts);
 
-        $this->writeFile('categories/' . $category->getSlug() . '.html', $html);
+        $html = $this->templateEngine->render('category.html', [
+            'category_name' => $category->getName(),
+            'category_description' => $category->getDescription(),
+            'category_color' => $category->getColor(),
+            'posts' => $postsData,
+            'count' => count($posts),
+            'year' => date('Y'),
+        ]);
+
+        $this->writeFile('category/' . $category->getSlug() . '.html', $html);
     }
 
     /**
@@ -617,6 +712,11 @@ final class StaticGenerator
     private function loadTemplate(string $name): string
     {
         $path = $this->templatePath . '/' . $name;
+
+        // Support pour la nouvelle convention .tpl
+        if (!file_exists($path) && file_exists($path . '.tpl')) {
+            $path = $path . '.tpl';
+        }
 
         if (!file_exists($path)) {
             throw new \RuntimeException("Template not found: $name");

@@ -77,7 +77,7 @@
                    placeholder="Votre nom"
                    value="[[ old.name ]]">
             [% if errors.name %]
-            <p class="error">[[ errors.name.0 ]]</p>
+            <p class="error" role="alert">[[ errors.name.0 ]]</p>
             [% endif %]
         </div>
 

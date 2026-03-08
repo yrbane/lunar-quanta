@@ -71,7 +71,7 @@
     <h2>Connexion</h2>
 
     [% if error %]
-    <div class="alert alert-error">
+    <div class="alert alert-error" role="alert" aria-live="polite">
         [[ error ]]
     </div>
     [% endif %]

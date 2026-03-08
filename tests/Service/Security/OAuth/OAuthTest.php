@@ -226,4 +226,25 @@ class OAuthTest extends TestCase
         $this->assertStringContainsString('client_id=my-gh-client', $url);
         $this->assertStringContainsString('state=state123', $url);
     }
+
+    // =========================================================================
+    // TESTS SSL VERIFICATION
+    // =========================================================================
+
+    public function testOAuthProviderEnablesSslVerification(): void
+    {
+        $reflection = new \ReflectionClass(\Lunar\Service\Security\OAuth\AbstractOAuthProvider::class);
+        $source = file_get_contents($reflection->getFileName());
+
+        $this->assertStringContainsString('verify_peer', $source);
+        $this->assertStringContainsString('verify_peer_name', $source);
+    }
+
+    public function testOAuthProviderSetsTimeout(): void
+    {
+        $reflection = new \ReflectionClass(\Lunar\Service\Security\OAuth\AbstractOAuthProvider::class);
+        $source = file_get_contents($reflection->getFileName());
+
+        $this->assertStringContainsString('timeout', $source);
+    }
 }

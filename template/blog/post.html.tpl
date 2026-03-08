@@ -1,21 +1,14 @@
-<!DOCTYPE html>
-<html lang="fr" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[[ title ]] - Lunar Blog</title>
-    <meta name="description" content="[[ excerpt ]]">
+[% extends '_layout.html.tpl' %]
+
+[% block title %][[ title ]] - Lunar Blog[% endblock %]
+
+[% block description %][[ excerpt ]][% endblock %]
+
+[% block head_extra %]
     <meta name="author" content="[[ author ]]">
-    <link rel="alternate" type="application/rss+xml" title="Lunar Blog RSS" href="/blog/feed.xml">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/lunar-aurora/aurora-blog.css">
-    <link rel="stylesheet" href="/blog/assets/enhanced.css">
-    <link rel="stylesheet" href="/blog/assets/print.css" media="print">
-    [[ meta_tags ]]
-    [[ schema_org ]]
-    [[ head_injections ]]
+    [[ meta_tags|raw ]]
+    [[ schema_org|raw ]]
+    [[ head_injections|raw ]]
     <style>
         .la-rating-badge { display: inline-flex; align-items: center; gap: var(--la-space-2); padding: var(--la-space-2) var(--la-space-4); background: var(--la-surface-2); border-radius: var(--la-radius-full); font-size: var(--la-text-sm); font-weight: var(--la-weight-semibold); }
         .la-rating-badge .la-icon { color: var(--la-warning, #f59e0b); }
@@ -65,23 +58,14 @@
         .la-original-source-box { margin-top: var(--la-space-8); padding: var(--la-space-6); background: var(--la-surface-2); border-radius: var(--la-radius-xl); text-align: center; }
         @media (max-width: 640px) { .la-author-box { flex-direction: column; text-align: center; } .la-author-avatar { margin: 0 auto; } .la-comment-form-row { flex-direction: column; } }
     </style>
-</head>
-<body class="la-blog">
-    <div class="la-reading-progress"><div class="la-reading-progress-bar" id="progress"></div></div>
+[% endblock %]
 
-    <header class="la-blog-header">
-        <div class="la-container">
-            <a href="/blog/" class="la-blog-logo"><span class="la-icon">rocket_launch</span><span>Lunar Blog</span></a>
-            <nav class="la-blog-nav">
+[% block nav_items %]
                 <a href="/blog/"><span class="la-icon sm">arrow_back</span> Articles</a>
-                <a href="https://github.com/yrbane/lunar-quanta" target="_blank" title="GitHub"><span class="la-icon sm">code</span></a>
-                <button class="la-btn ghost sm" id="theme-toggle" title="Changer le thème" aria-label="Basculer entre mode clair et sombre">
-                    <span class="la-icon sm theme-icon-light" style="display:none;">light_mode</span>
-                    <span class="la-icon sm theme-icon-dark">dark_mode</span>
-                </button>
-            </nav>
-        </div>
-    </header>
+[% endblock %]
+
+[% block content %]
+    <div class="la-reading-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progression de lecture"><div class="la-reading-progress-bar" id="progress"></div></div>
 
     <div class="la-post-featured-image" id="featured-image-container" style="display:none;">
         <img src="[[ featured_image ]]" alt="[[ title ]]" id="featured-img">
@@ -119,7 +103,7 @@
                             <button class="la-btn outline sm" id="bookmark-btn" title="Favoris"><span class="la-icon sm">bookmark</span><span id="bookmark-text">Favoris</span></button>
                             <button class="la-btn outline sm" onclick="window.print()" title="Imprimer"><span class="la-icon sm">print</span></button>
                             <button class="la-btn outline sm" onclick="navigator.clipboard.writeText(window.location.href)" title="Copier le lien"><span class="la-icon sm">link</span></button>
-                            [[ share_buttons ]]
+                            [[ share_buttons|raw ]]
                         </div>
                     </header>
 
@@ -140,7 +124,7 @@
                     </section>
 
                     <div class="la-prose la-mt-12" id="article-content">
-                        [[ content ]]
+                        [[ content|raw ]]
                     </div>
 
                     <div class="la-post-tags" id="tags-container"></div>
@@ -206,30 +190,22 @@
 
     <button class="la-btn primary la-rounded-full la-fixed la-bottom-8 la-right-8 la-z-50 la-opacity-0 la-transition-opacity" id="scroll-top"><span class="la-icon">arrow_upward</span></button>
     <div class="la-toast-container" id="toastContainer"></div>
+[% endblock %]
 
-    <footer class="la-blog-footer">
-        <div class="la-container">
-            <div class="la-blog-footer-bottom">
-                <div class="la-flex la-items-center la-gap-3"><span class="la-icon">rocket_launch</span><span class="la-font-semibold">Lunar Quanta</span></div>
-                <div class="la-blog-social"><a href="/blog/feed.xml" title="RSS"><span class="la-icon sm">rss_feed</span></a></div>
-                <p>&copy; [[ year ]] Lunar Quanta</p>
-            </div>
-        </div>
-    </footer>
-
+[% block scripts %]
     <!-- Data embedded by generator -->
     <script id="post-data" type="application/json">
     {
-        "tags": [[ tags_json ]],
-        "sources": [[ sources_json ]],
-        "related": [[ related_json ]],
-        "hasAvatar": [[ has_avatar ]],
-        "hasInstitution": [[ has_institution ]],
-        "hasBio": [[ has_bio ]],
-        "hasLicense": [[ has_license ]],
-        "isLocked": [[ is_locked ]],
-        "hasOriginalSource": [[ has_original_source ]],
-        "hasFeaturedImage": [[ has_featured_image ]]
+        "tags": [[ tags_json|raw ]],
+        "sources": [[ sources_json|raw ]],
+        "related": [[ related_json|raw ]],
+        "hasAvatar": [[ has_avatar|raw ]],
+        "hasInstitution": [[ has_institution|raw ]],
+        "hasBio": [[ has_bio|raw ]],
+        "hasLicense": [[ has_license|raw ]],
+        "isLocked": [[ is_locked|raw ]],
+        "hasOriginalSource": [[ has_original_source|raw ]],
+        "hasFeaturedImage": [[ has_featured_image|raw ]]
     }
     </script>
 
@@ -281,7 +257,7 @@
         const tagsContainer = document.getElementById('tags-container');
         if (data.tags && data.tags.length > 0) {
             tagsContainer.innerHTML = data.tags.map(tag =>
-                `<a href="/blog/tags/${tag}.html" class="la-tag"><span class="la-icon xs">tag</span> ${tag}</a>`
+                `<a href="/blog/tag/${tag}.html" class="la-tag"><span class="la-icon xs">tag</span> ${tag}</a>`
             ).join('');
         }
 
@@ -308,7 +284,10 @@
         // Reading progress
         window.addEventListener('scroll', () => {
             const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            document.getElementById('progress').style.width = (window.scrollY / h) * 100 + '%';
+            const pct = Math.round((window.scrollY / h) * 100);
+            const bar = document.getElementById('progress');
+            bar.style.width = pct + '%';
+            bar.closest('[role="progressbar"]')?.setAttribute('aria-valuenow', pct);
         });
 
         // Scroll top
@@ -408,6 +387,5 @@
         });
     });
     </script>
-    [[ body_end_injections ]]
-</body>
-</html>
+    [[ body_end_injections|raw ]]
+[% endblock %]

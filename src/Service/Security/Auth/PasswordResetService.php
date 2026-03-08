@@ -349,6 +349,8 @@ class PasswordResetService
      */
     private function getTokenPath(string $id): string
     {
-        return $this->getTokensPath() . '/' . $id . '.json';
+        $safeId = preg_replace('/[^a-zA-Z0-9_-]/', '', $id);
+
+        return $this->getTokensPath() . '/' . $safeId . '.json';
     }
 }

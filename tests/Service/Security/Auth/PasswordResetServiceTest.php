@@ -16,10 +16,16 @@ class PasswordResetServiceTest extends TestCase
     private PasswordResetService $service;
     private JsonStorage $storage;
     private string $tokensPath;
+    private string $originalAppKey;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->originalAppKey = getenv('APP_KEY') ?: '';
+        if (!getenv('APP_KEY')) {
+            putenv('APP_KEY=test_key_for_password_reset_tests');
+        }
 
         $this->storage = new JsonStorage();
         $this->service = new PasswordResetService($this->storage);
@@ -33,6 +39,12 @@ class PasswordResetServiceTest extends TestCase
     {
         parent::tearDown();
         $this->cleanTokensDirectory();
+
+        if ($this->originalAppKey) {
+            putenv('APP_KEY=' . $this->originalAppKey);
+        } else {
+            putenv('APP_KEY');
+        }
     }
 
     private function cleanTokensDirectory(): void
@@ -260,5 +272,19 @@ class PasswordResetServiceTest extends TestCase
         $deleted = $this->service->cleanExpiredTokens();
 
         $this->assertSame(0, $deleted);
+    }
+
+    public function testGetTokenPathSanitizesId(): void
+    {
+        // Use reflection to test private method
+        $reflection = new \ReflectionClass(PasswordResetService::class);
+        $method = $reflection->getMethod('getTokenPath');
+        $method->setAccessible(true);
+
+        $path = $method->invoke($this->service, '../../etc/passwd');
+
+        $this->assertStringNotContainsString('..', $path);
+        $this->assertStringNotContainsString('etc/passwd', $path);
+        $this->assertStringEndsWith('.json', $path);
     }
 }

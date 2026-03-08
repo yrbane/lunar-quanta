@@ -242,6 +242,62 @@ final class PostServiceTest extends TestCase
         $this->assertSame(2, $this->service->countByStatus(PostStatus::DRAFT));
     }
 
+    public function testMemoizationReturnsSameInstance(): void
+    {
+        $this->service->create('Post 1', 'Content');
+        $this->service->create('Post 2', 'Content');
+
+        $all1 = $this->service->all();
+        $all2 = $this->service->all();
+
+        // Same data returned
+        $this->assertCount(2, $all1);
+        $this->assertCount(2, $all2);
+        $this->assertSame(
+            array_map(fn($p) => $p->getId(), $all1),
+            array_map(fn($p) => $p->getId(), $all2)
+        );
+    }
+
+    public function testMemoizationInvalidatedOnCreate(): void
+    {
+        $this->service->create('Post 1', 'Content');
+        $all1 = $this->service->all();
+        $this->assertCount(1, $all1);
+
+        $this->service->create('Post 2', 'Content');
+        $all2 = $this->service->all();
+        $this->assertCount(2, $all2);
+    }
+
+    public function testMemoizationInvalidatedOnUpdate(): void
+    {
+        $post = $this->service->create('Original', 'Content');
+        $this->service->all(); // warm cache
+
+        $post->setTitle('Updated');
+        $this->service->update($post);
+
+        $found = $this->service->find($post->getId());
+        $this->assertSame('Updated', $found->getTitle());
+
+        $all = $this->service->all();
+        $updated = array_filter($all, fn($p) => $p->getId() === $post->getId());
+        $this->assertSame('Updated', array_values($updated)[0]->getTitle());
+    }
+
+    public function testMemoizationInvalidatedOnDelete(): void
+    {
+        $post = $this->service->create('To Delete', 'Content');
+        $this->service->create('Keep', 'Content');
+        $this->service->all(); // warm cache
+
+        $this->service->delete($post->getId());
+
+        $all = $this->service->all();
+        $this->assertCount(1, $all);
+    }
+
     private function removeDirectory(string $dir): void
     {
         if (!is_dir($dir)) {

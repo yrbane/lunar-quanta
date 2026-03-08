@@ -30,7 +30,11 @@ class JsonStorage implements StorageInterface
     public function __construct()
     {
         $this->dataPath = getenv('DATA_PATH') ?: __DIR__.'/../../../data';
-        $this->encryptionService = new EncryptionService(getenv('APP_KEY') ?: 'default_key');
+        $appKey = getenv('APP_KEY');
+        if (!$appKey) {
+            throw new \RuntimeException('APP_KEY environment variable is required for encryption. Generate one with: php -r "echo bin2hex(random_bytes(32));"');
+        }
+        $this->encryptionService = new EncryptionService($appKey);
     }
 
     /**

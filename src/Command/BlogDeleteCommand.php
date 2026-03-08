@@ -13,20 +13,15 @@ declare(strict_types=1);
 namespace Lunar\Command;
 
 use Lunar\Cli\Attribute\Command;
-use Lunar\Cli\CommandInterface;
-use Lunar\Service\Blog\PostService;
-use Lunar\Service\Storage\FileStorage;
 
 /**
  * Commande CLI pour supprimer un article.
  */
 #[Command(name: 'blog:delete', description: 'Supprime un article.')]
-class BlogDeleteCommand implements CommandInterface
+class BlogDeleteCommand extends AbstractBlogCommand
 {
     public function execute(array $args): int
     {
-        $basePath = dirname(__DIR__, 2);
-
         // Parse arguments
         $identifier = null;
         $force = false;
@@ -45,14 +40,8 @@ class BlogDeleteCommand implements CommandInterface
         }
 
         try {
-            $postStorage = new FileStorage($basePath . '/data/blog/posts');
-            $postService = new PostService($postStorage);
-
-            // Find post
-            $post = $postService->find($identifier);
-            if ($post === null) {
-                $post = $postService->findBySlug($identifier);
-            }
+            $postService = $this->createPostService();
+            $post = $this->findPostOrFail($postService, $identifier);
 
             if ($post === null) {
                 echo "\n✗ Article non trouvé : {$identifier}\n\n";

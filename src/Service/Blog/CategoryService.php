@@ -30,9 +30,17 @@ use Lunar\Service\Storage\FileStorage;
  */
 final class CategoryService
 {
+    /** @var Category[]|null */
+    private ?array $cachedAll = null;
+
     public function __construct(
         private readonly FileStorage $storage
     ) {
+    }
+
+    private function invalidateCache(): void
+    {
+        $this->cachedAll = null;
     }
 
     /**
@@ -57,6 +65,7 @@ final class CategoryService
         }
 
         $this->storage->save($category->getId(), $category->toArray());
+        $this->invalidateCache();
 
         return $category;
     }
@@ -67,6 +76,7 @@ final class CategoryService
     public function update(Category $category): Category
     {
         $this->storage->save($category->getId(), $category->toArray());
+        $this->invalidateCache();
         return $category;
     }
 
@@ -79,6 +89,7 @@ final class CategoryService
             return false;
         }
         $this->storage->delete($id);
+        $this->invalidateCache();
         return true;
     }
 
@@ -119,6 +130,10 @@ final class CategoryService
      */
     public function all(): array
     {
+        if ($this->cachedAll !== null) {
+            return $this->cachedAll;
+        }
+
         $all = $this->storage->all();
 
         $categories = array_map(
@@ -134,7 +149,8 @@ final class CategoryService
             return $a->getName() <=> $b->getName();
         });
 
-        return $categories;
+        $this->cachedAll = $categories;
+        return $this->cachedAll;
     }
 
     /**

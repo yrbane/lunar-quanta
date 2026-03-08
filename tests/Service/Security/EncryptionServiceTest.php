@@ -252,6 +252,16 @@ class EncryptionServiceTest extends TestCase
         $this->assertSame($data, $decrypted);
     }
 
+    public function testEncryptUsesSecureRandomBytes(): void
+    {
+        // Verify the source code uses random_bytes() not openssl_random_pseudo_bytes()
+        $reflection = new \ReflectionClass(EncryptionService::class);
+        $source = file_get_contents($reflection->getFileName());
+
+        $this->assertStringNotContainsString('openssl_random_pseudo_bytes', $source);
+        $this->assertStringContainsString('random_bytes', $source);
+    }
+
     public function testDecryptWithModifiedHmacFails(): void
     {
         $data = 'Secret data';

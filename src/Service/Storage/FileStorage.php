@@ -147,6 +147,10 @@ final class FileStorage
         // Nettoyer l'ID pour éviter les traversées de répertoire
         $safeId = preg_replace('/[^a-zA-Z0-9_-]/', '', $id);
 
+        if ($safeId === '') {
+            throw new \InvalidArgumentException('Invalid storage ID');
+        }
+
         return $this->basePath . '/' . $safeId . '.json';
     }
 }

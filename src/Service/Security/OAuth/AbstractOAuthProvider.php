@@ -155,6 +155,11 @@ abstract class AbstractOAuthProvider implements OAuthProviderInterface
     protected function httpPost(string $url, array $params): array
     {
         $options = [
+            'ssl' => [
+                'verify_peer' => true,
+                'verify_peer_name' => true,
+                'allow_self_signed' => false,
+            ],
             'http' => [
                 'method' => 'POST',
                 'header' => [
@@ -162,6 +167,7 @@ abstract class AbstractOAuthProvider implements OAuthProviderInterface
                     'Accept: application/json',
                 ],
                 'content' => http_build_query($params),
+                'timeout' => 10,
             ],
         ];
 
@@ -192,12 +198,18 @@ abstract class AbstractOAuthProvider implements OAuthProviderInterface
     protected function httpGet(string $url, string $authorization): array
     {
         $options = [
+            'ssl' => [
+                'verify_peer' => true,
+                'verify_peer_name' => true,
+                'allow_self_signed' => false,
+            ],
             'http' => [
                 'method' => 'GET',
                 'header' => [
                     "Authorization: {$authorization}",
                     'Accept: application/json',
                 ],
+                'timeout' => 10,
             ],
         ];
 

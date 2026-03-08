@@ -232,26 +232,29 @@ class JsonStorageTest extends TestCase
         $this->assertDirectoryExists($expectedDir);
     }
 
-    public function testInstantiationWithoutEnvVars(): void
+    public function testInstantiationWithoutAppKeyThrowsException(): void
     {
         // Store current values
         $currentDataPath = getenv('DATA_PATH');
         $currentAppKey = getenv('APP_KEY');
 
         // Clear env vars
-        putenv('DATA_PATH');
+        putenv('DATA_PATH=' . $this->tempDataPath);
         putenv('APP_KEY');
 
-        // Should not throw
-        $storage = new JsonStorage();
-        $this->assertInstanceOf(JsonStorage::class, $storage);
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('APP_KEY');
 
-        // Restore
-        if ($currentDataPath) {
-            putenv('DATA_PATH=' . $currentDataPath);
-        }
-        if ($currentAppKey) {
-            putenv('APP_KEY=' . $currentAppKey);
+        try {
+            new JsonStorage();
+        } finally {
+            // Restore
+            if ($currentDataPath) {
+                putenv('DATA_PATH=' . $currentDataPath);
+            }
+            if ($currentAppKey) {
+                putenv('APP_KEY=' . $currentAppKey);
+            }
         }
     }
 

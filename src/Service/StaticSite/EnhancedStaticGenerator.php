@@ -25,6 +25,7 @@ use Lunar\Service\Content\SocialShareService;
 use Lunar\Service\Content\TableOfContentsGenerator;
 use Lunar\Service\Content\WordStatisticsService;
 use Lunar\Service\I18n\DateFormatHelper;
+use Lunar\Template\AdvancedTemplateEngine;
 
 /**
  * Générateur de site statique amélioré avec tous les services de contenu.
@@ -69,6 +70,7 @@ final class EnhancedStaticGenerator
     private bool $enableMinification = true;
     private bool $enableLazyLoading = true;
     private bool $enableDarkMode = true;
+    private ?AdvancedTemplateEngine $templateEngine = null;
 
     public function __construct(
         private readonly PostService $postService,
@@ -136,6 +138,13 @@ final class EnhancedStaticGenerator
         $this->dateFormat = new DateFormatHelper('fr');
 
         $this->excerptGenerator = new ExcerptGenerator();
+
+        // Initialize template engine
+        $cachePath = dirname($this->outputPath) . '/cache/templates';
+        if (!is_dir($cachePath)) {
+            mkdir($cachePath, 0755, true);
+        }
+        $this->templateEngine = new AdvancedTemplateEngine($this->templatePath, $cachePath);
     }
 
     /**
@@ -178,8 +187,6 @@ final class EnhancedStaticGenerator
      */
     public function generatePost(Post $post): void
     {
-        $template = $this->loadTemplate('post.html');
-
         // Parse le Markdown
         $htmlContent = $this->markdownParser->parse($post->getContent());
 
@@ -261,16 +268,16 @@ final class EnhancedStaticGenerator
         // Construire les injections body (avant </body>)
         $bodyEndInjections = $this->buildBodyEndInjections();
 
-        // Remplacer les variables
-        $html = $this->render($template, [
+        // Utiliser le moteur de template lunar-template
+        $html = $this->templateEngine->render('post.html', [
             'title' => $post->getTitle(),
             'content' => $htmlContent,
-            'excerpt' => $post->getExcerpt(),
-            'author' => $post->getAuthor(),
-            'author_bio' => $post->getAuthorBio(),
-            'author_avatar' => $post->getAuthorAvatar(),
-            'author_institution' => $post->getAuthorInstitution(),
-            'published_at' => $post->getPublishedAt()?->format('d/m/Y'),
+            'excerpt' => $post->getExcerpt() ?? '',
+            'author' => $post->getAuthor() ?? '',
+            'author_bio' => $post->getAuthorBio() ?? '',
+            'author_avatar' => $post->getAuthorAvatar() ?? '',
+            'author_institution' => $post->getAuthorInstitution() ?? '',
+            'published_at' => $post->getPublishedAt()?->format('d/m/Y') ?? '',
             'published_at_formatted' => $formattedDate,
             'published_at_relative' => $relativeDate,
             'reading_time' => $stats['reading_time'],
@@ -282,25 +289,29 @@ final class EnhancedStaticGenerator
             'category' => $categoryName,
             'category_slug' => $categorySlug,
             'average_rating' => $averageRating > 0 ? number_format($averageRating, 1) : '0',
-            'license' => $post->getLicense(),
-            'original_url' => $post->getOriginalUrl(),
-            'original_source' => $post->getOriginalSource(),
+            'license' => $post->getLicense() ?? '',
+            'original_url' => $post->getOriginalUrl() ?? '',
+            'original_source' => $post->getOriginalSource() ?? '',
             'meta_tags' => $metaTagsHtml,
             'schema_org' => '<script type="application/ld+json">' . $schemaOrg . '</script>',
             'share_buttons' => $shareButtons,
             'head_injections' => $headInjections,
             'body_end_injections' => $bodyEndInjections,
+            'tags' => $post->getTags(),
+            'sources' => $post->getSources(),
+            'related_posts' => $relatedPosts,
             // JSON data for JavaScript
             'tags_json' => json_encode($post->getTags()),
             'sources_json' => json_encode($post->getSources()),
             'related_json' => json_encode($relatedPosts),
-            'has_avatar' => !empty($post->getAuthorAvatar()) ? 'true' : 'false',
-            'has_institution' => !empty($post->getAuthorInstitution()) ? 'true' : 'false',
-            'has_bio' => !empty($post->getAuthorBio()) ? 'true' : 'false',
-            'has_license' => !empty($post->getLicense()) ? 'true' : 'false',
+            // Boolean flags for JavaScript (as JSON strings)
+            'has_avatar' => $post->getAuthorAvatar() !== '' ? 'true' : 'false',
+            'has_institution' => $post->getAuthorInstitution() !== '' ? 'true' : 'false',
+            'has_bio' => $post->getAuthorBio() !== '' ? 'true' : 'false',
+            'has_license' => $post->getLicense() !== null && $post->getLicense() !== '' ? 'true' : 'false',
             'is_locked' => $post->isLocked() ? 'true' : 'false',
-            'has_original_source' => !empty($post->getOriginalSource()) ? 'true' : 'false',
-            'has_featured_image' => !empty($post->getFeaturedImage()) ? 'true' : 'false',
+            'has_original_source' => $post->getOriginalSource() !== null && $post->getOriginalSource() !== '' ? 'true' : 'false',
+            'has_featured_image' => $post->getFeaturedImage() !== null && $post->getFeaturedImage() !== '' ? 'true' : 'false',
         ]);
 
         // Minifier si activé
@@ -385,7 +396,6 @@ final class EnhancedStaticGenerator
      */
     public function generateIndex(): void
     {
-        $template = $this->loadTemplate('index.html');
         $posts = $this->postService->findPublished();
 
         usort($posts, fn($a, $b) => $b->getPublishedAt() <=> $a->getPublishedAt());
@@ -435,27 +445,23 @@ final class EnhancedStaticGenerator
 
             $avgRating = $post->getAverageRating();
 
-            // Lazy load featured image (sauf premiers articles)
-            $featuredImage = $post->getFeaturedImage() ?? '';
-
             return [
                 'title' => $post->getTitle(),
                 'url' => $post->getUrl(),
-                'excerpt' => $post->getExcerpt(),
-                'author' => $post->getAuthor(),
-                'published_at' => $post->getPublishedAt()?->format('d/m/Y'),
+                'excerpt' => $post->getExcerpt() ?? '',
+                'author' => $post->getAuthor() ?? '',
+                'published_at' => $post->getPublishedAt()?->format('d/m/Y') ?? '',
                 'published_at_relative' => $post->getPublishedAt()
                     ? $this->dateFormat->formatRelative($post->getPublishedAt())
                     : '',
                 'reading_time' => $post->getReadingTime(),
-                'featured_image' => $featuredImage,
+                'featured_image' => $post->getFeaturedImage() ?? '',
                 'category' => $categoryName,
                 'category_slug' => $categorySlug,
                 'slug' => $post->getSlug(),
                 'tags_string' => implode(', ', $post->getTags()),
-                'average_rating' => $avgRating,
+                'average_rating' => $avgRating > 0 ? number_format($avgRating, 1) : '',
                 'rating_stars' => $this->generateRatingStarsHtml($avgRating),
-                'ratings' => $post->getRatings(),
             ];
         }, $posts);
 
@@ -471,22 +477,20 @@ final class EnhancedStaticGenerator
         // Body end injections
         $bodyEndInjections = $this->buildBodyEndInjections();
 
-        $html = $this->processLengthCondition($template, 'posts', count($postsData) > 0);
-        $html = $this->renderWithLoop($html, 'posts', $postsData);
-
-        $html = str_replace('{{ year }}', date('Y'), $html);
-        $html = str_replace('{{ article_count }}', (string) count($posts), $html);
-        $html = str_replace('{{ categories_count }}', (string) count($allCategories), $html);
-        $html = str_replace('{{ tags_count }}', (string) count($allTags), $html);
-        $html = str_replace('{{ tags_list }}', $tagsHtml, $html);
-        $html = str_replace('{{ slider_items }}', $sliderHtml, $html);
-        $html = str_replace('{{ schema_org }}', '<script type="application/ld+json">' . $schemaOrg . '</script>', $html);
-        $html = str_replace('{{ head_injections }}', $headInjections, $html);
-        $html = str_replace('{{ body_end_injections }}', $bodyEndInjections, $html);
-
-        // Dark mode toggle button
-        $darkModeToggle = $this->darkMode->generateToggle();
-        $html = str_replace('{{ dark_mode_toggle }}', $darkModeToggle, $html);
+        // Utiliser le moteur de template lunar-template
+        $html = $this->templateEngine->render('index.html', [
+            'posts' => $postsData,
+            'year' => date('Y'),
+            'article_count' => count($posts),
+            'categories_count' => count($allCategories),
+            'tags_count' => count($allTags),
+            'tags_list' => $tagsHtml,
+            'slider_items' => $sliderHtml,
+            'schema_org' => '<script type="application/ld+json">' . $schemaOrg . '</script>',
+            'head_injections' => $headInjections,
+            'body_end_injections' => $bodyEndInjections,
+            'dark_mode_toggle' => $this->darkMode->generateToggle(),
+        ]);
 
         if ($this->enableMinification) {
             $html = $this->minification->html($html);
@@ -694,7 +698,10 @@ final class EnhancedStaticGenerator
     {
         $templatePath = $this->templatePath . '/tag.html';
         if (!file_exists($templatePath)) {
-            return 0;
+            $templatePath = $this->templatePath . '/tag.html.tpl';
+            if (!file_exists($templatePath)) {
+                return 0;
+            }
         }
 
         $template = file_get_contents($templatePath);
@@ -762,7 +769,10 @@ final class EnhancedStaticGenerator
 
         $templatePath = $this->templatePath . '/category.html';
         if (!file_exists($templatePath)) {
-            return 0;
+            $templatePath = $this->templatePath . '/category.html.tpl';
+            if (!file_exists($templatePath)) {
+                return 0;
+            }
         }
 
         $template = file_get_contents($templatePath);
@@ -902,6 +912,11 @@ final class EnhancedStaticGenerator
     private function loadTemplate(string $name): string
     {
         $path = $this->templatePath . '/' . $name;
+
+        // Support pour la nouvelle convention .tpl
+        if (!file_exists($path) && file_exists($path . '.tpl')) {
+            $path = $path . '.tpl';
+        }
 
         if (!file_exists($path)) {
             throw new \RuntimeException("Template not found: $name");

@@ -13,20 +13,15 @@ declare(strict_types=1);
 namespace Lunar\Command;
 
 use Lunar\Cli\Attribute\Command;
-use Lunar\Cli\CommandInterface;
-use Lunar\Service\Blog\PostService;
-use Lunar\Service\Storage\FileStorage;
 
 /**
  * Commande CLI pour dépublier un article.
  */
 #[Command(name: 'blog:unpublish', description: 'Dépublie un article (retour en brouillon).')]
-class BlogUnpublishCommand implements CommandInterface
+class BlogUnpublishCommand extends AbstractBlogCommand
 {
     public function execute(array $args): int
     {
-        $basePath = dirname(__DIR__, 2);
-
         $identifier = $args[0] ?? null;
 
         if ($identifier === null || $identifier === '--help') {
@@ -35,14 +30,8 @@ class BlogUnpublishCommand implements CommandInterface
         }
 
         try {
-            $postStorage = new FileStorage($basePath . '/data/blog/posts');
-            $postService = new PostService($postStorage);
-
-            // Find post
-            $post = $postService->find($identifier);
-            if ($post === null) {
-                $post = $postService->findBySlug($identifier);
-            }
+            $postService = $this->createPostService();
+            $post = $this->findPostOrFail($postService, $identifier);
 
             if ($post === null) {
                 echo "\n✗ Article non trouvé : {$identifier}\n\n";
