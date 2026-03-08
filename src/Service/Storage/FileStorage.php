@@ -140,11 +140,24 @@ final class FileStorage
     }
 
     /**
-     * Retourne le chemin du fichier pour un ID.
+     * Retourne le chemin du fichier pour un ID, avec protection path traversal.
+     *
+     * Sécurité : l'ID est nettoyé par whitelist (alphanum, tiret, underscore)
+     * pour empêcher les attaques de type "../../../etc/passwd".
+     * Un ID vide après sanitization est rejeté pour éviter d'écrire
+     * dans un chemin invalide (ex: ID composé uniquement de caractères spéciaux).
+     *
+     * @param string $id L'identifiant de l'entité
+     *
+     * @return string Le chemin complet du fichier JSON
+     *
+     * @throws \InvalidArgumentException Si l'ID est invalide après sanitization
+     *
+     * @see docs/security.md Section "Protection Path Traversal"
      */
     private function getPath(string $id): string
     {
-        // Nettoyer l'ID pour éviter les traversées de répertoire
+        // Whitelist : seuls les caractères sûrs sont conservés
         $safeId = preg_replace('/[^a-zA-Z0-9_-]/', '', $id);
 
         if ($safeId === '') {

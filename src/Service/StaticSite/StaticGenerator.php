@@ -47,7 +47,17 @@ final class StaticGenerator
     private ?CategoryService $categoryService = null;
     private ?AdvancedTemplateEngine $templateEngine = null;
 
-    /** @var array<string, Category> Pre-loaded category cache */
+    /**
+     * Cache de catégories pré-chargé pour des lookups O(1).
+     *
+     * Au lieu de faire N appels à categoryService->find() lors de la
+     * génération de N articles, on charge toutes les catégories une seule
+     * fois via warmCategoryCache() puis on fait des lookups par clé.
+     *
+     * @var array<string, Category> Indexé par ID de catégorie
+     *
+     * @see docs/performance.md Section "Category Cache"
+     */
     private array $categoryCache = [];
 
     public function __construct(
@@ -81,7 +91,9 @@ final class StaticGenerator
     }
 
     /**
-     * Configure le service de catégories.
+     * Configure le service de catégories et pré-charge le cache.
+     *
+     * @param CategoryService $categoryService Le service de catégories
      */
     public function setCategoryService(CategoryService $categoryService): void
     {
@@ -89,6 +101,12 @@ final class StaticGenerator
         $this->warmCategoryCache();
     }
 
+    /**
+     * Pré-charge toutes les catégories en mémoire.
+     *
+     * Un seul appel à categoryService->all() au lieu de N appels à find().
+     * Appelé automatiquement par setCategoryService().
+     */
     private function warmCategoryCache(): void
     {
         $this->categoryCache = [];
@@ -99,6 +117,13 @@ final class StaticGenerator
         }
     }
 
+    /**
+     * Récupère une catégorie depuis le cache en O(1).
+     *
+     * @param string|null $categoryId L'ID de la catégorie
+     *
+     * @return Category|null La catégorie ou null si non trouvée
+     */
     private function getCachedCategory(?string $categoryId): ?Category
     {
         if ($categoryId === null) {
@@ -177,14 +202,34 @@ final class StaticGenerator
         }
     }
 
-    /** @var array<string, array<string, true>> Tag index: tag => [postId => true] */
+    /**
+     * Index inversé de tags pour le calcul d'articles similaires.
+     *
+     * Structure : tag → [postId → true]
+     * Permet de trouver tous les articles partageant un tag donné en O(1).
+     *
+     * @var array<string, array<string, true>>
+     *
+     * @see docs/performance.md Section "Tag Index pour Related Posts"
+     */
     private array $tagIndex = [];
 
-    /** @var array<string, Post> Post index: id => Post */
+    /**
+     * Index de posts par ID pour accès O(1) lors du scoring.
+     *
+     * @var array<string, Post>
+     */
     private array $postIndex = [];
 
+    /** @var bool Évite de reconstruire l'index à chaque appel */
     private bool $relatedIndexBuilt = false;
 
+    /**
+     * Construit l'index inversé de tags (lazy, une seule fois).
+     *
+     * Parcourt tous les articles publiés et indexe chaque tag.
+     * L'index est réutilisé pour chaque appel à findRelatedPosts().
+     */
     private function buildRelatedIndex(): void
     {
         if ($this->relatedIndexBuilt) {
@@ -202,8 +247,18 @@ final class StaticGenerator
     }
 
     /**
-     * Trouve les articles similaires basés sur la catégorie et les tags.
-     * Utilise un index de tags pour des lookups O(1) au lieu de O(n).
+     * Trouve les articles similaires via l'index de tags.
+     *
+     * Algorithme de scoring :
+     * - +5 points par tag en commun (via lookup dans l'index inversé)
+     * - +10 points pour la même catégorie
+     * Les articles sont triés par score décroissant.
+     *
+     * Complexité : O(k) où k = nombre de tags de l'article courant,
+     * au lieu de O(n²) avec une comparaison paire à paire.
+     *
+     * @param Post $currentPost L'article de référence
+     * @param int  $limit       Nombre max de résultats
      *
      * @return array<int, array{title: string, url: string, excerpt: string}>
      */

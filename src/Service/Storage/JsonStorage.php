@@ -15,9 +15,28 @@ use Lunar\Entity\User;
 use Lunar\Service\Security\EncryptionService;
 
 /**
- * Class JsonStorage.
+ * Stockage chiffré des entités utilisateur en fichiers JSON.
  *
- * Implémente le stockage des entités sous forme de fichiers JSON chiffrés.
+ * Chaque utilisateur est stocké dans un fichier JSON chiffré par AES-256-CBC.
+ * Le fichier est nommé par le hash SHA-256 de l'email et réparti dans
+ * des sous-dossiers basés sur les 3 premiers caractères du hash
+ * (sharding pour éviter un répertoire unique avec trop de fichiers).
+ *
+ * Sécurité : la variable d'environnement APP_KEY est OBLIGATOIRE.
+ * Sans elle, le constructeur lance une RuntimeException.
+ *
+ * @example
+ * ```php
+ * // Nécessite APP_KEY dans l'environnement
+ * putenv('APP_KEY=' . bin2hex(random_bytes(32)));
+ *
+ * $storage = new JsonStorage();
+ * $storage->saveUser($user);   // Chiffré sur disque
+ * $user = $storage->loadUser('email@example.com');  // Déchiffré à la lecture
+ * ```
+ *
+ * @see EncryptionService Pour le détail du chiffrement AES-256-CBC + HMAC
+ * @see docs/security.md  Pour l'architecture de sécurité complète
  */
 class JsonStorage implements StorageInterface
 {
@@ -25,11 +44,16 @@ class JsonStorage implements StorageInterface
     private EncryptionService $encryptionService;
 
     /**
-     * Constructeur.
+     * Initialise le stockage avec la clé de chiffrement APP_KEY.
+     *
+     * @throws \RuntimeException Si APP_KEY n'est pas définie
      */
     public function __construct()
     {
         $this->dataPath = getenv('DATA_PATH') ?: __DIR__.'/../../../data';
+
+        // APP_KEY est obligatoire — pas de clé par défaut pour éviter
+        // qu'un déploiement en production utilise une clé connue
         $appKey = getenv('APP_KEY');
         if (!$appKey) {
             throw new \RuntimeException('APP_KEY environment variable is required for encryption. Generate one with: php -r "echo bin2hex(random_bytes(32));"');
@@ -38,12 +62,15 @@ class JsonStorage implements StorageInterface
     }
 
     /**
-     * Sauvegarde l'utilisateur dans un fichier.
+     * Sauvegarde l'utilisateur dans un fichier chiffré.
      *
-     * Le fichier est nommé par le hash de l'email et stocké dans un dossier
-     * déterminé par les 3 premières lettres du hash.
+     * Le chemin est déterminé par le hash SHA-256 de l'email :
+     * data/user/{hash[0:3]}/{hash}.json
      *
-     * @param User $user instance de l'utilisateur
+     * Ce sharding par préfixe distribue les fichiers en ~4096 sous-dossiers,
+     * évitant les problèmes de performance avec un seul répertoire massif.
+     *
+     * @param User $user L'instance utilisateur à persister
      */
     public function saveUser(User $user): void
     {

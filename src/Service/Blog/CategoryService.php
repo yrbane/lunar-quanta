@@ -30,7 +30,16 @@ use Lunar\Service\Storage\FileStorage;
  */
 final class CategoryService
 {
-    /** @var Category[]|null */
+    /**
+     * Cache mémoire des catégories (même pattern que PostService).
+     *
+     * Rempli au premier appel à all(), invalidé à chaque écriture.
+     *
+     * @var Category[]|null null = pas encore chargé
+     *
+     * @see PostService::$cachedAll Pour le même pattern
+     * @see docs/performance.md Pour l'explication du pattern de mémoïsation
+     */
     private ?array $cachedAll = null;
 
     public function __construct(
@@ -38,6 +47,9 @@ final class CategoryService
     ) {
     }
 
+    /**
+     * Invalide le cache après une opération d'écriture.
+     */
     private function invalidateCache(): void
     {
         $this->cachedAll = null;

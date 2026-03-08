@@ -343,9 +343,17 @@ class PasswordResetService
     }
 
     /**
-     * Retourne le chemin d'un fichier token.
+     * Retourne le chemin d'un fichier token, avec protection path traversal.
+     *
+     * Même principe que FileStorage::getPath() : l'ID est nettoyé par
+     * whitelist pour empêcher un attaquant de lire/écrire hors du
+     * répertoire de tokens via un ID malveillant (ex: "../../etc/passwd").
      *
      * @param string $id L'identifiant du token
+     *
+     * @return string Le chemin sécurisé du fichier token
+     *
+     * @see FileStorage::getPath() Pour le même pattern de sanitization
      */
     private function getTokenPath(string $id): string
     {

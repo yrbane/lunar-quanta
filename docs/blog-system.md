@@ -177,8 +177,12 @@ $generator = new StaticGenerator(
     $postService,
     new MarkdownParser(),
     'public/blog',      // Sortie
-    'template/blog'     // Templates
+    'template/blog',    // Templates
+    'https://example.com' // Active RSS + Sitemap
 );
+
+// Optionnel : configurer les catégories (active le cache O(1))
+$generator->setCategoryService($categoryService);
 
 // Générer un article
 $generator->generatePost($post);
@@ -186,18 +190,31 @@ $generator->generatePost($post);
 // Générer l'index
 $generator->generateIndex();
 
-// Tout générer
+// Tout générer (posts, index, tags, categories, RSS, sitemap)
 $result = $generator->generateAll();
-// ['posts' => 10, 'index' => true]
+// ['posts' => 10, 'index' => true, 'rss' => true, 'sitemap' => true, 'tags' => 5, 'categories' => 3]
 
 // Régénérer (clean + generate)
 $generator->regenerate();
 
-// Callback à la publication
-$generator->onPublish(function($post) {
-    // Notifier, invalider cache, etc.
-});
+// Callbacks
+$generator->onPublish(function($post) { /* ... */ });
+$generator->onProgress(function($current, $total, $type, $item) { /* ... */ });
 ```
+
+#### Optimisations de performance
+
+Le StaticGenerator utilise trois patterns d'optimisation :
+
+1. **Category Cache** : `setCategoryService()` pré-charge toutes les catégories en mémoire
+   pour des lookups O(1) au lieu de N appels à `find()`.
+
+2. **Tag Index** : Index inversé `tag → [postIds]` pour calculer les articles similaires
+   en O(k) au lieu de O(n²) (k = nombre de tags de l'article courant).
+
+3. **Scoring des articles similaires** : +5 par tag commun, +10 pour même catégorie.
+
+Voir `docs/performance.md` pour les détails.
 
 ## Administration
 
@@ -331,6 +348,48 @@ location /blog {
 }
 ```
 
+## Commandes CLI
+
+Les commandes blog héritent de `AbstractBlogCommand`, qui fournit :
+- `createPostService()` : instanciation du service avec le bon chemin
+- `findPostOrFail()` : résolution par ID ou slug (lookup en cascade)
+
+```bash
+# Cycle de vie
+php bin/console blog:publish <id|slug>      # DRAFT → PUBLISHED
+php bin/console blog:unpublish <id|slug>    # PUBLISHED → DRAFT
+php bin/console blog:archive <id|slug>      # * → ARCHIVED
+
+# Suppression (irréversible, nécessite --force)
+php bin/console blog:delete <id|slug> --force
+
+# Régénération du site statique
+php bin/console blog:regenerate
+
+# Autres commandes utiles
+php bin/console blog:list                   # Liste tous les articles
+php bin/console blog:stats                  # Statistiques du blog
+php bin/console blog:search <terme>         # Recherche full-text
+```
+
+## Performance
+
+### Mémoïsation (PostService, CategoryService)
+
+Les services `PostService` et `CategoryService` cachent le résultat de `all()`
+en mémoire. Le cache est invalidé automatiquement à chaque écriture (create, update, delete).
+
+```php
+// Premier appel : lit le filesystem
+$posts = $postService->all();
+
+// Appels suivants : retourne le cache mémoire
+$posts = $postService->all();       // Instantané
+$published = $postService->findPublished(); // Utilise all() en interne
+```
+
+Voir `docs/performance.md` pour les détails.
+
 ## Bonnes pratiques
 
 1. **Toujours régénérer après modification** : Les fichiers statiques ne se mettent pas à jour automatiquement
@@ -342,3 +401,5 @@ location /blog {
 4. **Valider le HTML** : Le HtmlSanitizer protège contre les XSS
 
 5. **Optimiser les images** : Avant upload pour des pages rapides
+
+6. **Configurer APP_KEY** : Variable obligatoire pour le chiffrement (voir `docs/security.md`)

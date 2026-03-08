@@ -14,10 +14,30 @@ namespace Lunar\Service\Security;
 use Lunar\Exception\SecurityException;
 
 /**
- * Encryption service with AES-256-CBC and HMAC verification.
+ * Service de chiffrement AES-256-CBC avec vérification HMAC.
  *
- * Provides methods to encrypt and decrypt data with integrity verification.
- * Uses encrypt-then-MAC pattern for authenticated encryption.
+ * Utilise le pattern Encrypt-then-MAC (EtM), reconnu comme le plus sûr
+ * des trois patterns d'authenticated encryption :
+ * - Encrypt-then-MAC (EtM) ✓ : HMAC calculé sur le ciphertext
+ * - Encrypt-and-MAC (E&M)   : HMAC calculé sur le plaintext
+ * - MAC-then-Encrypt (MtE)  : vulnérable aux padding oracle attacks
+ *
+ * ```
+ * Flux de chiffrement :
+ *
+ *   plaintext → [AES-256-CBC + IV aléatoire] → ciphertext
+ *                                                    ↓
+ *   IV + ciphertext → [HMAC-SHA256] → tag d'intégrité
+ *                                          ↓
+ *   Sortie : base64(IV || ciphertext || HMAC)
+ * ```
+ *
+ * Choix de sécurité :
+ * - IV généré par random_bytes() (CSPRNG du système, pas openssl)
+ * - Clés dérivées : SHA-512 de la master key, split en 2 clés de 32 octets
+ * - Vérification HMAC avec hash_equals() (constant-time, anti timing-attack)
+ *
+ * @see docs/security.md Pour l'architecture de sécurité complète
  */
 class EncryptionService implements EncryptionInterface
 {
@@ -27,16 +47,20 @@ class EncryptionService implements EncryptionInterface
     private string $hmacAlgo = 'sha256';
 
     /**
-     * Constructor.
+     * Dérive deux clés distinctes depuis la master key.
      *
-     * @param string $key secret key for encryption
+     * Utiliser la même clé pour le chiffrement et le HMAC serait une
+     * mauvaise pratique : si l'une est compromise, l'autre le serait aussi.
+     * SHA-512 produit 64 octets, divisés en 2 clés de 32 octets chacune.
+     *
+     * @param string $key La clé maîtresse (APP_KEY)
      */
     public function __construct(string $key)
     {
-        // Derive separate keys for encryption and HMAC
+        // Dérivation : 1 master key → 2 clés indépendantes
         $derivedKey = hash('sha512', $key, true);
-        $this->encryptionKey = substr($derivedKey, 0, 32);
-        $this->hmacKey = substr($derivedKey, 32, 32);
+        $this->encryptionKey = substr($derivedKey, 0, 32);  // Clé AES
+        $this->hmacKey = substr($derivedKey, 32, 32);        // Clé HMAC
     }
 
     /**

@@ -14,7 +14,24 @@ declare(strict_types=1);
 namespace Lunar\Service\Security\OAuth;
 
 /**
- * Classe abstraite pour les providers OAuth.
+ * Classe abstraite pour les providers OAuth 2.0.
+ *
+ * Implémente le flux Authorization Code Grant (RFC 6749, Section 4.1) :
+ *
+ * ```
+ * 1. getAuthorizationUrl()  → Redirect user to provider
+ * 2. Provider callback      → Receive authorization code
+ * 3. getAccessToken(code)   → Exchange code for access token
+ * 4. getUser(token)         → Fetch user profile
+ * ```
+ *
+ * Sécurité réseau :
+ * - SSL obligatoire (verify_peer + verify_peer_name)
+ * - Pas de certificats auto-signés (allow_self_signed = false)
+ * - Timeout de 10s pour éviter les connexions bloquantes
+ *
+ * @see GoogleProvider, GitHubProvider Pour les implémentations concrètes
+ * @see docs/security.md Section "OAuth"
  */
 abstract class AbstractOAuthProvider implements OAuthProviderInterface
 {

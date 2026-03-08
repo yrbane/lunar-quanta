@@ -27,7 +27,17 @@ use Lunar\Service\Storage\FileStorage;
  */
 final class PostService
 {
-    /** @var Post[]|null */
+    /**
+     * Cache mémoire pour éviter de relire le filesystem à chaque appel.
+     *
+     * Pattern de mémoïsation : le cache est rempli au premier appel à all()
+     * et invalidé automatiquement à chaque écriture (create, update, delete).
+     * Cela garantit la cohérence tout en évitant les I/O redondants.
+     *
+     * @var Post[]|null null signifie "pas encore chargé"
+     *
+     * @see docs/performance.md Pour une explication détaillée du pattern
+     */
     private ?array $cachedAll = null;
 
     public function __construct(
@@ -35,6 +45,12 @@ final class PostService
     ) {
     }
 
+    /**
+     * Invalide le cache mémoire.
+     *
+     * Appelée automatiquement après chaque opération d'écriture
+     * pour garantir que le prochain appel à all() relira le filesystem.
+     */
     private function invalidateCache(): void
     {
         $this->cachedAll = null;
